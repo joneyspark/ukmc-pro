@@ -1,0 +1,11 @@
+.tr-bg{
+    background: #0b2e5e !important;
+}
+.custom-badge{
+    height: 25px !important;
+    width: 25px !important;
+    padding: 3px !important;
+    top: -14px !important;
+    right: -10px !important;
+    font-size: 13px !important;
+}
