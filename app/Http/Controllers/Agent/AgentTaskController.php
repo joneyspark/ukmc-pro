@@ -96,7 +96,7 @@ class AgentTaskController extends Controller{
         $data['agent_task'] = true;
         $data['agent_task_all'] = true;
         $data['get_task_id'] = Session::get('task_id');
-        $data['tasks'] = AgentTask::orderBy('id','desc')->paginate(10);
+        $data['tasks'] = AgentTask::where('company_id',Auth::user()->company_id)->orderBy('id','desc')->paginate(10);
         Session::forget('task_id');
         return view('agent_task/all',$data);
     }
@@ -108,7 +108,7 @@ class AgentTaskController extends Controller{
         $data['page_title'] = 'Agent Task | Edit';
         $data['agent_task'] = true;
         $data['agent_task_all'] = true;
-        $data['users'] = User::where('role','!=','agent')->where('role','!=','admin')->where('active',1)->get();
+        $data['users'] = User::where('role','agent')->where('is_admin',0)->where('company_id',Auth::user()->company_id)->where('active',1)->get();
         $data['priorities'] = Service::priority();
         $data['task_data'] = AgentTask::where('slug',$slug)->first();
         return view('agent_task/edit',$data);

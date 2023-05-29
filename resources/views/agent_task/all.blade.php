@@ -53,17 +53,17 @@
                                               @if($task->status==1)
                                               <div class="progress-bar br-30 bg-danger" role="progressbar" style="width: 29.56%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                               @elseif($task->status==2)
-                                              <div class="progress-bar br-30 bg-danger" role="progressbar" style="width: 59.56%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> 
+                                              <div class="progress-bar br-30 bg-danger" role="progressbar" style="width: 59.56%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                               @elseif($task->status==3)
-                                              <div class="progress-bar br-30 bg-danger" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> 
+                                              <div class="progress-bar br-30 bg-danger" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                               @else
-                                              <div class="progress-bar br-30 bg-danger" role="progressbar" style="width: {{ ($task->is_view==1)?'10%':'0%' }}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> 
+                                              <div class="progress-bar br-30 bg-danger" role="progressbar" style="width: {{ ($task->is_view==1)?'10%':'0%' }}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                             @endif
-                                            
+
                                         </div>
                                     </td>
                                     </td>
-                                    
+
                                     <td>{{ $task->priority }}</td>
                                     <td>
                                         @if($task->status==0)
@@ -82,21 +82,16 @@
                                         <p>{{ date('Y-m-d',strtotime($task->deadline)) }}</p>
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ URL::to('task/details/'.$task->slug) }}" class="badge badge-pill bg-primary">
+                                        <a href="{{ URL::to('agent/task/details/'.$task->slug) }}" class="badge badge-pill bg-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                         </a>
-                                        <a href="{{ URL::to('edit-task/'.$task->slug) }}" class="badge badge-pill bg-warning">
+                                        <a href="{{ URL::to('agent-edit-task/'.$task->slug) }}" class="badge badge-pill bg-warning">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                         </a>
-                                        @if($task->status==3 || $task->status==4)
-                                        <a href="" class="badge badge-pill bg-danger">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2  delete-multiple text-white"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                        </a></td>
-                                        @endif
-                                        
-                                </tr> 
+                                    </td>
+                                </tr>
                                 @empty
-                                <tr>No Data Found</tr> 
+                                <tr>No Data Found</tr>
                                 @endforelse
                             </tbody>
                         </table>

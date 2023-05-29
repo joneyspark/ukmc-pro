@@ -63,6 +63,10 @@ class AgentController extends Controller{
     }
     //edit company data
     public function edit_company($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
         $data['page_title'] = 'Company | Edit';
         $data['agent'] = true;
         $data['company_data'] = Company::where('id',$id)->first();
@@ -333,6 +337,10 @@ class AgentController extends Controller{
     }
     //get all companyee employee
     public function get_employees_by_company($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
         $data['page_title'] = 'Agents | Employee List';
         $data['agent_id'] = Session::get('agent_id');
         $data['company_data'] = Company::where('id',$id)->first();
@@ -343,6 +351,10 @@ class AgentController extends Controller{
         return view('agent/agent_list',$data);
     }
     public function create_agent_by_super_admin($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
         $data['page_title'] = 'Agents | Create New Employee';
         $data['company_data'] = Company::where('id',$id)->first();
         $data['countries'] = Service::countries();
@@ -418,6 +430,10 @@ class AgentController extends Controller{
     }
     //edit agent details
     public function edit_agent_by_super_admin($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
         $data['page_title'] = 'Agents | Edit Agent Employee';
         $data['agent_data'] = User::where('id',$id)->first();
         $data['company_data'] = Company::where('id',$data['agent_data']->company_id)->first();
@@ -426,6 +442,10 @@ class AgentController extends Controller{
         return view('agent/edit_agent_details',$data);
     }
     public function edit_agent_by_super_admin_post(EditEmpAgentRequest $request){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
         $user = User::where('id',$request->user_id)->first();
         $photo = $request->image;
         if($request->hasFile('image')) {
@@ -464,5 +484,160 @@ class AgentController extends Controller{
         }else{
             return redirect('get-employees-by-company/'.$user->company_id.'/list');
         }
+    }
+    //employee list by agent company
+    public function get_employee_by_agent(){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
+        $data['agent_id'] = Session::get('agent_id');
+        $data['page_title'] = 'Agent | Employee List';
+        $data['agent_user'] = true;
+        $data['agent_user_list'] = true;
+        $data['agent_data'] = User::where('company_id',Auth::user()->company_id)->orderBy('id','desc')->paginate(10);
+        $data['company_data'] = Company::where('id',Auth::user()->company_id)->first();
+        $data['countries'] = Service::countries();
+        $data['agent'] = true;
+        Session::forget('agent_id');
+        return view('agent/get_employee_by_agent',$data);
+    }
+    //create employee by agent
+    public function create_employee_by_agent(){
+        if(!Auth::check() && Auth::user()->is_admin != 1){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
+        $data['page_title'] = 'Agents | Create New Employee';
+        $data['agent_user'] = true;
+        $data['agent_user_list'] = true;
+        $data['company_data'] = Company::where('id',Auth::user()->id)->first();
+        $data['countries'] = Service::countries();
+        $data['agent'] = true;
+        return view('agent/create_employee_by_agent',$data);
+    }
+    //post agent employee data
+    public function create_employee_by_agent_post(CreateEmpAgentByAdminRequest $request){
+        $first_name = "";
+        $last_name = "";
+        $user = new User();
+        $user->name = $request->name;
+        if($user->name){
+            $array = explode(" ",$user->name);
+            foreach($array as $key=>$row){
+                if($key==0){
+                    $first_name = $row;
+                }
+                if(!empty($row) && $key != 0){
+                    $last_name .= $row.' ';
+                }
+            }
+        }
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->role = 'agent';
+        $user->email = $request->email;
+        $user->phone = $request->agent_phone;
+        //slug create
+        $url_modify = Service::slug_create($request->name);
+        $checkSlug = User::where('slug', 'LIKE', '%' . $url_modify . '%')->count();
+        if ($checkSlug > 0) {
+            $new_number = $checkSlug + 1;
+            $new_slug = $url_modify . '-' . $new_number;
+            $user->slug = $new_slug;
+        } else {
+            $user->slug = $url_modify;
+        }
+        $photo = $request->image;
+        if ($request->hasFile('image')) {
+
+            $ext = $photo->getClientOriginalExtension();
+            $filename = $photo->getClientOriginalName();
+            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+            $image_resize = Image::make($photo->getRealPath());
+            $image_resize->resize(200, 200);
+            $upload_path = 'backend/images/users/agent/';
+            Service::createDirectory($upload_path);
+            $image_resize->save(public_path('backend/images/users/agent/'.$filename));
+            $user->photo = 'backend/images/users/agent/'.$filename;
+        }
+        $user->password = Hash::make($request->password);
+        $user->company_id = Auth::user()->company_id;
+        $user->is_admin = 0;
+        $user->save();
+        //create agent information
+        $agent = new Agent();
+        $agent->user_id = $user->id;
+        $agent->agent_name = $request->agent_name;
+        $agent->agent_phone = $request->agent_phone;
+        $agent->agent_email = $request->agent_email;
+        $agent->alternative_person_contact = $request->alternative_person_contact;
+        $agent->nid_or_passport = $request->nid_or_passport;
+        $agent->nationality = $request->nationality;
+        $agent->agent_country = $request->agent_country;
+        $agent->agent_state = $request->agent_state;
+        $agent->agent_city = $request->agent_city;
+        $agent->agent_zip_code = $request->agent_zip_code;
+        $agent->agent_address = $request->agent_address;
+        $agent->save();
+        Session::put('agent_id',$user->id);
+        Session::flash('success','New Agent Employee Created Successfully!');
+        return redirect('get-employee-by-agent');
+    }
+    //edit part
+    public function edit_employee_by_agent($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
+        $data['page_title'] = 'Agents | Edit Agent Employee';
+        $data['agent_user'] = true;
+        $data['agent_user_list'] = true;
+        $data['agent_data'] = User::where('id',$id)->first();
+        $data['company_data'] = Company::where('id',Auth::user()->company_id)->first();
+        $data['countries'] = Service::countries();
+        $data['agent'] = true;
+        return view('agent/edit_employee_by_agent',$data);
+    }
+    public function edit_employee_by_agent_post(EditEmpAgentRequest $request){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
+        $user = User::where('id',$request->user_id)->first();
+        $photo = $request->image;
+        if($request->hasFile('image')) {
+            if (File::exists(public_path($user->photo))) {
+                File::delete(public_path($user->photo));
+            }
+            $ext = $photo->getClientOriginalExtension();
+            $filename = $photo->getClientOriginalName();
+            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+            $image_resize = Image::make($photo->getRealPath());
+            $image_resize->resize(200, 200);
+            $upload_path = 'backend/images/users/agent/';
+            Service::createDirectory($upload_path);
+            $image_resize->save(public_path('backend/images/users/agent/'.$filename));
+            $user->photo = 'backend/images/users/agent/'.$filename;
+        }
+        $user->save();
+        //create agent information
+        $agent = Agent::where('user_id',$user->id)->first();
+        $agent->user_id = $user->id;
+        $agent->agent_name = $request->agent_name;
+        $agent->agent_phone = $request->agent_phone;
+        $agent->agent_email = $request->agent_email;
+        $agent->alternative_person_contact = $request->alternative_person_contact;
+        $agent->nid_or_passport = $request->nid_or_passport;
+        $agent->nationality = $request->nationality;
+        $agent->agent_country = $request->agent_country;
+        $agent->agent_state = $request->agent_state;
+        $agent->agent_city = $request->agent_city;
+        $agent->agent_zip_code = $request->agent_zip_code;
+        $agent->agent_address = $request->agent_address;
+        $agent->save();
+        Session::put('agent_id',$user->id);
+        Session::flash('success','Employee Data Upadted Successfully!');
+        return redirect('get-employee-by-agent');
     }
 }
