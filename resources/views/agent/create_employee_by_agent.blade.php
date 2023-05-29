@@ -20,8 +20,8 @@
                                 </div>
                                 <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="{{ URL::to('agents') }}">Agent Company</a></li>
-                                        <li class="breadcrumb-item"><a href="#">{{ $company_data->company_name }}</a></li>
+                                        <li class="breadcrumb-item"><a href="{{ URL::to('/') }}">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="#">{{ (!empty($company_data->company_name))?$company_data->company_name:'' }}</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Crete New</li>
                                     </ol>
                                 </nav>

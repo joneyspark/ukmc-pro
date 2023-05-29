@@ -4,9 +4,16 @@ namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use App\Traits\Service;
+Use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\File;
 
-class CourseController extends Controller
-{
+class CourseController extends Controller{
+    use Service;
     public function create(){
         $data['page_title'] = 'Course / Create';
         $data['course'] = true;
@@ -25,12 +32,7 @@ class CourseController extends Controller
         $data['course_archive'] = true;
         return view('course/archive',$data);
     }
-    public function course_categories(){
-        $data['page_title'] = 'Course | Categories';
-        $data['course'] = true;
-        $data['course_categories'] = true;
-        return view('course/categories',$data);
-    }
+    
     public function course_levels(){
         $data['page_title'] = 'Course | Levels';
         $data['course'] = true;

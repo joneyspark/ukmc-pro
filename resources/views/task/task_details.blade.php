@@ -110,8 +110,14 @@
                                         </div>
                                   </div>
                                 </div>
+                                @if(!empty($task_data->doc))
+                                <div class="col-4">
+                                    <div class="form-group mb-2"><label for="exampleFormControlInput1">Task Doc File</label><br>
+                                        <a class="task-doc-download" download href="{{ asset($task_data->doc) }}">Download</a>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
-
                         </div>
                         <div>
                             <h5 class="mb-5">Comments <span class="comment-count">({{ (!empty($coments))?count($coments):'0' }})</span></h5>

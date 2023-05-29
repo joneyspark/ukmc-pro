@@ -511,7 +511,7 @@ class AgentController extends Controller{
         $data['page_title'] = 'Agents | Create New Employee';
         $data['agent_user'] = true;
         $data['agent_user_list'] = true;
-        $data['company_data'] = Company::where('id',Auth::user()->id)->first();
+        $data['company_data'] = Company::where('id',Auth::user()->company_id)->first();
         $data['countries'] = Service::countries();
         $data['agent'] = true;
         return view('agent/create_employee_by_agent',$data);
