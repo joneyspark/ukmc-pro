@@ -22,19 +22,31 @@ class SettingController extends Controller{
         $data['page_title'] = 'Company / Settings';
         $data['settings'] = true;
         $data['company_settings'] = true;
-        $data['company_data'] = CompanySetting::where('id',1)->first();
-        $data['countries'] = Service::get_company_country();
+        if(Auth::user()->role=='agent'){
+            $data['company_data'] = CompanySetting::where('company_id',Auth::user()->company_id)->first();
+        }else{
+            $data['company_data'] = CompanySetting::where('id',1)->first();
+        }
+        $data['countries'] = Service::countries();
         return view('setting/company_setting',$data);
     }
-    //company setting post 
+    //company setting post
     public function company_setting_post(Request $request){
         if(!Auth::check()){
             Session::flash('error','Login First! Then See Company Setting!');
             return redirect('login');
         }
-        $company = CompanySetting::where('id',1)->first();
-        if(!$company){
-            $company = new CompanySetting();
+        if(Auth::user()->role=='admin'){
+            $company = CompanySetting::where('id',1)->first();
+            if(!$company){
+                $company = new CompanySetting();
+            }
+        }
+        if(Auth::user()->role=='agent'){
+            $company = CompanySetting::where('company_id',Auth::user()->company_id)->first();
+            if(!$company){
+                $company = new CompanySetting();
+            }
         }
         $company->company_name = $request->company_name;
         $company->address = $request->address;
@@ -51,15 +63,43 @@ class SettingController extends Controller{
             if (File::exists(public_path('backend/images/company_logo/'.$company->company_logo))) {
                 File::delete(public_path('backend/images/company_logo/'.$company->company_logo));
             }
+            $extArr = array("jpg","png","jpeg");
             $ext = $company_logo->getClientOriginalExtension();
-            $filename = $company_logo->getClientOriginalName();
-            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
-            $image_resize = Image::make($company_logo->getRealPath());
-            $image_resize->resize(160, 65);
-            $upload_path = 'backend/images/company_logo/';
-            Service::createDirectory($upload_path);
-            $image_resize->save(public_path('backend/images/company_logo/'.$filename));
-            $company->company_logo = 'backend/images/company_logo/'.$filename;
+            if(in_array($ext, $extArr)){
+                $filename = $company_logo->getClientOriginalName();
+                $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+                $image_resize = Image::make($company_logo->getRealPath());
+                $image_resize->resize(34, 34);
+                $upload_path = 'backend/images/company_logo/';
+                Service::createDirectory($upload_path);
+                $image_resize->save(public_path('backend/images/company_logo/'.$filename));
+                $company->company_logo = 'backend/images/company_logo/'.$filename;
+            }else{
+                Session::flash('error','Image Type Not Support! Only support jpg,png,jpeg');
+                return redirect('company-settings');
+            }
+        }
+        //update image if exists
+        $favicon = $request->favicon;
+        if ($request->hasFile('favicon')) {
+            if (File::exists(public_path('backend/images/favicon/'.$company->favicon))) {
+                File::delete(public_path('backend/images/favicon/'.$company->favicon));
+            }
+            $extArr = array("ico","png");
+            $ext = $favicon->getClientOriginalExtension();
+            if(in_array($ext, $extArr)){
+                $filename = $favicon->getClientOriginalName();
+                $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+                $image_resize = Image::make($favicon->getRealPath());
+                $image_resize->resize(15, 15);
+                $upload_path = 'backend/images/favicon/';
+                Service::createDirectory($upload_path);
+                $image_resize->save(public_path('backend/images/favicon/'.$filename));
+                $company->favicon = 'backend/images/favicon/'.$filename;
+            }else{
+                Session::flash('error','Favicon Type Not Support! Only support .ico,.png');
+                return redirect('company-settings');
+            }
         }
         //update company banner image if exists
         $company_banner = $request->company_banner;
@@ -67,17 +107,23 @@ class SettingController extends Controller{
             if (File::exists(public_path('backend/images/company_banner/'.$company->company_banner))) {
                 File::delete(public_path('backend/images/company_banner/'.$company->company_banner));
             }
+            $extArr = array("jpg","png","jpeg");
             $ext = $company_banner->getClientOriginalExtension();
-            $filename = $company_banner->getClientOriginalName();
-            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
-            $image_resize = Image::make($company_banner->getRealPath());
-            $image_resize->resize(800, 300);
-            $upload_path = 'backend/images/company_banner/';
-            Service::createDirectory($upload_path);
-            $image_resize->save(public_path('backend/images/company_banner/'.$filename));
-            $company->company_banner = 'backend/images/company_banner/'.$filename;
+            if(in_array($ext, $extArr)){
+                $filename = $company_banner->getClientOriginalName();
+                $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+                $image_resize = Image::make($company_banner->getRealPath());
+                $image_resize->resize(800, 300);
+                $upload_path = 'backend/images/company_banner/';
+                Service::createDirectory($upload_path);
+                $image_resize->save(public_path('backend/images/company_banner/'.$filename));
+                $company->company_banner = 'backend/images/company_banner/'.$filename;
+            }else{
+                Session::flash('error','Image Type Not Support! Only support jpg,png,jpeg');
+                return redirect('company-settings');
+            }
+
         }
-        
         $company->website = $request->website;
         $company->crm_website = $request->crm_website;
         $company->contact_us = $request->contact_us;
@@ -90,7 +136,11 @@ class SettingController extends Controller{
         $company->whatsapp = $request->whatsapp;
         $company->privacy_policy = $request->privacy_policy;
         $company->terms_and_condition = $request->terms_and_condition;
-
+        if(Auth::user()->role=='agent'){
+            $company->company_id = Auth::user()->company_id;
+        }else{
+            $company->company_id = 0;
+        }
         $company->contact_person_name = $request->contact_person_name;
         $company->contact_person_phone = $request->contact_person_phone;
         $company->contact_person_email = $request->contact_person_email;
@@ -106,7 +156,7 @@ class SettingController extends Controller{
         $data['profile_settings'] = true;
         return view('setting/profile_settings',$data);
     }
-    
+
     public function edit_profile(){
         $data['page_title'] = 'Edit / Settings';
         $data['settings'] = true;

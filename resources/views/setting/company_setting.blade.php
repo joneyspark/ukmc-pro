@@ -87,20 +87,31 @@
                             <div class="row mb-4">
                                 <div class="col">
                                     <div class="row d-flex align-items-center">
-                                        <div class="col col-md-6">
+                                        <div class="col col-md-4">
                                             <div class="form-group mb-2">
                                                 <label>Company Logo</label>
                                                     <input type="file"
                                                         class="form-control-file" accept="image/*"
                                                         name="company_logo">
                                                 @if(!empty($company_data->company_logo))
-                                                    <img width="160" height="65" src="{{ asset($company_data->company_logo) }}" class="custom-file-container__image-preview"/>
+                                                    <img width="34" height="34" src="{{ asset($company_data->company_logo) }}" class="custom-file-container__image-preview"/>
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="col col-md-6">
+                                        <div class="col col-md-4">
                                             <div class="form-group mb-2">
-                                                <label>Company Logo</label>
+                                                <label>Favicon Icon</label>
+                                                    <input type="file"
+                                                        class="form-control-file" accept="image/*"
+                                                        name="favicon">
+                                                @if(!empty($company_data->favicon))
+                                                    <img width="34" height="34" src="{{ asset($company_data->favicon) }}" class="custom-file-container__image-preview"/>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col col-md-4">
+                                            <div class="form-group mb-2">
+                                                <label>Company Banner(for email)</label>
                                                 <input type="file"
                                                     class="form-control-file" accept="image/*"
                                                     name="company_banner">

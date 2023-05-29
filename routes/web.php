@@ -9,6 +9,7 @@ use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Login\LoginController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Agent\AgentTaskController;
 
 
 Route::controller(HomeController::class)->group(function () {
@@ -28,6 +29,17 @@ Route::controller(TaskController::class)->group(function () {
     Route::get('task/details/{slug?}','details');
     Route::post('task-coment-store', 'task_commment');
     Route::post('task-status-chnage', 'task_status_chnage');
+});
+Route::controller(AgentTaskController::class)->group(function () {
+    Route::get('agent-task-create', 'create');
+    Route::post('agent-task-store', 'store');
+    Route::get('agent-task-list', 'all');
+    Route::get('agent-my-tasks', 'my_tasks');
+    Route::get('agent-edit-task/{slug?}', 'edit');
+    Route::post('agent-edit-task-post', 'edit_post');
+    Route::get('agent/task/details/{slug?}','details');
+    Route::post('agent-task-coment-store', 'task_commment');
+    Route::post('agent-task-status-chnage', 'task_status_chnage');
 });
 Route::controller(SettingController::class)->group(function () {
     Route::get('company-settings', 'company_settings');

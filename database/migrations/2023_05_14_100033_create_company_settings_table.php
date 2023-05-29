@@ -20,10 +20,11 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('zip_code')->nullable();
             $table->text('company_logo')->nullable();
+            $table->text('favicon')->nullable();
             $table->text('company_banner')->nullable();
             $table->text('email')->nullable();
             $table->text('phone')->nullable();
-            
+
             $table->text('website')->nullable();
             $table->text('crm_website')->nullable();
             $table->text('contact_us')->nullable();
@@ -36,6 +37,7 @@ return new class extends Migration
             $table->text('pinterest')->nullable();
             $table->text('youtube')->nullable();
             $table->text('whatsapp')->nullable();
+            $table->integer('company_id')->nullable();
             $table->string('contact_person_name')->nullable();
             $table->string('contact_person_phone')->nullable();
             $table->string('contact_person_email')->nullable();

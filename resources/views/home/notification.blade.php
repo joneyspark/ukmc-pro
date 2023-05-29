@@ -45,7 +45,7 @@
                                         <p>{{ $row->id }}</p>
                                     </td>
                                     <td>
-                                        <a href="{{ $row->slug }}"><p>{!! $row->description !!}</p></a>
+                                        <a href="{{ URL::to($row->slug) }}"><p>{!! $row->description !!}</p></a>
                                     </td>
                                     <td class="text-center">
                                         <p>{{ date('Y-m-d',strtotime($row->created_at)) }}</p>

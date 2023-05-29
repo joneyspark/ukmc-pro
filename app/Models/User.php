@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Admission\AdmissionOfficer;
 use App\Models\Agent\Agent;
+use App\Models\Agent\AgentTask;
 use App\Models\Task\Task;
 use App\Models\Teacher\Teacher;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -61,5 +62,8 @@ class User extends Authenticatable
     }
     public function tasks(){
         return $this->hasMany(Task::class, 'assign_to', 'id');
+    }
+    public function agent_tasks(){
+        return $this->hasMany(AgentTask::class, 'assign_to', 'id');
     }
 }

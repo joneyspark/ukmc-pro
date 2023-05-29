@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('creator_image')->nullable();
             $table->string('creator_name')->nullable();
             $table->integer('user_id')->nullable();
+            $table->integer('company_id')->nullable();
             $table->tinyInteger('status')->nullable()->default(0);
             $table->tinyInteger('is_view')->nullable()->default(0);
             $table->text('slug')->nullable();

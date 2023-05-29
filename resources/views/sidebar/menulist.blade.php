@@ -73,7 +73,7 @@
                     <a href="{{ URL::to('campus-create') }}"> Add Campus</a>
                 </li>
                 @endif
-                @if(Auth::check() && Auth::user()->role != 'agent')
+                @if(Auth::check())
                 <li class="{{ (!empty($campus_all) && $campus_all==true)?'active':'' }}">
                     <a href="{{ URL::to('all-campus') }}"> All Campus </a>
                 </li>
@@ -138,6 +138,7 @@
             </a>
         </li>
         @endif
+        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='teacher' || Auth::user()->role=='admin')
         <li class="menu {{ (!empty($task) && $task==true)?'active':'' }}">
             <a href="#menuLevel1" data-bs-toggle="collapse" aria-expanded="{{ (!empty($course) && $course==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">
@@ -164,6 +165,35 @@
                 @endif
             </ul>
         </li>
+        @endif
+        @if(Auth::check() && Auth::user()->role=='agent')
+        <li class="menu {{ (!empty($agent_task) && $agent_task==true)?'active':'' }}">
+            <a href="#menuLevel1" data-bs-toggle="collapse" aria-expanded="{{ (!empty($agent_task) && $agent_task==true)?'true':'false' }}" class="dropdown-toggle">
+                <div class="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <span>Task Management</span>
+                </div>
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+            </a>
+            <ul class="{{ (!empty($agent_task) && $agent_task==true)?'collapse show':'collapse' }} submenu list-unstyled" id="menuLevel1" data-bs-parent="#accordionExample">
+                @if(Auth::check() && Auth::user()->is_admin==1)
+                <li class="{{ (!empty($agent_task_add) && $agent_task_add==true)?'active':'' }}">
+                    <a href="{{ URL::to('agent-task-create') }}"> Create Task </a>
+                </li>
+                <li class="{{ (!empty($agent_task_all) && $agent_task_all==true)?'active':'' }}">
+                    <a href="{{ URL::to('agent-task-list') }}"> All Task </a>
+                </li>
+                @endif
+                @if(Auth::check() && Auth::user()->is_admin==0)
+                <li class="{{ (!empty($agent_task_my) && $agent_task_my==true)?'active':'' }}">
+                    <a href="{{ URL::to('agent-my-tasks') }}"> My Tasks </a>
+                </li>
+                @endif
+            </ul>
+        </li>
+        @endif
         @if(Auth::check() && Auth::user()->role=='admin')
         <li class="menu {{ (!empty($settings) && $settings==true)?'active':'' }}">
             <a href="#users" data-bs-toggle="collapse" aria-expanded="{{ (!empty($settings) && $settings==true)?'true':'false' }}" class="dropdown-toggle">
@@ -182,7 +212,24 @@
             </ul>
         </li>
         @endif
-
+        @if(Auth::check() && Auth::user()->role=='agent' && Auth::user()->is_admin==1)
+        <li class="menu {{ (!empty($settings) && $settings==true)?'active':'' }}">
+            <a href="#users" data-bs-toggle="collapse" aria-expanded="{{ (!empty($settings) && $settings==true)?'true':'false' }}" class="dropdown-toggle">
+                <div class="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings "><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Settings</span>
+                </div>
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+            </a>
+            <ul class="{{ (!empty($settings) && $settings==true)?'collapse show':'collapse' }} submenu list-unstyled" id="users" data-bs-parent="#accordionExample">
+                <li class="{{ (!empty($company_settings) && $company_settings==true)?'active':'' }}">
+                    <a href="{{ URL::to('company-settings') }}"> Software Settings </a>
+                </li>
+            </ul>
+        </li>
+        @endif
     </ul>
     @endif
 
