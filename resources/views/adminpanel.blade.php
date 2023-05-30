@@ -49,6 +49,10 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/assets/css/light/forms/switches.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="{{ asset('web/css/custom.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/plugins/src/tagify/tagify.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/plugins/css/light/tagify/custom-tagify.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/plugins/css/dark/tagify/custom-tagify.css') }}">
 </head>
 
 <body class="layout-boxed">
@@ -215,6 +219,9 @@
     <script src="{{ asset('backend/src/plugins/src/apex/apexcharts.min.js') }}"></script>
     <script src="{{ asset('backend/src/assets/js/dashboard/dash_1.js') }}"></script>
     <script src="{{ asset('backend/src/assets/js/dashboard/dash_2.js') }}"></script>
+
+    <script src="{{ asset('backend/src/plugins/src/tagify/tagify.min.js') }}"></script>
+    <script src="{{ asset('backend/src/plugins/src/tagify/custom-tagify.js') }}"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
      <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -376,6 +383,8 @@
 			});
         </script>
         <script src="{{ asset('web/js/custom.js') }}"></script>
+        <script src="{{ asset('web/js/addRemove.js') }}"></script>
+        <script src="{{ asset('web/js/tagify.js') }}"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 //e.preventDefault();

@@ -80,6 +80,47 @@ $(function(){
 
     });
 });
+$(function(){
+    $('.level-status-change').change(function(){
+        var status = $(this).prop('checked') == true ? 0 : 1;
+        var level_id = $(this).data('id');
+        var url = $(this).data('action');
+            $.post(url,
+            {
+                level_id: level_id,
+                status: status
+            },
+            function(data, status){
+                console.log(data);
+                if(data['result']['key']===101){
+                    iziToast.show({
+                        title: 'Status',
+                        message: data['result']['val'],
+                        position: 'topRight',
+                        timeout: 8000,
+                        color: 'red',
+                        balloon: true,
+                        close: true,
+                        progressBarColor: 'yellow',
+                    });
+                }
+                if(data['result']['key']===200){
+                    iziToast.show({
+                        title: 'Status',
+                        message: data['result']['val'],
+                        position: 'topRight',
+                        timeout: 8000,
+                        color: 'green',
+                        balloon: true,
+                        close: true,
+                        progressBarColor: 'yellow',
+                    });
+                }
+                //alert("Data: " + data + "\nStatus: " + status);
+            });
+
+    });
+});
 
 $(function(){
     $('.company-status-chnage').change(function(){
