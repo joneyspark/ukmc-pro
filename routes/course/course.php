@@ -9,6 +9,7 @@ use App\Http\Controllers\Course\CourseCategoryController;
 
 Route::controller(CourseController::class)->group(function () {
     Route::get('course-create', 'create');
+    Route::post('course-data-store', 'store');
     Route::get('all-course', 'all');
     Route::get('archived-courses', 'archive');
     Route::get('course-details/{slug?}', 'course_details');

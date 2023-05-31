@@ -167,6 +167,7 @@
                                         </div>
                                     </td>
                                 </tr>
+
                                 @empty
                                 <tr>
                                     <td>No Data Found!</td>

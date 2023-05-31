@@ -20,7 +20,7 @@
                                 </div>
                                 <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="#">Application</a></li>
+                                        <li class="breadcrumb-item"><a href="{{ URL::to('all-course') }}">Courses</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Create</li>
                                     </ol>
                                 </nav>
@@ -30,7 +30,8 @@
                     </header>
                 </div>
             </div>
-            <form enctype="multipart/form-data">
+            <form method="post" action="{{ URL::to('course-data-store') }}" enctype="multipart/form-data">
+                @csrf
                 <div id="card_1" class="col-lg-12 layout-spacing layout-top-spacing">
                     <div class="statbox widget box box-shadow">
                         <div class="widget-content widget-content-area">
@@ -54,7 +55,7 @@
                                 <div class="col">
                                     <div class="flex space-x-2 md:space-x-4">
                                         <div class="form-group mb-4 w-full"><label
-                                                for="campus_id">Select Campus</label><select
+                                                for="campus_id">Select Campus*</label><select
                                                 class="form-control" id="campus_id" name="campus_id">
                                                 <option value="">--Select One--</option>
                                                 @foreach ($campus_list as $campus)
@@ -69,7 +70,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label
-                                            for="exampleFormControlInput1">Course Name</label>
+                                            for="exampleFormControlInput1">Course Name*</label>
                                             <input type="text" class="form-control" value="{{ old('course_name') }}" name="course_name">
                                             @if ($errors->has('course_name'))
                                                 <span class="text-danger">{{ $errors->first('course_name') }}</span>
@@ -80,7 +81,7 @@
                             <div class="row mb-4">
                                 <div class="col">
                                     <div class="form-group mb-4"><label
-                                            for="exampleFormControlInput1">Course Category</label>
+                                            for="exampleFormControlInput1">Course Category*</label>
                                         <select name="category_id" class="form-control">
                                             <option value="">Select a Category</option>
                                             @foreach ($categories as $category)
@@ -108,7 +109,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label
-                                            for="exampleFormControlInput1">Course Duration</label>
+                                            for="exampleFormControlInput1">Course Duration*</label>
                                             <input type="text" class="form-control" name="course_duration">
                                             @if ($errors->has('course_duration'))
                                                 <span class="text-danger">{{ $errors->first('course_duration') }}</span>
@@ -120,7 +121,7 @@
                                 <div class="col">
                                     <div class="Icon-outside field-wrapper form-group mb-4"><label
                                             for="exampleFormControlInput1">Course Fee (For
-                                            Local)</label>
+                                            Local)*</label>
                                             <input type="text" class="course-fee-input form-control" name="course_fee">
                                             @if ($errors->has('course_fee'))
                                                 <span class="text-danger">{{ $errors->first('course_fee') }}</span>
@@ -130,7 +131,7 @@
                                 <div class="col">
                                     <div class="Icon-outside form-group mb-4"><label
                                             for="exampleFormControlInput1">Course Fee (For
-                                            International Students)</label>
+                                            International Students)*</label>
                                             <input type="text" class="course-fee-input form-control" name="international_course_fee">
                                             @if ($errors->has('international_course_fee'))
                                                 <span class="text-danger">{{ $errors->first('international_course_fee') }}</span>
@@ -141,8 +142,8 @@
                             <div class="row mb-4">
                                 <div class="col-8">
                                     <div class="form-group mb-4"><label
-                                            for="exampleFormControlInput1">Course Intake</label>
-                                            <input type="text" placeholder="september,janyary" pattern='^[A-Za-z_✲ ]{1,15}$' class="" name="course_intake">
+                                            for="exampleFormControlInput1">Course Intake*</label>
+                                            <input type="text" placeholder="september,janyary" class="" name="course_intake">
                                             @if ($errors->has('course_intake'))
                                                 <span class="text-danger">{{ $errors->first('course_intake') }}</span>
                                             @endif
@@ -152,7 +153,7 @@
                             <div class="row mb-4">
                                 <div class="col">
                                     <div class="form-group mb-4"><label
-                                            for="exampleFormControlInput1">Awarding Body</label>
+                                            for="exampleFormControlInput1">Awarding Body*</label>
                                             <input type="text" class="form-control" name="awarding_body">
                                             @if ($errors->has('awarding_body'))
                                                 <span class="text-danger">{{ $errors->first('awarding_body') }}</span>
@@ -160,7 +161,7 @@
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Is Language Mendatory</label>
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Is Language Mendatory*</label>
                                         <input type="text" class="form-control" placeholder="Yes or No" name="is_lang_mendatory">
                                         @if($errors->has('is_lang_mendatory'))
                                             <span class="text-danger">{{ $errors->first('is_lang_mendatory') }}</span>
@@ -254,7 +255,7 @@
                                                     <div class="form-group mb-4"><label
                                                         for="personName">Course Additional Information ( If have )</label>
                                                     <textarea id="exampleFormControlTextarea1" class="form-control" rows="3"
-                                                        spellcheck="false" name="course_additionals.0.course_additional_infos"></textarea>
+                                                        spellcheck="false" name="course_additionals[]"></textarea>
                                                 </div>
                                                 <span class="input-group-btn"><button type="button" class="btn btn-danger remove-attribute-element1"><i class="glyphicon glyphicon-minus"></i>-</button></span>
                                                 </div>

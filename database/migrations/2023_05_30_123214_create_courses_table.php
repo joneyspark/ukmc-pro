@@ -28,6 +28,7 @@ return new class extends Migration
             $table->text('addtional_info_course')->nullable();
             $table->text('course_prospectus')->nullable();
             $table->text('course_module')->nullable();
+            $table->text('slug')->nullable();
             $table->integer('create_by')->nullable();
             $table->integer('update_by')->nullable();
             $table->tinyInteger('status')->nullable()->default(1);
