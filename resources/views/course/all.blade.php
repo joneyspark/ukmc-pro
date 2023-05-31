@@ -29,15 +29,16 @@
             <form>
                  <div class="row mb-4">
                      <div class="col-4">
-                        <select class="form-control">
-                            <option>Select Campus</option>
-                            <option>London</option>
-                            <option>New York</option>
-                            <option>Manchester</option>
+                        <select name="status" id="status" class="form-control">
+                            <option value="">Select Campus</option>
+                            @foreach ($campus_list as $row)
+                            <option value="{{ $row->id }}">{{ $row->campus_name }}</option>
+                            @endforeach
+                            
                         </select>
                      </div>
                      <div class="col-6">
-                         <input type="text" class="form-control" placeholder="Enter Course Name">
+                         <input type="text" name="serach" id="serach" class="form-control" placeholder="Enter Course Name">
                      </div>
 
                      <div class="col">
@@ -50,7 +51,7 @@
 
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-8">
-                    <div class="table-responsive">
+                    <div id="tabledata" class="table-responsive">
                         @include('ajax.Course.list')
                     </div>
                 </div>

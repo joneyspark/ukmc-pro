@@ -388,7 +388,7 @@
         </script>
         <!--task event create -->
         @include('ajax.taskUser')
-
+        @include('ajax.Course.Search')
         <script>
             function get_notifications(){
                 $.get('{{ URL::to('get-notification-count') }}',function(data,status){

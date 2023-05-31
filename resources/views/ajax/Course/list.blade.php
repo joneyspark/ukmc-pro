@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         @forelse ($courses as $course)
-        <tr>
+        <tr class="{{ (!empty($return_course_id) && $return_course_id==$course->id)?'tr-bg':'' }}">
             <td>{{ (!empty($course->id))?$course->id:'' }}</td>
             <td>{{ (!empty($course->course_name))?$course->course_name:'' }}</td>
             <td>{{ (!empty($course->campus->campus_name))?$course->campus->campus_name:'' }}</td>
@@ -49,5 +49,5 @@
     </tbody>
 </table>
 <div style="text-align: center;" class="pagination-custom_solid">
-    {{ $courses->links() }}
+    {!! $courses->links() !!}
 </div>

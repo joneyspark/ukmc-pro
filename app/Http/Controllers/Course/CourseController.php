@@ -100,15 +100,31 @@ class CourseController extends Controller{
                 $additional->save();
             }
         }
-        echo 'Course Saved';
-
+        Session::put('course_id',$course->id);
+        Session::flash('success','Course Data Saved Successfully!');
+        return redirect('all-course');
     }
-    public function all(){
+    public function all(Request $request){
         $data['page_title'] = 'Course | List';
+        
+        $data['return_course_id'] = Session::get('course_id');
+        $data['campus_list'] = Campus::where('active',1)->get();
         $data['course'] = true;
         $data['course_all'] = true;
+        Session::forget('course_id');
+        $campus_name = $request->serach;
+        if($request->ajax()){
+            //meiisearch work here
+            $data['courses'] = Course::query()
+            ->when($request->status, function($q)use($request){
+                $q->where('campus_id',$request->status);
+            })
+            ->orderBy('id','desc')
+            ->paginate(1);
+            return view('ajax.Course.list', $data);
+        }
         $data['courses'] = Course::orderBy('id','desc')->paginate(1);
-        return view('course/all',$data);
+        return view('course.all',$data);
     }
     public function archive(){
         $data['page_title'] = 'Archived | Course';
