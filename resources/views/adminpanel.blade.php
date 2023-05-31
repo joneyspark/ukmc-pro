@@ -53,6 +53,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/plugins/src/tagify/tagify.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/plugins/css/light/tagify/custom-tagify.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/plugins/css/dark/tagify/custom-tagify.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/assets/css/dark/components/modal.css') }}">
 </head>
 
 <body class="layout-boxed">
@@ -230,6 +231,74 @@
      <!-- END PAGE LEVEL SCRIPTS -->
      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 	 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+     <script>
+
+        function addVideoInModal(btnSelector, videoSource, modalSelector, iframeHeight, iframeWidth, iframeContainer) {
+            var myModal = new bootstrap.Modal(document.getElementById(modalSelector), {
+                keyboard: false
+            })            
+            document.querySelector(btnSelector).addEventListener('click', function() {
+                var src = videoSource;
+                myModal.show('show');
+                var ifrm = document.createElement("iframe");
+                ifrm.setAttribute("src", src);
+                ifrm.setAttribute('width', iframeWidth);
+                ifrm.setAttribute('height', iframeHeight);
+                ifrm.style.border = "0";
+                ifrm.setAttribute("allow", "encrypted-media");
+                document.querySelector(iframeContainer).appendChild(ifrm);
+            })
+        }
+        
+        addVideoInModal('#yt-video-link', 'https://www.youtube.com/embed/YE7VzlLtp-4', 'videoMedia1', '315', '560', '.yt-container')
+        
+        addVideoInModal('#vimeo-video-link', 'https://player.vimeo.com/video/1084537', 'videoMedia2', '315', '560', '.vimeo-container')
+
+
+
+
+        /**
+         * ==================
+         * Single File Upload
+         * ==================
+        */
+
+        // We register the plugins required to do 
+        // image previews, cropping, resizing, etc.
+        FilePond.registerPlugin(
+        FilePondPluginFileValidateType,
+        FilePondPluginImageExifOrientation,
+        FilePondPluginImagePreview,
+        FilePondPluginImageCrop,
+        FilePondPluginImageResize,
+        FilePondPluginImageTransform,
+        //   FilePondPluginImageEdit
+        );
+
+        // Select the file input and use 
+        // create() to turn it into a pond
+        var modalImage = FilePond.create(
+        document.querySelector('.filepond'),
+        {
+            // labelIdle: `<span class="no-image-placeholder"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span> <p class="drag-para">Drag & Drop your picture or <span class="filepond--label-action" tabindex="0">Browse</span></p>`,
+            imagePreviewHeight: 170,
+            imageCropAspectRatio: '1:1',
+            imageResizeTargetWidth: 200,
+            imageResizeTargetHeight: 200,
+            stylePanelLayout: 'compact circle',
+            styleLoadIndicatorPosition: 'center bottom',
+            styleProgressIndicatorPosition: 'right bottom',
+            styleButtonRemoveItemPosition: 'left bottom',
+            styleButtonProcessItemPosition: 'right bottom',
+        }
+        );
+
+        const myModalEl = document.getElementById('profileModal')
+        myModalEl.addEventListener('shown.bs.modal', event => {
+            modalImage.addFiles('../src/assets/img/drag-1.jpeg');
+        })
+
+    </script>
      <script>
 		@if(Session::has('success'))
 		toastr.options =
