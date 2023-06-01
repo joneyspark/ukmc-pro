@@ -15,7 +15,6 @@
         search_term: search_term
       },
       success: function(data) {
-        console.log(data);
         $('#tabledata').html(data);
       },
       error: function(xhr, status, error) {

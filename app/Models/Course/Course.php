@@ -5,12 +5,11 @@ namespace App\Models\Course;
 use App\Models\Campus\Campus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
 use Carbon\Carbon;
 
 class Course extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory;
     protected $table = 'courses';
 
 
@@ -32,29 +31,6 @@ class Course extends Model
         'course_module',
         'status',
     ];
-
-    public static function searchableAttributes()
-    {
-        return ['course_name', 'course_intake'];
-    }
-    public static function searchFilterableAttributes()
-    {
-        return ['campus_id', 'category_id', 'course_level_id'];
-    }
-    public static function searchSortableAttributes()
-    {
-        return ['id','created_at'];
-    }
-    public function toSearchableArray()
-    {
-        $array = $this->toArray();
-        $dateInMs = Carbon::createFromDate($array['created_at'])->getTimestampMs();
-        $dateInMsUpdated = Carbon::createFromDate($array['updated_at'])->getTimestampMs();
-        $array['created_at'] = $dateInMs;
-        $array['updated_at'] = $dateInMsUpdated;
-
-        return $array;
-    }
     public function campus(){
         return $this->belongsTo(Campus::class);
     }

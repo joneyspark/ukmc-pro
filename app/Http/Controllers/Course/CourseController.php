@@ -19,6 +19,7 @@ use App\Models\Course\CourseCategories;
 use App\Models\Course\CourseLevel;
 use  Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 class CourseController extends Controller{
     use Service;
@@ -108,7 +109,6 @@ class CourseController extends Controller{
     }
     public function all(Request $request){
         $data['page_title'] = 'Course | List';
-
         $data['return_course_id'] = Session::get('course_id');
         $data['campus_list'] = Campus::where('active',1)->get();
         $data['course'] = true;
@@ -116,28 +116,25 @@ class CourseController extends Controller{
         Session::forget('course_id');
 
         if($request->ajax()){
-            $search = $request->get('search_term');
+            $search = $request->search_term;
             $status = $request->status;
-            //meiisearch work here
-            if($search){
-                $courses = Course::search($search)->query(function (Builder $query) {
-                })->orderBy('id', 'desc')->paginate(2);
-                dd($courses);
-                //return $courses;
-                //$courses = json_decode(json_encode($coursesData));
-                //$data['courses'] = $coursesData->paginate(1);
-                //return response()->json($data['courses']);
-                return view('ajax.Course.list', compact('courses'));
-            }
+            Session::put('campus_id',$status);
+            Session::put('course_name',$search);
             $data['courses'] = Course::query()
             ->when($request->status, function($q)use($request){
                 $q->where('campus_id',$request->status);
             })
+            ->when($request->search_term, function($q)use($request){
+                $q->where('course_name', 'like', '%' . $request->search_term . '%');
+            })
             ->orderBy('id','desc')
-            ->paginate(10);
+            ->paginate(2);
             return view('ajax.Course.list', $data);
         }
-        $data['courses'] = Course::orderBy('id','desc')->paginate(10);
+        
+        $data['courses'] = Course::orderBy('id','desc')->paginate(2);
+        //Cache::put('cachekey', $data['courses'], 1 );
+        //dd(Cache::get('cachekey'));exit();
         return view('course.all',$data);
     }
     public function archive(){

@@ -224,7 +224,7 @@
     <script src="{{ asset('backend/src/plugins/src/tagify/tagify.min.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/src/tagify/custom-tagify.js') }}"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="{{ asset('web/js/jquery.js') }}"></script>
      <!-- BEGIN PAGE LEVEL SCRIPTS -->
      <script src="{{ asset('backend/src/plugins/src/stepper/bsStepper.min.js') }}"></script>
      <script src="{{ asset('backend/src/plugins/src/stepper/custom-bsStepper.min.js') }}"></script>
@@ -491,6 +491,10 @@
             });
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @if(request()->is('all-course*'))
+        @include('ajax.Course.Search')
+        @endif
+        
 
 
 </body>
