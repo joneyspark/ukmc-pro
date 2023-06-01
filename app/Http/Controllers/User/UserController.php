@@ -58,7 +58,7 @@ class UserController extends Controller{
         ->where('id','!=',Auth::user()->id)
         ->where('role','!=','agent')
         ->orderBy('id','desc')
-        ->paginate(9)
+        ->paginate(1)
         ->appends([
             'name' => $name,
             'role' => $role,

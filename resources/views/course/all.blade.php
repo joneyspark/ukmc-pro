@@ -34,11 +34,11 @@
                             @foreach ($campus_list as $row)
                             <option value="{{ $row->id }}">{{ $row->campus_name }}</option>
                             @endforeach
-                            
+
                         </select>
                      </div>
                      <div class="col-6">
-                         <input type="text" name="serach" id="serach" class="form-control" placeholder="Enter Course Name">
+                         <input type="text" name="search" id="search" class="form-control" placeholder="Enter Course Name">
                      </div>
 
                      <div class="col">

@@ -9,16 +9,18 @@
     }
     $.ajax({
       url: "{{ URL::to('all-course') }}",
-      data: {
+      data:{
         page: page,
         status: status,
         search_term: search_term
       },
       success: function(data) {
+        console.log(data);
         $('#tabledata').html(data);
       },
       error: function(xhr, status, error) {
         console.log(xhr.responseText); // Handle any errors
+        console.log(error); // Handle any errors
       }
     });
   }

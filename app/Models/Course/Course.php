@@ -13,6 +13,7 @@ class Course extends Model
     use HasFactory, Searchable;
     protected $table = 'courses';
 
+
     protected $fillable = [
         'campus_id',
         'category_id',
@@ -42,7 +43,7 @@ class Course extends Model
     }
     public static function searchSortableAttributes()
     {
-        return ['created_at'];
+        return ['id','created_at'];
     }
     public function toSearchableArray()
     {

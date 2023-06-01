@@ -236,7 +236,7 @@
         function addVideoInModal(btnSelector, videoSource, modalSelector, iframeHeight, iframeWidth, iframeContainer) {
             var myModal = new bootstrap.Modal(document.getElementById(modalSelector), {
                 keyboard: false
-            })            
+            })
             document.querySelector(btnSelector).addEventListener('click', function() {
                 var src = videoSource;
                 myModal.show('show');
@@ -249,9 +249,9 @@
                 document.querySelector(iframeContainer).appendChild(ifrm);
             })
         }
-        
+
         addVideoInModal('#yt-video-link', 'https://www.youtube.com/embed/YE7VzlLtp-4', 'videoMedia1', '315', '560', '.yt-container')
-        
+
         addVideoInModal('#vimeo-video-link', 'https://player.vimeo.com/video/1084537', 'videoMedia2', '315', '560', '.vimeo-container')
 
 
@@ -263,7 +263,7 @@
          * ==================
         */
 
-        // We register the plugins required to do 
+        // We register the plugins required to do
         // image previews, cropping, resizing, etc.
         FilePond.registerPlugin(
         FilePondPluginFileValidateType,
@@ -275,7 +275,7 @@
         //   FilePondPluginImageEdit
         );
 
-        // Select the file input and use 
+        // Select the file input and use
         // create() to turn it into a pond
         var modalImage = FilePond.create(
         document.querySelector('.filepond'),
@@ -388,7 +388,6 @@
         </script>
         <!--task event create -->
         @include('ajax.taskUser')
-        @include('ajax.Course.Search')
         <script>
             function get_notifications(){
                 $.get('{{ URL::to('get-notification-count') }}',function(data,status){

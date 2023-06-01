@@ -51,3 +51,12 @@
 <div style="text-align: center;" class="pagination-custom_solid">
     {!! $courses->links() !!}
 </div>
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+@include('ajax.Course.Search')
