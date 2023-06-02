@@ -122,25 +122,22 @@ class CourseController extends Controller{
         $campus_id = $request->campus_id;
         Session::put('get_campus_id', $campus_id);
         Session::put('get_course_name', $query);
-        //meilisearch
-        // $data['courses'] = Course::search($course_name)->query(function (Builder $query) {
-        // })->orderBy('id', 'desc')->where('campus_id', $campus_id)->paginate(10)->appends([
-        //     'course_name' => $course_name,
-        //     'campus_id' => $campus_id,
-        // ]);
         $client = new Client('http://localhost:7700');
-
-        // Specify the index name
         $indexName = 'courses';
-
-        // Get the current settings of the index
         $index = $client->index($indexName);
         $currentSettings = $index->getSettings();
-        // Update the settings to include the `campus_id` attribute as filterable
+        $sortableAttributes = $currentSettings['sortableAttributes'];
+
+        if (!in_array('id', $sortableAttributes)) {
+            $sortableAttributes[] = 'id';
+            $settings['sortableAttributes'] = $sortableAttributes;
+
+            $index->updateSettings($settings);
+        }
         $newSettings = [
             'filterableAttributes' => array_merge($currentSettings['filterableAttributes'], ['campus_id'])
         ];
-        // Apply the updated settings to the index
+        
         $index->updateSettings($newSettings);
         $courseSearch = Course::search($query, function ($ms, $q, $options) use ($request, $query, $campus_id) {
             $filter = [];
@@ -148,6 +145,7 @@ class CourseController extends Controller{
                 $filter[] = 'campus_id = ' . $campus_id;
             }
             $options['filter'] = $filter;
+            $options['sort'] = ['id:desc'];
             return $ms->search($q, $options);
         });
         $data['courses'] = $courseSearch
@@ -156,21 +154,6 @@ class CourseController extends Controller{
             'course_name' => $query,
             'campus_id' => $campus_id,
         ]);
-        //end
-        // $data['courses'] = Course::query()
-        //     ->when($campus_id, function ($q) use ($campus_id) {
-        //         $q->where('campus_id', $campus_id);
-        //     })
-        //     ->when($course_name, function ($q) use ($course_name) {
-        //         $q->where('course_name', 'like', '%' . $course_name . '%');
-        //     })
-        //     ->orderBy('id', 'desc')
-        //     ->paginate(10)
-        //     ->appends([
-        //         'course_name' => $course_name,
-        //         'campus_id' => $campus_id,
-        //     ]);
-
         $data['get_campus_id'] = Session::get('get_campus_id');
         $data['get_course_name'] = Session::get('get_course_name');
         return view('course.all', $data);
