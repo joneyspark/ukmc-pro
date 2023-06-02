@@ -6,10 +6,11 @@ use App\Models\Campus\Campus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Laravel\Scout\Searchable;
 
 class Course extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
     protected $table = 'courses';
 
 
@@ -31,6 +32,10 @@ class Course extends Model
         'course_module',
         'status',
     ];
+    public function searchableAs(): string
+    {
+        return 'courses';
+    }
     public function campus(){
         return $this->belongsTo(Campus::class);
     }

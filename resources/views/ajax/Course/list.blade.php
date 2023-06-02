@@ -1,5 +1,6 @@
 <table class="table table-bordered">
     <thead>
+        <span>{{ $resultdata }}</span>
         <tr>
             <th scope="col">No.</th>
             <th scope="col">Course Name</th>
