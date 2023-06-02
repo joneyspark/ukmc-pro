@@ -20,6 +20,8 @@ use App\Models\Course\CourseLevel;
 use  Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Scout\Searchable;
+use MeiliSearch\Client;
 
 class CourseController extends Controller{
     use Service;
@@ -108,112 +110,103 @@ class CourseController extends Controller{
         return redirect('all-course');
     }
     public function all(Request $request){
-        // $data['page_title'] = 'Course | List';
-        // $data['return_course_id'] = Session::get('course_id');
-        // $data['campus_list'] = Campus::where('active',1)->get();
-        // $data['course'] = true;
-        // $data['course_all'] = true;
-        // Session::forget('course_id');
-
-        // if($request->ajax()){
-        //     //cache check
-        //     if(Cache::has('courses_data')){
-        //         $search = $request->search_term;
-        //         $status = $request->status;
-        //         Session::put('campus_id', $status);
-        //         Session::put('course_name', $search);
-
-        //         // Retrieve cached data
-        //         $data = Cache::get('courses_data');
-
-        //         // Filter the data based on search term and status
-        //         $data = $data->when($status, function ($q) use ($status) {
-        //                 return $q->where('campus_id', $status);
-        //             })
-        //             ->when($search, function ($q) use ($search) {
-        //                 return $q->where('course_name', 'like', '%' . $search . '%');
-        //             });
-
-        //         // Apply the order by and paginate
-        //         $data = $data->orderBy('id', 'desc')
-        //             ->paginate(2);
-
-        //         // Store the filtered data back into cache
-        //         Cache::put('courses_data', $data, 5);
-        //         $datac['courses'] = $data;
-        //         $datac['resultdata'] = 'This is from real cache';
-        //         return view('ajax.Course.list', $datac);
-        //     }
-        //     $search = $request->search_term;
-        //     $status = $request->status;
-        //     Session::put('campus_id',$status);
-        //     Session::put('course_name',$search);
-        //     $data['courses'] = Course::query()
-        //     ->when($request->status, function($q)use($request){
-        //         $q->where('campus_id',$request->status);
-        //     })
-        //     ->when($request->search_term, function($q)use($request){
-        //         $q->where('course_name', 'like', '%' . $request->search_term . '%');
-        //     })
-        //     ->orderBy('id','desc')
-        //     ->paginate(2);
-        //     Cache::put('courses_data',$data['courses'],5);
-        //     $data['resultdata'] = 'This is first time cache';
-        //     return view('ajax.Course.list', $data);
-        // }
-        
-        // $data['courses'] = Course::orderBy('id','desc')->paginate(2);
-        // //Cache::put('cachekey', $data['courses'], 1 );
-        // //dd(Cache::get('cachekey'));exit();
-        // $data['resultdata'] = 'This is not cache';
-        // return view('course.all',$data);
+        //$c = Course::search('K')->paginate(2);
+        //dd($c);
         $data['page_title'] = 'Course | List';
         $data['return_course_id'] = Session::get('course_id');
         $data['campus_list'] = Campus::where('active', 1)->get();
         $data['course'] = true;
         $data['course_all'] = true;
         Session::forget('course_id');
+        $query = $request->course_name;
+        $campus_id = $request->campus_id;
+        Session::put('get_campus_id', $campus_id);
+        Session::put('get_course_name', $query);
+        //meilisearch
+        // $data['courses'] = Course::search($course_name)->query(function (Builder $query) {
+        // })->orderBy('id', 'desc')->where('campus_id', $campus_id)->paginate(10)->appends([
+        //     'course_name' => $course_name,
+        //     'campus_id' => $campus_id,
+        // ]);
+        $client = new Client('http://localhost:7700');
 
-        if ($request->ajax()) {
-            $search = $request->search_term;
-            $status = $request->status;
-            Session::put('campus_id', $status);
-            Session::put('course_name', $search);
+        // Specify the index name
+        $indexName = 'courses';
 
-            $data['courses'] = Cache::remember('courses_data', 5, function () use ($status, $search) {
-                return Course::query()
-                    ->when($status, function ($q) use ($status) {
-                        $q->where('campus_id', $status);
-                    })
-                    ->when($search, function ($q) use ($search) {
-                        $q->where('course_name', 'like', '%' . $search . '%');
-                    })
-                    ->orderBy('id', 'desc')
-                    ->paginate(2);
-            });
+        // Get the current settings of the index
+        $index = $client->index($indexName);
+        $currentSettings = $index->getSettings();
+        // Update the settings to include the `campus_id` attribute as filterable
+        $newSettings = [
+            'filterableAttributes' => array_merge($currentSettings['filterableAttributes'], ['campus_id'])
+        ];
+        // Apply the updated settings to the index
+        $index->updateSettings($newSettings);
+        $courseSearch = Course::search($query, function ($ms, $q, $options) use ($request, $query, $campus_id) {
+            $filter = [];
+            if ($campus_id) {
+                $filter[] = 'campus_id = ' . $campus_id;
+            }
+            $options['filter'] = $filter;
+            return $ms->search($q, $options);
+        });
+        $data['courses'] = $courseSearch
+        ->paginate(5)
+        ->appends([
+            'course_name' => $query,
+            'campus_id' => $campus_id,
+        ]);
+        //end
+        // $data['courses'] = Course::query()
+        //     ->when($campus_id, function ($q) use ($campus_id) {
+        //         $q->where('campus_id', $campus_id);
+        //     })
+        //     ->when($course_name, function ($q) use ($course_name) {
+        //         $q->where('course_name', 'like', '%' . $course_name . '%');
+        //     })
+        //     ->orderBy('id', 'desc')
+        //     ->paginate(10)
+        //     ->appends([
+        //         'course_name' => $course_name,
+        //         'campus_id' => $campus_id,
+        //     ]);
 
-            $data['resultdata'] = 'This is from cache';
-            return view('ajax.Course.list', $data);
-        }
-
-        $search = $request->search_term;
-        $status = $request->status;
-        Session::put('campus_id', $status);
-        Session::put('course_name', $search);
-
-        $data['courses'] = Course::query()
-            ->when($status, function ($q) use ($status) {
-                $q->where('campus_id', $status);
-            })
-            ->when($search, function ($q) use ($search) {
-                $q->where('course_name', 'like', '%' . $search . '%');
-            })
-            ->orderBy('id', 'desc')
-            ->paginate(2);
-
-        Cache::put('courses_data', $data['courses'], 5);
-        $data['resultdata'] = 'This is first time cache';
+        $data['get_campus_id'] = Session::get('get_campus_id');
+        $data['get_course_name'] = Session::get('get_course_name');
         return view('course.all', $data);
+    }
+    //reset course list 
+    public function reset_course_list(){
+        Session::forget('get_campus_id');
+        Session::forget('get_course_name');
+        Session::forget('course_id');
+        return redirect('all-course');
+    }
+    //user status change
+    public function course_status_chnage(Request $request){
+        $courseData = Course::where('id',$request->course_id)->first();
+        if(!$courseData){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Course Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($courseData->status==1){
+            $courseData->status = 0;
+            $courseData->save();
+            $msg = 'Course Deactivated';
+        }else{
+            $courseData->status = 1;
+            $courseData->save();
+            $msg = 'Course Activated';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
     }
     public function archive(){
         $data['page_title'] = 'Archived | Course';

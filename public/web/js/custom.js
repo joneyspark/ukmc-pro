@@ -164,6 +164,48 @@ $(function(){
 
     });
 });
+$(function(){
+    $('.course-status-chnage').change(function(){
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        var course_id = $(this).data('id');
+        var url = $(this).data('action');
+            $.post(url,
+            {
+                course_id: course_id,
+                status: status
+            },
+            function(data, status){
+                console.log(data);
+                if(data['result']['key']===101){
+                    iziToast.show({
+                        title: 'Status',
+                        message: data['result']['val'],
+                        position: 'topRight',
+                        timeout: 8000,
+                        color: 'blue',
+                        balloon: true,
+                        close: true,
+                        progressBarColor: 'yellow',
+                    });
+                }
+                if(data['result']['key']===200){
+                    iziToast.show({
+                        title: 'Status',
+                        message: data['result']['val'],
+                        position: 'topRight',
+                        timeout: 8000,
+                        color: 'blue',
+                        balloon: true,
+                        close: true,
+                        progressBarColor: 'yellow',
+                    });
+
+                }
+                //alert("Data: " + data + "\nStatus: " + status);
+            });
+
+    });
+});
 
 function getRoleData(id){
     var user_id = $('#user_id').val(id);

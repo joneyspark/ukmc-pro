@@ -26,23 +26,26 @@
         </div>
         <h5 class="p-3">Course List</h5>
         <div class="widget-content widget-content-area">
-            <form>
+            <form method="get">
                  <div class="row mb-4">
-                     <div class="col-4">
-                        <select name="status" id="status" class="form-control">
+                     <div class="col-3">
+                        <select name="campus_id" id="campus_id" class="form-control">
                             <option value="">Select Campus</option>
                             @foreach ($campus_list as $row)
-                            <option value="{{ $row->id }}">{{ $row->campus_name }}</option>
+                            <option {{ (!empty($get_campus_id) && $get_campus_id==$row->id)?'selected':'' }} value="{{ $row->id }}">{{ $row->campus_name }}</option>
                             @endforeach
 
                         </select>
                      </div>
-                     <div class="col-6">
-                         <input type="text" name="search" id="search" class="form-control" placeholder="Enter Course Name">
+                     <div class="col-5">
+                         <input type="text" value="{{ (!empty($get_course_name))?$get_course_name:'' }}" name="course_name" id="course_name" class="form-control" placeholder="Enter Course Name">
+                     </div>
+                     <div class="col-2">
+                        <input type="submit" value="Filter" name="time" class="btn btn-warning">
                      </div>
 
-                     <div class="col">
-                        <input type="submit" value="Reset" name="time" class="btn btn-danger">
+                     <div class="col-1">
+                        <a href="{{ URL::to('reset-course-list') }}" class="btn btn-danger">Reset</a>
                      </div>
                  </div>
             </form>

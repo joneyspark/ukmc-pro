@@ -1,6 +1,5 @@
 <table class="table table-bordered">
     <thead>
-        <span>{{ $resultdata }}</span>
         <tr>
             <th scope="col">No.</th>
             <th scope="col">Course Name</th>
@@ -26,9 +25,8 @@
                     class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
                     <div class="input-checkbox">
                         <span class="switch-chk-label label-left">On</span>
-                        <input class="switch-input" type="checkbox"
-                            role="switch" id="form-custom-switch-inner-text"
-                            checked="">
+                        <input {{ ($course->status==1)?'checked':'' }} data-action="{{ URL::to('course-status-chnage') }}" data-id="{{ $course->id }}" class="course-status-chnage switch-input" type="checkbox"
+                                                    role="switch" id="form-custom-switch-inner-text">
                         <span class="switch-chk-label label-right">Off</span>
                     </div>
                 </div>

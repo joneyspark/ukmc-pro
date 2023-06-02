@@ -32,6 +32,40 @@ class Course extends Model
         'course_module',
         'status',
     ];
+    /*
+     * Searchable attributes for laravel/scout
+     */
+    public static function searchableAttributes()
+    {
+        return ['course_name'];
+    }
+
+    /*
+     * filterable attributes
+     */
+    public static function searchFilterableAttributes()
+    {
+        return ['campus_id','course_level_id'];
+    }
+
+    /*
+     * Sortable attributes
+     */
+    public static function searchSortableAttributes()
+    {
+        return ['id'];
+    }
+
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+        $dateInMs = Carbon::createFromDate($array['created_at'])->getTimestampMs();
+        $dateInMsUpdated = Carbon::createFromDate($array['updated_at'])->getTimestampMs();
+        $array['created_at'] = $dateInMs;
+        $array['updated_at'] = $dateInMsUpdated;
+
+        return $array;
+    }
     public function searchableAs(): string
     {
         return 'courses';
