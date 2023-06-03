@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\CourseCreateRequest;
+use App\Http\Requests\Course\CourseEditRequest;
 use App\Models\Campus\Campus;
 use App\Models\Course\Course;
 use App\Models\Course\CourseAdditional;
@@ -137,7 +138,7 @@ class CourseController extends Controller{
         $newSettings = [
             'filterableAttributes' => array_merge($currentSettings['filterableAttributes'], ['campus_id'])
         ];
-        
+
         $index->updateSettings($newSettings);
         $courseSearch = Course::search($query, function ($ms, $q, $options) use ($request, $query, $campus_id) {
             $filter = [];
@@ -156,9 +157,107 @@ class CourseController extends Controller{
         ]);
         $data['get_campus_id'] = Session::get('get_campus_id');
         $data['get_course_name'] = Session::get('get_course_name');
+        Session::put('current_url',URL::full());
         return view('course.all', $data);
     }
-    //reset course list 
+    //edit course
+    public function edit($slug=NULL){
+        $data['page_title'] = 'Course | Edit';
+
+        $data['campus_list'] = Campus::where('active', 1)->get();
+        $data['categories'] = CourseCategories::where('status',0)->get();
+        $data['course_levels'] = CourseLevel::where('status',0)->get();
+        $data['course_data'] = Course::where('slug',$slug)->first();
+        $data['course'] = true;
+        $data['course_all'] = true;
+        $data['additionals'] = CourseAdditional::where('course_id',$data['course_data']->id)->get();
+        return view('course.edit',$data);
+    }
+    //course edit data post
+    public function edit_post(CourseEditRequest $request){
+        $course = Course::where('slug',$request->slug)->first();
+        if(!$course){
+            Session::flash('error','Course Data Not Found!');
+            return redirect('all-course');
+        }
+        $course->campus_id = $request->campus_id;
+        $course->course_name = $request->course_name;
+        $course->category_id = $request->category_id;
+        $course->course_level_id = $request->course_level_id;
+        $course->course_duration = $request->course_duration;
+        $course->course_fee = $request->course_fee;
+        $course->international_course_fee = $request->international_course_fee;
+        //$course->course_intake = $request->course_intake;
+        $course_intake_str = '';
+        $arr = json_decode($request->course_intake,true);
+        if(is_array($arr)){
+            foreach($arr as $row){
+                $course_intake_str .= $row['value'].',';
+            }
+        }else{
+            echo 'Not array';
+        }
+        $course->course_intake = $course_intake_str;
+        $course->awarding_body = $request->awarding_body;
+        $course->is_lang_mendatory = $request->is_lang_mendatory;
+        $course->lang_requirements = $request->lang_requirements;
+        $course->per_time_work_details = $request->per_time_work_details;
+        $course->addtional_info_course = $request->addtional_info_course;
+        //course prospectus
+        $course_prospectus = $request->course_prospectus;
+        if ($request->hasFile('course_prospectus')) {
+            if (File::exists(public_path($course->course_prospectus))) {
+                File::delete(public_path($course->course_prospectus));
+            }
+            $ext = $course_prospectus->getClientOriginalExtension();
+            $doc_file_name = $course_prospectus->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $upload_path1 = 'backend/images/course/course_prospectus/';
+            Service::createDirectory($upload_path1);
+            $request->file('course_prospectus')->move(public_path('backend/images/course/course_prospectus/'), $doc_file_name);
+            $course->course_prospectus = $upload_path1.$doc_file_name;
+        }
+        //course module pdf
+        $course_module = $request->course_module;
+        if ($request->hasFile('course_module')) {
+            if (File::exists(public_path($course->course_module))) {
+                File::delete(public_path($course->course_module));
+            }
+            $ext = $course_module->getClientOriginalExtension();
+            $doc_file_name = $course_module->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $upload_path1 = 'backend/images/course/course_module/';
+            Service::createDirectory($upload_path1);
+            $request->file('course_module')->move(public_path('backend/images/course/course_module/'), $doc_file_name);
+            $course->course_module = $upload_path1.$doc_file_name;
+        }
+        $course->update_by = Auth::user()->id;
+        $course->save();
+        //additional data saved
+        $additionals = $request->course_additionals;
+        if($additionals){
+            $getPrevios = CourseAdditional::where('course_id',$course->id)->get();
+            if($getPrevios){
+                foreach($getPrevios as $row){
+                    $del = CourseAdditional::where('id',$row->id)->delete();
+                }
+            }
+            foreach($additionals as $row){
+                $additional = new CourseAdditional();
+                $additional->course_id = $course->id;
+                $additional->additional = $row;
+                $additional->save();
+            }
+        }
+        Session::put('course_id',$course->id);
+        Session::flash('success','Course Data Updated Successfully!');
+        if(!empty(Session::get('current_url'))){
+            return redirect(Session::get('current_url'));
+        }else{
+            return redirect('all-course');
+        }
+    }
+    //reset course list
     public function reset_course_list(){
         Session::forget('get_campus_id');
         Session::forget('get_course_name');
@@ -201,6 +300,7 @@ class CourseController extends Controller{
         $data['page_title'] = 'Course | Details';
         $data['course'] = true;
         $data['course_all'] = true;
+        $data['course_data'] = Course::where('slug',$slug)->first();
         return view('course/details',$data);
     }
 }

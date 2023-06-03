@@ -79,4 +79,7 @@ class Course extends Model
     public function course_level(){
         return $this->belongsTo(CourseLevel::class,'course_level_id','id');
     }
+    public function additionals(){
+        return $this->hasMany(CourseAdditional::class);
+    }
 }

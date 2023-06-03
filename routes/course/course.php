@@ -15,6 +15,8 @@ Route::controller(CourseController::class)->group(function () {
     Route::get('course-details/{slug?}', 'course_details');
     Route::get('reset-course-list', 'reset_course_list');
     Route::post('course-status-chnage', 'course_status_chnage');
+    Route::get('course/edit/{slug?}', 'edit');
+    Route::post('course-edit-post', 'edit_post');
 });
 Route::controller(CourseCategoryController::class)->group(function () {
     Route::get('course-categories/{id?}', 'course_categories');

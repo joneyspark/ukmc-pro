@@ -44,7 +44,7 @@
                                                         <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
                                                             <div class="input-checkbox">
                                                                 <span class="switch-chk-label label-left">On</span>
-                                                                <input {{ ($campus->active==1)?'checked':'' }} data-id="{{ $campus->id }}" data-toggle="toggle" class="switch-input campus-change-status" type="checkbox"
+                                                                <input {{ ($campus->active==1)?'checked':'' }} data-id="{{ $campus->id }}" data-action="{{ URL::to('campus-change-status') }}" data-toggle="toggle" class="switch-input campus-change-status" type="checkbox"
                                                                     role="switch" id="form-custom-switch-inner-text">
                                                                 <span class="switch-chk-label label-right">Off</span>
                                                             </div>
