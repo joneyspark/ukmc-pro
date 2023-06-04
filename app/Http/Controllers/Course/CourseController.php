@@ -31,8 +31,8 @@ class CourseController extends Controller{
         $data['course'] = true;
         $data['course_add'] = true;
         $data['campus_list'] = Campus::where('active',1)->orderBy('id','desc')->get();
-        $data['categories'] = CourseCategories::where('status',0)->get();
-        $data['course_levels'] = CourseLevel::where('status',0)->get();
+        $data['categories1'] = CourseCategories::where('status',0)->get();
+        $data['course_levels1'] = CourseLevel::where('status',0)->get();
         return view('course/create',$data);
     }
     public function store(CourseCreateRequest $request){

@@ -298,3 +298,4 @@ function task_status_change(){
             location.reload(true);
         }, 2000);
 }
+

@@ -29,7 +29,7 @@
             <form method="get">
                  <div class="row mb-4">
                      <div class="col-3">
-                        <select name="campus_id" id="campus_id" class="form-control">
+                        <select name="campus_id" id="campus_id" class="form-control" onchange="getCourseData()">
                             <option value="">Select Campus</option>
                             @foreach ($campus_list as $row)
                             <option {{ (!empty($get_campus_id) && $get_campus_id==$row->id)?'selected':'' }} value="{{ $row->id }}">{{ $row->campus_name }}</option>

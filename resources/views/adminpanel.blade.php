@@ -287,6 +287,14 @@
                     }
                 });
             }
+            //get course data
+            function getCourseData(){
+                var campus_id = $('#campus_id').val();
+                var course_name = $('#course_name').val();
+                if(campus_id !== null){
+                    window.location = "{{ URL::to('all-course?campus_id=') }}" + campus_id + "&course_name=" + course_name;
+                }
+            }
         </script>
         <script src="{{ asset('web/js/custom.js') }}"></script>
         <script src="{{ asset('web/js/addRemove.js') }}"></script>

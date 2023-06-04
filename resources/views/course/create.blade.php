@@ -58,8 +58,8 @@
                                                 for="campus_id">Select Campus*</label><select
                                                 class="form-control" id="campus_id" name="campus_id">
                                                 <option value="">--Select One--</option>
-                                                @foreach ($campus_list as $campus)
-                                                <option value="{{ $campus->id }}">{{ $campus->campus_name }}</option>
+                                                @foreach ($campus_list as $campus1)
+                                                <option value="{{ $campus1->id }}">{{ $campus1->campus_name }}</option>
                                                 @endforeach
                                             </select>
                                             @if ($errors->has('campus_id'))
@@ -84,7 +84,7 @@
                                             for="exampleFormControlInput1">Course Category*</label>
                                         <select name="category_id" class="form-control">
                                             <option value="">Select a Category</option>
-                                            @foreach ($categories as $category)
+                                            @foreach ($categories1 as $category)
                                             <option value="{{ $category->id }}">{{ $category->title }}</option>
                                             @endforeach
                                         </select>
@@ -98,7 +98,7 @@
                                             for="exampleFormControlInput1">Course Level</label>
                                         <select name="course_level_id" class="form-control">
                                             <option value="">Select Course Level</option>
-                                            @foreach ($course_levels as $level)
+                                            @foreach ($course_levels1 as $level)
                                             <option value="{{ $level->id }}">{{ $level->title }}</option>
                                             @endforeach
                                         </select>
