@@ -5,15 +5,23 @@ namespace App\Http\Controllers\Application;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Events\AddNewLead;
+use App\Models\Agent\Company;
+use App\Models\Campus\Campus;
+use Carbon\Carbon;
+use App\Traits\Service;
 
-class ApplicationController extends Controller
-{
+class ApplicationController extends Controller{
+    use Service;
     public function create(){
+        
         $data['page_title'] = 'Application | Create';
         $data['application'] = true;
         $data['application_add'] = true;
+        $data['a_company_data'] = Company::where('status',1)->get();
+        $data['a_campuses_data'] = Campus::where('active',1)->get();
+        $data['intakes'] = Service::get_intake_with_next_year();
         //AddNewLead::dispatch('Hello this is test');
-        return view('application/create',$data);
+        return view('application/create_step_1',$data);
     }
     public function create_step_2(){
         $data['page_title'] = 'Application | Create | Step 2';

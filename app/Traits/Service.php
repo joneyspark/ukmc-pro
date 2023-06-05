@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 Use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Login\LoginRequest;
+use Carbon\Carbon;
 
 trait Service
 {
@@ -18,6 +19,28 @@ trait Service
             Session::flash('error','Login First! Then See thee Dashboard!');
             return redirect('login');
         }
+    }
+    public static function get_intake_with_next_year(){
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+        $nextYear = $currentYear + 1;
+        $months = [];
+        $getMonths = array();
+
+        for ($i = $currentMonth; $i <= 12; $i++) {
+            $months[] = Carbon::createFromDate($currentYear, $i, 1)->format('F Y');
+        }
+
+        for ($i = 1; $i <= 12; $i++) {
+            $months[] = Carbon::createFromDate($nextYear, $i, 1)->format('F Y');
+        }
+        foreach($months as $row){
+            $getMonths[] = array(
+                'val'=>date('Y-m',strtotime($row)),
+                'string'=> $row
+            );
+        }
+        return $getMonths;
     }
     public static function distance($lat1, $lon1, $lat2, $lon2, $unit)
     {
