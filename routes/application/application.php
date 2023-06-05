@@ -7,7 +7,12 @@ use App\Http\Controllers\Application\ApplicationController;
 
 
 Route::controller(ApplicationController::class)->group(function () {
-    Route::get('application-create', 'create');
+    Route::get('application-create/{id?}', 'create');
+    Route::get('application-create/{id?}/step-2', 'create_step_2');
+    Route::get('application-create/{id?}/step-3', 'create_step_3');
+    Route::get('application-create/{id?}/step-4', 'create_step_4');
+    Route::get('application-create/{id?}/step-5', 'create_step_5');
+    Route::get('application-create/{id?}/step-6', 'create_step_6');
     Route::get('all-application', 'all');
     Route::get('ongoing-applications', 'ongoing');
     Route::get('enrolled-students', 'enrolled');

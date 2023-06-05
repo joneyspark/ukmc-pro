@@ -9,11 +9,46 @@ use App\Events\AddNewLead;
 class ApplicationController extends Controller
 {
     public function create(){
-        $data['page_title'] = 'Application / Create';
+        $data['page_title'] = 'Application | Create';
         $data['application'] = true;
         $data['application_add'] = true;
-        AddNewLead::dispatch('Hello this is test');
+        //AddNewLead::dispatch('Hello this is test');
         return view('application/create',$data);
+    }
+    public function create_step_2(){
+        $data['page_title'] = 'Application | Create | Step 2';
+        $data['application'] = true;
+        $data['application_add'] = true;
+        //AddNewLead::dispatch('Hello this is test');
+        return view('application/create_step_2',$data);
+    }
+    public function create_step_3(){
+        $data['page_title'] = 'Application | Create | Step 3';
+        $data['application'] = true;
+        $data['application_add'] = true;
+        //AddNewLead::dispatch('Hello this is test');
+        return view('application/create_step_3',$data);
+    }
+    public function create_step_4(){
+        $data['page_title'] = 'Application | Create | Step 4';
+        $data['application'] = true;
+        $data['application_add'] = true;
+        //AddNewLead::dispatch('Hello this is test');
+        return view('application/create_step_4',$data);
+    }
+    public function create_step_5(){
+        $data['page_title'] = 'Application | Create | Step 5';
+        $data['application'] = true;
+        $data['application_add'] = true;
+        //AddNewLead::dispatch('Hello this is test');
+        return view('application/create_step_5',$data);
+    }
+    public function create_step_6(){
+        $data['page_title'] = 'Application | Create | Step 6';
+        $data['application'] = true;
+        $data['application_add'] = true;
+        //AddNewLead::dispatch('Hello this is test');
+        return view('application/create_step_6',$data);
     }
     public function all(){
         $data['page_title'] = 'Application / All';
