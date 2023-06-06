@@ -18,4 +18,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('enrolled-students', 'enrolled');
     Route::get('archive-students', 'archive_students');
     Route::get('application-details', 'application_details');
+    Route::post('get-courses-by-campus', 'get_courses_by_campus');
+    Route::post('get-course-info', 'get_course_info');
+    Route::post('step-1-post', 'step_1_post');
 });

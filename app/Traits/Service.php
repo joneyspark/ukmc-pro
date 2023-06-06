@@ -708,11 +708,11 @@ trait Service
                 'key'=>'teacher',
                 'val'=>'Teacher',
             ),
-            
+
         ];
         return $roles;
     }
-    //priority list 
+    //priority list
     public static function priority(){
         $list = array(
             'Low',
@@ -742,6 +742,96 @@ trait Service
             array(
                 'id'=>4,
                 'val'=>'Cancel'
+            ),
+        ];
+        return $status;
+    }
+    public static function residential_status(){
+        $status = [
+            array(
+                'id'=>'UK Citizen',
+                'val'=>'UK Citizen'
+            ),
+            array(
+                'id'=>'Other',
+                'val'=>'Other'
+            ),
+        ];
+        return $status;
+    }
+    public static function program(){
+        $status = [
+            array(
+                'id'=>'BSc (Hons) Business',
+                'val'=>'BSc (Hons) Business'
+            ),
+            array(
+                'id'=>'MSc in Computer Science',
+                'val'=>'MSc in Computer Science'
+            ),
+        ];
+        return $status;
+    }
+    public static function delivery_pattern(){
+        $status = [
+            array(
+                'id'=>'Evening and Weekend',
+                'val'=>'Evening and Weekend'
+            ),
+            array(
+                'id'=>'Standard',
+                'val'=>'Standard'
+            ),
+        ];
+        return $status;
+    }
+    public static function name_title(){
+        $status = [
+            array(
+                'id'=>'Mr',
+                'val'=>'Mr'
+            ),
+            array(
+                'id'=>'Mrs',
+                'val'=>'Mrs'
+            ),
+            array(
+                'id'=>'Miss',
+                'val'=>'Miss'
+            ),
+            array(
+                'id'=>'Ms',
+                'val'=>'Ms'
+            ),
+        ];
+        return $status;
+    }
+    public static function gender(){
+        $status = [
+            array(
+                'id'=>'Male',
+                'val'=>'Male'
+            ),
+            array(
+                'id'=>'Female',
+                'val'=>'Female'
+            ),
+            array(
+                'id'=>'Other',
+                'val'=>'Other'
+            ),
+        ];
+        return $status;
+    }
+    public static function apply_apl(){
+        $status = [
+            array(
+                'id'=>'Yes',
+                'val'=>'Yes'
+            ),
+            array(
+                'id'=>'No',
+                'val'=>'No'
             ),
         ];
         return $status;

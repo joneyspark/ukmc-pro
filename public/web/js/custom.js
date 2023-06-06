@@ -298,4 +298,62 @@ function task_status_change(){
             location.reload(true);
         }, 2000);
 }
+function getCourse(){
+    var campus_id = $('#campus_id').val();
+    var url = $('#campus_id').data('action');
+    $.post(url,
+    {
+        campus_id: campus_id
+    },
+    function(data, status){
+        console.log(data);
+        if(data['result']['key']===101){
+            iziToast.show({
+                title: 'Status',
+                message: data['result']['val'],
+                position: 'topRight',
+                timeout: 8000,
+                color: 'orange',
+                balloon: true,
+                close: true,
+                progressBarColor: 'yellow',
+            });
+        }
+        if(data['result']['key']===200){
+            $('#course_data').html(data['result']['val'])
+        }
+        //alert("Data: " + data + "\nStatus: " + status);
+    });
+
+}
+function getCourseInfo(){
+    var course_id = $('.get-course-info-data').val();
+    var url = $('.get-course-info-data').data('action');
+    $.post(url,
+    {
+        course_id: course_id
+    },
+    function(data, status){
+        console.log(data);
+        if(data['result']['key']===101){
+            iziToast.show({
+                title: 'Status',
+                message: data['result']['val'],
+                position: 'topRight',
+                timeout: 8000,
+                color: 'orange',
+                balloon: true,
+                close: true,
+                progressBarColor: 'yellow',
+            });
+        }
+        if(data['result']['key']===200){
+            $('#course_intake').html(data['result']['val']);
+            $('#course_fee_local').val(data['result']['course_fee_local']);
+            $('#course_fee_international').val(data['result']['course_fee_international']);
+        }
+        //alert("Data: " + data + "\nStatus: " + status);
+    });
+
+}
 
