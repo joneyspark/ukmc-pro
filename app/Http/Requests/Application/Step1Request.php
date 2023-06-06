@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Application;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class Step1Request extends FormRequest
 {
@@ -23,7 +24,6 @@ class Step1Request extends FormRequest
     {
         return [
             'applicant_fees_funded' => 'required',
-            'current_residential_status' => 'required',
             'campus_id' => 'required',
             'course_id' => 'required',
             'local_course_fee' => 'required',
@@ -36,9 +36,10 @@ class Step1Request extends FormRequest
             'last_name' => 'required',
             'gender' => 'required',
             'date_of_birth' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required',
             'phone' => 'required',
             'is_applying_advanced_entry' => 'required',
         ];
+        
     }
 }

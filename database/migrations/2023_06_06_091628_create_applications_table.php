@@ -27,10 +27,12 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('name')->nullable();
             $table->string('gender')->nullable();
             $table->string('date_of_birth')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
+            $table->text('slug')->nullable();
             $table->string('is_applying_advanced_entry')->nullable();
             $table->integer('admission_officer_id')->default(0)->nullable();
             $table->tinyInteger('application_status_id')->default(0)->nullable();

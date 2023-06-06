@@ -37,6 +37,9 @@ class Application extends Model
         'is_final_interview',
         'steps',
         'application_process_status',
+        'status',
+        'create_by',
+        'update_by',
     ];
 
     public function searchableAs(): string

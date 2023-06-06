@@ -89,10 +89,10 @@
                         @if(Auth::check() && Auth::user()->role=='admin')
                         <div class="form-group mb-4">
                             <label for="verticalFormStepform-name">Agent/Company/Referral:</label>
-                            <select id="company_id" class="form-select">
+                            <select name="company_id" id="company_id" class="form-select">
                                 <option selected>Choose...</option>
                                 @foreach ($a_company_data as $crow)
-                                <option value="{{ $crow->id }}">{{ $crow->company_name }}</option>
+                                <option {{ (!empty($app_data->company_id) && $app_data->company_id==$crow->id)?'selected':'' }} value="{{ $crow->id }}">{{ $crow->company_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -105,16 +105,14 @@
                                 funded by the Student Loan Company / Student Finance
                                 England?</label>
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="customRadioInline1" name="is_applicant_fees_be_funded" {{ (!empty($app_data->is_applicant_fees_be_funded) && $app_data->is_applicant_fees_be_funded=='yes')?'checked':'' }} value="yes" class="custom-control-input">
+                                <input type="radio" id="customRadioInline1" name="applicant_fees_funded" {{ (!empty($app_data->applicant_fees_funded) && $app_data->applicant_fees_funded=='yes')?'checked':'' }} value="yes" class="custom-control-input">
                                 <label class="custom-control-label" for="customRadioInline1">Yes</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="customRadioInline2" name="is_applicant_fees_be_funded" {{ (!empty($app_data->is_applicant_fees_be_funded) && $app_data->is_applicant_fees_be_funded=='no')?'checked':'' }} value="no" class="custom-control-input">
+                                <input type="radio" id="customRadioInline2" name="applicant_fees_funded" {{ (!empty($app_data->applicant_fees_funded) && $app_data->applicant_fees_funded=='no')?'checked':'' }} value="no" class="custom-control-input">
                                 <label class="custom-control-label" for="customRadioInline2">No</label>
                             </div>
-                            @if ($errors->has('is_applicant_fees_be_funded'))
-                                <span class="text-danger">{{ $errors->first('is_applicant_fees_be_funded') }}</span>
-                            @endif
+                            
                         </div>
                         <div class="form-group mb-4">
                             <label for="verticalFormStepform-name">Select one category that
@@ -125,9 +123,6 @@
                                 <option {{ (!empty($app_data->current_residential_status) && $app_data->current_residential_status==$rrow['id'])?'selected':'' }} value="{{ $rrow['id'] }}">{{ $rrow['val'] }}</option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('current_residential_status'))
-                                <span class="text-danger">{{ $errors->first('current_residential_status') }}</span>
-                            @endif
                         </div>
                         <div class="row">
                             <div class="col form-group mb-4">
@@ -172,7 +167,7 @@
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Course fee
                                     (GBP) Per Year (Local):</label>
-                                <input type="text" value="{{ (!empty($app_data->local_course_fee))?$app_data->local_course_fee:'' }}" class="form-control" id="local_course_fee" name="course_fee_local" placeholder="">
+                                <input type="text" value="{{ (!empty($app_data->local_course_fee))?$app_data->local_course_fee:old('local_course_fee') }}" class="form-control" id="local_course_fee" name="local_course_fee" placeholder="">
                                 @if ($errors->has('local_course_fee'))
                                     <span class="text-danger">{{ $errors->first('local_course_fee') }}</span>
                                 @endif
@@ -180,7 +175,7 @@
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Course fee
                                     (GBP) Per Year (International):</label>
-                                <input {{ (!empty($app_data->international_course_fee))?$app_data->international_course_fee:'' }} type="text" class="form-control" id="course_fee_international" name="international_course_fee" placeholder="">
+                                <input value="{{ (!empty($app_data->international_course_fee))?$app_data->international_course_fee:old('international_course_fee') }}" type="text" class="form-control" id="course_fee_international" name="international_course_fee" placeholder="">
                             </div>
                         </div>
                         <div class="row">
@@ -252,14 +247,14 @@
                             </div>
                             <div class="col-5 form-group mb-4">
                                 <label for="verticalFormStepform-name">First name:</label>
-                                <input name="first_name" value="{{ (!empty($app_data->first_name))?$app_data->first_name:'' }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
+                                <input name="first_name" value="{{ (!empty($app_data->first_name))?$app_data->first_name:old('first_name') }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
                                 @if ($errors->has('first_name'))
                                     <span class="text-danger">{{ $errors->first('first_name') }}</span>
                                 @endif
                             </div>
                             <div class="col-5 form-group mb-4">
                                 <label for="verticalFormStepform-name">Last name:</label>
-                                <input name="last_name" value="{{ (!empty($app_data->last_name))?$app_data->last_name:'' }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
+                                <input name="last_name" value="{{ (!empty($app_data->last_name))?$app_data->last_name:old('last_name') }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
                                 @if ($errors->has('last_name'))
                                     <span class="text-danger">{{ $errors->first('last_name') }}</span>
                                 @endif
@@ -281,31 +276,24 @@
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Date of
                                     Birth:</label>
-                                <input value="{{ (!empty($app_data->date_of_birth))?$app_data->date_of_birth:'' }}" name="date_of_birth" type="date" class="form-control" id="verticalFormStepform-name">
+                                <input value="{{ (!empty($app_data->date_of_birth))?$app_data->date_of_birth:old('date_of_birth') }}" name="date_of_birth" type="date" class="form-control" id="verticalFormStepform-name">
                                 @if ($errors->has('date_of_birth'))
                                     <span class="text-danger">{{ $errors->first('date_of_birth') }}</span>
                                 @endif
                             </div>
                         </div>
                         <div class="row">
-                            @if(!empty($app_data->email))
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Email:</label>
-                                <input disabled value="{{ (!empty($app_data->email))?$app_data->email:'' }}" type="email" class="form-control" id="verticalFormStepform-name">
-                            </div>
-                            @else
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Email:</label>
-                                <input value="" name="email" type="email" class="form-control" id="verticalFormStepform-name">
+                                <input value="{{ (!empty($app_data->email))?$app_data->email:old('email') }}" name="email" type="email" class="form-control" id="verticalFormStepform-name">
                                 @if ($errors->has('email'))
                                     <span class="text-danger">{{ $errors->first('email') }}</span>
                                 @endif
                             </div>
-                            @endif
 
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Phone:</label>
-                                <input value="{{ (!empty($app_data->phone))?$app_data->phone:'' }}" type="text" name="phone" class="form-control" id="verticalFormStepform-name">
+                                <input value="{{ (!empty($app_data->phone))?$app_data->phone:old('phone') }}" type="text" name="phone" class="form-control" id="verticalFormStepform-name">
                                 @if ($errors->has('phone'))
                                     <span class="text-danger">{{ $errors->first('phone') }}</span>
                                 @endif
