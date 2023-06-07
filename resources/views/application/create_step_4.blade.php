@@ -14,13 +14,53 @@
                         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="#">Application</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Create</li>
+                                <li class="breadcrumb-item active" aria-current="page">Create Step 4</li>
                             </ol>
                         </nav>
 
                     </div>
                 </div>
             </header>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload Documents</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><svg> ... </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
+                    <div class="col form-group mb-4">
+                        <label for="verticalFormStepform-name">Browse Document:</label>
+                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                    </div>
+                    <div class="col form-group mb-4">
+                        <label for="verticalFormStepform-name">Document Type:</label>
+                        <select id="inputState" class="form-select">
+                            <option selected>Choose...</option>
+                        <option>C.V.</option>
+                        <option>English language certificate</option>
+                        <option>Highest qualification certificate</option>
+                        <option>Highest qualification transcript</option>
+                        <option>Leave to remain</option>
+                        <option>Passport</option>
+                        <option>Personal statement	</option>
+                        <option>Qualification certificate</option>
+                        <option>Qualification certificate and Transcript</option>
+                        <option>Qualification transcript</option>
+                        <option>Work reference letter</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                    <button type="button" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
         </div>
     </div>
     {{-- <h5 class="p-3">New Applicant</h5> --}}
@@ -89,45 +129,7 @@
                                 Upload File
                               </button>
                         </div>
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Upload Documents</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><svg> ... </svg>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="col form-group mb-4">
-                                            <label for="verticalFormStepform-name">Browse Document:</label>
-                                            <input type="file" class="form-control-file" id="exampleFormControlFile1">
-                                        </div>
-                                        <div class="col form-group mb-4">
-                                            <label for="verticalFormStepform-name">Document Type:</label>
-                                            <select id="inputState" class="form-select">
-                                                <option selected>Choose...</option>
-                                            <option>C.V.</option>
-                                            <option>English language certificate</option>
-                                            <option>Highest qualification certificate</option>
-                                            <option>Highest qualification transcript</option>
-                                            <option>Leave to remain</option>
-                                            <option>Passport</option>
-                                            <option>Personal statement	</option>
-                                            <option>Qualification certificate</option>
-                                            <option>Qualification certificate and Transcript</option>
-                                            <option>Qualification transcript</option>
-                                            <option>Work reference letter</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
-                                        <button type="button" class="btn btn-primary">Upload</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="col-12">
                             <label for="verticalFormInputAddress" class="form-label">Attached Files</label>
                             <div class="table-responsive">

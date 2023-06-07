@@ -54,6 +54,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/plugins/css/light/tagify/custom-tagify.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/plugins/css/dark/tagify/custom-tagify.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/assets/css/dark/components/modal.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/assets/css/dark/editors/markdown/simplemde.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/src/assets/css/light/editors/markdown/simplemde.min.css') }}">
 </head>
 
 <body class="layout-boxed">
@@ -229,6 +231,8 @@
      <!-- BEGIN PAGE LEVEL SCRIPTS -->
      <script src="{{ asset('backend/src/plugins/src/stepper/bsStepper.min.js') }}"></script>
      <script src="{{ asset('backend/src/plugins/src/stepper/custom-bsStepper.min.js') }}"></script>
+     <script src="{{ asset('backend/src/editors/markdown/simplemde.min.js') }}"></script>
+     <script src="{{ asset('backend/src/editors/markdown/custom-markdown.js') }}"></script>
      <!-- END PAGE LEVEL SCRIPTS -->
      <script src="{{ asset('web/js/iziToast.js') }}"></script>
      <link rel="stylesheet" type="text/css" href="{{ asset('web/css/toastr.css') }}">

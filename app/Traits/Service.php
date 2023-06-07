@@ -836,4 +836,67 @@ trait Service
         ];
         return $status;
     }
+    public static function ethnic_origin(){
+        $ethnic = array(
+            'Black',
+            'White',
+            'Other',
+
+        );
+        return $ethnic;
+    }
+    public static function highest_qualifications(){
+        $qualifications = [
+            array(
+                'id'=>'1',
+                'val'=>'Qualification below GCSE'
+            ),
+            array(
+                'id'=>'2',
+                'val'=>'GCSE or Level 2 qualification'
+            ),
+            array(
+                'id'=>'3',
+                'val'=>'Level 3 Diploma'
+            ),
+            array(
+                'id'=>'4',
+                'val'=>'Level 3 Certificate'
+            ),
+            array(
+                'id'=>'5',
+                'val'=>'Level 3 Award'
+            ),
+            array(
+                'id'=>'6',
+                'val'=>'A/AS Level(s)'
+            ),
+            array(
+                'id'=>'7',
+                'val'=>'Scottish Baccalaureate'
+            ),
+            array(
+                'id'=>'8',
+                'val'=>'Scottish Highers/Advanced Highers'
+            ),
+            array(
+                'id'=>'9',
+                'val'=>'International Baccalaureate (IB) Diploma'
+            ),
+        ];
+        return $qualifications;
+    }
+    public static function last_institution_to_be_attend(){
+        $institutions = [
+            array(
+                'id'=>'1',
+                'val'=>'Any Non UK Institution'
+            ),
+            array(
+                'id'=>'2',
+                'val'=>'Other'
+            ),
+        ];
+        return $institutions;
+    }
 }

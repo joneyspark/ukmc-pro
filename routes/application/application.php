@@ -21,4 +21,6 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('get-courses-by-campus', 'get_courses_by_campus');
     Route::post('get-course-info', 'get_course_info');
     Route::post('step-1-post', 'step_1_post');
+    Route::post('step-2-post', 'step_2_post');
+    Route::post('step-3-post', 'step_3_post');
 });
