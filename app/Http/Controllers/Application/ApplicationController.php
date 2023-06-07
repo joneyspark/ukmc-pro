@@ -12,6 +12,7 @@ use App\Models\Agent\Company;
 use App\Models\Application\Application;
 use App\Models\Application\Application_Step_2;
 use App\Models\Application\Application_Step_3;
+use App\Models\Application\ApplicationDocument;
 use App\Models\Campus\Campus;
 use App\Models\Course\Course;
 use App\Models\Course\CourseLevel;
@@ -19,6 +20,7 @@ use Carbon\Carbon;
 use App\Traits\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class ApplicationController extends Controller{
     use Service;
@@ -222,6 +224,20 @@ class ApplicationController extends Controller{
             Session::flash('error','Complete Step 3 Then Proced!');
             return redirect('application-create/'.$application->id.'/step-3');
         }
+        //update step
+        $document = ApplicationDocument::where('application_id',$application->id)->count();
+        if($document > 2){
+            $up_step = 4;
+            $get_application = Application::where('id',$id)->first();
+            $array = explode(",",$get_application->steps);
+            if(!in_array($up_step,$array)){
+                $update_step = $get_application->steps.','.$up_step;
+                $get_application->steps = $update_step;
+                $get_application->save();
+            }
+        }
+        $data['document_count'] = $document;
+        $data['application_documents'] = ApplicationDocument::where('application_id',$application->id)->get();
         $data['application_id'] = $application->id;
         $data['page_title'] = 'Application | Create | Step 4';
         $data['application'] = true;
@@ -229,7 +245,53 @@ class ApplicationController extends Controller{
         //AddNewLead::dispatch('Hello this is test');
         return view('application/create_step_4',$data);
     }
-    public function create_step_5(){
+    //step 4 post
+    public function step_4_post(Request $request){
+        $validator = Validator::make($request->all(), [
+            'document_type' => 'required',
+            'doc' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        $application = Application::where('id',$request->application_id)->first();
+        if(!$application){
+            Session::flash('error','Application Data Not Found!');
+            return redirect('application-create');
+        }
+        $document = new ApplicationDocument();
+        $document->application_id = $application->id;
+        $document->document_type = $request->document_type;
+        $doc = $request->doc;
+        if ($request->hasFile('doc')) {
+            $ext = $doc->getClientOriginalExtension();
+            $doc_file_name = $doc->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 999).'.'.$ext;
+            $upload_path1 = 'backend/images/application/doc/'.$application->id.'/';
+            Service::createDirectory($upload_path1);
+            $request->file('doc')->move(public_path('backend/images/application/doc/'.$application->id.'/'), $doc_file_name);
+            $document->doc = $upload_path1.$doc_file_name;
+        }
+        $document->save();
+        Session::flash('success','Document Saved Successfully!');
+        return redirect('application-create/'.$application->id.'/step-4');
+    }
+    //upload application document
+    public function upload_application_document(Request $request){
+        
+    }
+    public function create_step_5($id=NULL){
+        $current_step = 4;
+        $application = Application::where('id',$id)->first();
+        if(!$application){
+            Session::flash('error','Application Data Not Found!');
+            return redirect('application-create');
+        }
+        $step_arr = explode(",",$application->steps);
+        if(!in_array($current_step,$step_arr)){
+            Session::flash('error','Complete Step 4 Then Proced!');
+            return redirect('application-create/'.$application->id.'/step-4');
+        }
         $data['page_title'] = 'Application | Create | Step 5';
         $data['application'] = true;
         $data['application_add'] = true;

@@ -27,6 +27,8 @@
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <form method="post" action="{{ URL::to('step-4-post') }}" enctype="multipart/form-data">
+                    @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Upload Documents</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><svg> ... </svg>
@@ -36,30 +38,37 @@
                     <input type="hidden" name="application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
                     <div class="col form-group mb-4">
                         <label for="verticalFormStepform-name">Browse Document:</label>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                        <input name="doc" type="file" class="form-control-file" id="exampleFormControlFile1">
+                        @if ($errors->has('doc'))
+                            <span class="text-danger">{{ $errors->first('doc') }}</span>
+                        @endif
                     </div>
                     <div class="col form-group mb-4">
                         <label for="verticalFormStepform-name">Document Type:</label>
-                        <select id="inputState" class="form-select">
-                            <option selected>Choose...</option>
-                        <option>C.V.</option>
-                        <option>English language certificate</option>
-                        <option>Highest qualification certificate</option>
-                        <option>Highest qualification transcript</option>
-                        <option>Leave to remain</option>
-                        <option>Passport</option>
-                        <option>Personal statement	</option>
-                        <option>Qualification certificate</option>
-                        <option>Qualification certificate and Transcript</option>
-                        <option>Qualification transcript</option>
-                        <option>Work reference letter</option>
+                        <select name="document_type" id="inputState" class="form-select">
+                        <option value="">Choose...</option>
+                        <option value="CV">CV</option>
+                        <option value="English language certificate">English language certificate</option>
+                        <option value="Highest qualification certificate">Highest qualification certificate</option>
+                        <option value="Highest qualification transcript">Highest qualification transcript</option>
+                        <option value="Leave to remain">Leave to remain</option>
+                        <option value="Passport">Passport</option>
+                        <option value="Personal statement">Personal statement</option>
+                        <option value="Qualification certificate">Qualification certificate</option>
+                        <option value="Qualification certificate and Transcript">Qualification certificate and Transcript</option>
+                        <option value="Qualification transcript">Qualification transcript</option>
+                        <option value="Work reference letter">Work reference letter</option>
                         </select>
+                        @if ($errors->has('document_type'))
+                            <span class="text-danger">{{ $errors->first('document_type') }}</span>
+                        @endif
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
-                    <button type="button" class="btn btn-primary">Upload</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
                 </div>
+            </form>
             </div>
         </div>
     </div>
@@ -137,23 +146,26 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Filename</th>
-                                            <th scope="col">Detail</th>
                                             <th scope="col">Uploaded on</th>
-                                            <th scope="col">File</th>
+                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @forelse ($application_documents as $doc)
                                         <tr>
-                                            <td>Bachelor certificate.pdf</td>
-                                            <td>Academic Certificate</td>
+                                            <td>{{ $doc->document_type }}</td>
                                             <td>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                                <span class="table-inner-text">25 Apr 2023</span>
+                                                <span class="table-inner-text">{{ date('F d Y',strtotime($doc->created_at)) }}</span>
                                             </td>
                                             <td>
-                                                <span class="badge badge-light-success">Open</span>
+                                                <a download href="{{ asset($doc->doc) }}"><span class="badge badge-light-success">Download</span></a>
                                             </td>
                                         </tr>
+                                        @empty
+                                            <tr>No Data Found</tr>
+                                        @endforelse
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -161,8 +173,13 @@
                     </form>
 
                     <div class="button-action mt-3">
-                        <button class="btn btn-secondary btn-prev me-3">Prev</button>
-                        <button class="btn btn-secondary btn-nxt">Next</button>
+                        <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-prev me-3">Prev</a>
+                        @if($document_count > 2)
+                        <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
+                        @else
+                        <button disabled class="btn btn-secondary btn-nxt">Next</button>  
+                        @endif
+                        
                     </div>
                 </div>
             </div>
@@ -171,5 +188,12 @@
     </div>
 
 </div>
-
+@if($errors->any())
+<script src="{{ asset('web/js/jquery.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#exampleModal').modal('show');
+        });
+    </script>
+@endif
 @stop

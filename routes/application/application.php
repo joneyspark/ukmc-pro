@@ -23,4 +23,5 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('step-1-post', 'step_1_post');
     Route::post('step-2-post', 'step_2_post');
     Route::post('step-3-post', 'step_3_post');
+    Route::post('step-4-post', 'step_4_post');
 });
