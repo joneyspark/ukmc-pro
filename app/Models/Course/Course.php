@@ -2,6 +2,7 @@
 
 namespace App\Models\Course;
 
+use App\Models\Application\Application;
 use App\Models\Campus\Campus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -81,5 +82,8 @@ class Course extends Model
     }
     public function additionals(){
         return $this->hasMany(CourseAdditional::class);
+    }
+    public function application(){
+        return $this->hasOne(Application::class);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Models\Application;
 
+use App\Models\Campus\Campus;
+use App\Models\Course\Course;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -45,5 +47,20 @@ class Application extends Model
     public function searchableAs(): string
     {
         return 'applications';
+    }
+    public function step2Data(){
+        return $this->hasOne(Application_Step_2::class);
+    }
+    public function step3Data(){
+        return $this->hasOne(Application_Step_3::class);
+    }
+    public function applicationDocuments(){
+        return $this->hasMany(ApplicationDocument::class);
+    }
+    public function campus(){
+        return $this->belongsTo(Campus::class);
+    }
+    public function course(){
+        return $this->belongsTo(Course::class);
     }
 }

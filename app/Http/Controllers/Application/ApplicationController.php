@@ -295,6 +295,7 @@ class ApplicationController extends Controller{
         $data['page_title'] = 'Application | Create | Step 5';
         $data['application'] = true;
         $data['application_add'] = true;
+        $data['app_data'] = $application;
         //AddNewLead::dispatch('Hello this is test');
         return view('application/create_step_5',$data);
     }
