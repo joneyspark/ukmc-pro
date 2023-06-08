@@ -79,456 +79,439 @@
             </div>
 
             <div class="bs-stepper-content">
-                <div id="verticalFormStep-five" class="container content fade dstepper-block active" role="tabpanel">
-                    <h5 class="text-center mb-3">Submit Application</h5>
-                    <div class="container bg-dark py-5 px-5 rounded">
+                <div id="download-as-pdf">
+                    <div id="verticalFormStep-five" class="container content fade dstepper-block active" role="tabpanel">
+                        <h5 class="text-center mb-3">Submit Application</h5>
+                        <div class="container bg-dark py-5 px-5 rounded">
 
-                        <div id="MainContent_DV_FundedBy" class="row mb-4 px-5">
-                            <div class="col">Will your fees be funded by the Student Loan Company / Student Finance England?
-                                :
+                            <div id="MainContent_DV_FundedBy" class="row mb-4 px-5">
+                                <div class="col">Will your fees be funded by the Student Loan Company / Student Finance England?
+                                    :
+                                </div>
+                                <div class="col"><span id="MainContent_lbl_FundedBy">{{ (!empty($app_data->applicant_fees_funded))?$app_data->applicant_fees_funded:'' }}</span></div>
                             </div>
-                            <div class="col"><span id="MainContent_lbl_FundedBy">{{ (!empty($app_data->applicant_fees_funded))?$app_data->applicant_fees_funded:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_DV_ResidentCat" class="row mb-4 px-5">
-                            <div class="col">Residency Status : </div>
-                            <div class="col">
-                                <span id="MainContent_lbl_ResidentCat">{{ (!empty($app_data->current_residential_status))?$app_data->current_residential_status:'' }}</span>
+                            <div id="MainContent_DV_ResidentCat" class="row mb-4 px-5">
+                                <div class="col">Residency Status : </div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_ResidentCat">{{ (!empty($app_data->current_residential_status))?$app_data->current_residential_status:'' }}</span>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Campus : </div>
-                            <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->campus->campus_name))?$app_data->campus->campus_name:'' }}</span></div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Course : </div>
-                            <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->course_name))?$app_data->course->course_name:'' }}</span></div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Course Fee Local : </div>
-                            <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->course_fee))?$app_data->course->course_fee:'' }}</span></div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Course Fee International : </div>
-                            <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->international_course_fee))?$app_data->course->international_course_fee:'' }}</span></div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Course Programme :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_CourseGroup">{{ (!empty($app_data->course_program))?$app_data->course_program:'' }}</span>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Campus : </div>
+                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->campus->campus_name))?$app_data->campus->campus_name:'' }}</span></div>
+                            </div>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Course : </div>
+                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->course_name))?$app_data->course->course_name:'' }}</span></div>
+                            </div>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Course Fee Local : </div>
+                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->course_fee))?$app_data->course->course_fee:'' }}</span></div>
+                            </div>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Course Fee International : </div>
+                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->international_course_fee))?$app_data->course->international_course_fee:'' }}</span></div>
+                            </div>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Course Programme :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_CourseGroup">{{ (!empty($app_data->course_program))?$app_data->course_program:'' }}</span>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Course Intake :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_CourseGroup">{{ (!empty($app_data->intake))?$app_data->intake:'' }}</span>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Course Intake :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_CourseGroup">{{ (!empty($app_data->intake))?$app_data->intake:'' }}</span>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Course Level :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_CourseGroup">{{ (!empty($app_data->course_level))?$app_data->course_level:'' }}</span>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Course Level :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_CourseGroup">{{ (!empty($app_data->course_level))?$app_data->course_level:'' }}</span>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Delivery Pattern :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_Course">{{ (!empty($app_data->delivery_pattern))?$app_data->delivery_pattern:'' }}</span>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Delivery Pattern :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_Course">{{ (!empty($app_data->delivery_pattern))?$app_data->delivery_pattern:'' }}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Name :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_Intake">{{ (!empty($app_data->name))?$app_data->name:'' }}</span>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Name :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_Intake">{{ (!empty($app_data->name))?$app_data->name:'' }}</span>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Gender :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_Intake">{{ (!empty($app_data->gender))?$app_data->gender:'' }}</span>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Gender :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_Intake">{{ (!empty($app_data->gender))?$app_data->gender:'' }}</span>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Date Of Birth :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_Intake">{{ (!empty($app_data->date_of_birth))?$app_data->date_of_birth:'' }}</span>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Date Of Birth :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_Intake">{{ (!empty($app_data->date_of_birth))?$app_data->date_of_birth:'' }}</span>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Email :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_Intake">{{ (!empty($app_data->email))?$app_data->email:'' }}</span>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Email :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_Intake">{{ (!empty($app_data->email))?$app_data->email:'' }}</span>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Phone :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_Intake">{{ (!empty($app_data->phone))?$app_data->phone:'' }}</span>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Phone :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_Intake">{{ (!empty($app_data->phone))?$app_data->phone:'' }}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                            <div class="col">Are you applying for advance entry (APL) :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_DeliveryPattern">{{ (!empty($app_data->is_applying_advanced_entry))?$app_data->is_applying_advanced_entry:'' }}</span>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Are you applying for advance entry (APL) :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_DeliveryPattern">{{ (!empty($app_data->is_applying_advanced_entry))?$app_data->is_applying_advanced_entry:'' }}</span>
 
-                            </div>
-                        </div>
-                    </div>
-                    <h5 class="text-center py-3 p-3" id="MainContent_DV_HPersonalInfo">Personal Info</h5>
-                    <div class="container bg-dark py-5 px-5 rounded">
-                        <div id="MainContent_dv_Nationality" class="row mb-4 px-5">
-                            <div class="col">Nationality :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_Nationality">{{ (!empty($app_data->step2Data->nationality))?$app_data->step2Data->nationality:'' }}</span>
-                            </div>
-                        </div>
-                        <div id="MainContent_dv_DualNationality" class="row mb-4 px-5">
-                            <div class="col">Other Nationality :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_DualNationality">{{ (!empty($app_data->step2Data->other_nationality))?$app_data->step2Data->other_nationality:'' }}</span>
-
-                            </div>
-                        </div>
-                        <div id="MainContent_dv_DualNationality" class="row mb-4 px-5">
-                            <div class="col">Ethnic Origin :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_DualNationality">{{ (!empty($app_data->step2Data->ethnic_origin))?$app_data->step2Data->ethnic_origin:'' }}</span>
-
-                            </div>
-                        </div>
-
-                        <div id="MainContent_dv_CountryOfBirth" class="row mb-4 px-5">
-                            <div class="col">Country of Birth :</div>
-                            <div class="col"><span id="MainContent_lbl_CountryOfBirth">{{ (!empty($app_data->step2Data->country))?$app_data->step2Data->country:'' }}</span>
-                            </div>
-                        </div>
-                        <div id="MainContent_dv_EthnicOriginID" class="row mb-4 px-5">
-                            <div class="col">Highest qualification on entry :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_EthnicOriginID">{{ (!empty($app_data->step2Data->highest_qualification_entry))?$app_data->step2Data->highest_qualification_entry:'' }}</span>
-                            </div>
-                        </div>
-                        <div id="MainContent_dv_DOB" class="row mb-4 px-5">
-                            <div class="col">Highest Qualification :</div>
-                            <div class="col"><span id="MainContent_lbl_DOB">{{ (!empty($app_data->step2Data->highest_qualification))?$app_data->step2Data->highest_qualification:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_HIghestQualificationFrom" class="row mb-4 px-5">
-                            <div class="col">Last Institution You Attended :</div>
-                            <div class="col"><span id="MainContent_lbl_HIghestQualificationFrom">{{ (!empty($app_data->step2Data->last_institution_you_attended))?$app_data->step2Data->last_institution_you_attended:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_HIghestQualification" class="row mb-4 px-5">
-                            <div class="col">Unique Learner Number (ULN) :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_HIghestQualification">{{ (!empty($app_data->step2Data->unique_learner_number))?$app_data->step2Data->unique_learner_number:'' }}</span>
-
-                            </div>
-                        </div>
-                        <div id="MainContent_dv_LastEducationalInstitution" class="row mb-4 px-5">
-                            <div class="col">Name of qualification :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_LastEducationalInstitution">{{ (!empty($app_data->step2Data->name_of_qualification))?$app_data->step2Data->name_of_qualification:'' }}</span>
-
-                            </div>
-                        </div>
-                        <div id="MainContent_dv_WhichUKInstitute" class="row mb-4 px-5">
-                            <div class="col">Year achieved/obtained :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_WhichUKInstitute">{{ (!empty($app_data->step2Data->you_obtained))?$app_data->step2Data->you_obtained:'' }}</span>
-                            </div>
-                        </div>
-                        <div id="MainContent_dv_HESA_ID" class="row mb-4 px-5">
-                            <div class="col">Subject :</div>
-                            <div class="col"><span id="MainContent_lbl_HESA_ID">{{ (!empty($app_data->step2Data->subject))?$app_data->step2Data->subject:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_ULN" class="row mb-4 px-5">
-                            <div class="col">Grade :</div>
-                            <div class="col"><span id="MainContent_lbl_ULN">{{ (!empty($app_data->step2Data->grade))?$app_data->step2Data->grade:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_QualificationOnEntry" class="row mb-4 px-5">
-                            <div class="col">Passport No :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_QualificationOnEntry">{{ (!empty($app_data->step2Data->passport_no))?$app_data->step2Data->passport_no:'' }}</span>
-                            </div>
-                        </div>
-                        <div id="MainContent_dv_QualificationYear" class="row mb-4 px-5">
-                            <div class="col">Passport Expiry :</div>
-                            <div class="col"><span id="MainContent_lbl_QualificationYear">{{ (!empty($app_data->step2Data->passport_expiry))?$app_data->step2Data->passport_expiry:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_QualificationYear" class="row mb-4 px-5">
-                            <div class="col">Passport Place of Issuance :</div>
-                            <div class="col"><span id="MainContent_lbl_QualificationYear">{{ (!empty($app_data->step2Data->passport_place))?$app_data->step2Data->passport_place:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_QualificationYear" class="row mb-4 px-5">
-                            <div class="col">Have you spent any time in public care up to the age of 18? :</div>
-                            <div class="col"><span id="MainContent_lbl_QualificationYear">{{ (!empty($app_data->step2Data->spent_public_care))?$app_data->step2Data->spent_public_care:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_QualificationYear" class="row mb-4 px-5">
-                            <div class="col">Disability/special needs :</div>
-                            <div class="col"><span id="MainContent_lbl_QualificationYear">{{ (!empty($app_data->step2Data->disability))?$app_data->step2Data->disability:'' }}</span></div>
-                        </div>
-                    </div>
-                    <h5 class="text-center py-3" id="MainContent_dv_HPerm">Permanent Home Address</h5>
-                    <div class="container bg-dark py-5 px-5 rounded">
-                        <div id="MainContent_dv_PermAdd1" class="row mb-4 px-5">
-                            <div class="col">House Number/Name and Street :</div>
-                            <div class="col"><span id="MainContent_lbl_PermAdd1">{{ (!empty($app_data->step2Data->house_number))?$app_data->step2Data->house_number:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_PermAdd2" class="row mb-4 px-5">
-                            <div class="col">Address Line 2 :</div>
-                            <div class="col"><span id="MainContent_lbl_PermAdd2">{{ (!empty($app_data->step2Data->address_line_2))?$app_data->step2Data->address_line_2:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_PermCounty" class="row mb-4 px-5">
-                            <div class="col">State/Province :</div>
-                            <div class="col"><span id="MainContent_lbl_PermCounty">{{ (!empty($app_data->step2Data->state))?$app_data->step2Data->state:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_PermCity" class="row mb-4 px-5">
-                            <div class="col">City/Town :</div>
-                            <div class="col"><span id="MainContent_lbl_PermCity">{{ (!empty($app_data->step2Data->city))?$app_data->step2Data->city:'' }}</span></div>
-                        </div>
-                        
-                        <div id="MainContent_dv_PermPostalCode" class="row mb-4 px-5">
-                            <div class="col">Postal Code :</div>
-                            <div class="col"><span id="MainContent_lbl_PermPostalCode">{{ (!empty($app_data->step2Data->postal_code))?$app_data->step2Data->postal_code:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_PerCountry" class="row mb-4 px-5">
-                            <div class="col">Country :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_PerCountry">{{ (!empty($app_data->step2Data->address_country))?$app_data->step2Data->address_country:'' }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h5 class="text-center py-3" id="MainContent_dv_HCor">Current Address</h5>
-                    <div class="container bg-dark py-5 px-5 rounded">
-                        <div id="MainContent_dv_PermAdd1" class="row mb-4 px-5">
-                            <div class="col">House Number/Name and Street :</div>
-                            <div class="col"><span id="MainContent_lbl_PermAdd1">{{ (!empty($app_data->step2Data->current_house_number))?$app_data->step2Data->current_house_number:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_PermAdd2" class="row mb-4 px-5">
-                            <div class="col">Address Line 2 :</div>
-                            <div class="col"><span id="MainContent_lbl_PermAdd2">{{ (!empty($app_data->step2Data->current_address_line_2))?$app_data->step2Data->current_address_line_2:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_PermCounty" class="row mb-4 px-5">
-                            <div class="col">State/Province :</div>
-                            <div class="col"><span id="MainContent_lbl_PermCounty">{{ (!empty($app_data->step2Data->current_state))?$app_data->step2Data->current_state:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_PermCity" class="row mb-4 px-5">
-                            <div class="col">City/Town :</div>
-                            <div class="col"><span id="MainContent_lbl_PermCity">{{ (!empty($app_data->step2Data->current_city))?$app_data->step2Data->current_city:'' }}</span></div>
-                        </div>
-                        
-                        <div id="MainContent_dv_PermPostalCode" class="row mb-4 px-5">
-                            <div class="col">Postal Code :</div>
-                            <div class="col"><span id="MainContent_lbl_PermPostalCode">{{ (!empty($app_data->step2Data->current_postal_code))?$app_data->step2Data->current_postal_code:'' }}</span></div>
-                        </div>
-                        <div id="MainContent_dv_PerCountry" class="row mb-4 px-5">
-                            <div class="col">Country :</div>
-                            <div class="col">
-                                <span id="MainContent_lbl_PerCountry">{{ (!empty($app_data->step2Data->current_country))?$app_data->step2Data->current_country:'' }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <h5 class="text-center py-3" id="MainContent_dv_NextToKin">Next of Kin</h5>
-                    <div class="container bg-dark py-5 px-5 rounded">
-                        <div id="MainContent_dv_NextToKinName" class="row mb-4 px-5">
-                            <div class="col">Name :</div>
-                            <div class="col"><span id="MainContent_lbl_NextToKinName"></span></div>
-                        </div>
-                        <div id="MainContent_dv_NextToKinRelation" class="row mb-4 px-5">
-                            <div class="col">Relation :</div>
-                            <div class="col"><span id="MainContent_lbl_NextToKinRelation"></span></div>
-                        </div>
-                        <div id="MainContent_dv_NextToKinHPhoneNo" class="row mb-4 px-5">
-                            <div class="col">Phone No :</div>
-                            <div class="col"><span id="MainContent_lbl_NextToKinHPhoneNo"></span></div>
-                        </div>
-                        <div id="MainContent_dv_NextToKinEmail" class="row mb-4 px-5">
-                            <div class="col">Email :</div>
-                            <div class="col"><span id="MainContent_lbl_NextToKinEmail"></span></div>
-                        </div>
-                    </div>
-                    <h5 class="text-center py-3" id="MainContent_dv_HPersonalStatement">Personal Statement</h5>
-                    <div class="container bg-dark py-5 px-5 rounded">
-                        <div id="MainContent_dv_PersonalStatement" class="row mb-4 px-5">
-                            <div class="col"><span id="MainContent_lbl_Other_PersonalStatement"> As someone with a Level 3
-                                    Certificate in Electrical Maintenance, I have gained a valuable foundation of technical
-                                    knowledge and practical skills that I believe will be highly relevant to my studies in BSc
-                                    (Hons) International Business Management at ARU London. Through my education and work
-                                    experience, I have developed a range of transferable skills that I believe will enable me to
-                                    succeed in a variety of professional settings.My interest in business and management has
-                                    grown
-                                    over time, and I am excited about the opportunity to explore this field in greater depth
-                                    through
-                                    my studies at ARU London. I am particularly interested in international business, as I
-                                    believe
-                                    that the global economy presents a wealth of opportunities and challenges that will require
-                                    a
-                                    deep understanding of different cultures, customs, and business practices.In addition to my
-                                    technical knowledge and practical skills, I have also developed a range of soft skills that
-                                    I
-                                    believe will be highly relevant to my studies in International Business Management. These
-                                    include effective communication, problem-solving, and teamwork. As an electrical maintenance
-                                    technician, I was required to work closely with clients, suppliers, and colleagues to ensure
-                                    that projects were completed on time and to a high standard of quality. This experience has
-                                    taught me how to effectively communicate with a diverse range of stakeholders and to build
-                                    strong relationships based on trust and mutual respect.Furthermore, my work in electrical
-                                    maintenance has taught me how to solve complex problems, think critically, and adapt to
-                                    changing
-                                    situations. These skills will be highly valuable in a business context, where I will need to
-                                    identify and address complex challenges effectively.Overall, I am excited about the
-                                    opportunity
-                                    to apply my technical knowledge and practical skills, as well as my soft skills in
-                                    communication, problem-solving, and teamwork, to my studies in International Business
-                                    Management
-                                    at ARU London. I am confident that my passion for business and management, coupled with my
-                                    diverse range of skills and experiences, will enable me to make meaningful contributions to
-                                    the
-                                    program and achieve success in my future career. I look forward to the challenges and
-                                    opportunities that lie ahead, and I am committed to working hard to achieve my goals.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <h5 class="text-center py-3" id="MainContent_dv_AttachedFiles">Attached Files</h5>
-                    <div class="container bg-dark py-5 px-5 rounded">
-                        <div id="MainContent_dv_GridView4" class="row mb-4 px-5">
-                            <div class="col">
-                                <div class="text-white">
-                                    <table class="text-white table" cellspacing="0" rules="all" border="1"
-                                        id="MainContent_GridView4" style="border-collapse:collapse;">
-                                        <tbody class="text-center">
-                                            <tr class="">
-                                                <th class="LCAHidden" scope="col">ID</th>
-                                                <th class="LCAHidden" scope="col">Applicant ID</th>
-                                                <th scope="col">Filename</th>
-                                                <th scope="col">Detail</th>
-                                                <th scope="col">Uploaded On</th>
-                                            </tr>
-                                            <tr>
-                                                <td class="LCAHidden">775331</td>
-                                                <td class="LCAHidden">13257442</td>
-                                                <td>001_level 3.pdf</td>
-                                                <td>&nbsp;</td>
-                                                <td>10/05/2023 16:37:06</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="LCAHidden">775333</td>
-                                                <td class="LCAHidden">13257442</td>
-                                                <td>002_NathanielPeterCV.pdf</td>
-                                                <td>&nbsp;</td>
-                                                <td>10/05/2023 16:37:15</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="LCAHidden">775335</td>
-                                                <td class="LCAHidden">13257442</td>
-                                                <td>003_passport.jpg</td>
-                                                <td>&nbsp;</td>
-                                                <td>10/05/2023 16:37:46</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="LCAHidden">775337</td>
-                                                <td class="LCAHidden">13257442</td>
-                                                <td>004_ARUApplication.pdf</td>
-                                                <td>Submited Application</td>
-                                                <td>10/05/2023 16:39:38</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <h5 class="text-center py-3" id="MainContent_dv_HDeclaration_Text">Declaration<span style="color: Red;">
-                            *</span></h5>
-                    <div class="container bg-dark py-5 px-5 rounded ">
-                        <div id="MainContent_dv_Declaration_Text" class="row mb-4 px-5">
-                            <div class="col">
-                                <p id="MainContent_Declaration_Text" class="text-white">
-                                    I agree to <span id="MainContent_UniLongName">Anglia Ruskin University London</span> (<span
-                                        id="MainContent_UniAbbriv1">ARUL</span>) processing personal data contained in this
-                                    form or
-                                    other data
-                                    which <span id="MainContent_UniAbbriv2">ARUL</span> may obtain from other people. I agree
-                                    to
-                                    the processing of such data for any purposes connected with my
-                                    studies or my health and safety whilst on the premises or for any legitimate reason
-                                    including
-                                    communication with me
-                                    following the completion of my studies. In addition, I agree to <span
-                                        id="MainContent_UniAbbriv3">ARUL</span> processing personal data described as Special
-                                    Category Data as defined under the General Data Protection Regulation, such processing to be
-                                    undertaken for any
-                                    purposes as indicated in the declaration above. In addition to the Privacy Notice linked to
-                                    this
-                                    form please also
-                                    see our Corporate Privacy Policy on our website -
-                                    <a href="https://www.anglia.ac.uk/privacy-and-cookies" target="_blank">
-                                        <font style="color: Blue; text-decoration: underline;">
-                                            https://www.anglia.ac.uk/privacy-and-cookies</font>
-                                    </a>.
-                                </p>
+                        <h5 class="text-center py-3 p-3" id="MainContent_DV_HPersonalInfo">Personal Info</h5>
+                        <div class="container bg-dark py-5 px-5 rounded">
+                            <div id="MainContent_dv_Nationality" class="row mb-4 px-5">
+                                <div class="col">Nationality :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_Nationality">{{ (!empty($app_data->step2Data->nationality))?$app_data->step2Data->nationality:'' }}</span>
+                                </div>
+                            </div>
+                            <div id="MainContent_dv_DualNationality" class="row mb-4 px-5">
+                                <div class="col">Other Nationality :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_DualNationality">{{ (!empty($app_data->step2Data->other_nationality))?$app_data->step2Data->other_nationality:'' }}</span>
+
+                                </div>
+                            </div>
+                            <div id="MainContent_dv_DualNationality" class="row mb-4 px-5">
+                                <div class="col">Ethnic Origin :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_DualNationality">{{ (!empty($app_data->step2Data->ethnic_origin))?$app_data->step2Data->ethnic_origin:'' }}</span>
+
+                                </div>
+                            </div>
+
+                            <div id="MainContent_dv_CountryOfBirth" class="row mb-4 px-5">
+                                <div class="col">Country of Birth :</div>
+                                <div class="col"><span id="MainContent_lbl_CountryOfBirth">{{ (!empty($app_data->step2Data->country))?$app_data->step2Data->country:'' }}</span>
+                                </div>
+                            </div>
+                            <div id="MainContent_dv_EthnicOriginID" class="row mb-4 px-5">
+                                <div class="col">Highest qualification on entry :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_EthnicOriginID">{{ (!empty($app_data->step2Data->highest_qualification_entry))?$app_data->step2Data->highest_qualification_entry:'' }}</span>
+                                </div>
+                            </div>
+                            <div id="MainContent_dv_DOB" class="row mb-4 px-5">
+                                <div class="col">Highest Qualification :</div>
+                                <div class="col"><span id="MainContent_lbl_DOB">{{ (!empty($app_data->step2Data->highest_qualification))?$app_data->step2Data->highest_qualification:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_HIghestQualificationFrom" class="row mb-4 px-5">
+                                <div class="col">Last Institution You Attended :</div>
+                                <div class="col"><span id="MainContent_lbl_HIghestQualificationFrom">{{ (!empty($app_data->step2Data->last_institution_you_attended))?$app_data->step2Data->last_institution_you_attended:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_HIghestQualification" class="row mb-4 px-5">
+                                <div class="col">Unique Learner Number (ULN) :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_HIghestQualification">{{ (!empty($app_data->step2Data->unique_learner_number))?$app_data->step2Data->unique_learner_number:'' }}</span>
+
+                                </div>
+                            </div>
+                            <div id="MainContent_dv_LastEducationalInstitution" class="row mb-4 px-5">
+                                <div class="col">Name of qualification :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_LastEducationalInstitution">{{ (!empty($app_data->step2Data->name_of_qualification))?$app_data->step2Data->name_of_qualification:'' }}</span>
+
+                                </div>
+                            </div>
+                            <div id="MainContent_dv_WhichUKInstitute" class="row mb-4 px-5">
+                                <div class="col">Year achieved/obtained :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_WhichUKInstitute">{{ (!empty($app_data->step2Data->you_obtained))?$app_data->step2Data->you_obtained:'' }}</span>
+                                </div>
+                            </div>
+                            <div id="MainContent_dv_HESA_ID" class="row mb-4 px-5">
+                                <div class="col">Subject :</div>
+                                <div class="col"><span id="MainContent_lbl_HESA_ID">{{ (!empty($app_data->step2Data->subject))?$app_data->step2Data->subject:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_ULN" class="row mb-4 px-5">
+                                <div class="col">Grade :</div>
+                                <div class="col"><span id="MainContent_lbl_ULN">{{ (!empty($app_data->step2Data->grade))?$app_data->step2Data->grade:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_QualificationOnEntry" class="row mb-4 px-5">
+                                <div class="col">Passport No :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_QualificationOnEntry">{{ (!empty($app_data->step2Data->passport_no))?$app_data->step2Data->passport_no:'' }}</span>
+                                </div>
+                            </div>
+                            <div id="MainContent_dv_QualificationYear" class="row mb-4 px-5">
+                                <div class="col">Passport Expiry :</div>
+                                <div class="col"><span id="MainContent_lbl_QualificationYear">{{ (!empty($app_data->step2Data->passport_expiry))?$app_data->step2Data->passport_expiry:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_QualificationYear" class="row mb-4 px-5">
+                                <div class="col">Passport Place of Issuance :</div>
+                                <div class="col"><span id="MainContent_lbl_QualificationYear">{{ (!empty($app_data->step2Data->passport_place))?$app_data->step2Data->passport_place:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_QualificationYear" class="row mb-4 px-5">
+                                <div class="col">Have you spent any time in public care up to the age of 18? :</div>
+                                <div class="col"><span id="MainContent_lbl_QualificationYear">{{ (!empty($app_data->step2Data->spent_public_care))?$app_data->step2Data->spent_public_care:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_QualificationYear" class="row mb-4 px-5">
+                                <div class="col">Disability/special needs :</div>
+                                <div class="col"><span id="MainContent_lbl_QualificationYear">{{ (!empty($app_data->step2Data->disability))?$app_data->step2Data->disability:'' }}</span></div>
                             </div>
                         </div>
-                        <div id="MainContent_dv_Declaration_cb1_IAcceptStatement" class="row mb-4 px-5 ">
-                            <div class="col">
-                                <span class="aspNetDisabled" style="margin: 0;">
-                                <input class="checkbox "
-                                    id="MainContent_Declaration_cb1_IAcceptStatement" type="checkbox"
-                                    name="ctl00$MainContent$Declaration_cb1_IAcceptStatement" checked="checked"
-                                    disabled="disabled">
-                                    <label class="text-white" for="MainContent_Declaration_cb1_IAcceptStatement">I
-                                    understand
-                                    and accept this statement</label>
-                                </span>
+                        <h5 class="text-center py-3" id="MainContent_dv_HPerm">Permanent Home Address</h5>
+                        <div class="container bg-dark py-5 px-5 rounded">
+                            <div id="MainContent_dv_PermAdd1" class="row mb-4 px-5">
+                                <div class="col">House Number/Name and Street :</div>
+                                <div class="col"><span id="MainContent_lbl_PermAdd1">{{ (!empty($app_data->step2Data->house_number))?$app_data->step2Data->house_number:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PermAdd2" class="row mb-4 px-5">
+                                <div class="col">Address Line 2 :</div>
+                                <div class="col"><span id="MainContent_lbl_PermAdd2">{{ (!empty($app_data->step2Data->address_line_2))?$app_data->step2Data->address_line_2:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PermCounty" class="row mb-4 px-5">
+                                <div class="col">State/Province :</div>
+                                <div class="col"><span id="MainContent_lbl_PermCounty">{{ (!empty($app_data->step2Data->state))?$app_data->step2Data->state:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PermCity" class="row mb-4 px-5">
+                                <div class="col">City/Town :</div>
+                                <div class="col"><span id="MainContent_lbl_PermCity">{{ (!empty($app_data->step2Data->city))?$app_data->step2Data->city:'' }}</span></div>
+                            </div>
+
+                            <div id="MainContent_dv_PermPostalCode" class="row mb-4 px-5">
+                                <div class="col">Postal Code :</div>
+                                <div class="col"><span id="MainContent_lbl_PermPostalCode">{{ (!empty($app_data->step2Data->postal_code))?$app_data->step2Data->postal_code:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PerCountry" class="row mb-4 px-5">
+                                <div class="col">Country :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_PerCountry">{{ (!empty($app_data->step2Data->address_country))?$app_data->step2Data->address_country:'' }}</span>
+                                </div>
                             </div>
                         </div>
-                        <div id="MainContent_dv_Declaration_cb2_ICertifyInfoTrue" class="row mb-4 px-5 chkICertifyInfoTrue">
-                            <div class="col"><span class="aspNetDisabled" style="margin: 0;"><input class="checkbox"
-                                        id="MainContent_Declaration_cb2_ICertifyInfoTrue" type="checkbox"
-                                        name="ctl00$MainContent$Declaration_cb2_ICertifyInfoTrue" checked="checked"
+
+                        <h5 class="text-center py-3" id="MainContent_dv_HCor">Current Address</h5>
+                        <div class="container bg-dark py-5 px-5 rounded">
+                            <div id="MainContent_dv_PermAdd1" class="row mb-4 px-5">
+                                <div class="col">House Number/Name and Street :</div>
+                                <div class="col"><span id="MainContent_lbl_PermAdd1">{{ (!empty($app_data->step2Data->current_house_number))?$app_data->step2Data->current_house_number:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PermAdd2" class="row mb-4 px-5">
+                                <div class="col">Address Line 2 :</div>
+                                <div class="col"><span id="MainContent_lbl_PermAdd2">{{ (!empty($app_data->step2Data->current_address_line_2))?$app_data->step2Data->current_address_line_2:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PermCounty" class="row mb-4 px-5">
+                                <div class="col">State/Province :</div>
+                                <div class="col"><span id="MainContent_lbl_PermCounty">{{ (!empty($app_data->step2Data->current_state))?$app_data->step2Data->current_state:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PermCity" class="row mb-4 px-5">
+                                <div class="col">City/Town :</div>
+                                <div class="col"><span id="MainContent_lbl_PermCity">{{ (!empty($app_data->step2Data->current_city))?$app_data->step2Data->current_city:'' }}</span></div>
+                            </div>
+
+                            <div id="MainContent_dv_PermPostalCode" class="row mb-4 px-5">
+                                <div class="col">Postal Code :</div>
+                                <div class="col"><span id="MainContent_lbl_PermPostalCode">{{ (!empty($app_data->step2Data->current_postal_code))?$app_data->step2Data->current_postal_code:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PerCountry" class="row mb-4 px-5">
+                                <div class="col">Country :</div>
+                                <div class="col">
+                                    <span id="MainContent_lbl_PerCountry">{{ (!empty($app_data->step2Data->current_country))?$app_data->step2Data->current_country:'' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="text-center py-3" id="MainContent_dv_NextToKin">Next of Kin</h5>
+                        <div class="container bg-dark py-5 px-5 rounded">
+                            <div id="MainContent_dv_NextToKinName" class="row mb-4 px-5">
+                                <div class="col">Name :</div>
+                                <div class="col"><span id="MainContent_lbl_NextToKinName">{{ (!empty($app_data->step2Data->kin_name))?$app_data->step2Data->kin_name:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_NextToKinRelation" class="row mb-4 px-5">
+                                <div class="col">Relation :</div>
+                                <div class="col"><span id="MainContent_lbl_NextToKinRelation">{{ (!empty($app_data->step2Data->kin_relation))?$app_data->step2Data->kin_relation:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_NextToKinHPhoneNo" class="row mb-4 px-5">
+                                <div class="col">Phone No :</div>
+                                <div class="col"><span id="MainContent_lbl_NextToKinHPhoneNo">{{ (!empty($app_data->step2Data->kin_email))?$app_data->step2Data->kin_email:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_NextToKinEmail" class="row mb-4 px-5">
+                                <div class="col">Email :</div>
+                                <div class="col"><span id="MainContent_lbl_NextToKinEmail">{{ (!empty($app_data->step2Data->kin_phone))?$app_data->step2Data->kin_phone:'' }}</span></div>
+                            </div>
+                        </div>
+                        <h5 class="text-center py-3" id="MainContent_dv_HPersonalStatement">Personal Statement</h5>
+                        <div class="container bg-dark py-5 px-5 rounded">
+                            <div id="MainContent_dv_PersonalStatement" class="row mb-4 px-5">
+                                <div class="col"><span id="MainContent_lbl_Other_PersonalStatement">{{ (!empty($app_data->step3Data->personal_statement))?$app_data->step3Data->personal_statement:'' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="text-center py-3" id="MainContent_dv_AttachedFiles">Attached Files</h5>
+                        <div class="container bg-dark py-5 px-5 rounded">
+                            <div id="MainContent_dv_GridView4" class="row mb-4 px-5">
+                                <div class="col">
+                                    <div class="text-white">
+                                        <table class="text-white table" cellspacing="0" rules="all" border="1"
+                                            id="MainContent_GridView4" style="border-collapse:collapse;">
+                                            <tbody class="text-center">
+                                                <tr class="">
+                                                    <th class="LCAHidden" scope="col">Applicant ID</th>
+                                                    <th scope="col">Document Type</th>
+                                                    <th scope="col">Uploaded On</th>
+                                                    <th scope="col">Open</th>
+                                                </tr>
+
+                                                @forelse ($app_data->applicationDocuments as $row)
+                                                <tr>
+                                                    <td class="LCAHidden">UKMC-{{ (!empty($row->application_id))?$row->application_id:'' }}</td>
+                                                    <td>{{ (!empty($row->document_type))?$row->document_type:'' }}</td>
+                                                    <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>
+                                                    <td><a download href="{{ asset($row->doc) }}">Download</a></td>
+                                                </tr>
+                                                @empty
+                                                <tr>No Data Found</tr>
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="text-center py-3" id="MainContent_dv_HDeclaration_Text">Declaration<span style="color: Red;">
+                                *</span></h5>
+                        <div class="container bg-dark py-5 px-5 rounded ">
+                            <div id="MainContent_dv_Declaration_Text" class="row mb-4 px-5">
+                                <div class="col">
+                                    <p id="MainContent_Declaration_Text" class="text-white">
+                                        I agree to <span id="MainContent_UniLongName">{{ (!empty($app_data->campus->campus_name))?$app_data->campus->campus_name:'' }}</span> (<span
+                                            id="MainContent_UniAbbriv1">{{ (!empty($app_data->campus->campus_name))?$app_data->campus->campus_name:'' }}</span>) processing personal data contained in this
+                                        form or
+                                        other data
+                                        which <span id="MainContent_UniAbbriv2">{{ (!empty($app_data->campus->campus_name))?$app_data->campus->campus_name:'' }}</span> may obtain from other people. I agree
+                                        to
+                                        the processing of such data for any purposes connected with my
+                                        studies or my health and safety whilst on the premises or for any legitimate reason
+                                        including
+                                        communication with me
+                                        following the completion of my studies. In addition, I agree to <span
+                                            id="MainContent_UniAbbriv3">{{ (!empty($app_data->campus->campus_name))?$app_data->campus->campus_name:'' }}</span> processing personal data described as Special
+                                        Category Data as defined under the General Data Protection Regulation, such processing to be
+                                        undertaken for any
+                                        purposes as indicated in the declaration above. In addition to the Privacy Notice linked to
+                                        this
+                                        form please also
+                                        see our Corporate Privacy Policy on our website -
+                                        <a href="{{ (!empty($app_data->campus->website))?$app_data->campus->website:'' }}" target="_blank">
+                                            <font style="color: Blue; text-decoration: underline;">
+                                                {{ (!empty($app_data->campus->website))?$app_data->campus->website:'' }}</font>
+                                        </a>.
+                                    </p>
+                                </div>
+                            </div>
+                            <div id="MainContent_dv_Declaration_cb1_IAcceptStatement" class="row mb-4 px-5 ">
+                                <div class="col">
+                                    <span class="aspNetDisabled" style="margin: 0;">
+                                    <input class="checkbox "
+                                        id="MainContent_Declaration_cb1_IAcceptStatement" type="checkbox"
+                                        name="ctl00$MainContent$Declaration_cb1_IAcceptStatement" checked="checked"
                                         disabled="disabled">
-                                        <label class="text-white" for="MainContent_Declaration_cb2_ICertifyInfoTrue">I
-                                        confirm
-                                        that the information I have provided on this application is true, complete and
-                                        accurate</label></span></div>
+                                        <label class="text-white" for="MainContent_Declaration_cb1_IAcceptStatement">I
+                                        understand
+                                        and accept this statement</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div id="MainContent_dv_Declaration_cb2_ICertifyInfoTrue" class="row mb-4 px-5 chkICertifyInfoTrue">
+                                <div class="col"><span class="aspNetDisabled" style="margin: 0;"><input class="checkbox"
+                                            id="MainContent_Declaration_cb2_ICertifyInfoTrue" type="checkbox"
+                                            name="ctl00$MainContent$Declaration_cb2_ICertifyInfoTrue" checked="checked"
+                                            disabled="disabled">
+                                            <label class="text-white" for="MainContent_Declaration_cb2_ICertifyInfoTrue">I
+                                            confirm
+                                            that the information I have provided on this application is true, complete and
+                                            accurate</label></span></div>
+                            </div>
+                            <div id="MainContent_dv_Declaration_cb3_ICertifyQualification"
+                                class="row mb-4 px-5 chkICertifyQualification">
+                                <div class="col"><span class="aspNetDisabled" style="margin: 0;"><input class="checkbox"
+                                            id="MainContent_Declaration_cb3_ICertifyQualification" type="checkbox"
+                                            name="ctl00$MainContent$Declaration_cb3_ICertifyQualification" checked="checked"
+                                            disabled="disabled">
+                                            <label class="text-white" for="MainContent_Declaration_cb3_ICertifyQualification">I
+                                            confirm that have I have declared all previous study and have listed my highest
+                                            qualification</label></span></div>
+                            </div>
+                            <div id="MainContent_DV_Signed" class="row mb-4 px-5">
+                                <div class="col">Signed And Submitted By :</div>
+                                <div class="col"><span id="MainContent_lbl_Signed">{{ (!empty($app_data->name))?$app_data->name:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_Div1" class="row mb-4 px-5">
+                                <div class="col">Dated :</div>
+                                <div class="col"><span id="MainContent_lbl_Dated">{{ date('F d Y',strtotime($app_data->created_at)) }}</span></div>
+                            </div>
                         </div>
-                        <div id="MainContent_dv_Declaration_cb3_ICertifyQualification"
-                            class="row mb-4 px-5 chkICertifyQualification">
-                            <div class="col"><span class="aspNetDisabled" style="margin: 0;"><input class="checkbox"
-                                        id="MainContent_Declaration_cb3_ICertifyQualification" type="checkbox"
-                                        name="ctl00$MainContent$Declaration_cb3_ICertifyQualification" checked="checked"
-                                        disabled="disabled">
-                                        <label class="text-white" for="MainContent_Declaration_cb3_ICertifyQualification">I
-                                        confirm that have I have declared all previous study and have listed my highest
-                                        qualification</label></span></div>
-                        </div>
-                        <div id="MainContent_DV_Signed" class="row mb-4 px-5">
-                            <div class="col">Signed And Submitted By :</div>
-                            <div class="col"><span id="MainContent_lbl_Signed">Nathaniel</span></div>
-                        </div>
-                        <div id="MainContent_Div1" class="row mb-4 px-5">
-                            <div class="col">Dated :</div>
-                            <div class="col"><span id="MainContent_lbl_Dated">10/05/2023 16:39:36</span></div>
-                        </div>
+
+
                     </div>
 
-                    <div class="button-action mt-3 ms-3">
-                        <button class="btn btn-secondary btn-prev me-3">Back</button>
-                        <button class="btn btn-success btn-nxt me-3">Submit</button>
-                        <button class="btn btn-warning">Download PDF</button>
-                    </div>
+                </div>
+                <div class="row">
+                    <form method="post" action="">
+                        <input type="hidden" name="application_id" value="" />
+                        <div class="button-action mt-3 ms-3">
+                            <a href="{{ URL::to('application-create/'.$app_data->id.'/step-4') }}" class="btn btn-secondary btn-prev me-3">Back</a>
+                            <button class="btn btn-success btn-nxt me-3">Submit</button>
+                            <a onclick="window.print()" class="btn btn-warning">Print</a>
+                        </div>
+                    </form>
                 </div>
             </div>
+
 
         </div>
     </div>
 
 </div>
-
+<script type="text/javascript">
+    function printDiv(divId) {
+        var printContents = document.getElementById(divId).innerHTML;
+        var printWindow = window.open('', '_blank');
+        printWindow.document.write('<html><head><title></title>');
+        printWindow.document.write('<style>@media print { body * { display: none; } #print-content { display: block; } }</style>');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write('<div id="print-content">' + printContents + '</div>');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+        printWindow.close();
+    }
+  </script>
+<style>
+    @media print {
+      body *:not(#download-as-pdf):not(#download-as-pdf *){
+        visibility: hidden;
+      }
+      #download-as-pdf{
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+  </style>
 @stop
