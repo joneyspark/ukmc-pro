@@ -466,14 +466,13 @@
                                 <div class="col"><span id="MainContent_lbl_Dated">{{ date('F d Y',strtotime($app_data->created_at)) }}</span></div>
                             </div>
                         </div>
-
-
                     </div>
-
                 </div>
                 <div class="row">
-                    <form method="post" action="">
-                        <input type="hidden" name="application_id" value="" />
+                    <form method="post" action="{{ URL::to('step-5-post') }}">
+                        @csrf
+                        <input type="hidden" name="application_id" value="{{ (!empty($app_data->id))?$app_data->id:'' }}" />
+                        <input type="hidden" name="application_step5_id" value="{{ (!empty($app_step_5->id))?$app_step_5->id:'' }}" />
                         <div class="button-action mt-3 ms-3">
                             <a href="{{ URL::to('application-create/'.$app_data->id.'/step-4') }}" class="btn btn-secondary btn-prev me-3">Back</a>
                             <button class="btn btn-success btn-nxt me-3">Submit</button>
@@ -482,8 +481,6 @@
                     </form>
                 </div>
             </div>
-
-
         </div>
     </div>
 

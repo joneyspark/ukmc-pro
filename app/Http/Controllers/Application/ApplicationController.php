@@ -12,6 +12,7 @@ use App\Models\Agent\Company;
 use App\Models\Application\Application;
 use App\Models\Application\Application_Step_2;
 use App\Models\Application\Application_Step_3;
+use App\Models\Application\Application_Step_5;
 use App\Models\Application\ApplicationDocument;
 use App\Models\Campus\Campus;
 use App\Models\Course\Course;
@@ -276,10 +277,6 @@ class ApplicationController extends Controller{
         Session::flash('success','Document Saved Successfully!');
         return redirect('application-create/'.$application->id.'/step-4');
     }
-    //upload application document
-    public function upload_application_document(Request $request){
-        
-    }
     public function create_step_5($id=NULL){
         $current_step = 4;
         $application = Application::where('id',$id)->first();
@@ -295,9 +292,38 @@ class ApplicationController extends Controller{
         $data['page_title'] = 'Application | Create | Step 5';
         $data['application'] = true;
         $data['application_add'] = true;
+        $data['app_step_5'] = Application_Step_5::where('application_id',$application->id)->first();
         $data['app_data'] = $application;
         //AddNewLead::dispatch('Hello this is test');
         return view('application/create_step_5',$data);
+    }
+    //step 5 post 
+    public function step_5_post(Request $request){
+        $role = Auth::user()->role;
+        $application = Application::where('id',$request->application_id)->first();
+        if(!$application){
+            Session::flash('error','Internal Server Error!');
+            return redirect('application-create');
+        }
+        if($request->application_step5_id){
+            $application_step5 = Application_Step_5::where('id',$request->application_step5_id)->first();
+        }else{
+            //update step
+            $application->steps = $application->steps.','.'5';
+            $application->save();
+            $application_step5 = new Application_Step_5();
+            $application_step5->user_id = Auth::user()->id;
+        }
+        $application_step5->application_id = $application->id;
+        $application_step5->save();
+        if($role=='agent'){
+            Session::flash('success','Application Successfully Submitted!');
+            return redirect('agent-applications');
+        }
+        //if create by superadmin or admimission manager then go proced
+        Session::flash('success','Application Submitted! Fix a Date for Interview!');
+        return redirect('application-create/'.$application->id.'/step-6');
+
     }
     public function create_step_6(){
         $data['page_title'] = 'Application | Create | Step 6';
