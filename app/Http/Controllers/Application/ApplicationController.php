@@ -375,11 +375,20 @@ class ApplicationController extends Controller{
         Session::flash('success','Interview Done of This Application');
         return redirect('all-application');
     }
+    
     public function agent_applications(){
-        $data['page_title'] = 'Application / All';
+        $data['page_title'] = 'Application | All';
         $data['application'] = true;
         $data['application_all'] = true;
-        return view('application/all',$data);
+        $data['agent_applications'] = Application::where('company_id',Auth::user()->company_id)->orderBy('id','desc')->paginate(10);
+        return view('application.agent.all',$data);
+    }
+    public function agent_application_details($id=NULL){
+        $data['page_title'] = 'Application | All';
+        $data['application'] = true;
+        $data['application_all'] = true;
+        $data['app_data'] = Application::where('company_id',Auth::user()->company_id)->where('id',$id)->first();
+        return view('application.agent.details',$data);
     }
     public function all(){
         $data['page_title'] = 'Application / All';

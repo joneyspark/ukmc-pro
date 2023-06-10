@@ -43,9 +43,17 @@
                 <li class="{{ (!empty($application_add) && $application_add==true)?'active':'' }}">
                     <a href="{{ URL::to('application-create') }}"> Add Application</a>
                 </li>
+                @if(Auth::check() && Auth::user()->role=='agent')
+                <li class="{{ (!empty($application_all) && $application_all==true)?'active':'' }}">
+                    <a href="{{ URL::to('agent-applications') }}"> Agent Applications </a>
+                </li>
+                @endif
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='admin')
                 <li class="{{ (!empty($application_all) && $application_all==true)?'active':'' }}">
                     <a href="{{ URL::to('all-application') }}"> All Application </a>
                 </li>
+                @endif
+                
                 <li class="{{ (!empty($application_ongoing) && $application_ongoing==true)?'active':'' }}">
                     <a href="{{ URL::to('ongoing-applications') }}"> Ongoing Application </a>
                 </li>

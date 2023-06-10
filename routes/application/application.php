@@ -27,4 +27,5 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('step-5-post', 'step_5_post');
     Route::post('step-6-post', 'step_6_post');
     Route::get('agent-applications', 'agent_applications');
+    Route::get('agent-applications/{id?}/details', 'agent_application_details');
 });
