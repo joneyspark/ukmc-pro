@@ -81,32 +81,49 @@
             <div class="bs-stepper-content">
                 <div id="verticalFormStep-Six" class="content fade dstepper-block active" role="tabpanel">
                     <h5 class="text-center">Interview / ELPT</h5>
-                    <form class="row g-3">
+                    <form class="row g-3" action="{{ URL::to('step-6-post') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
+                        <input type="hidden" name="app_step6_id" value="{{ (!empty($app_step6->id))?$app_step6->id:'' }}" />
                         <div class="col-6">
                             <label for="verticalFormInputAddress" class="form-label">Inteview Date :</label>
-                            <input type="date" class="form-control" id="verticalFormInputAddress">
+                            <input name="interview_date" value="{{ (!empty($app_step6->interview_date))?$app_step6->interview_date:old('interview_date') }}" type="date" class="form-control" id="verticalFormInputAddress">
+                            @if ($errors->has('interview_date'))
+                                <span class="text-danger">{{ $errors->first('interview_date') }}</span>
+                            @endif
                         </div>
                         <div class="col-6">
                             <label for="verticalFormInputAddress2" class="form-label">Interview Time :</label>
-                            <input type="time" class="form-control" id="verticalFormInputAddress2" placeholder="Apartment, studio, or floor">
+                            <input name="interview_time" value="{{ (!empty($app_step6->interview_time))?$app_step6->interview_time:old('interview_time') }}" type="time" class="form-control" id="verticalFormInputAddress2" placeholder="Apartment, studio, or floor">
+                            @if ($errors->has('interview_time'))
+                                <span class="text-danger">{{ $errors->first('interview_time') }}</span>
+                            @endif
                         </div>
                         <div class="col-md-6">
                             <label for="verticalFormStepInputCity" class="form-label">Results :</label>
-                            <input type="text" class="form-control" id="verticalFormStepInputCity">
+                            <input name="results" value="{{ (!empty($app_step6->results))?$app_step6->results:old('results') }}" type="text" class="form-control" id="verticalFormStepInputCity">
+                            @if ($errors->has('results'))
+                                <span class="text-danger">{{ $errors->first('results') }}</span>
+                            @endif
                         </div>
                         <div class="col-md-6">
                             <label for="verticalFormStepInputState" class="form-label">No Show :</label>
-                            <select id="verticalFormStepInputState" class="form-select">
-                                <option selected="">Choose...</option>
+                            <select name="show" id="verticalFormStepInputState" class="form-select">
+                                <option value="">Choose...</option>
+                                @foreach ($result_shows as $rrow)
+                                    <option {{ (!empty($app_step6->show) && $app_step6->show==$rrow)?'selected':'' }} value="{{ $rrow }}">{{ $rrow }}</option>
+                                @endforeach
                                 <option>No</option>
-                                <option>Yes</option>
                             </select>
+                            @if ($errors->has('show'))
+                                <span class="text-danger">{{ $errors->first('show') }}</span>
+                            @endif
+                        </div>
+                        <div class="button-action mt-3">
+                            <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-prev me-3">Back</a>
+                            <button class="btn btn-success btn-nxt me-3">Submit</button>
                         </div>
                     </form>
-
-                    <div class="button-action mt-3">
-                        <button class="btn btn-secondary btn-prev me-3">Prev</button>
-                    </div>
                 </div>
             </div>
 

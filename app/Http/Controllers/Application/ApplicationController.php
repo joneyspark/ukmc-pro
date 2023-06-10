@@ -13,6 +13,7 @@ use App\Models\Application\Application;
 use App\Models\Application\Application_Step_2;
 use App\Models\Application\Application_Step_3;
 use App\Models\Application\Application_Step_5;
+use App\Models\Application\Application_Step_6;
 use App\Models\Application\ApplicationDocument;
 use App\Models\Campus\Campus;
 use App\Models\Course\Course;
@@ -48,6 +49,7 @@ class ApplicationController extends Controller{
         return view('application/create_step_1',$data);
     }
     public function step_1_post(Step1Request $request){
+        
         if($request->application_id){
             $application = Application::where('id',$request->application_id)->first();
             $application->update_by = (!empty(Auth::user()->id))?Auth::user()->id:0;
@@ -310,6 +312,7 @@ class ApplicationController extends Controller{
         }else{
             //update step
             $application->steps = $application->steps.','.'5';
+            $application->application_status_id = 1;
             $application->save();
             $application_step5 = new Application_Step_5();
             $application_step5->user_id = Auth::user()->id;
@@ -321,16 +324,62 @@ class ApplicationController extends Controller{
             return redirect('agent-applications');
         }
         //if create by superadmin or admimission manager then go proced
-        Session::flash('success','Application Submitted! Fix a Date for Interview!');
+        Session::flash('success','Application Submitted! Wait for Interview!');
         return redirect('application-create/'.$application->id.'/step-6');
 
     }
-    public function create_step_6(){
+    public function create_step_6($id=NULL){
+        $current_step = 5;
+        $application = Application::where('id',$id)->first();
+        if(!$application){
+            Session::flash('error','Application Data Not Found!');
+            return redirect('application-create');
+        }
+        $step_arr = explode(",",$application->steps);
+        if(!in_array($current_step,$step_arr)){
+            Session::flash('error','Application Is Not Ready For Interview!');
+            return redirect('application-create/'.$application->id.'/step-3');
+        }
+        $data['app_step6'] = Application_Step_6::where('application_id',$application->id)->first();
+        $data['result_shows'] = Service::result_shows();
         $data['page_title'] = 'Application | Create | Step 6';
+        $data['application_id'] = $application->id;
         $data['application'] = true;
         $data['application_add'] = true;
         //AddNewLead::dispatch('Hello this is test');
         return view('application/create_step_6',$data);
+    }
+    //step 6 post
+    public function step_6_post(Request $request){
+        $role = Auth::user()->role;
+        $application = Application::where('id',$request->application_id)->first();
+        if(!$application){
+            Session::flash('error','Internal Server Error!');
+            return redirect('application-create');
+        }
+        if($request->app_step6_id){
+            $application_step6 = Application_Step_6::where('id',$request->app_step6_id)->first();
+        }else{
+            //update step
+            $application->steps = $application->steps.','.'6';
+            $application->is_final_interview = 1;
+            $application->save();
+            $application_step6 = new Application_Step_6();
+            $application_step6->interview_date = $request->interview_date;
+            $application_step6->interview_time = $request->interview_time;
+            $application_step6->results = $request->results;
+            $application_step6->show = $request->show;
+        }
+        $application_step6->application_id = $application->id;
+        $application_step6->save();
+        Session::flash('success','Interview Done of This Application');
+        return redirect('all-application');
+    }
+    public function agent_applications(){
+        $data['page_title'] = 'Application / All';
+        $data['application'] = true;
+        $data['application_all'] = true;
+        return view('application/all',$data);
     }
     public function all(){
         $data['page_title'] = 'Application / All';

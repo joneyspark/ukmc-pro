@@ -167,7 +167,7 @@
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Course fee
                                     (GBP) Per Year (Local):</label>
-                                <input type="text" value="{{ (!empty($app_data->local_course_fee))?$app_data->local_course_fee:old('local_course_fee') }}" class="form-control" id="local_course_fee" name="local_course_fee" placeholder="">
+                                <input type="text" value="{{ (!empty($app_data->local_course_fee))?$app_data->local_course_fee:old('local_course_fee') }}" class="course-fee-local-data form-control" id="local_course_fee" name="local_course_fee" placeholder="">
                                 @if ($errors->has('local_course_fee'))
                                     <span class="text-danger">{{ $errors->first('local_course_fee') }}</span>
                                 @endif

@@ -899,4 +899,11 @@ trait Service
         ];
         return $institutions;
     }
+    public static function result_shows(){
+        $results = array(
+            'Yes',
+            'No',
+        );
+        return $results;
+    }
 }

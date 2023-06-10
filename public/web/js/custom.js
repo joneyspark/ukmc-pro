@@ -349,7 +349,7 @@ function getCourseInfo(){
         }
         if(data['result']['key']===200){
             $('#course_intake').html(data['result']['val']);
-            $('#course_fee_local').val(data['result']['course_fee_local']);
+            $('.course-fee-local-data').val(data['result']['course_fee_local']);
             $('#course_fee_international').val(data['result']['course_fee_international']);
         }
         //alert("Data: " + data + "\nStatus: " + status);
