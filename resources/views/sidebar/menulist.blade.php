@@ -48,7 +48,7 @@
                     <a href="{{ URL::to('agent-applications') }}"> Agent Applications </a>
                 </li>
                 @endif
-                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='admin')
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager')
                 <li class="{{ (!empty($application_all) && $application_all==true)?'active':'' }}">
                     <a href="{{ URL::to('all-application') }}"> All Application </a>
                 </li>

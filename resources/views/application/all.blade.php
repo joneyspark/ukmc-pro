@@ -122,25 +122,36 @@
                                 <tr>
                                     <th>Application ID</th>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
                                     <th>Campus</th>
                                     <th>Create date</th>
                                     <th>Follow Up</th>
+                                    <th>Intake</th>
+                                    <th>Assign</th>
                                     <th>Status</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse ($application_list as $row)
                                 <tr>
-                                    <td>U00121</td>
-                                    <td>Tiger Nixon</td>
-                                    <td>demo@demo.com</td>
-                                    <td>991144525</td>
-                                    <td>Birmington</td>
-                                    <td>25-Apr-2023</td>
+                                    <td>{{ (!empty($row->id)?'UKMC-'.$row->id:'') }}</td>
                                     <td>
-                                        <div class="dropdown">
+                                        <div class="media">
+                                            <div class="avatar me-2">
+                                                <img alt="avatar" src="{{ asset('web/avatar/user.png') }}" class="rounded-circle" />
+                                            </div>
+                                            <div class="media-body align-self-center">
+                                                <h6 class="mb-0">{{ (!empty($row->name))?$row->name:'' }}</h6>
+                                                <span>{{ (!empty($row->email))?$row->email:'' }}</span><br>
+                                                <span>{{ (!empty($row->phone))?$row->phone:'' }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ (!empty($row->campus->campus_name)?$row->campus->campus_name:'') }}</td>
+                                    <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>
+                                    <td>
+                                        @if(Auth::user()->role=='admin' || Auth::user()->id==$row->admission_officer_id)
+                                        <div class="is-action{{ $row->id }} dropdown">
                                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
                                             </a>
@@ -150,29 +161,8 @@
                                                 <a data-bs-toggle="modal" data-bs-target="#inputFormModal2" class="dropdown-item" href="javascript:void(0);">Meeting</a>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td><span class="shadow-none badge badge-danger">New</span></td>
-                                    <td>
-                                            <a href="{{ URL::to('application-details') }}" class="badge badge-pill bg-primary">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                            </a>
-                                            <a href="{{ URL::to('application-details') }}" class="badge badge-pill bg-warning">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                            </a>
-                                            <a href="" class="badge badge-pill bg-danger">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2  delete-multiple text-white"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                            </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>U00121</td>
-                                    <td>Tiger Nixon</td>
-                                    <td>demo@demo.com</td>
-                                    <td>991144525</td>
-                                    <td>Birmington</td>
-                                    <td>25-Apr-2023</td>
-                                    <td>
-                                        <div class="dropdown">
+                                        @else
+                                        <div style="display: none;" class="is-action{{ $row->id }} dropdown">
                                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
                                             </a>
@@ -182,84 +172,95 @@
                                                 <a data-bs-toggle="modal" data-bs-target="#inputFormModal2" class="dropdown-item" href="javascript:void(0);">Meeting</a>
                                             </div>
                                         </div>
+                                        @endif
                                     </td>
-                                    <td><span class="shadow-none badge badge-danger">New</span></td>
                                     <td>
-                                            <a href="{{ URL::to('application-details') }}" class="badge badge-pill bg-primary">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                            </a>
-                                            <a href="{{ URL::to('application-details') }}" class="badge badge-pill bg-warning">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                            </a>
-                                            <a href="" class="badge badge-pill bg-danger">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2  delete-multiple text-white"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                            </a>
+                                        {{ date('F Y',strtotime($row->intake)) }}
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td>U00121</td>
-                                    <td>Tiger Nixon</td>
-                                    <td>demo@demo.com</td>
-                                    <td>991144525</td>
-                                    <td>Birmington</td>
-                                    <td>25-Apr-2023</td>
+                                    
                                     <td>
-                                        <div class="dropdown">
-                                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                                            </a>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink6" style="">
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="dropdown-item" href="#">Notes</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal1" class="dropdown-item" href="javascript:void(0);">Follow Up</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal2" class="dropdown-item" href="javascript:void(0);">Meeting</a>
+                                        @if(Auth::user()->role=='adminManager')
+                                            @if($row->admission_officer_id==0 || $row->admission_officer_id==Auth::user()->id)
+                                            <div
+                                                class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
+                                                <div class="input-checkbox">
+                                                    <span class="switch-chk-label label-left">On</span>
+                                                    <input {{ ($row->admission_officer_id==Auth::user()->id)?'checked':'' }} data-action="{{ URL::to('course-status-chnage') }}" data-id="{{ $row->id }}" class="course-status-chnage switch-input" type="checkbox"
+                                                                                role="switch" id="form-custom-switch-inner-text">
+                                                    <span class="switch-chk-label label-right">Off</span>
+                                                </div>
                                             </div>
-                                        </div>
+                                            @else
+                                            <span>
+                                                {{ (!empty($row->assign->name))?$row->assign->name:'' }}
+                                            </span>
+                                            @endif
+                                        @endif
+                                        @if(Auth::user()->role=='admin')
+                                        <span>
+                                            {{ (!empty($row->assign->name))?$row->assign->name:'' }}
+                                        </span>
+                                        @endif
                                     </td>
+                                    
+                                    
                                     <td><span class="shadow-none badge badge-danger">New</span></td>
-                                    <td>
-                                            <a href="{{ URL::to('application-details') }}" class="badge badge-pill bg-primary">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                            </a>
-                                            <a href="{{ URL::to('application-details') }}" class="badge badge-pill bg-warning">
+                                    <td class="flex space-x-2">
+                                        @if($row->application_status_id==1)
+                                        <a href="{{ URL::to('agent-applications/'.$row->id.'/details') }}" class="badge badge-pill bg-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                        </a>
+                                        @else
+                                            @if(!in_array(2,explode(",",$row->steps)))
+                                            <a href="{{ URL::to('application-create/'.$row->id.'/step-2') }}" class="badge badge-pill bg-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             </a>
-                                            <a href="" class="badge badge-pill bg-danger">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2  delete-multiple text-white"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                            </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>U00121</td>
-                                    <td>Tiger Nixon</td>
-                                    <td>demo@demo.com</td>
-                                    <td>991144525</td>
-                                    <td>Birmington</td>
-                                    <td>25-Apr-2023</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                                            </a>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink6" style="">
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="dropdown-item" href="#">Notes</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal1" class="dropdown-item" href="javascript:void(0);">Follow Up</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal2" class="dropdown-item" href="javascript:void(0);">Meeting</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="shadow-none badge badge-danger">New</span></td>
-                                    <td>
-                                            <a href="{{ URL::to('application-details') }}" class="badge badge-pill bg-primary">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                            </a>
-                                            <a href="{{ URL::to('application-details') }}" class="badge badge-pill bg-warning">
+                                            @elseif(!in_array(3,explode(",",$row->steps)))
+                                            <a href="{{ URL::to('application-create/'.$row->id.'/step-3') }}" class="badge badge-pill bg-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             </a>
-                                            <a href="" class="badge badge-pill bg-danger">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2  delete-multiple text-white"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                            @elseif(!in_array(4,explode(",",$row->steps)))
+                                            <a href="{{ URL::to('application-create/'.$row->id.'/step-4') }}" class="badge badge-pill bg-warning">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             </a>
+                                            @elseif(!in_array(5,explode(",",$row->steps)))
+                                            <a href="{{ URL::to('application-create/'.$row->id.'/step-5') }}" class="badge badge-pill bg-warning">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                            </a>
+                                            @else
+
+                                            @endif
+
+                                        @endif
+                                        @if(Auth::user()->role=='admin' || Auth::user()->id==$row->admission_officer_id)
+                                        <span>
+                                            <a href="#" class="badge badge-pill bg-secondary">
+                                                <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.75 5H8.25C7.55964 5 7 5.58763 7 6.3125V19L12 15.5L17 19V6.3125C17 5.58763 16.4404 5 15.75 5Z" stroke="#464455" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </a>
+                                            <a href="#" class="badge badge-pill bg-warning">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                            </a>
+                                        </span>
+                                        @else
+                                        <span class="action-spn{{ $row->id }}" style="display: none;">
+                                            <a href="#" class="badge badge-pill bg-secondary">
+                                                <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.75 5H8.25C7.55964 5 7 5.58763 7 6.3125V19L12 15.5L17 19V6.3125C17 5.58763 16.4404 5 15.75 5Z" stroke="#464455" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </a>
+                                            <a href="#" class="badge badge-pill bg-warning">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                            </a>
+                                        </span>
+                                        @endif
+                                        
                                     </td>
+
                                 </tr>
+                                @empty
+                                    <tr>
+                                        No Data Found
+                                    </tr>
+                                @endforelse
+                                
                             </tbody>
                         </table>
                     </div>

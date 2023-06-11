@@ -437,9 +437,10 @@ class ApplicationController extends Controller{
         return view('application.agent.details',$data);
     }
     public function all(){
-        $data['page_title'] = 'Application / All';
+        $data['page_title'] = 'Application | All';
         $data['application'] = true;
         $data['application_all'] = true;
+        $data['application_list'] = Application::where('application_status_id','!=',0)->orderBy('id','desc')->paginate(15);
         return view('application/all',$data);
     }
     public function ongoing(){

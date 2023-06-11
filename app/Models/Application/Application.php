@@ -4,6 +4,7 @@ namespace App\Models\Application;
 
 use App\Models\Campus\Campus;
 use App\Models\Course\Course;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -62,5 +63,8 @@ class Application extends Model
     }
     public function course(){
         return $this->belongsTo(Course::class);
+    }
+    public function assign(){
+        return $this->belongsTo(User::class,'admission_officer_id','id');
     }
 }
