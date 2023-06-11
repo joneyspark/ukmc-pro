@@ -18,6 +18,8 @@ use App\Models\Application\ApplicationDocument;
 use App\Models\Campus\Campus;
 use App\Models\Course\Course;
 use App\Models\Course\CourseLevel;
+use App\Models\Notification\Notification;
+use App\Models\User;
 use Carbon\Carbon;
 use App\Traits\Service;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +51,7 @@ class ApplicationController extends Controller{
         return view('application/create_step_1',$data);
     }
     public function step_1_post(Step1Request $request){
-        
+
         if($request->application_id){
             $application = Application::where('id',$request->application_id)->first();
             $application->update_by = (!empty(Auth::user()->id))?Auth::user()->id:0;
@@ -299,7 +301,7 @@ class ApplicationController extends Controller{
         //AddNewLead::dispatch('Hello this is test');
         return view('application/create_step_5',$data);
     }
-    //step 5 post 
+    //step 5 post
     public function step_5_post(Request $request){
         $role = Auth::user()->role;
         $application = Application::where('id',$request->application_id)->first();
@@ -314,6 +316,38 @@ class ApplicationController extends Controller{
             $application->steps = $application->steps.','.'5';
             $application->application_status_id = 1;
             $application->save();
+            //make notification
+            if(Auth::user()->role=='agent'){
+                $notification = new Notification();
+                $notification->title = 'New Application';
+                $notification->description = 'New Application Create By '.Auth::user()->name;
+                $notification->create_date = time();
+                $notification->create_by = Auth::user()->id;
+                $notification->creator_name = Auth::user()->name;
+                $notification->creator_image = Auth::user()->photo;
+                $notification->user_id = 1;
+                $notification->slug = 'application/'.$application->id.'/details';
+                $notification->save();
+                //make instant messaging
+                $message = 'New Application Create By '.Auth::user()->name;
+                $url = url('application/'.$application->id.'/details');
+                event(new AddNewLead($message,$url));
+            }
+            if(Auth::user()->role=='admin' || Auth::user()->role=='adminManager'){
+                $notification = new Notification();
+                $notification->title = 'New Application';
+                $notification->description = 'New Application Create By '.Auth::user()->name;
+                $notification->create_date = time();
+                $notification->create_by = Auth::user()->id;
+                $notification->creator_name = Auth::user()->name;
+                $notification->creator_image = Auth::user()->photo;
+                $notification->user_id = 1;
+                $notification->slug = 'application/'.$application->id.'/details';
+                $notification->save();
+                $message = 'New Application Create By '.Auth::user()->name;
+                $url = url('application/'.$application->id.'/details');
+                event(new AddNewLead($message,$url));
+            }
             $application_step5 = new Application_Step_5();
             $application_step5->user_id = Auth::user()->id;
         }
@@ -328,6 +362,7 @@ class ApplicationController extends Controller{
         return redirect('application-create/'.$application->id.'/step-6');
 
     }
+
     public function create_step_6($id=NULL){
         $current_step = 5;
         $application = Application::where('id',$id)->first();
@@ -375,9 +410,20 @@ class ApplicationController extends Controller{
         Session::flash('success','Interview Done of This Application');
         return redirect('all-application');
     }
-    
+    public function application_details_by_admin($id=NULL){
+        if(Auth::user()->role == 'agent'){
+            Session::flash('error','You dont have any permission to see application details');
+            return redirect('login');
+        }
+        $data['page_title'] = 'Application | Details';
+        $data['application'] = true;
+        $data['application_all'] = true;
+        $data['app_data'] = Application::where('id',$id)->first();
+        return view('application.details',$data);
+    }
+
     public function agent_applications(){
-        $data['page_title'] = 'Application | All';
+        $data['page_title'] = 'Application | Details';
         $data['application'] = true;
         $data['application_all'] = true;
         $data['agent_applications'] = Application::where('company_id',Auth::user()->company_id)->orderBy('id','desc')->paginate(10);

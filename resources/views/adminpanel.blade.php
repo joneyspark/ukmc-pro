@@ -247,21 +247,18 @@
 		</script>
 
         <script src="{{ asset('web/js/pusher.js') }}"></script>
+        @if(Auth::user()->role=='admin' || Auth::user()->role=='adminManager')
         <script>
-
-            // Enable pusher logging - don't include this in production
             Pusher.logToConsole = true;
-
             var pusher = new Pusher('ef4fd77f0ef3365b974c', {
             cluster: 'ap2'
             });
-
-            var channel = pusher.subscribe('university');
+            var channel = pusher.subscribe('CreateLead');
             channel.bind('notice', function(data) {
                 //alert(JSON.stringify(data));
                 iziToast.show({
                     title: 'Hey',
-                    message: data.message,
+                    message: data.message+' <a style="color:blue;" href="'+data.url+'">View Task</a>',
                     position: 'bottomRight',
                     timeout: 8000,
                     color: 'green',
@@ -269,8 +266,10 @@
                     close: true,
                     progressBarColor: 'yellow',
                 });
+                this.get_notifications();
             });
         </script>
+        @endif
         <!--task event create -->
         @include('ajax.taskUser')
         <script>

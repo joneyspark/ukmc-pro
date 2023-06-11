@@ -15,15 +15,17 @@ class AddNewLead implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
+    public $url;
 
-    public function __construct($message)
+    public function __construct($message,$url)
     {
         $this->message = $message;
+        $this->url = $url;
     }
 
     public function broadcastOn()
     {
-        return ['university'];
+        return ['CreateLead'];
     }
 
     public function broadcastAs()

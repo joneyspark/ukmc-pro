@@ -1,92 +1,5 @@
 @extends('adminpanel')
 @section('admin')
-<div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-
-        <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Notes</b></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-        </div>
-        <form method="post" action="{{ URL::to('user-role-confirm') }}" class="mt-0">
-            @csrf
-            <div class="modal-body">
-                <p class="modal-text">1: Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
-                <p class="modal-text">2: Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
-                <div class="form-group">
-                    <div class="col">
-                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Note:</label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Submit</button>
-            </div>
-        </form>
-      </div>
-    </div>
-</div>
-<div class="modal fade inputForm-modal" id="inputFormModal1" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-
-        <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Follow Up</b></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-        </div>
-        <form method="post" action="{{ URL::to('user-role-confirm') }}" class="mt-0">
-            @csrf
-            <div class="modal-body">
-                <p class="modal-text">1: Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
-                <p class="modal-text">2: Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
-                <div class="form-group">
-                    <div class="col">
-                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Note:</label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Submit</button>
-            </div>
-        </form>
-      </div>
-    </div>
-</div>
-<div class="modal fade inputForm-modal" id="inputFormModal2" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-
-        <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Meeting</b></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-        </div>
-        <form method="post" action="{{ URL::to('user-role-confirm') }}" class="mt-0">
-            @csrf
-            <div class="modal-body">
-                <p class="modal-text">1: Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
-                <p class="modal-text">2: Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
-                <div class="form-group">
-                    <div class="col">
-                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Note:</label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Submit</button>
-            </div>
-        </form>
-      </div>
-    </div>
-</div>
 <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <div class="secondary-nav">
@@ -102,7 +15,7 @@
                             <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="#">Application</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Create</li>
+                                    <li class="breadcrumb-item active" aria-current="page">All</li>
                                 </ol>
                             </nav>
 
@@ -126,7 +39,6 @@
                                     <th>Create date</th>
                                     <th>Intake</th>
                                     <th>Application Status</th>
-                                    <th>Follow Up</th>
                                     <th>Status</th>
                                     <th class="text-center">Action</th>
                                 </tr>
@@ -165,18 +77,6 @@
                                         <span class="badge badge-success">Application Submitted</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                                            </a>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink6" style="">
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="dropdown-item" href="#">Notes</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal1" class="dropdown-item" href="javascript:void(0);">Follow Up</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal2" class="dropdown-item" href="javascript:void(0);">Meeting</a>
-                                            </div>
-                                        </div>
-                                    </td>
                                     <td><span class="shadow-none badge badge-danger">New</span></td>
                                     <td>
                                         @if($row->application_status_id==1)
@@ -201,7 +101,7 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             </a>
                                             @else
-                                                
+
                                             @endif
 
                                         @endif
@@ -212,7 +112,7 @@
                                         No Data Found
                                     </tr>
                                 @endforelse
-                                
+
                             </tbody>
                         </table>
                         <div style="text-align: center;" class="pagination-custom_solid">
