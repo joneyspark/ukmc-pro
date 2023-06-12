@@ -24,6 +24,37 @@
         </div>
     </div>
     <!-- Modal -->
+    <div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+    
+            <div class="modal-header" id="inputFormModalLabel">
+                <h5 class="modal-title"><b>Request Documents</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <form method="post" action="{{ URL::to('request-document-message') }}" class="mt-0">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" name="set_application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Request Document Note:</label>
+                                <textarea name="message" class="form-control" rows="2"></textarea>
+                                @if ($errors->has('message'))
+                                    <span class="text-danger">{{ $errors->first('message') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
+                    <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect">Submit</button>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -171,7 +202,21 @@
                             </div>
                         </div>
                     </form>
-
+                    @if(Auth::user()->role=='agent')
+                        @if(!empty($application_data) && $application_data->application_status_id==1)
+                        <a href="{{ URL::to('agent-applications') }}" class="btn btn-secondary btn-nxt">Agent Applications</a>
+                        @else
+                        <div class="button-action mt-3">
+                            <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-prev me-3">Prev</a>
+                            @if($document_count > 2)
+                            <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
+                            @else
+                            <button disabled class="btn btn-secondary btn-nxt">Next</button>  
+                            @endif
+                        </div>
+                        @endif
+                    @endif
+                    @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
                     <div class="button-action mt-3">
                         <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-prev me-3">Prev</a>
                         @if($document_count > 2)
@@ -179,9 +224,32 @@
                         @else
                         <button disabled class="btn btn-secondary btn-nxt">Next</button>  
                         @endif
-                        
+                        <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="btn btn-warning btn-nxt">Request For Document</a>
                     </div>
+                    @endif
+                    
+                </div><br>
+                @if(Auth::user()->role=='agent' && count($requested_documents) > 0)
+                <div class="row">
+                    <h5>Requested Document</h5>
+                    <table class="table table-responsive">
+                        <tr>
+                            <td>Title</td>
+                            <td>Request By</td>
+                            <td>Action</td>
+                        </tr>
+                        @foreach($requested_documents as $drow)
+                        <tr>
+                            <td>{{ (!empty($drow->message))?$drow->message:'' }}</td>
+                            <td>{{ (!empty($drow->document_by->name))?$drow->document_by->name:'' }}</td>
+                            <td>
+                                <a href="javascript:void(0)" onclick="if(confirm('Are you sure to Confirm this Document Data?')) location.href='{{ URL::to('confirm-request-document/'.$drow->id) }}'; return false;"><span class="badge badge-light-warning">Confirm</span></a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
                 </div>
+                @endif
             </div>
 
         </div>
@@ -190,10 +258,19 @@
 </div>
 @if($errors->any())
 <script src="{{ asset('web/js/jquery.js') }}"></script>
+    @if($errors->has('document_type') || $errors->has('doc'))
     <script>
         $(document).ready(function() {
             $('#exampleModal').modal('show');
         });
-    </script>
+    </script> 
+    @endif
+    @if($errors->has('message'))
+    <script>
+        $(document).ready(function() {
+            $('#inputFormModal').modal('show');
+        });
+    </script> 
+    @endif
 @endif
 @stop

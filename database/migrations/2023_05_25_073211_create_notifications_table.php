@@ -21,7 +21,9 @@ return new class extends Migration
             $table->string('creator_name')->nullable();
             $table->integer('user_id')->nullable();
             $table->integer('company_id')->nullable();
+            $table->integer('application_id')->default(0)->nullable();
             $table->tinyInteger('status')->nullable()->default(0);
+            $table->tinyInteger('is_admin')->nullable()->default(0);
             $table->tinyInteger('is_view')->nullable()->default(0);
             $table->text('slug')->nullable();
             $table->timestamps();

@@ -299,6 +299,7 @@
                 }
             }
         </script>
+        
         <script src="{{ asset('web/js/custom.js') }}"></script>
         <script src="{{ asset('web/js/addRemove.js') }}"></script>
         <script src="{{ asset('web/js/tagify.js') }}"></script>

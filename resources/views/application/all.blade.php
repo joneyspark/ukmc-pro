@@ -162,7 +162,7 @@
                                             </div>
                                         </div>
                                         @else
-                                        <div style="display: none;" class="is-action{{ $row->id }} dropdown">
+                                        <div class="is-action-data is-action{{ $row->id }} dropdown">
                                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
                                             </a>
@@ -185,7 +185,7 @@
                                                 class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
                                                 <div class="input-checkbox">
                                                     <span class="switch-chk-label label-left">On</span>
-                                                    <input {{ ($row->admission_officer_id==Auth::user()->id)?'checked':'' }} data-action="{{ URL::to('course-status-chnage') }}" data-id="{{ $row->id }}" class="course-status-chnage switch-input" type="checkbox"
+                                                    <input {{ ($row->admission_officer_id==Auth::user()->id)?'checked':'' }} data-action="{{ URL::to('application/assign-to-me') }}" data-id="{{ $row->id }}" class="assign-to-me-status switch-input" type="checkbox"
                                                                                 role="switch" id="form-custom-switch-inner-text">
                                                     <span class="switch-chk-label label-right">Off</span>
                                                 </div>
@@ -237,16 +237,16 @@
                                             <a href="#" class="badge badge-pill bg-secondary">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.75 5H8.25C7.55964 5 7 5.58763 7 6.3125V19L12 15.5L17 19V6.3125C17 5.58763 16.4404 5 15.75 5Z" stroke="#464455" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                             </a>
-                                            <a href="#" class="badge badge-pill bg-warning">
+                                            <a href="{{ URL::to('application-create/'.$row->id) }}" class="badge badge-pill bg-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             </a>
                                         </span>
                                         @else
-                                        <span class="action-spn{{ $row->id }}" style="display: none;">
+                                        <span class="action-spn{{ $row->id }} is-action-data">
                                             <a href="#" class="badge badge-pill bg-secondary">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.75 5H8.25C7.55964 5 7 5.58763 7 6.3125V19L12 15.5L17 19V6.3125C17 5.58763 16.4404 5 15.75 5Z" stroke="#464455" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                             </a>
-                                            <a href="#" class="badge badge-pill bg-warning">
+                                            <a href="{{ URL::to('application-create/'.$row->id) }}" class="badge badge-pill bg-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             </a>
                                         </span>
@@ -271,5 +271,12 @@
 
     </div>
 </div>
-
+<style>
+    .is-action-data{
+        display: none;
+    }
+    .is-action-data-show{
+        display: block;
+    }
+</style>
 @stop

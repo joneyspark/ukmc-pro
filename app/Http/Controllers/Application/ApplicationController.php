@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Application;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Events\AddNewLead;
+use App\Events\AgentEvent;
 use App\Http\Requests\Application\ApplicationStep2Request;
 use App\Http\Requests\Application\ApplicationStep3Request;
 use App\Http\Requests\Application\Step1Request;
@@ -15,6 +16,7 @@ use App\Models\Application\Application_Step_3;
 use App\Models\Application\Application_Step_5;
 use App\Models\Application\Application_Step_6;
 use App\Models\Application\ApplicationDocument;
+use App\Models\Application\RequestDocument;
 use App\Models\Campus\Campus;
 use App\Models\Course\Course;
 use App\Models\Course\CourseLevel;
@@ -25,6 +27,8 @@ use App\Traits\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\requestDocumentMail;
 
 class ApplicationController extends Controller{
     use Service;
@@ -244,6 +248,8 @@ class ApplicationController extends Controller{
         $data['document_count'] = $document;
         $data['application_documents'] = ApplicationDocument::where('application_id',$application->id)->get();
         $data['application_id'] = $application->id;
+        $data['application_data'] = $application;
+        $data['requested_documents'] = RequestDocument::where('application_id',$application->id)->where('status',0)->get();
         $data['page_title'] = 'Application | Create | Step 4';
         $data['application'] = true;
         $data['application_add'] = true;
@@ -326,6 +332,8 @@ class ApplicationController extends Controller{
                 $notification->creator_name = Auth::user()->name;
                 $notification->creator_image = Auth::user()->photo;
                 $notification->user_id = 1;
+                $notification->is_admin = 1;
+                $notification->application_id = $application->id;
                 $notification->slug = 'application/'.$application->id.'/details';
                 $notification->save();
                 //make instant messaging
@@ -342,6 +350,8 @@ class ApplicationController extends Controller{
                 $notification->creator_name = Auth::user()->name;
                 $notification->creator_image = Auth::user()->photo;
                 $notification->user_id = 1;
+                $notification->is_admin = 1;
+                $notification->application_id = $application->id;
                 $notification->slug = 'application/'.$application->id.'/details';
                 $notification->save();
                 $message = 'New Application Create By '.Auth::user()->name;
@@ -421,6 +431,28 @@ class ApplicationController extends Controller{
         $data['app_data'] = Application::where('id',$id)->first();
         return view('application.details',$data);
     }
+    public function confirm_request_document($id=NULL){
+        $check = RequestDocument::where('id',$id)->first();
+        if(!$check){
+            Session::flash('error','Requested Document Data Not Found!');
+            return redirect('all-application');
+        }
+        $update = RequestDocument::where('id',$check->id)->update(['status'=>1]);
+        $notification = new Notification();
+        $notification->title = 'Document Confirmation';
+        $notification->description = 'Requested Document Upload By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = $check->request_by;
+        $notification->is_admin = 0;
+        $notification->application_id = $check->application_id;
+        $notification->slug = 'application-create/'.$check->application_id.'/step-4';
+        $notification->save();
+        event(new AddNewLead($notification->description,url($notification->slug)));
+        return redirect('application-create/'.$check->application_id.'/step-4');
+    }
 
     public function agent_applications(){
         $data['page_title'] = 'Application | Details';
@@ -466,6 +498,51 @@ class ApplicationController extends Controller{
         $data['application'] = true;
         $data['application_all'] = true;
         return view('application/details',$data);
+    }
+    //request doc file message 
+    public function request_document_message(Request $request){
+        $validator = Validator::make($request->all(), [
+            'message' => 'required',
+        ]);
+        if ($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        $application = Application::where('id',$request->set_application_id)->first();
+        if(!$application){
+            Session::flash('error','Application Data Not Found! Server Error!');
+            return redirect('all-application');
+        }
+        $doc = new RequestDocument();
+        $doc->application_id = $application->id;
+        $doc->message = $request->message;
+        $doc->request_by = Auth::user()->id;
+        $doc->request_to = $application->create_by;
+        $doc->save();
+        $notification = new Notification();
+        $notification->title = 'Document Request';
+        $notification->description = 'New Document Requested By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = $application->create_by;
+        $notification->is_admin = 1;
+        $notification->application_id = $application->id;
+        $notification->slug = 'application-create/'.$application->id.'/step-4';
+        $notification->save();
+        //make mail to student and agent
+        $agentData = User::where('id',$application->create_by)->first();
+        $studentEmail = $application->email;
+        $agentEmail = $agentData->email;
+        $details = [
+            'create_by'=>Auth::user()->name,
+            'message'=>$request->message,
+        ];
+        Mail::to($studentEmail)->send(new requestDocumentMail($details));
+        Mail::to($agentEmail)->send(new requestDocumentMail($details));
+        event(new AgentEvent($application->create_by,$notification->description,url('application-create/'.$application->id.'/step-4')));
+        return redirect('application-create/'.$application->id.'/step-4');
+        
     }
 
     public function get_courses_by_campus(Request $request){
@@ -521,6 +598,56 @@ class ApplicationController extends Controller{
             'val'=>$sintake,
             'course_fee_local'=>$course_fee_local,
             'course_fee_international'=>$course_fee_international,
+        );
+        return response()->json($data,200);
+    }
+    public function application_assign_to_me(Request $request){
+        if(Auth::user()->role != 'adminManager'){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'You don,t have any permission To Assign Application!'
+            );
+            return response()->json($data,200);
+        }
+        $message = '';
+        $application = Application::where('id',$request->application_id)->first();
+        if($application->admission_officer_id != 0){
+            if($application->admission_officer_id != Auth::user()->id){
+                $data['result'] = array(
+                    'key'=>101,
+                    'val'=>'Application Assign By Other Admission Officer! Choose Another One!'
+                );
+                return response()->json($data,200);
+            }
+        }
+        $notification = new Notification();
+        
+        if($application->admission_officer_id==Auth::user()->id){
+            $application->admission_officer_id = 0;
+            $message = 'Application Unassign By '.Auth::user()->name;
+            $notification->title = 'Unassigned';
+            $notification->description = 'Application Unassign By '.Auth::user()->name;
+        }else{
+            $application->admission_officer_id = Auth::user()->id;
+            $message = 'Application Assign By '.Auth::user()->name;
+            $notification->title = 'Assigned';
+            $notification->description = 'Application Assign By '.Auth::user()->name;
+        }
+        $application->save();
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->application_id = $application->id;
+        $notification->slug = 'application/'.$application->id.'/details';
+        $notification->save();
+        event(new AddNewLead($message,url('application/'.$application->id.'/details')));
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$message,
+            'application_id'=>$application->id,
         );
         return response()->json($data,200);
     }

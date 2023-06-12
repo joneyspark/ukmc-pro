@@ -356,4 +356,50 @@ function getCourseInfo(){
     });
 
 }
+$(function(){
+    $('.assign-to-me-status').change(function(){
+        var application_id = $(this).data('id');
+        var url = $(this).data('action');
+            $.post(url,
+            {
+                application_id: application_id,
+            },
+            function(data, status){
+                console.log(data);
+                if(data['result']['key']===101){
+                    iziToast.show({
+                        title: 'Status',
+                        message: data['result']['val'],
+                        position: 'topRight',
+                        timeout: 8000,
+                        color: 'blue',
+                        balloon: true,
+                        close: true,
+                        progressBarColor: 'yellow',
+                    });
+                    //location.reload(true);
+                }
+                if(data['result']['key']===200){
+                    //$(".action-spn"+data['result']['application_id']).removeClass("is-action-data");
+                    //$(".action-spn"+data['result']['application_id']).addClass("is-action-data-show");
+                    iziToast.show({
+                        title: 'Status',
+                        message: data['result']['val'],
+                        position: 'topRight',
+                        timeout: 8000,
+                        color: 'blue',
+                        balloon: true,
+                        close: true,
+                        progressBarColor: 'yellow',
+                    });
+                    setTimeout(function () {
+                        location.reload(true);
+                    }, 2000);
+
+                }
+                //alert("Data: " + data + "\nStatus: " + status);
+            });
+
+    });
+});
 

@@ -29,4 +29,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('agent-applications', 'agent_applications');
     Route::get('agent-applications/{id?}/details', 'agent_application_details');
     Route::get('application/{id?}/details', 'application_details_by_admin');
+    Route::post('application/assign-to-me', 'application_assign_to_me');
+    Route::post('request-document-message', 'request_document_message');
+    Route::get('confirm-request-document/{id?}', 'confirm_request_document');
 });

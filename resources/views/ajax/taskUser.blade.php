@@ -27,3 +27,28 @@
     });
 </script>
 @endif
+
+@if(Auth::user()->role=='agent')
+<script>
+    var userId = {{ Auth::user()->id }};
+    Pusher.logToConsole = true;
+    var pusher = new Pusher('ef4fd77f0ef3365b974c', {
+        cluster: 'ap2'
+    });
+    var channel = pusher.subscribe('agent.'+userId);
+    channel.bind('agentnotice', function(data) {
+        //alert(JSON.stringify(data));
+        iziToast.show({
+            title: 'Agent Notification:',
+            message: data.message+' <a style="color:blue;" href="'+data.url+'">View Details</a>',
+            position: 'bottomRight',
+            timeout: 8000,
+            color: 'green',
+            balloon: true,
+            close: true,
+            progressBarColor: 'yellow',
+        });
+        this.get_notifications();
+    });
+</script>       
+@endif

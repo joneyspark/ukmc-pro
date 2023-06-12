@@ -8,6 +8,7 @@ use App\Models\Admission\AdmissionOfficer;
 use App\Models\Agent\Agent;
 use App\Models\Agent\AgentTask;
 use App\Models\Application\Application;
+use App\Models\Application\RequestDocument;
 use App\Models\Task\Task;
 use App\Models\Teacher\Teacher;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -69,5 +70,8 @@ class User extends Authenticatable
     }
     public function applications(){
         return $this->hasMany(Application::class,'admission_officer_id','id');
+    }
+    public function documents(){
+        return $this->hasMany(RequestDocument::class,'request_by','id');
     }
 }
