@@ -465,8 +465,18 @@ class ApplicationController extends Controller{
         $data['page_title'] = 'Application | All';
         $data['application'] = true;
         $data['application_all'] = true;
-        $data['app_data'] = Application::where('company_id',Auth::user()->company_id)->where('id',$id)->first();
+        if(Auth::user()->role=='agent'){
+            $data['app_data'] = Application::where('company_id',Auth::user()->company_id)->where('id',$id)->first();
+        }else{
+            $data['app_data'] = Application::where('id',$id)->first();
+        }
         return view('application.agent.details',$data);
+    }
+    public function application_processing(){
+        $data['page_title'] = 'Application | All';
+        $data['application'] = true;
+        $data['application_all'] = true;
+        return view('application/processing',$data);
     }
     public function all(){
         $data['page_title'] = 'Application | All';
@@ -499,7 +509,7 @@ class ApplicationController extends Controller{
         $data['application_all'] = true;
         return view('application/details',$data);
     }
-    //request doc file message 
+    //request doc file message
     public function request_document_message(Request $request){
         $validator = Validator::make($request->all(), [
             'message' => 'required',
@@ -542,7 +552,7 @@ class ApplicationController extends Controller{
         Mail::to($agentEmail)->send(new requestDocumentMail($details));
         event(new AgentEvent($application->create_by,$notification->description,url('application-create/'.$application->id.'/step-4')));
         return redirect('application-create/'.$application->id.'/step-4');
-        
+
     }
 
     public function get_courses_by_campus(Request $request){
@@ -621,7 +631,7 @@ class ApplicationController extends Controller{
             }
         }
         $notification = new Notification();
-        
+
         if($application->admission_officer_id==Auth::user()->id){
             $application->admission_officer_id = 0;
             $message = 'Application Unassign By '.Auth::user()->name;

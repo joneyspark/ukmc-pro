@@ -32,4 +32,5 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('application/assign-to-me', 'application_assign_to_me');
     Route::post('request-document-message', 'request_document_message');
     Route::get('confirm-request-document/{id?}', 'confirm_request_document');
+    Route::get('application/{id?}/processing', 'application_processing');
 });
