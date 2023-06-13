@@ -49,13 +49,16 @@
                 </li>
                 @endif
                 @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager')
+                <li class="{{ (!empty($application_pending) && $application_pending==true)?'active':'' }}">
+                    <a href="{{ URL::to('pending-applications') }}"> Pending Application </a>
+                </li>
                 <li class="{{ (!empty($application_all) && $application_all==true)?'active':'' }}">
                     <a href="{{ URL::to('all-application') }}"> All Application </a>
                 </li>
                 @endif
-                
-                <li class="{{ (!empty($application_ongoing) && $application_ongoing==true)?'active':'' }}">
-                    <a href="{{ URL::to('ongoing-applications') }}"> Ongoing Application </a>
+
+                <li class="{{ (!empty($interview_list) && $interview_list==true)?'active':'' }}">
+                    <a href="{{ URL::to('interview-list') }}"> Interview / Followup </a>
                 </li>
                 <li class="{{ (!empty($application_enrolled) && $application_enrolled==true)?'active':'' }}">
                     <a href="{{ URL::to('enrolled-students') }}"> Enrolled Students </a>

@@ -421,6 +421,10 @@ class ApplicationController extends Controller{
         return redirect('all-application');
     }
     public function application_details_by_admin($id=NULL){
+        if(!Auth::user()){
+            Session::flash('error','Auth Error!');
+            return redirect('login');
+        }
         if(Auth::user()->role == 'agent'){
             Session::flash('error','You dont have any permission to see application details');
             return redirect('login');
@@ -453,6 +457,12 @@ class ApplicationController extends Controller{
         event(new AddNewLead($notification->description,url($notification->slug)));
         return redirect('application-create/'.$check->application_id.'/step-4');
     }
+    public function interview_list(){
+        $data['page_title'] = 'Application | Details';
+        $data['application'] = true;
+        $data['interview_list'] = true;
+        return view('application.interview_list',$data);
+    }
 
     public function agent_applications(){
         $data['page_title'] = 'Application | Details';
@@ -471,6 +481,13 @@ class ApplicationController extends Controller{
             $data['app_data'] = Application::where('id',$id)->first();
         }
         return view('application.agent.details',$data);
+    }
+    public function pending_applications(){
+        $data['page_title'] = 'Application | All';
+        $data['application'] = true;
+        $data['application_pending'] = true;
+        $data['agent_applications'] = Application::orderBy('id','desc')->where('application_status_id',0)->paginate(10);
+        return view('application/pending',$data);
     }
     public function application_processing(){
         $data['page_title'] = 'Application | All';

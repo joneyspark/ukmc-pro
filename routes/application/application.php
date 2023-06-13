@@ -33,4 +33,6 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('request-document-message', 'request_document_message');
     Route::get('confirm-request-document/{id?}', 'confirm_request_document');
     Route::get('application/{id?}/processing', 'application_processing');
+    Route::get('pending-applications', 'pending_applications');
+    Route::get('interview-list', 'interview_list');
 });

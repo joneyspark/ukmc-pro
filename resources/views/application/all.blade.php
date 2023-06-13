@@ -111,6 +111,53 @@
                 </header>
             </div>
         </div>
+        <h5 class="pt-3">Filter</h5>
+        <div class="widget-content widget-content-area">
+            <form method="get" action="">
+                 <div class="row">
+                     <div class="row mb-2">
+                        <div class="col-4">
+                            <select name="role" class="form-control">
+                                <option value="">Select Campus</option>
+                            </select>
+                         </div>
+                         <div class="col-4">
+                            <select name="role" class="form-control">
+                                <option value="">Select Agent</option>
+                            </select>
+                         </div>
+                         <div class="col-4">
+                            <select name="role" class="form-control">
+                                <option value="">Select Admission Manager</option>
+                            </select>
+                         </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-3">
+                            <select name="role" class="form-control">
+                                <option value="">Select Status</option>
+                            </select>
+                         </div>
+                         <div class="col-2">
+                            <select name="role" class="form-control">
+                                <option value="">Select Intake</option>
+                            </select>
+                         </div>
+                         <div class="col-5">
+                             <input value="" name="name" type="text" class="form-control" placeholder="Enter Name,Email,Phone">
+                         </div>
+                         <div class="col-1">
+                            <input type="submit" value="Filter" name="time" class="btn btn-warning">
+                         </div>
+                         <div class="col-1">
+                            <a href="#" class="btn btn-danger">Reset</a>
+                         </div>
+                     </div>
+
+
+                 </div>
+            </form>
+        </div>
         <h5 class="pt-3">All Application Here</h5>
         <div class="row layout-top-spacing">
 
