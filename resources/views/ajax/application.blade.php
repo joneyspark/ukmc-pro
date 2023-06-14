@@ -27,22 +27,31 @@
             },
             submitHandler: function(form) {
             $('#btn-note-submit').prop('disabled', true);
-            var application_id = $('#application_id').val();
+            var application_id = $('#note_application_id').val();
             var application_note = $('#application_note').val();
-            $.post('#',
+            $.post('{{ URL::to('application-note-post') }}',
                 {
                     application_id: application_id,
                     application_note: application_note,
                 },
-
                 function(data, status){
                     console.log(data);
                     console.log(status);
-                    if(data['result']['key']===101){
-
-                    }
                     if(data['result']['key']===200){
-
+                        iziToast.show({
+                            title: 'Success:',
+                            message: 'Successfully Create a New Note!',
+                            position: 'topRight',
+                            timeout: 8000,
+                            color: 'green',
+                            balloon: true,
+                            close: true,
+                            progressBarColor: 'yellow',
+                        });
+                        $('#btn-note-submit').prop('disabled', false);
+                        $('#note-data').html(data['result']['val']);
+                        $('#application_note').val("");
+                        $('#note_application_id').val(data['result']['application_id']);
                     }
                 }).fail(function(xhr, status, error) {
                     // Error callback...

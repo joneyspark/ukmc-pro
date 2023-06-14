@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Application;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Events\AddNewLead;
+use App\Events\AdminMsgEvent;
 use App\Events\AgentEvent;
 use App\Models\Notification\Notification;
 use App\Models\User;
@@ -55,7 +56,7 @@ class ApplicationOtherController extends Controller
         //make notification
         $notification = new Notification();
         $notification->title = 'Note Create';
-        $notification->description = 'Make a New Note Of Application By '.Auth::user()->name;
+        $notification->description = 'Make a New Note of Application By '.Auth::user()->name;
         $notification->create_date = time();
         $notification->create_by = Auth::user()->id;
         $notification->creator_name = Auth::user()->name;
@@ -83,9 +84,12 @@ class ApplicationOtherController extends Controller
                 $select .= '</p><hr>';
             }
         }
+        //make instant notification for super admin
+        event(new AdminMsgEvent($notification->description,url('application/'.$request->application_id.'/processing')));
         $data['result'] = array(
             'key'=>200,
             'val'=>$select,
+            'application_id'=>$note->application_id
         );
         return response()->json($data,200);
     }
