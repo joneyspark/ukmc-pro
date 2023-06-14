@@ -50,5 +50,6 @@
         });
         this.get_notifications();
     });
-</script>       
+</script>
+
 @endif

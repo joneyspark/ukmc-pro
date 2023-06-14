@@ -299,10 +299,13 @@
                 }
             }
         </script>
-        
+        @include('ajax.application')
+
         <script src="{{ asset('web/js/custom.js') }}"></script>
+        <script src="{{ asset('web/js/application.js') }}"></script>
         <script src="{{ asset('web/js/addRemove.js') }}"></script>
         <script src="{{ asset('web/js/tagify.js') }}"></script>
+        <script src="{{ asset('web/js/validation.js') }}"></script>
         @include('ajax.university')
         <script src="{{ asset('web/js/iziToast.js') }}"></script>
 

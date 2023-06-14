@@ -8,6 +8,7 @@ use App\Models\Admission\AdmissionOfficer;
 use App\Models\Agent\Agent;
 use App\Models\Agent\AgentTask;
 use App\Models\Application\Application;
+use App\Models\Application\Note;
 use App\Models\Application\RequestDocument;
 use App\Models\Task\Task;
 use App\Models\Teacher\Teacher;
@@ -73,5 +74,8 @@ class User extends Authenticatable
     }
     public function documents(){
         return $this->hasMany(RequestDocument::class,'request_by','id');
+    }
+    public function notes(){
+        return $this->hasMany(Note::class);
     }
 }

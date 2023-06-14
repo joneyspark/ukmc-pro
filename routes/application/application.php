@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Application\ApplicationController;
+use App\Http\Controllers\Application\ApplicationOtherController;
 
 
 Route::controller(ApplicationController::class)->group(function () {
@@ -35,4 +36,9 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('application/{id?}/processing', 'application_processing');
     Route::get('pending-applications', 'pending_applications');
     Route::get('interview-list', 'interview_list');
+});
+
+Route::controller(ApplicationOtherController::class)->group(function () {
+    Route::get('application-get-notes/{id?}', 'get_notes');
+    Route::post('application-note-post', 'application_note_post');
 });

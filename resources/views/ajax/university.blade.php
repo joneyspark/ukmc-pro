@@ -35,3 +35,26 @@
 
     });
 </script>
+@if(Auth::check() && Auth::user()->role=='admin')
+<script>
+    Pusher.logToConsole = true;
+    var pusher = new Pusher('ef4fd77f0ef3365b974c', {
+    cluster: 'ap2'
+    });
+    var channel = pusher.subscribe('AdminMessage');
+    channel.bind('adminmsg', function(data) {
+        //alert(JSON.stringify(data));
+        iziToast.show({
+            title: 'Hey',
+            message: data.message+' <a style="color:blue;" href="'+data.url+'">View</a>',
+            position: 'bottomRight',
+            timeout: 8000,
+            color: 'green',
+            balloon: true,
+            close: true,
+            progressBarColor: 'yellow',
+        });
+        this.get_notifications();
+    });
+</script>
+@endif
