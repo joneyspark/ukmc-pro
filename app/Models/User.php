@@ -8,6 +8,7 @@ use App\Models\Admission\AdmissionOfficer;
 use App\Models\Agent\Agent;
 use App\Models\Agent\AgentTask;
 use App\Models\Application\Application;
+use App\Models\Application\Followup;
 use App\Models\Application\Note;
 use App\Models\Application\RequestDocument;
 use App\Models\Task\Task;
@@ -77,5 +78,8 @@ class User extends Authenticatable
     }
     public function notes(){
         return $this->hasMany(Note::class);
+    }
+    public function followups(){
+        return $this->hasMany(Followup::class);
     }
 }

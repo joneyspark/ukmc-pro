@@ -40,22 +40,28 @@
             <h5 class="modal-title"><b>Follow Up</b></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
-        <form method="post" action="{{ URL::to('user-role-confirm') }}" class="mt-0">
-            @csrf
+        <form id="followup-form" method="post" action="#" class="mt-0">
             <div class="modal-body">
-                <p class="modal-text">1: Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
-                <p class="modal-text">2: Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
+                <div id="followupnote-data">
+
+                </div>
                 <div class="form-group">
                     <div class="col">
                         <div class="form-group mb-4"><label for="exampleFormControlInput1">Note:</label>
-                            <textarea class="form-control" rows="2"></textarea>
+                            <input type="hidden" name="followup_application_id" id="followup_application_id" />
+                            <textarea name="application_followup" id="application_followup" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Followup Date:</label>
+                            <input name="followup_date" id="followup_date" type="datetime-local" class="form-control" />
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Submit</button>
+                <button id="btn-followup-submit" class="btn btn-primary mt-2 mb-2 btn-no-effect">Submit</button>
             </div>
         </form>
       </div>
@@ -207,7 +213,7 @@
                                             </a>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink6" style="">
                                                 <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="dropdown-item" onclick="get_application_notes({{ $row->id }})" href="#">Notes</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal1" class="dropdown-item" href="javascript:void(0);">Follow Up</a>
+                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal1" class="dropdown-item" onclick="get_application_followups({{ $row->id }})" href="javascript:void(0);">Follow Up</a>
                                                 <a data-bs-toggle="modal" data-bs-target="#inputFormModal2" class="dropdown-item" href="javascript:void(0);">Meeting</a>
                                             </div>
                                         </div>
@@ -327,6 +333,9 @@
     }
     .is-action-data-show{
         display: block;
+    }
+    .error{
+        color: #a90606 !important;
     }
 </style>
 @stop
