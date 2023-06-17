@@ -36,6 +36,19 @@
             }
         });
     }
+    function deleteMeetingNote(id){
+        if (confirm('Are you sure to delete this Meeting Data?')) {
+            $.get('{{ URL::to('meeting-note-remove') }}/'+id,function(data,status){
+                if(data['result']['key']===101){
+                    alert(data['result']['val']);
+                }
+                if(data['result']['key']===200){
+                    console.log(data['result']['val']);
+                    $('#meetingnote-data').html(data['result']['val']);
+                }
+            });
+        }
+    }
 
 </script>
 <script>
@@ -138,6 +151,66 @@
                         $('#application_followup').val("");
                         $('#followup_date').val("");
                         $('#followup_application_id').val(data['result']['application_id']);
+                    }
+                }).fail(function(xhr, status, error) {
+                    // Error callback...
+                    console.log(xhr.responseText);
+                    console.log(status);
+                    console.log(error);
+                });
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#meeting-form').validate({
+            rules: {
+                application_meeting: {
+                    required: true
+                },
+                meeting_date: {
+                    required: true
+                },
+            },
+            messages: {
+                application_meeting: {
+                    required: "Meeting Note Field Is Required!"
+                },
+                meeting_date: {
+                    required: "Meeting Date Field Is Required!"
+                },
+            },
+            submitHandler: function(form) {
+            $('#btn-meeting-submit').prop('disabled', true);
+            var application_id = $('#meeting_application_id').val();
+            var application_meeting = $('#application_meeting').val();
+            var meeting_date = $('#meeting_date').val();
+            $.post('{{ URL::to('application-meeting-note-post') }}',
+                {
+                    application_id: application_id,
+                    application_meeting: application_meeting,
+                    meeting_date: meeting_date,
+                },
+                function(data, status){
+                    console.log(data);
+                    console.log(status);
+                    if(data['result']['key']===200){
+                        iziToast.show({
+                            title: 'Success:',
+                            message: 'Successfully Create a New Meeting Of Application!',
+                            position: 'topRight',
+                            timeout: 8000,
+                            color: 'green',
+                            balloon: true,
+                            close: true,
+                            progressBarColor: 'yellow',
+                        });
+                        $('#btn-meeting-submit').prop('disabled', false);
+                        $('#meetingnote-data').html(data['result']['val']);
+                        $('#application_meeting').val("");
+                        $('#meeting_date').val("");
+                        $('#meeting_application_id').val(data['result']['application_id']);
                     }
                 }).fail(function(xhr, status, error) {
                     // Error callback...

@@ -96,7 +96,7 @@
             </div>
             <div class="modal-footer">
                 <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                <button class="btn btn-primary mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Submit</button>
+                <button id="btn-meeting-submit" class="btn btn-primary mt-2 mb-2 btn-no-effect">Submit</button>
             </div>
         </form>
       </div>
