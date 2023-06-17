@@ -23,6 +23,20 @@
             }
         });
     }
+    //meetings note
+    function get_application_meetings(id){
+        if(id===null){
+            return false;
+        }
+        $.get('{{ URL::to('application-get-meetings') }}/'+id,function(data,status){
+            if(data['result']['key']===200){
+                console.log(data['result']['val']);
+                $('#meetingnote-data').html(data['result']['val']);
+                $('#meeting_application_id').val(data['result']['application_id']);
+            }
+        });
+    }
+
 </script>
 <script>
     $(document).ready(function() {

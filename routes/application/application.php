@@ -43,4 +43,6 @@ Route::controller(ApplicationOtherController::class)->group(function () {
     Route::post('application-note-post', 'application_note_post');
     Route::get('application-get-followups/{id?}', 'get_followups');
     Route::post('follow-up-note-post', 'follow_up_note_post');
+
+    Route::get('application-get-meetings/{id?}', 'get_meetings');
 });

@@ -72,25 +72,31 @@
       <div class="modal-content">
 
         <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Meeting</b></h5>
+            <h5 class="modal-title"><b>Meetings</b></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
-        <form method="post" action="{{ URL::to('user-role-confirm') }}" class="mt-0">
-            @csrf
+        <form id="meeting-form" method="post" class="mt-0">
             <div class="modal-body">
-                <p class="modal-text">1: Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
-                <p class="modal-text">2: Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
+                <div id="meetingnote-data">
+
+                </div>
                 <div class="form-group">
                     <div class="col">
                         <div class="form-group mb-4"><label for="exampleFormControlInput1">Note:</label>
-                            <textarea class="form-control" rows="2"></textarea>
+                            <input type="hidden" name="meeting_application_id" id="meeting_application_id" />
+                            <textarea id="application_meeting" name="application_meeting" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Meeting Date:</label>
+                            <input name="meeting_date" id="meeting_date" type="datetime-local" class="form-control" />
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Submit</button>
+                <button class="btn btn-primary mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Submit</button>
             </div>
         </form>
       </div>
@@ -214,7 +220,7 @@
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink6" style="">
                                                 <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="dropdown-item" onclick="get_application_notes({{ $row->id }})" href="#">Notes</a>
                                                 <a data-bs-toggle="modal" data-bs-target="#inputFormModal1" class="dropdown-item" onclick="get_application_followups({{ $row->id }})" href="javascript:void(0);">Follow Up</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal2" class="dropdown-item" href="javascript:void(0);">Meeting</a>
+                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal2" class="dropdown-item" onclick="get_application_meetings({{ $row->id }})" href="javascript:void(0);">Meeting</a>
                                             </div>
                                         </div>
                                         @else

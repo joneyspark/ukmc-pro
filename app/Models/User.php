@@ -9,6 +9,7 @@ use App\Models\Agent\Agent;
 use App\Models\Agent\AgentTask;
 use App\Models\Application\Application;
 use App\Models\Application\Followup;
+use App\Models\Application\Meeting;
 use App\Models\Application\Note;
 use App\Models\Application\RequestDocument;
 use App\Models\Task\Task;
@@ -81,5 +82,8 @@ class User extends Authenticatable
     }
     public function followups(){
         return $this->hasMany(Followup::class);
+    }
+    public function meetings(){
+        return $this->hasMany(Meeting::class);
     }
 }
