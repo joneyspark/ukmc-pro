@@ -31,9 +31,13 @@ class ApplicationOtherController extends Controller
                     $select .= '<div class="media custom-media-img">';
                         $select .= '<div class="mr-2">';
                             $select .= '<img alt="avatar" src="'.$note->user->photo.'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
-                        $select .= '</div>';
-                        $select .= '<div class="media-body">';
-                            $select .= '<h6 class="tx-inverse">'.$note->user->name.'</h6>';
+                            $select .= '</div>';
+                            $select .= '<div class="media-body">';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->id==$note->user_id){
+                                $select .= '<a onclick="deleteMainNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->note.'</p>';
                             $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small>';
                         $select .= '</div>';
@@ -76,9 +80,13 @@ class ApplicationOtherController extends Controller
                     $select .= '<div class="media custom-media-img">';
                         $select .= '<div class="mr-2">';
                             $select .= '<img alt="avatar" src="'.$note->user->photo.'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
-                        $select .= '</div>';
-                        $select .= '<div class="media-body">';
-                            $select .= '<h6 class="tx-inverse">'.$note->user->name.'</h6>';
+                            $select .= '</div>';
+                            $select .= '<div class="media-body">';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->id==$note->user_id){
+                                $select .= '<a onclick="deleteMainNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->note.'</p>';
                             $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small>';
                         $select .= '</div>';
@@ -360,23 +368,79 @@ class ApplicationOtherController extends Controller
         //make notification
         $notification = new Notification();
         $notification->title = 'Meeting Canceled';
-        $notification->description = 'Meeting Canceled of Application By '.Auth::user()->name;
+        $notification->description = 'Followup Remove of Application By '.Auth::user()->name;
         $notification->create_date = time();
         $notification->create_by = Auth::user()->id;
         $notification->creator_name = Auth::user()->name;
         $notification->creator_image = Auth::user()->photo;
         $notification->user_id = 1;
         $notification->is_admin = 1;
-        $notification->application_id = $meeting->application_id;
-        $notification->slug = 'application/'.$meeting->application_id.'/processing';
+        $notification->application_id = $followup->application_id;
+        $notification->slug = 'application/'.$followup->application_id.'/processing';
         $notification->save();
         //make instant notification for super admin
-        event(new AdminMsgEvent($notification->description,url('application/'.$meeting->application_id.'/processing')));
+        event(new AdminMsgEvent($notification->description,url('application/'.$followup->application_id.'/processing')));
         $data['result'] = array(
             'key'=>200,
             'val'=>$select,
-            'delete'=>$delete
         );
         return response()->json($data,200);
     }
+    //note delete
+    public function main_note_delete($id=NULL){
+        $main_note = Note::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        if(!$main_note){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Note Data Not Found'
+            );
+            return response()->json($data,200);
+        }
+        $delete = Note::where('id',$main_note->id)->delete();
+
+        //make notification
+        $notification = new Notification();
+        $notification->title = 'Note Delete';
+        $notification->description = 'Note Delete of Application By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->application_id = $main_note->application_id;
+        $notification->slug = 'application/'.$main_note->application_id.'/processing';
+        $notification->save();
+        $select = '';
+        $notes = Note::where('application_id',$main_note->application_id)->orderBy('id','desc')->get();
+        if($notes){
+            foreach($notes as $note){
+                $select .= '<p class="modal-text">';
+                    $select .= '<div class="media custom-media-img">';
+                        $select .= '<div class="mr-2">';
+                            $select .= '<img alt="avatar" src="'.$note->user->photo.'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
+                        $select .= '</div>';
+                        $select .= '<div class="media-body">';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->id==$note->user_id){
+                                $select .= '<a onclick="deleteMainNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            $select .= '</h6>';
+                            $select .= '<p class="mg-b-0">'.$note->note.'</p>';
+                            $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small>';
+                        $select .= '</div>';
+                    $select .= '</div>';
+                $select .= '</p><hr>';
+            }
+        }
+        //make instant notification for super admin
+        event(new AdminMsgEvent($notification->description,url('application/'.$main_note->application_id.'/processing')));
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select,
+        );
+        return response()->json($data,200);
+    }
+    //create note on detail page
+    
 }

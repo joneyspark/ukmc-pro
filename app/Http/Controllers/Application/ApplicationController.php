@@ -489,10 +489,11 @@ class ApplicationController extends Controller{
         $data['agent_applications'] = Application::orderBy('id','desc')->where('application_status_id',0)->paginate(10);
         return view('application/pending',$data);
     }
-    public function application_processing(){
+    public function application_processing($id=NULL){
         $data['page_title'] = 'Application | All';
         $data['application'] = true;
         $data['application_all'] = true;
+        $data['application_info'] = Application::where('id',$id)->first();
         return view('application/processing',$data);
     }
     public function all(){

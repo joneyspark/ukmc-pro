@@ -67,4 +67,13 @@ class Application extends Model
     public function assign(){
         return $this->belongsTo(User::class,'admission_officer_id','id');
     }
+    public function notes(){
+        return $this->hasMany(Note::class);
+    }
+    public function meetings(){
+        return $this->hasMany(Meeting::class);
+    }
+    public function followups(){
+        return $this->hasMany(Followup::class);
+    }
 }

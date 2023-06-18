@@ -50,15 +50,30 @@
         }
     }
     function deleteFollowupNote(id){
-        $.get('{{ URL::to('meeting-note-remove') }}/'+id,function(data,status){
-            if(data['result']['key']===101){
-                alert(data['result']['val']);
-            }
-            if(data['result']['key']===200){
-                console.log(data['result']['val']);
-                $('#meetingnote-data').html(data['result']['val']);
-            }
-        });
+        if(confirm('Are You Sure To Delete Followup Data')){
+            $.get('{{ URL::to('follow-up-note-remove') }}/'+id,function(data,status){
+                if(data['result']['key']===101){
+                    alert(data['result']['val']);
+                }
+                if(data['result']['key']===200){
+                    console.log(data['result']['val']);
+                    $('#followupnote-data').html(data['result']['val']);
+                }
+            });
+        }
+    }
+    function deleteMainNote(id){
+        if(confirm('Are You Sure To Delete Note Data')){
+            $.get('{{ URL::to('main-note-remove') }}/'+id,function(data,status){
+                if(data['result']['key']===101){
+                    alert(data['result']['val']);
+                }
+                if(data['result']['key']===200){
+                    console.log(data['result']['val']);
+                    $('#note-data').html(data['result']['val']);
+                }
+            });
+        }
     }
 
 </script>
