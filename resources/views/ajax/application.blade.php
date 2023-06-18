@@ -49,6 +49,17 @@
             });
         }
     }
+    function deleteFollowupNote(id){
+        $.get('{{ URL::to('meeting-note-remove') }}/'+id,function(data,status){
+            if(data['result']['key']===101){
+                alert(data['result']['val']);
+            }
+            if(data['result']['key']===200){
+                console.log(data['result']['val']);
+                $('#meetingnote-data').html(data['result']['val']);
+            }
+        });
+    }
 
 </script>
 <script>

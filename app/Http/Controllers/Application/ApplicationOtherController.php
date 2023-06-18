@@ -107,7 +107,11 @@ class ApplicationOtherController extends Controller
                             $select .= '<img alt="avatar" src="'.$note->user->photo.'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
                         $select .= '</div>';
                         $select .= '<div class="media-body">';
-                            $select .= '<h6 class="tx-inverse">'.$note->user->name.'</h6>';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->id==$note->user_id){
+                                $select .= '<a onclick="deleteFollowupNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->follow_up.'</p>';
                             $select .= '<small class="text-left"> Followup Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->follow_up_date_time)).'</span></small><br>';
                             $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small>';
@@ -154,7 +158,11 @@ class ApplicationOtherController extends Controller
                             $select .= '<img alt="avatar" src="'.$note->user->photo.'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
                         $select .= '</div>';
                         $select .= '<div class="media-body">';
-                            $select .= '<h6 class="tx-inverse">'.$note->user->name.'</h6>';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->id==$note->user_id){
+                                $select .= '<a onclick="deleteFollowupNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->follow_up.'</p>';
                             $select .= '<small class="text-left"> Followup Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->follow_up_date_time)).'</span></small><br>';
                             $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small>';
@@ -268,6 +276,7 @@ class ApplicationOtherController extends Controller
             return response()->json($data,200);
         }
         $delete = Meeting::where('id',$meeting->id)->delete();
+
         $select = '';
         $meeting_notes = Meeting::where('application_id',$meeting->application_id)->orderBy('id','desc')->get();
         if($meeting_notes){
@@ -291,6 +300,78 @@ class ApplicationOtherController extends Controller
                 $select .= '</p><hr>';
             }
         }
+        //make notification
+        $notification = new Notification();
+        $notification->title = 'Meeting Canceled';
+        $notification->description = 'Meeting Canceled of Application By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->application_id = $meeting->application_id;
+        $notification->slug = 'application/'.$meeting->application_id.'/processing';
+        $notification->save();
+        //make instant notification for super admin
+        event(new AdminMsgEvent($notification->description,url('application/'.$meeting->application_id.'/processing')));
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select,
+            'delete'=>$delete
+        );
+        return response()->json($data,200);
+    }
+    //follow up note delete
+    public function follow_up_note_delete($id=NULL){
+        $followup = Followup::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        if(!$followup){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Follow up Data Not Found'
+            );
+            return response()->json($data,200);
+        }
+        $delete = Followup::where('id',$followup->id)->delete();
+
+        $select = '';
+        $followup_notes = Followup::where('application_id',$followup->application_id)->orderBy('id','desc')->get();
+        if($followup_notes){
+            foreach($followup_notes as $note){
+                $select .= '<p class="modal-text">';
+                    $select .= '<div class="media custom-media-img">';
+                        $select .= '<div class="mr-2">';
+                            $select .= '<img alt="avatar" src="'.$note->user->photo.'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
+                        $select .= '</div>';
+                        $select .= '<div class="media-body">';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->id==$note->user_id){
+                                $select .= '<a onclick="deleteFollowupNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            $select .= '</h6>';
+                            $select .= '<p class="mg-b-0">'.$note->follow_up.'</p>';
+                            $select .= '<small class="text-left"> Followup Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->follow_up_date_time)).'</span></small><br>';
+                            $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small>';
+                        $select .= '</div>';
+                    $select .= '</div>';
+                $select .= '</p><hr>';
+            }
+        }
+        //make notification
+        $notification = new Notification();
+        $notification->title = 'Meeting Canceled';
+        $notification->description = 'Meeting Canceled of Application By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->application_id = $meeting->application_id;
+        $notification->slug = 'application/'.$meeting->application_id.'/processing';
+        $notification->save();
+        //make instant notification for super admin
+        event(new AdminMsgEvent($notification->description,url('application/'.$meeting->application_id.'/processing')));
         $data['result'] = array(
             'key'=>200,
             'val'=>$select,
