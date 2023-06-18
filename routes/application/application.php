@@ -50,5 +50,5 @@ Route::controller(ApplicationOtherController::class)->group(function () {
     Route::get('follow-up-note-remove/{id?}', 'follow_up_note_delete');
     Route::get('main-note-remove/{id?}', 'main_note_delete');
 
-    Route::get('note-create-of-application-details', 'note_create_of_application_details');
+    Route::post('note-create-of-application-details', 'note_create_of_application_details');
 });

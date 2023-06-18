@@ -104,26 +104,20 @@
                                                         <div style="margin-left: 2px;" class="ml-2">
                                                             <img alt="avatar" src="{{ asset($note->user->photo) }}" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">
                                                         </div>
-                                                        <div class="media-body"><h6 class="tx-inverse">{{ (!empty($note->user->name))?$note->user->name:'' }}<a onclick="deleteMainNote(2)" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></h6><p class="mg-b-0">{{ (!empty($note->note))?$note->note:'' }}</p><small class="text-left"> Created : {{ date('F d Y H:i:s',strtotime($note->created_at)) }}</small></div>
+                                                        <div class="media-body"><h6 class="tx-inverse">{{ (!empty($note->user->name))?$note->user->name:'' }}<a onclick="deleteMainNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></h6><p class="mg-b-0">{{ (!empty($note->note))?$note->note:'' }}</p><small class="text-left"> Created : {{ date('F d Y H:i:s',strtotime($note->created_at)) }}</small></div>
                                                     </div>
                                                 </div><hr>
                                                 @endforeach
                                             @endif
                                         </div>
                                         <div class="card-body custom-card-body">
-                                            <form method="post" action="{{ URL::to('note-create-of-application-details') }}" >
-                                                @csrf
+                                            <form id="note-formid" method="post">
                                                 <div class="col col-md-12 p-0">
                                                     <div class="form-group lead-drawer-form">
-                                                        <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="note_application_id" />
-                                                        <textarea name="note" cols="30" rows="3" placeholder="Type Lead Notes here..." class="form-control"></textarea>
-                                                        @if ($errors->has('note'))
-                                                            <span class="text-danger">{{ $errors->first('note') }}</span>
-                                                        @endif
+                                                        <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="note_application_id" id="note_application_id" />
+                                                        <textarea name="application_note" id="application_note" class="form-control" rows="2"></textarea>
                                                         <!---->
-                                                    </div><button class="btn badge badge-info btn-sm">Save
-                                                        <!---->
-                                                    </button>
+                                                    </div><button id="btn-note-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Save</button>
                                                 </div>
                                                 <hr>
                                             </form>
@@ -132,43 +126,16 @@
                                     </div>
                                 </div>
                             </div><br>
-                            <div class="card no-outer-spacing">
-                                <div id="headingThree3" class="card-header">
+                            <div class="card no-outer-spacing no-border-custom">
+                                <div class="card-header">
                                     <section class="mb-0 mt-0">
-                                        <h5>Meeting</h5>
+                                        <div role="menu" class="" data-toggle="">Meeting</div>
                                     </section>
                                 </div>
                                 <div>
                                     <div class="card-body custom-card-body p-0">
-                                        <div class="col-col-md-12"><button class="btn btn-secondary meeting-button"> Make a
-                                                Meeting <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round"
-                                                    class="feather feather-calendar">
-                                                    <rect x="3" y="4" width="18" height="18"
-                                                        rx="2" ry="2"></rect>
-                                                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                                                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                                                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                                                </svg></button></div><br>
-                                        <!---->
-                                        <div class="col col-md-12 p-0">
-                                            <div id="tableSimple" class="col-lg-12 col-12 p-0"><label
-                                                    style="font-size: 12px;">Meeting schedule</label>
-                                                <div class="table-responsive meeting-table">
-                                                    <table id="manage_app_process" class="table-bordered mb-4 table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Date Time</th>
-                                                                <th>Done</th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div class="col-col-md-12">Meeting</div><br>
+                                        
                                         <div data-v-b64104d7="" id="confirmationModal" class="modal confirmation-custom fade"
                                             tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel"
                                             aria-hidden="true">
@@ -340,4 +307,18 @@
         </div>
     </div>
 </div>
+<style>
+    .is-action-data{
+        display: none;
+    }
+    .is-action-data-show{
+        display: block;
+    }
+    .error{
+        color: #a90606 !important;
+    }
+    .custom-media-margin{
+        margin: 7px !important;
+    }
+</style>
 @stop
