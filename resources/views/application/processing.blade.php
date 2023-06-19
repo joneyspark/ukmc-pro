@@ -30,12 +30,14 @@
                 </header>
             </div>
         </div>
+        
         <div class="row layout-top-spacing">
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-8">
                     <div class="row">
                         <div class="col col-md-6 mb-4">
-                            <h5 class="pb-2">Personal Information</h5>
+                            
+                            <h5 class="pb-2">Personal Information <a href="{{ URL::to('application-create/'.$application_info->id.'/step-2') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Basic Info <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
                             <div class="table-responsive">
                                 <table class="table-bordered mb-4 table">
                                     <tbody>
@@ -144,8 +146,11 @@
                                                     <div class="media-body">
                                                         <h6 class="tx-inverse">{{ (!empty($note->user->name))?$note->user->name:'' }}
                                                             <a onclick="deleteMeetingNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
-                                                            <a id="meeting_waiting{{ $note->id }}" onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>
-                                                            <a id="meeting_complete{{ $note->id }}" onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>
+                                                            @if($note->is_meeting_done==1)
+                                                            <a onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>
+                                                            @else
+                                                            <a onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>
+                                                            @endif
                                                         </h6>
                                                         <p class="mg-b-0">{{ (!empty($note->meeting_notes))?$note->meeting_notes:'' }}</p>
                                                         <small class="text-left"> Meeting Date : <span class="badge badge-warning">June 29 2023 18:33:00</span></small><br>
@@ -175,7 +180,7 @@
                             </div>
                         </div>
                         <div class="col col-md-6 mb-4">
-                            <h5 class="pb-2">Admission Information</h5>
+                            <h5 class="pb-2">Admission Information <a href="{{ URL::to('application-create/'.$application_info->id.'/step-1') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Admission Info <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
                             <div class="table-responsive">
                                 <table class="table-bordered mb-4 table">
                                     <tbody>
@@ -232,9 +237,16 @@
                                                         <img alt="avatar" src="{{ asset($note->user->photo) }}" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">
                                                     </div>
                                                     <div class="media-body">
-                                                        <h6 class="tx-inverse">{{ (!empty($note->user->name))?$note->user->name:'' }}<a onclick="deleteFollowupNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></h6>
+                                                        <h6 class="tx-inverse">{{ (!empty($note->user->name))?$note->user->name:'' }}
+                                                            <a onclick="deleteFollowupNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
+                                                            @if($note->is_follow_up_done==1)
+                                                            <a onclick="isFollowupComplete({{ $note->id }})" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>
+                                                            @else
+                                                            <a onclick="isFollowupComplete({{ $note->id }})" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>
+                                                            @endif
+                                                        </h6>
                                                         <p class="mg-b-0">{{ (!empty($note->follow_up))?$note->follow_up:'' }}</p>
-                                                        <small class="text-left"> Meeting Date : <span class="badge badge-warning">{{ date('F d Y H:i:s',strtotime($note->follow_up_date_time)) }}</span></small><br>
+                                                        <small class="text-left"> Followup Date : <span class="badge badge-warning">{{ date('F d Y H:i:s',strtotime($note->follow_up_date_time)) }}</span></small><br>
                                                         <small class="text-left"> Created : {{ date('F d Y H:i:s',strtotime($note->created_at)) }}</small></div>
                                                 </div>
                                             </div><hr>
@@ -261,9 +273,35 @@
                             </div>
                         </div>
                         <div class="col col-md-12 mb-4">
-                            <h5 class="pb-2">Application Document</h5>
-                            <p>No File Uploaded Yet</p>
-                            <ul class="documents-files"></ul>
+                            <h5 class="pb-2">Application Document <a href="{{ URL::to('application-create/'.$application_info->id.'/step-4') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Document <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Filename</th>
+                                            <th scope="col">Uploaded on</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($application_info->applicationDocuments as $doc)
+                                        <tr>
+                                            <td>{{ $doc->document_type }}</td>
+                                            <td>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                <span class="table-inner-text">{{ date('F d Y',strtotime($doc->created_at)) }}</span>
+                                            </td>
+                                            <td>
+                                                <a download href="{{ asset($doc->doc) }}"><span class="badge badge-light-success">Download</span></a>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                            <tr>No Data Found</tr>
+                                        @endforelse
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

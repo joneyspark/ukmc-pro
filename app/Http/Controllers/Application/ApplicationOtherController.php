@@ -119,6 +119,11 @@ class ApplicationOtherController extends Controller
                             if(Auth::user()->id==$note->user_id){
                                 $select .= '<a onclick="deleteFollowupNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
                             }
+                            if($note->is_follow_up_done==1){
+                                $select .= '<a onclick="isFollowupComplete('.$note->id.')" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>';
+                            }else{
+                                $select .= '<a onclick="isFollowupComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
+                            }
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->follow_up.'</p>';
                             $select .= '<small class="text-left"> Followup Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->follow_up_date_time)).'</span></small><br>';
@@ -170,6 +175,11 @@ class ApplicationOtherController extends Controller
                             if(Auth::user()->id==$note->user_id){
                                 $select .= '<a onclick="deleteFollowupNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
                             }
+                            if($note->is_follow_up_done==1){
+                                $select .= '<a onclick="isFollowupComplete('.$note->id.')" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>';
+                            }else{
+                                $select .= '<a onclick="isFollowupComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
+                            }
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->follow_up.'</p>';
                             $select .= '<small class="text-left"> Followup Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->follow_up_date_time)).'</span></small><br>';
@@ -203,6 +213,11 @@ class ApplicationOtherController extends Controller
                             $select .= '<h6 class="tx-inverse">'.$note->user->name;
                             if(Auth::user()->id==$note->user_id){
                                 $select .= '<a onclick="deleteMeetingNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            if($note->is_meeting_done==1){
+                                $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Success" aria-label="Success"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>';
+                            }else{
+                                $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
                             }
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->meeting_notes.'</p>';
@@ -255,6 +270,11 @@ class ApplicationOtherController extends Controller
                             if(Auth::user()->id==$note->user_id){
                                 $select .= '<a onclick="deleteMeetingNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
                             }
+                            if($note->is_meeting_done==1){
+                                $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Success" aria-label="Success"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>';
+                            }else{
+                                $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
+                            }
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->meeting_notes.'</p>';
                             $select .= '<small class="text-left"> Meeting Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->meeting_date_time)).'</span></small><br>';
@@ -298,6 +318,11 @@ class ApplicationOtherController extends Controller
                             $select .= '<h6 class="tx-inverse">'.$note->user->name;
                             if(Auth::user()->id==$note->user_id){
                                 $select .= '<a onclick="deleteMeetingNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            if($note->is_meeting_done==1){
+                                $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Success" aria-label="Success"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>';
+                            }else{
+                                $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
                             }
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->meeting_notes.'</p>';
@@ -356,6 +381,11 @@ class ApplicationOtherController extends Controller
                             if(Auth::user()->id==$note->user_id){
                                 $select .= '<a onclick="deleteFollowupNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
                             }
+                            if($note->is_follow_up_done==1){
+                                $select .= '<a onclick="isFollowupComplete('.$note->id.')" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>';
+                            }else{
+                                $select .= '<a onclick="isFollowupComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
+                            }
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->follow_up.'</p>';
                             $select .= '<small class="text-left"> Followup Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->follow_up_date_time)).'</span></small><br>';
@@ -367,7 +397,7 @@ class ApplicationOtherController extends Controller
         }
         //make notification
         $notification = new Notification();
-        $notification->title = 'Meeting Canceled';
+        $notification->title = 'Followup Remove';
         $notification->description = 'Followup Remove of Application By '.Auth::user()->name;
         $notification->create_date = time();
         $notification->create_by = Auth::user()->id;
@@ -453,13 +483,12 @@ class ApplicationOtherController extends Controller
         }
         $msg = '';
         if($meeting->is_meeting_done==1){
-            $meeting->is_meeting_done==0;
+            $update = Meeting::where('id',$meeting->id)->update(['is_meeting_done'=>0]);
             $msg = 'Meeting Restore of Application by '.Auth::user()->name;
         }else{
-            $meeting->is_meeting_done==1;
+            $update = Meeting::where('id',$meeting->id)->update(['is_meeting_done'=>1]);
             $msg = 'Meeting Complete of Application by '.Auth::user()->name;
         }
-        $meeting->save();
         $select = '';
         $meeting_notes = Meeting::where('application_id',$meeting->application_id)->orderBy('id','asc')->get();
         if($meeting_notes){
@@ -474,6 +503,11 @@ class ApplicationOtherController extends Controller
                             if(Auth::user()->id==$note->user_id){
                                 $select .= '<a onclick="deleteMeetingNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
                             }
+                            if($note->is_meeting_done==1){
+                                $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Success" aria-label="Success"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>';
+                            }else{
+                                $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
+                            }
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->meeting_notes.'</p>';
                             $select .= '<small class="text-left"> Meeting Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->meeting_date_time)).'</span></small><br>';
@@ -485,8 +519,8 @@ class ApplicationOtherController extends Controller
         }
         //make notification
         $notification = new Notification();
-        $notification->title = 'Meeting Canceled';
-        $notification->description = 'Meeting Canceled of Application By '.Auth::user()->name;
+        $notification->title = 'Meeting Status Change';
+        $notification->description = $msg;
         $notification->create_date = time();
         $notification->create_by = Auth::user()->id;
         $notification->creator_name = Auth::user()->name;
@@ -501,6 +535,75 @@ class ApplicationOtherController extends Controller
         $data['result'] = array(
             'key'=>200,
             'val'=>$select,
+            'message'=>$msg,
+        );
+        return response()->json($data,200);
+    }
+    //followup status chnage
+    public function followup_status_change($id=NULL){
+        $followup = Followup::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        if(!$followup){
+            $data['result'] = array(
+                'key'=>200,
+                'val'=>'Followup Data Not Found!',
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($followup->is_follow_up_done==1){
+            $update = Followup::where('id',$followup->id)->update(['is_follow_up_done'=>0]);
+            $msg = 'Followup Restore of Application by '.Auth::user()->name;
+        }else{
+            $update = Followup::where('id',$followup->id)->update(['is_follow_up_done'=>1]);
+            $msg = 'Followup Complete of Application by '.Auth::user()->name;
+        }
+        $select = '';
+        $followup_notes = Followup::where('application_id',$followup->application_id)->orderBy('id','asc')->get();
+        if($followup_notes){
+            foreach($followup_notes as $note){
+                $select .= '<p class="modal-text">';
+                    $select .= '<div class="custom-media-margin media custom-media-img">';
+                        $select .= '<div class="mr-2">';
+                            $select .= '<img alt="avatar" src="'.url($note->user->photo).'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
+                        $select .= '</div>';
+                        $select .= '<div class="media-body">';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->id==$note->user_id){
+                                $select .= '<a onclick="deleteFollowupNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            if($note->is_follow_up_done==1){
+                                $select .= '<a onclick="isFollowupComplete('.$note->id.')" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>';
+                            }else{
+                                $select .= '<a onclick="isFollowupComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
+                            }
+                            $select .= '</h6>';
+                            $select .= '<p class="mg-b-0">'.$note->follow_up.'</p>';
+                            $select .= '<small class="text-left"> Followup Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->follow_up_date_time)).'</span></small><br>';
+                            $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small>';
+                        $select .= '</div>';
+                    $select .= '</div>';
+                $select .= '</p><hr>';
+            }
+        }
+        //make notification
+        $notification = new Notification();
+        $notification->title = 'Followup Status Change';
+        $notification->description = $msg;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->application_id = $followup->application_id;
+        $notification->slug = 'application/'.$followup->application_id.'/processing';
+        $notification->save();
+        //make instant notification for super admin
+        event(new AdminMsgEvent($notification->description,url('application/'.$followup->application_id.'/processing')));
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select,
+            'message'=>$msg,
         );
         return response()->json($data,200);
     }

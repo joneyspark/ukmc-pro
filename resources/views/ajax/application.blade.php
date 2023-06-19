@@ -75,6 +75,52 @@
             });
         }
     }
+    function isMeetingComplete(id){
+        if(confirm('Are You Sure To Change Meeting Status')){
+            $.get('{{ URL::to('meeting-status-change') }}/'+id,function(data,status){
+                if(data['result']['key']===101){
+                    alert(data['result']['val']);
+                }
+                if(data['result']['key']===200){
+                    console.log(data['result']['val']);
+                    $('#meetingnote-data').html(data['result']['val']);
+                    iziToast.show({
+                        title: 'Success:',
+                        message: data['result']['message'],
+                        position: 'topRight',
+                        timeout: 8000,
+                        color: 'green',
+                        balloon: true,
+                        close: true,
+                        progressBarColor: 'yellow',
+                    });
+                }
+            });
+        }
+    }
+    function isFollowupComplete(id){
+        if(confirm('Are You Sure To Change Followup Status')){
+            $.get('{{ URL::to('followup-status-change') }}/'+id,function(data,status){
+                if(data['result']['key']===101){
+                    alert(data['result']['val']);
+                }
+                if(data['result']['key']===200){
+                    console.log(data['result']['val']);
+                    $('#followupnote-data').html(data['result']['val']);
+                    iziToast.show({
+                        title: 'Success:',
+                        message: data['result']['message'],
+                        position: 'topRight',
+                        timeout: 8000,
+                        color: 'green',
+                        balloon: true,
+                        close: true,
+                        progressBarColor: 'yellow',
+                    });
+                }
+            });
+        }
+    }
 
 </script>
 <script>
