@@ -190,7 +190,7 @@
                             <input type="submit" value="Filter" name="time" class="btn btn-warning">
                          </div>
                          <div class="col-1">
-                            <a href="#" class="btn btn-danger">Reset</a>
+                            <a href="{{ URL::to('reset-application-search') }}" class="btn btn-danger">Reset</a>
                          </div>
                      </div>
 

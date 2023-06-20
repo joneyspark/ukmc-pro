@@ -37,6 +37,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('pending-applications', 'pending_applications');
     Route::get('interview-list', 'interview_list');
     Route::post('application-status-change', 'application_status_change');
+    Route::get('reset-application-search', 'reset_application_search');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

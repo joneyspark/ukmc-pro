@@ -571,6 +571,15 @@ class ApplicationController extends Controller{
         //$data['application_list'] = Application::where('application_status_id','!=',0)->orderBy('id','desc')->paginate(15);
         return view('application/all',$data);
     }
+    public function reset_application_search(){
+        Session::put('get_campus','');
+        Session::put('get_agent','');
+        Session::put('get_officer','');
+        Session::put('get_status','');
+        Session::put('get_intake','');
+        Session::put('search','');
+        return redirect('all-application');
+    }
     public function unique_intake_info()
     {
         $date_array = array();
