@@ -36,6 +36,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('application/{id?}/processing', 'application_processing');
     Route::get('pending-applications', 'pending_applications');
     Route::get('interview-list', 'interview_list');
+    Route::post('application-status-change', 'application_status_change');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {
@@ -53,4 +54,6 @@ Route::controller(ApplicationOtherController::class)->group(function () {
     Route::post('note-create-of-application-details', 'note_create_of_application_details');
     Route::get('meeting-status-change/{id?}', 'meeting_status_change');
     Route::get('followup-status-change/{id?}', 'followup_status_change');
+    Route::get('direct-meeting-status-change/{id?}', 'direct_meeting_status_change');
+    Route::get('direct-followup-status-change/{id?}', 'direct_followup_status_change');
 });

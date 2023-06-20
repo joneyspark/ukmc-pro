@@ -266,7 +266,15 @@
                                     </td>
 
 
-                                    <td><span class="shadow-none badge badge-danger">New</span></td>
+                                    <td>
+                                        @if (count($statuses) > 0)
+                                            @foreach ($statuses as $srow)
+                                                @if($row->status==$srow->id)
+                                                <span class="shadow-none badge badge-danger">{{ $srow->title }}</span>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    </td>
                                     <td class="flex space-x-2">
                                         @if($row->application_status_id==1)
                                         <a href="{{ URL::to('agent-applications/'.$row->id.'/details') }}" class="badge badge-pill bg-primary">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Application;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Events\AddNewLead;
+use App\Events\AdminMsgEvent;
 use App\Events\AgentEvent;
 use App\Http\Requests\Application\ApplicationStep2Request;
 use App\Http\Requests\Application\ApplicationStep3Request;
@@ -29,6 +30,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\requestDocumentMail;
+use App\Models\Application\Followup;
+use App\Models\Application\Meeting;
+use App\Models\Application\Status;
 
 class ApplicationController extends Controller{
     use Service;
@@ -75,7 +79,7 @@ class ApplicationController extends Controller{
             $application->application_status_id = 0;
             $application->is_final_interview = 0;
             $application->application_process_status = 0;
-            $application->status = 0;
+            $application->status = 1;
             $application->create_by = (!empty(Auth::user()->id))?Auth::user()->id:0;
         }
         $application->company_id = $request->company_id;
@@ -461,6 +465,8 @@ class ApplicationController extends Controller{
         $data['page_title'] = 'Application | Details';
         $data['application'] = true;
         $data['interview_list'] = true;
+        $data['meetings'] = Meeting::where('user_id',Auth::user()->id)->where('is_meeting_done',0)->take(20)->get();
+        $data['followups'] = Followup::where('user_id',Auth::user()->id)->where('is_follow_up_done',0)->take(20)->get();
         return view('application.interview_list',$data);
     }
 
@@ -494,12 +500,14 @@ class ApplicationController extends Controller{
         $data['application'] = true;
         $data['application_all'] = true;
         $data['application_info'] = Application::where('id',$id)->first();
+        $data['application_status'] = Status::where('status',0)->get();
         return view('application/processing',$data);
     }
     public function all(){
         $data['page_title'] = 'Application | All';
         $data['application'] = true;
         $data['application_all'] = true;
+        $data['statuses'] = Status::where('status',0)->get();
         $data['application_list'] = Application::where('application_status_id','!=',0)->orderBy('id','desc')->paginate(15);
         return view('application/all',$data);
     }
@@ -676,6 +684,42 @@ class ApplicationController extends Controller{
             'key'=>200,
             'val'=>$message,
             'application_id'=>$application->id,
+        );
+        return response()->json($data,200);
+    }
+    //application status change
+    public function application_status_change(Request $request){
+        $application = Application::where('id',$request->application_id)->first();
+        if(!$application){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Application Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $current_status = Status::where('id',$application->status)->first();
+        $update_status = Status::where('id',$request->status)->first();
+        $application->status = $request->status;
+        $application->update_by = Auth::user()->id;
+        $application->save();
+        //make notification to admin
+        $notification = new Notification();
+        $notification->title = 'Application Status Change';
+        $notification->description = 'Application Status Change From <span style="color:red;">'.$current_status->title.'</span> to <span style="color:green;">'.$update_status->title.'</span> By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->application_id = $application->id;
+        $notification->slug = 'application/'.$application->id.'/processing';
+        $notification->save();
+        //make instant notification for super admin
+        event(new AdminMsgEvent($notification->description,url('application/'.$application->id.'/processing')));
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$notification->description,
         );
         return response()->json($data,200);
     }

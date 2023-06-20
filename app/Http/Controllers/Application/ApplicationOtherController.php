@@ -607,5 +607,38 @@ class ApplicationOtherController extends Controller
         );
         return response()->json($data,200);
     }
+    //direct meeting status chage
+    public function direct_meeting_status_change($id=NULL){
+        $meeting = Meeting::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        if(!$meeting){
+            Session::flash('error','Meeting Data Not Found!');
+            return redirect('interview-list');
+        }
+        $msg = '';
+        if($meeting->is_meeting_done==0){
+            $update = Meeting::where('id',$meeting->id)->update(['is_meeting_done'=>1]);
+            Session::flash('success','Meeting Successfully Confirmed!');
+            return redirect('interview-list');
+        }else{
+            Session::flash('error','Already Confirmed This Meeting!');
+            return redirect('interview-list');
+        }
+    }
+    //direct meeting status chage
+    public function direct_followup_status_change($id=NULL){
+        $followup = Followup::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        if(!$followup){
+            Session::flash('error','Followup Data Not Found!');
+            return redirect('interview-list');
+        }
+        if($followup->is_follow_up_done==0){
+            $update = Followup::where('id',$followup->id)->update(['is_follow_up_done'=>1]);
+            Session::flash('success','Followup Successfully Confirmed!');
+            return redirect('interview-list');
+        }else{
+            Session::flash('error','Already Confirmed This Followup!');
+            return redirect('interview-list');
+        }
+    }
 
 }

@@ -298,6 +298,49 @@ function task_status_change(){
             location.reload(true);
         }, 2000);
 }
+//application status change
+function application_status_change(){
+    var status = $('.application-status-change').val();
+    var application_id = $('.application-status-change').data('id');
+    var url = $('.application-status-change').data('action');
+        $.post(url,
+        {
+            application_id: application_id,
+            status: status
+        },
+        function(data, status){
+            console.log(data);
+            if(data['result']['key']===101){
+                iziToast.show({
+                    title: 'Status',
+                    message: data['result']['val'],
+                    position: 'topRight',
+                    timeout: 8000,
+                    color: 'orange',
+                    balloon: true,
+                    close: true,
+                    progressBarColor: 'yellow',
+                });
+            }
+            if(data['result']['key']===200){
+                iziToast.show({
+                    title: 'Status',
+                    message: data['result']['val'],
+                    position: 'topRight',
+                    timeout: 8000,
+                    color: 'green',
+                    balloon: true,
+                    close: true,
+                    progressBarColor: 'yellow',
+                });
+
+            }
+            //alert("Data: " + data + "\nStatus: " + status);
+        });
+        // setTimeout(function () {
+        //     location.reload(true);
+        // }, 3000);
+}
 function getCourse(){
     var campus_id = $('#campus_id').val();
     var url = $('#campus_id').data('action');
