@@ -78,7 +78,16 @@ class ApplicationController extends Controller{
             $application->admission_officer_id = 0;
             $application->application_status_id = 0;
             $application->is_final_interview = 0;
-            $application->application_process_status = 0;
+            // 1 for agent, 2 for web
+            if(Auth::user()->role=='agent'){
+                $application->application_process_status = 1;
+            }
+            if(Auth::user()->role=='student'){
+                $application->application_process_status = 2;
+            }else{
+                $application->application_process_status = 1; 
+            }
+            //$application->application_process_status = 1;
             $application->status = 1;
             $application->create_by = (!empty(Auth::user()->id))?Auth::user()->id:0;
         }
@@ -817,6 +826,14 @@ class ApplicationController extends Controller{
             'val'=>$notification->description,
         );
         return response()->json($data,200);
+    }
+    //meeting details 
+    public function meeting_details($id=NULL){
+        $data['page_title'] = 'Meeting | Details';
+        $data['application'] = true;
+        $data['application_all'] = true;
+        $data['meeting_data'] = Meeting::where('id',$id)->first();
+        return view('application/meeting_details',$data);
     }
 
 }

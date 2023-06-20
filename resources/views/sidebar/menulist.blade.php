@@ -58,7 +58,7 @@
                 @endif
 
                 <li class="{{ (!empty($interview_list) && $interview_list==true)?'active':'' }}">
-                    <a href="{{ URL::to('interview-list') }}"> Interview / Followup </a>
+                    <a href="{{ URL::to('interview-list') }}"> Interview Schedule </a>
                 </li>
                 <li class="{{ (!empty($application_enrolled) && $application_enrolled==true)?'active':'' }}">
                     <a href="{{ URL::to('enrolled-students') }}"> Enrolled Students </a>

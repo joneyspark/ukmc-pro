@@ -219,6 +219,7 @@ class ApplicationOtherController extends Controller
                             }else{
                                 $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
                             }
+                            $select .= '<a href="'.url('meeting/'.$note->id.'/details').'" style="float:right; margin-right:5px;" class="badge badge-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>';
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->meeting_notes.'</p>';
                             $select .= '<small class="text-left"> Meeting Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->meeting_date_time)).'</span></small><br>';
@@ -275,6 +276,7 @@ class ApplicationOtherController extends Controller
                             }else{
                                 $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
                             }
+                            $select .= '<a href="'.url('meeting/'.$note->id.'/details').'" style="float:right; margin-right:5px;" class="badge badge-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>';
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->meeting_notes.'</p>';
                             $select .= '<small class="text-left"> Meeting Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->meeting_date_time)).'</span></small><br>';
@@ -324,6 +326,7 @@ class ApplicationOtherController extends Controller
                             }else{
                                 $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
                             }
+                            $select .= '<a href="'.url('meeting/'.$note->id.'/details').'" style="float:right; margin-right:5px;" class="badge badge-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>';
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->meeting_notes.'</p>';
                             $select .= '<small class="text-left"> Meeting Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->meeting_date_time)).'</span></small><br>';
@@ -508,6 +511,7 @@ class ApplicationOtherController extends Controller
                             }else{
                                 $select .= '<a onclick="isMeetingComplete('.$note->id.')" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>';
                             }
+                            $select .= '<a href="'.url('meeting/'.$note->id.'/details').'" style="float:right; margin-right:5px;" class="badge badge-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>';
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->meeting_notes.'</p>';
                             $select .= '<small class="text-left"> Meeting Date : <span class="badge badge-warning">'.date('F d Y H:i:s',strtotime($note->meeting_date_time)).'</span></small><br>';
@@ -612,16 +616,16 @@ class ApplicationOtherController extends Controller
         $meeting = Meeting::where('id',$id)->where('user_id',Auth::user()->id)->first();
         if(!$meeting){
             Session::flash('error','Meeting Data Not Found!');
-            return redirect('interview-list');
+            return redirect()->back();
         }
         $msg = '';
         if($meeting->is_meeting_done==0){
             $update = Meeting::where('id',$meeting->id)->update(['is_meeting_done'=>1]);
             Session::flash('success','Meeting Successfully Confirmed!');
-            return redirect('interview-list');
+            return redirect()->back();
         }else{
             Session::flash('error','Already Confirmed This Meeting!');
-            return redirect('interview-list');
+            return redirect()->back();
         }
     }
     //direct meeting status chage

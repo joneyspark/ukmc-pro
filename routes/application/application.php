@@ -39,6 +39,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('application-status-change', 'application_status_change');
     Route::get('reset-application-search', 'reset_application_search');
     Route::get('application/{id?}/details', 'main_application_details');
+    Route::get('meeting/{id?}/details', 'meeting_details');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

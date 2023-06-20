@@ -55,7 +55,7 @@
                                         <select name="country" class="form-control">
                                             <option value="">Select Country</option>
                                             @foreach ($countries as $country)
-                                                <option value="{{ $country }}">{{ $country }}</option>
+                                                <option {{ ($country=="United Kingdom")?'selected':'' }} value="{{ $country }}">{{ $country }}</option>
                                             @endforeach
                                         </select>
                                         @if ($errors->has('country'))
