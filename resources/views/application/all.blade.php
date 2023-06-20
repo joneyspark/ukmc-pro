@@ -135,8 +135,8 @@
                             <select id="campus" name="campus" class="form-control" onchange="getApplicationData()">
                                 <option value="">Select Campus</option>
                                 @if(count($campuses) > 0)
-                                @foreach ($campuses as $campus)
-                                <option {{ (!empty($get_campus) && $get_campus==$campus->id)?'selected':'' }} value="{{ $campus->id }}">{{ $campus->campus_name }}</option>
+                                @foreach ($campuses as $campus1)
+                                <option {{ (!empty($get_campus) && $get_campus==$campus1->id)?'selected':'' }} value="{{ $campus1->id }}">{{ $campus1->campus_name }}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -302,7 +302,7 @@
                                     </td>
                                     <td class="flex space-x-2">
                                         @if($row->application_status_id==1)
-                                        <a href="{{ URL::to('agent-applications/'.$row->id.'/details') }}" class="badge badge-pill bg-primary">
+                                        <a href="{{ URL::to('application/'.$row->id.'/details') }}" class="badge badge-pill bg-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                         </a>
                                         @else
@@ -338,9 +338,7 @@
                                         </span>
                                         @else
                                         <span class="action-spn{{ $row->id }} is-action-data">
-                                            <a href="{{ URL::to('application/'.$row->id.'/processing') }}" class="badge badge-pill bg-secondary">
-                                                <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.75 5H8.25C7.55964 5 7 5.58763 7 6.3125V19L12 15.5L17 19V6.3125C17 5.58763 16.4404 5 15.75 5Z" stroke="#464455" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                            </a>
+
                                             <a href="{{ URL::to('application-create/'.$row->id) }}" class="badge badge-pill bg-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             </a>

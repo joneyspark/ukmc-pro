@@ -488,6 +488,13 @@ class ApplicationController extends Controller{
         }
         return view('application.agent.details',$data);
     }
+    public function main_application_details($id=NULL){
+        $data['page_title'] = 'Application | All';
+        $data['application'] = true;
+        $data['application_all'] = true;
+        $data['app_data'] = Application::where('id',$id)->first();
+        return view('application.details',$data);
+    }
     public function pending_applications(){
         $data['page_title'] = 'Application | All';
         $data['application'] = true;

@@ -26,57 +26,7 @@
     {{-- <h5 class="p-3">New Applicant</h5> --}}
     <div class="row" id="cancel-row">
         <div class="container bs-stepper stepper-form-vertical vertical linear mt-3">
-            <div class="bs-stepper-header" role="tablist">
-                <div class="step crossed" data-target="#verticalFormStep-one">
-                    <button type="button" class="step-trigger" role="tab" aria-selected="false" disabled="disabled">
-                        <span class="bs-stepper-circle">1</span>
-                        <span class="bs-stepper-label">Step One</span>
-                    </button>
-                </div>
-                <div class="line"></div>
-                <div class="step crossed" data-target="#verticalFormStep-two">
-                    <button type="button" class="step-trigger" role="tab" aria-selected="false" disabled="disabled">
-                        <span class="bs-stepper-circle">2</span>
-                        <span class="bs-stepper-label">Step Two</span>
-                    </button>
-                </div>
-                <div class="line"></div>
-                <div class="step crossed" data-target="#verticalFormStep-three">
-                    <button type="button" class="step-trigger" role="tab" aria-selected="false" disabled="disabled">
-                        <span class="bs-stepper-circle">3</span>
-                        <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">Step Three</span>
-                        </span>
-                    </button>
-                </div>
-                <div class="line"></div>
-                <div class="step crossed" data-target="#verticalFormStep-four">
-                    <button type="button" class="step-trigger" role="tab" aria-selected="false" disabled="disabled">
-                        <span class="bs-stepper-circle">4</span>
-                        <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">Step Four</span>
-                        </span>
-                    </button>
-                </div>
-                <div class="line"></div>
-                <div class="step active" data-target="#verticalFormStep-five">
-                    <button type="button" class="step-trigger active" role="tab">
-                        <span class="bs-stepper-circle">5</span>
-                        <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">Step Five</span>
-                        </span>
-                    </button>
-                </div>
-                <div class="line"></div>
-                <div class="step" data-target="#verticalFormStep-Six">
-                    <button type="button" class="step-trigger" role="tab">
-                        <span class="bs-stepper-circle">6</span>
-                        <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">Final Step</span>
-                        </span>
-                    </button>
-                </div>
-            </div>
+
 
             <div class="bs-stepper-content">
                 <div id="download-as-pdf">
@@ -470,7 +420,7 @@
                 </div>
                 <div class="row">
                     <div class="button-action mt-3 ms-3">
-                        <a href="{{ URL::to('all-application') }}" class="btn btn-secondary btn-prev me-3">All Application</a>
+                        <a href="{{ URL::to('all-application') }}" class="btn btn-secondary btn-prev me-3">Back</a>
                         <a onclick="window.print()" class="btn btn-warning">Print</a>
                     </div>
                 </div>
