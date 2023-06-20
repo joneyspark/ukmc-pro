@@ -132,34 +132,59 @@
                  <div class="row">
                      <div class="row mb-2">
                         <div class="col-4">
-                            <select name="role" class="form-control">
+                            <select id="campus" name="campus" class="form-control" onchange="getApplicationData()">
                                 <option value="">Select Campus</option>
+                                @if(count($campuses) > 0)
+                                @foreach ($campuses as $campus)
+                                <option {{ (!empty($get_campus) && $get_campus==$campus->id)?'selected':'' }} value="{{ $campus->id }}">{{ $campus->campus_name }}</option>
+                                @endforeach
+                                @endif
                             </select>
                          </div>
                          <div class="col-4">
-                            <select name="role" class="form-control">
+                            <select id="agent" name="agent" class="form-control" onchange="getApplicationData()">
                                 <option value="">Select Agent</option>
+                                @if(count($agents) > 0)
+                                @foreach ($agents as $agent)
+                                <option {{ (!empty($get_agent) && $get_agent==$agent->id)?'selected':'' }} value="{{ $agent->id }}">{{ $agent->name }}</option>
+                                @endforeach
+                                @endif
                             </select>
                          </div>
                          <div class="col-4">
-                            <select name="role" class="form-control">
+                            <select id="officer" name="officer" class="form-control" onchange="getApplicationData()">
                                 <option value="">Select Admission Manager</option>
+                                @if(count($officers) > 0)
+                                @foreach ($officers as $officer)
+                                <option {{ (!empty($get_officer) && $get_officer==$officer->id)?'selected':'' }} value="{{ $officer->id }}">{{ $officer->name }}</option>
+                                @endforeach
+                                @endif
                             </select>
                          </div>
                      </div>
                      <div class="row">
                         <div class="col-3">
-                            <select name="role" class="form-control">
+                            <select id="status" name="status" class="form-control" onchange="getApplicationData()">
                                 <option value="">Select Status</option>
+                                @if(count($statuses) > 0)
+                                @foreach ($statuses as $status)
+                                <option {{ (!empty($get_status) && $get_status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
+                                @endforeach
+                                @endif
                             </select>
                          </div>
                          <div class="col-2">
-                            <select name="role" class="form-control">
+                            <select id="intake" name="intake" class="form-control" onchange="getApplicationData()">
                                 <option value="">Select Intake</option>
+                                @if(count($intakes) > 0)
+                                @foreach ($intakes as $intake)
+                                <option {{ (!empty($get_intake) && $get_intake==$intake)?'selected':'' }} value="{{ $intake }}">{{ date('F y',strtotime($intake)) }}</option>
+                                @endforeach
+                                @endif
                             </select>
                          </div>
                          <div class="col-5">
-                             <input value="" name="name" type="text" class="form-control" placeholder="Enter Name,Email,Phone">
+                             <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter Name,Email,Phone">
                          </div>
                          <div class="col-1">
                             <input type="submit" value="Filter" name="time" class="btn btn-warning">

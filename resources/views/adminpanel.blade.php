@@ -298,6 +298,15 @@
                     window.location = "{{ URL::to('all-course?campus_id=') }}" + campus_id + "&course_name=" + course_name;
                 }
             }
+            //search application data
+            function getApplicationData(){
+                var campus = $('#campus').val();
+                var agent = $('#agent').val();
+                var officer = $('#officer').val();
+                var status = $('#status').val();
+                var intake = $('#intake').val();
+                window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake;
+            }
         </script>
         @include('ajax.application')
 
