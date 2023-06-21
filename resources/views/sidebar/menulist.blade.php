@@ -20,6 +20,7 @@
     <div class="shadow-bottom"></div>
     @if(Auth::check())
     <ul class="list-unstyled menu-categories" id="accordionExample" >
+        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
         <li class="menu {{ (!empty($dashboard) && $dashboard==true)?'active':'' }}">
             <a href="{{ URL::to('/') }}" data-bs-toggle="" aria-expanded="true" class="dropdown-toggle">
                 <div class="">
@@ -28,6 +29,7 @@
                 </div>
             </a>
         </li>
+        @endif
 
         <li class="menu {{ (!empty($application) && $application==true)?'active':'' }}">
             <a href="#datatables1" data-bs-toggle="collapse" aria-expanded="{{ (!empty($application) && $application==true)?'true':'false' }}" class="dropdown-toggle">
@@ -44,6 +46,11 @@
                     <a href="{{ URL::to('application-create') }}"> Add Application</a>
                 </li>
                 @if(Auth::check() && Auth::user()->role=='agent')
+                <li class="{{ (!empty($student_portal) && $student_portal==true)?'active':'' }}">
+                    <a href="{{ URL::to('student-portal') }}"> My Application</a>
+                </li>
+                @endif
+                @if(Auth::check() && Auth::user()->role=='agent')
                 <li class="{{ (!empty($application_all) && $application_all==true)?'active':'' }}">
                     <a href="{{ URL::to('agent-applications') }}"> Agent Applications </a>
                 </li>
@@ -56,7 +63,7 @@
                     <a href="{{ URL::to('all-application') }}"> All Application </a>
                 </li>
                 @endif
-
+                @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
                 <li class="{{ (!empty($interview_list) && $interview_list==true)?'active':'' }}">
                     <a href="{{ URL::to('interview-list') }}"> Interview Schedule </a>
                 </li>
@@ -66,8 +73,10 @@
                 <li class="{{ (!empty($application_archived) && $application_archived==true)?'active':'' }}">
                     <a href="{{ URL::to('archive-students') }}"> Archive Students </a>
                 </li>
+                @endif
             </ul>
         </li>
+        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
         <li class="menu {{ (!empty($campus) && $campus==true)?'active':'' }}">
             <a href="#datatables2" data-bs-toggle="collapse" aria-expanded="{{ (!empty($campus) && $campus==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">
@@ -96,6 +105,8 @@
                 @endif
             </ul>
         </li>
+        @endif
+        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
         <li class="menu {{ (!empty($course) && $course==true)?'active':'' }}">
             <a href="#datatables3" data-bs-toggle="collapse" aria-expanded="{{ (!empty($course) && $course==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">
@@ -129,6 +140,7 @@
                 @endif
             </ul>
         </li>
+        @endif
         @if(Auth::check() && Auth::user()->role=='agent' && Auth::user()->is_admin==1)
         <li class="menu {{ (!empty($agent_user) && $agent_user==true)?'active':'' }}">
             <a href="{{ URL::to('get-employee-by-agent') }}" data-bs-toggle="" aria-expanded="false" class="dropdown-toggle">

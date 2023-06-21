@@ -15,6 +15,9 @@ use App\Http\Controllers\Agent\AgentTaskController;
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('login', 'login');
+    Route::get('student-login', 'student_login');
+    Route::get('student-register', 'student_register');
+    Route::post('student-register-post', 'student_register_post');
     Route::get('get-notification-count', 'get_notification_count');
     Route::get('get-my-notification', 'get_my_notification');
     Route::get('my-notification-list', 'get_all_my_notification');

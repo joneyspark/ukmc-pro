@@ -34,6 +34,9 @@ class LoginController extends Controller
         try{
             if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])){
                 if(Auth::user()->active==1){
+                    if(Auth::user()->role=='student'){
+                        return redirect('student-portal');
+                    }
                     return redirect('/');
                 }else{
                     Auth::logout();
@@ -70,8 +73,8 @@ class LoginController extends Controller
         $token = Str::random(64);
 
         DB::table('password_resets')->insert([
-            'email' => $request->email, 
-            'token' => $token, 
+            'email' => $request->email,
+            'token' => $token,
             'created_at' => Carbon::now()
           ]);
 
@@ -80,18 +83,18 @@ class LoginController extends Controller
             'settings' => CompanySetting::where('id',1)->first(),
             //'password' => $make_password,
         ];
-        //mail send 
+        //mail send
         Mail::to($request->email)->send(new forgotPasswordMail($details));
         Session::flash('success','We have e-mailed your password reset link!');
         return redirect('reset-password');
     }
-    //reset password form 
+    //reset password form
     public function reset_password_form($token){
         $data['page_title'] = 'User | Reset Password Form';
         $data['token'] = $token;
         return view('authpanel/reset_password_form',$data);
     }
-    //reset password form post 
+    //reset password form post
     public function reset_password_form_post(Request $request){
         $request->validate([
             'email' => 'required|email|exists:users',
@@ -101,7 +104,7 @@ class LoginController extends Controller
 
         $updatePassword = DB::table('password_resets')
                             ->where([
-                              'email' => $request->email, 
+                              'email' => $request->email,
                               'token' => $request->token
                             ])
                             ->first();

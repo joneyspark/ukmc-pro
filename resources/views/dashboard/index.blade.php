@@ -1,5 +1,6 @@
 @extends('adminpanel')
 @section('admin')
+@if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
 <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <!--  BEGIN BREADCRUMBS  -->
@@ -447,4 +448,5 @@
     </div>
 
 </div>
+@endif
 @stop

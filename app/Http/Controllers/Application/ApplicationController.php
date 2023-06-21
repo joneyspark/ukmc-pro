@@ -33,6 +33,7 @@ use App\Mail\requestDocumentMail;
 use App\Models\Application\Followup;
 use App\Models\Application\Meeting;
 use App\Models\Application\Status;
+use Illuminate\Support\Facades\File;
 
 class ApplicationController extends Controller{
     use Service;
@@ -85,7 +86,7 @@ class ApplicationController extends Controller{
             if(Auth::user()->role=='student'){
                 $application->application_process_status = 2;
             }else{
-                $application->application_process_status = 1; 
+                $application->application_process_status = 1;
             }
             //$application->application_process_status = 1;
             $application->status = 1;
@@ -827,13 +828,49 @@ class ApplicationController extends Controller{
         );
         return response()->json($data,200);
     }
-    //meeting details 
+    //meeting details
     public function meeting_details($id=NULL){
         $data['page_title'] = 'Meeting | Details';
         $data['application'] = true;
         $data['application_all'] = true;
         $data['meeting_data'] = Meeting::where('id',$id)->first();
         return view('application/meeting_details',$data);
+    }
+    //meeting video post
+    public function meeting_video_post(Request $request){
+        $meeting = Meeting::where('id',$request->meeting_id)->where('user_id',Auth::user()->id)->first();
+        if(!$meeting){
+            Session::flash('error','Meeting Data Not Found! Server Error!');
+            return redirect()->back();
+        }
+        //upload video file upload
+        $video = $request->video;
+        if ($request->hasFile('video')) {
+            if (File::exists(public_path($meeting->video))) {
+                File::delete(public_path($meeting->video));
+            }
+            $ext = $video->getClientOriginalExtension();
+            $doc_file_name = $video->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(111, 9999).'.'.$ext;
+            $upload_path1 = 'backend/images/meeting/video_file/';
+            Service::createDirectory($upload_path1);
+            $request->file('video')->move(public_path('backend/images/meeting/video_file/'), $doc_file_name);
+            $meeting->video = $upload_path1.$doc_file_name;
+        }
+        if($request->video_link){
+            $meeting->video_url = $request->video_link;
+        }
+        $meeting->save();
+        Session::flash('success','Meeting Data Updated Successfully!');
+        return redirect('meeting/'.$meeting->id.'/details');
+    }
+    //student portal
+    public function student_portal(){
+        $data['page_title'] = 'My Application';
+        $data['application'] = true;
+        $data['student_portal'] = true;
+        //AddNewLead::dispatch('Hello this is test');
+        return view('application/student_portal',$data);
     }
 
 }

@@ -30,7 +30,7 @@
                     </header>
                 </div>
             </div>
-            <h5 class="pt-3">Meeting Details</h5>
+            <h5 class="pt-3">Meeting Details <a href="{{ URL::to('application/'.$meeting_data->application_id.'/processing') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Back To Application Details <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
             <div class="" theme-mode-data="false">
                 <div id="card_1" class="col-lg-12 layout-spacing layout-top-spacing">
                     <div class="statbox widget box box-shadow">
@@ -47,9 +47,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="row mb-4">
-                                
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">Meeting Status</label>
                                         @if($meeting_data->is_meeting_done==0)
@@ -66,20 +64,41 @@
                                         @else
                                         <span class="badge badge-success">Complete</span>
                                         @endif
-                                        
-                                    </div>
-                                    
-                                </div>
-                                {{-- @if(!empty($task_data->doc))
-                                <div class="col-4">
-                                    <div class="form-group mb-2"><label for="exampleFormControlInput1">Task Doc File</label><br>
-                                        <a class="task-doc-download" download href="{{ asset($task_data->doc) }}">Download</a>
                                     </div>
                                 </div>
-                                @endif --}}
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Meeting Video File</label>
+                                        <a style="color: rgb(36, 36, 240);" download href="{{ asset($meeting_data->video) }}" >Download</a>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Is Done Meeting</label>
+                                        <a style="color: rgb(36, 36, 240);" href="{{ $meeting_data->video_url }}" target="_blank">Video Link</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <form method="post" enctype="multipart/form-data" class="" action="{{ URL::to('meeting-video-post') }}">
+                                        @csrf
+                                        <div class="col-5">
+                                            <input type="hidden" name="meeting_id" value="{{ (!empty($meeting_data->id))?$meeting_data->id:'' }}" />
+                                            <div class="form-group"><label for="exampleFormControlInput1">Choose Video File</label></div>
+                                            <input name="video" id="video" type="file" class="form-control">
+                                        </div><br>
+                                        <div class="col-5">
+                                            <div class="form-group"><label for="exampleFormControlInput1">Video Link</label></div>
+                                            <input name="video_link" id="video_link" type="text" class="form-control">
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="submit" class="btn btn-primary btn-lg mr-2"> Submit </button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>

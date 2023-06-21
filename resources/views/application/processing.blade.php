@@ -113,17 +113,18 @@
                                             @endif
                                         </div>
                                         <div class="card-body custom-card-body">
-                                            <form id="note-formid" method="post">
-                                                <div class="col col-md-12 p-0">
-                                                    <div class="form-group lead-drawer-form">
-                                                        <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="note_application_id" id="note_application_id" />
-                                                        <textarea name="application_note" id="application_note" class="form-control" rows="2"></textarea>
-                                                        <!---->
-                                                    </div><button id="btn-note-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Save</button>
-                                                </div>
-                                                <hr>
-                                            </form>
-
+                                            <div class="row">
+                                                <form class="form-group" id="note-formid" method="post">
+                                                    <div class="col-12 p-0">
+                                                        <div class="form-group lead-drawer-form">
+                                                            <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="note_application_id" id="note_application_id" />
+                                                            <textarea name="application_note" id="application_note" class="form-control" rows="2"></textarea>
+                                                            <!---->
+                                                        </div><button id="btn-note-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Save</button>
+                                                    </div>
+                                                    <hr>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -131,13 +132,13 @@
                             <div class="card no-outer-spacing no-border-custom">
                                 <div class="card-header">
                                     <section class="mb-0 mt-0">
-                                        <div role="menu" class="" data-toggle="">Meeting</div>
+                                        <h5>Follow up</h5>
                                     </section>
                                 </div>
                                 <div id="" class="" aria-labelledby="headingTwo2" data-parent="#withoutSpacing">
-                                    <div id="meetingnote-data">
-                                        @if(count($application_info->meetings) > 0)
-                                            @foreach ($application_info->meetings as $note)
+                                    <div id="followupnote-data">
+                                        @if(count($application_info->followups) > 0)
+                                            @foreach ($application_info->followups as $note)
                                             <div class="row col-md-12 mt-3" id="">
                                                 <div style="margin-left:7px;" class="media custom-media-img">
                                                     <div style="margin-left: 2px;" class="ml-2">
@@ -145,16 +146,15 @@
                                                     </div>
                                                     <div class="media-body">
                                                         <h6 class="tx-inverse">{{ (!empty($note->user->name))?$note->user->name:'' }}
-                                                            <a onclick="deleteMeetingNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
-                                                            @if($note->is_meeting_done==1)
-                                                            <a onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Complete" aria-label="Complete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>
+                                                            <a onclick="deleteFollowupNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
+                                                            @if($note->is_follow_up_done==1)
+                                                            <a onclick="isFollowupComplete({{ $note->id }})" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Complete" aria-label="Complete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>
                                                             @else
-                                                            <a onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>
+                                                            <a onclick="isFollowupComplete({{ $note->id }})" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>
                                                             @endif
-                                                            <a href="{{ URL::to('meeting/'.$note->id.'/details') }}" style="float:right; margin-right:5px;" class="badge badge-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
                                                         </h6>
-                                                        <p class="mg-b-0">{{ (!empty($note->meeting_notes))?$note->meeting_notes:'' }}</p>
-                                                        <small class="text-left"> Meeting Date : <span class="badge badge-warning">June 29 2023 18:33:00</span></small><br>
+                                                        <p class="mg-b-0">{{ (!empty($note->follow_up))?$note->follow_up:'' }}</p>
+                                                        <small class="text-left"> Followup Date : <span class="badge badge-warning">{{ date('F d Y H:i:s',strtotime($note->follow_up_date_time)) }}</span></small><br>
                                                         <small class="text-left"> Created : {{ date('F d Y H:i:s',strtotime($note->created_at)) }}</small></div>
                                                 </div>
                                             </div><hr>
@@ -162,16 +162,16 @@
                                         @endif
                                     </div>
                                     <div class="card-body custom-card-body">
-                                        <form id="meeting-form" method="post">
+                                        <form id="followup-form" method="post">
                                             <div class="col col-md-12 p-0">
                                                 <div class="form-group lead-drawer-form">
-                                                    <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="meeting_application_id" id="meeting_application_id" />
-                                                    <textarea id="application_meeting" name="application_meeting" class="form-control" rows="2"></textarea>
+                                                    <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="followup_application_id" id="followup_application_id" />
+                                                    <textarea name="application_followup" id="application_followup" class="form-control" rows="2"></textarea>
                                                 </div><br>
                                                 <div class="col col-md-12 p-0">
-                                                    <input name="meeting_date" id="meeting_date" type="datetime-local" class="form-control" />
+                                                    <input name="followup_date" id="followup_date" type="datetime-local" class="form-control" />
                                                 </div>
-                                                <button id="btn-meeting-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Save</button>
+                                                <button id="btn-followup-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Save</button>
                                             </div>
                                             <hr>
                                         </form>
@@ -228,16 +228,18 @@
                                     </section>
                                 </div>
                                 <div id="" class="" aria-labelledby="headingTwo2" data-parent="#withoutSpacing">
-                                    <div class="col-10">
-                                        <div class="form-group mb-2"><label for="exampleFormControlInput1">Select Status</label>
-                                            @if(count($application_status) > 0)
-                                            <select data-id="{{ (!empty($application_info->id))?$application_info->id:'' }}" data-action="{{ URL::to('application-status-change') }}" name="status" class="application-status-change form-control" onchange="application_status_change()">
-                                                <option value="">--Select One--</option>
-                                                @foreach ($application_status as $status)
-                                                <option {{ ($application_info->status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
-                                                @endforeach
-                                            </select>
-                                            @endif
+                                    <div class="row">
+                                        <div style="margin: 5px;" class="col-10">
+                                            <div class="form-group mb-2"><label for="exampleFormControlInput1">Select Status</label>
+                                                @if(count($application_status) > 0)
+                                                <select data-id="{{ (!empty($application_info->id))?$application_info->id:'' }}" data-action="{{ URL::to('application-status-change') }}" name="status" class="application-status-change form-control" onchange="application_status_change()">
+                                                    <option value="">--Select One--</option>
+                                                    @foreach ($application_status as $status)
+                                                    <option {{ ($application_info->status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -245,13 +247,13 @@
                             <div class="card no-outer-spacing no-border-custom">
                                 <div class="card-header">
                                     <section class="mb-0 mt-0">
-                                        <h5>Follow up</h5>
+                                        <div role="menu" class="" data-toggle="">Meeting</div>
                                     </section>
                                 </div>
                                 <div id="" class="" aria-labelledby="headingTwo2" data-parent="#withoutSpacing">
-                                    <div id="followupnote-data">
-                                        @if(count($application_info->followups) > 0)
-                                            @foreach ($application_info->followups as $note)
+                                    <div id="meetingnote-data">
+                                        @if(count($application_info->meetings) > 0)
+                                            @foreach ($application_info->meetings as $note)
                                             <div class="row col-md-12 mt-3" id="">
                                                 <div style="margin-left:7px;" class="media custom-media-img">
                                                     <div style="margin-left: 2px;" class="ml-2">
@@ -259,15 +261,16 @@
                                                     </div>
                                                     <div class="media-body">
                                                         <h6 class="tx-inverse">{{ (!empty($note->user->name))?$note->user->name:'' }}
-                                                            <a onclick="deleteFollowupNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
-                                                            @if($note->is_follow_up_done==1)
-                                                            <a onclick="isFollowupComplete({{ $note->id }})" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Complete" aria-label="Complete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>
+                                                            <a onclick="deleteMeetingNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
+                                                            @if($note->is_meeting_done==1)
+                                                            <a onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Complete" aria-label="Complete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>
                                                             @else
-                                                            <a onclick="isFollowupComplete({{ $note->id }})" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>
+                                                            <a onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>
                                                             @endif
+                                                            <a href="{{ URL::to('meeting/'.$note->id.'/details') }}" style="float:right; margin-right:5px;" class="badge badge-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
                                                         </h6>
-                                                        <p class="mg-b-0">{{ (!empty($note->follow_up))?$note->follow_up:'' }}</p>
-                                                        <small class="text-left"> Followup Date : <span class="badge badge-warning">{{ date('F d Y H:i:s',strtotime($note->follow_up_date_time)) }}</span></small><br>
+                                                        <p class="mg-b-0">{{ (!empty($note->meeting_notes))?$note->meeting_notes:'' }}</p>
+                                                        <small class="text-left"> Meeting Date : <span class="badge badge-warning">June 29 2023 18:33:00</span></small><br>
                                                         <small class="text-left"> Created : {{ date('F d Y H:i:s',strtotime($note->created_at)) }}</small></div>
                                                 </div>
                                             </div><hr>
@@ -275,16 +278,16 @@
                                         @endif
                                     </div>
                                     <div class="card-body custom-card-body">
-                                        <form id="followup-form" method="post">
+                                        <form id="meeting-form" method="post">
                                             <div class="col col-md-12 p-0">
                                                 <div class="form-group lead-drawer-form">
-                                                    <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="followup_application_id" id="followup_application_id" />
-                                                    <textarea name="application_followup" id="application_followup" class="form-control" rows="2"></textarea>
+                                                    <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="meeting_application_id" id="meeting_application_id" />
+                                                    <textarea id="application_meeting" name="application_meeting" class="form-control" rows="2"></textarea>
                                                 </div><br>
                                                 <div class="col col-md-12 p-0">
-                                                    <input name="followup_date" id="followup_date" type="datetime-local" class="form-control" />
+                                                    <input name="meeting_date" id="meeting_date" type="datetime-local" class="form-control" />
                                                 </div>
-                                                <button id="btn-followup-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Save</button>
+                                                <button id="btn-meeting-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Save</button>
                                             </div>
                                             <hr>
                                         </form>

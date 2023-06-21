@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use App\Models\Notification\Notification;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller{
     use Service;
@@ -39,6 +42,49 @@ class HomeController extends Controller{
     public function login(){
         $data['page_title'] = 'User | Login';
         return view('authpanel/login',$data);
+    }
+    //student login
+    public function student_login(){
+        $data['page_title'] = 'Student | Login';
+        return view('authpanel/student_login',$data);
+    }
+    //student register
+    public function student_register(){
+        $data['page_title'] = 'Student | Login';
+        return view('authpanel/student_register',$data);
+    }
+    //student register post
+    public function student_register_post(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'min:6',
+        ]);
+        $first_name = "";
+        $last_name = "";
+        $user = new User();
+        $user->name = $request->name;
+        if($user->name){
+            $array = explode(" ",$user->name);
+            foreach($array as $key=>$row){
+                if($key==0){
+                    $first_name = $row;
+                }
+                if(!empty($row) && $key != 0){
+                    $last_name .= $row.' ';
+                }
+            }
+        }
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->role = 'student';
+        $user->email = $request->email;
+        $user->slug = Str::slug($request->name,'-');
+        $user->password = Hash::make($request->password);
+        $user->save();
+        Session::flash('success','Successfully Registered');
+        return redirect('student-register');
     }
     //get notification
     public function get_notification_count(){
