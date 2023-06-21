@@ -41,6 +41,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('application/{id?}/details', 'main_application_details');
     Route::get('meeting/{id?}/details', 'meeting_details');
     Route::post('meeting-video-post', 'meeting_video_post');
+    Route::get('student-portal', 'student_portal');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

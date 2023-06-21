@@ -45,7 +45,7 @@
                 <li class="{{ (!empty($application_add) && $application_add==true)?'active':'' }}">
                     <a href="{{ URL::to('application-create') }}"> Add Application</a>
                 </li>
-                @if(Auth::check() && Auth::user()->role=='agent')
+                @if(Auth::check() && Auth::user()->role=='student')
                 <li class="{{ (!empty($student_portal) && $student_portal==true)?'active':'' }}">
                     <a href="{{ URL::to('student-portal') }}"> My Application</a>
                 </li>

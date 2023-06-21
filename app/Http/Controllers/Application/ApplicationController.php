@@ -372,6 +372,24 @@ class ApplicationController extends Controller{
                 $url = url('application/'.$application->id.'/details');
                 event(new AddNewLead($message,$url));
             }
+            if(Auth::user()->role=='student'){
+                $notification = new Notification();
+                $notification->title = 'New Application From Web Portal';
+                $notification->description = 'New Application Create By '.Auth::user()->name;
+                $notification->create_date = time();
+                $notification->create_by = Auth::user()->id;
+                $notification->creator_name = Auth::user()->name;
+                $notification->creator_image = Auth::user()->photo;
+                $notification->user_id = 1;
+                $notification->is_admin = 1;
+                $notification->application_id = $application->id;
+                $notification->slug = 'application/'.$application->id.'/details';
+                $notification->save();
+                //make instant messaging
+                $message = 'New Application Create By '.Auth::user()->name;
+                $url = url('application/'.$application->id.'/details');
+                event(new AddNewLead($message,$url));
+            }
             $application_step5 = new Application_Step_5();
             $application_step5->user_id = Auth::user()->id;
         }
@@ -380,6 +398,10 @@ class ApplicationController extends Controller{
         if($role=='agent'){
             Session::flash('success','Application Successfully Submitted!');
             return redirect('agent-applications');
+        }
+        if($role=='student'){
+            Session::flash('success','Application Successfully Submitted!');
+            return redirect('student-portal');
         }
         //if create by superadmin or admimission manager then go proced
         Session::flash('success','Application Submitted! Wait for Interview!');
@@ -869,6 +891,7 @@ class ApplicationController extends Controller{
         $data['page_title'] = 'My Application';
         $data['application'] = true;
         $data['student_portal'] = true;
+        $data['student_application'] = Application::where('create_by',Auth::user()->id)->orderBy('id','desc')->get();
         //AddNewLead::dispatch('Hello this is test');
         return view('application/student_portal',$data);
     }

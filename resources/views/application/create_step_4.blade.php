@@ -27,7 +27,7 @@
     <div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
-    
+
             <div class="modal-header" id="inputFormModalLabel">
                 <h5 class="modal-title"><b>Request Documents</b></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
@@ -196,7 +196,7 @@
                                         @empty
                                             <tr>No Data Found</tr>
                                         @endforelse
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -211,7 +211,7 @@
                             @if($document_count > 2)
                             <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
                             @else
-                            <button disabled class="btn btn-secondary btn-nxt">Next</button>  
+                            <button disabled class="btn btn-secondary btn-nxt">Next</button>
                             @endif
                         </div>
                         @endif
@@ -222,12 +222,23 @@
                         @if($document_count > 2)
                         <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
                         @else
-                        <button disabled class="btn btn-secondary btn-nxt">Next</button>  
+                        <button disabled class="btn btn-secondary btn-nxt">Next</button>
                         @endif
                         <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="btn btn-warning btn-nxt">Request For Document</a>
                     </div>
                     @endif
-                    
+
+                    @if(Auth::user()->role=='student')
+                    <div class="button-action mt-3">
+                        <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-prev me-3">Prev</a>
+                        @if($document_count > 2)
+                        <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
+                        @else
+                        <button disabled class="btn btn-secondary btn-nxt">Next</button>
+                        @endif
+                    </div>
+                    @endif
+
                 </div><br>
                 @if(Auth::user()->role=='agent' && count($requested_documents) > 0)
                 <div class="row">
@@ -263,14 +274,14 @@
         $(document).ready(function() {
             $('#exampleModal').modal('show');
         });
-    </script> 
+    </script>
     @endif
     @if($errors->has('message'))
     <script>
         $(document).ready(function() {
             $('#inputFormModal').modal('show');
         });
-    </script> 
+    </script>
     @endif
 @endif
 @stop

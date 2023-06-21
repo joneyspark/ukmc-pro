@@ -26,7 +26,7 @@
     {{-- <h5 class="p-3">New Applicant</h5> --}}
     <div class="row" id="cancel-row">
         <div class="container bs-stepper stepper-form-vertical vertical linear mt-3">
-            
+
 
             <div class="bs-stepper-content">
                 <div id="download-as-pdf">
@@ -420,7 +420,14 @@
                 </div>
                 <div class="row">
                     <div class="button-action mt-3 ms-3">
+                        @if(Auth::user()->role=='agent')
                         <a href="{{ URL::to('agent-applications') }}" class="btn btn-secondary btn-prev me-3">Back</a>
+                        @elseif(Auth::user()->role=='student')
+                        <a href="{{ URL::to('student-portal') }}" class="btn btn-secondary btn-prev me-3">Back</a>
+                        @else
+                        <a href="{{ URL::to('all-application') }}" class="btn btn-secondary btn-prev me-3">Back</a>
+                        @endif
+
                         <a onclick="window.print()" class="btn btn-warning">Print</a>
                     </div>
                 </div>
