@@ -35,8 +35,11 @@ return new class extends Migration
             $table->text('slug')->nullable();
             $table->string('is_applying_advanced_entry')->nullable();
             $table->integer('admission_officer_id')->default(0)->nullable();
+            $table->integer('is_academic')->default(1)->nullable();
             $table->tinyInteger('application_status_id')->default(0)->nullable();
             $table->tinyInteger('is_final_interview')->default(0)->nullable();
+            $table->tinyInteger('app_process')->default(0)->nullable();
+            $table->tinyInteger('is_written_test')->default(0)->nullable();
             $table->integer('create_by')->nullable();
             $table->integer('update_by')->nullable();
             $table->string('steps')->nullable();

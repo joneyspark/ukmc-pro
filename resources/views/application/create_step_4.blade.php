@@ -76,20 +76,28 @@
                     </div>
                     <div class="col form-group mb-4">
                         <label for="verticalFormStepform-name">Document Type:</label>
+                        @if($application_data->is_academic==1)
                         <select name="document_type" id="inputState" class="form-select">
-                        <option value="">Choose...</option>
-                        <option value="CV">CV</option>
-                        <option value="English language certificate">English language certificate</option>
-                        <option value="Highest qualification certificate">Highest qualification certificate</option>
-                        <option value="Highest qualification transcript">Highest qualification transcript</option>
-                        <option value="Leave to remain">Leave to remain</option>
-                        <option value="Passport">Passport</option>
-                        <option value="Personal statement">Personal statement</option>
-                        <option value="Qualification certificate">Qualification certificate</option>
-                        <option value="Qualification certificate and Transcript">Qualification certificate and Transcript</option>
-                        <option value="Qualification transcript">Qualification transcript</option>
-                        <option value="Work reference letter">Work reference letter</option>
-                        </select>
+                            <option value="">Choose...</option>
+                            <option value="English language certificate">English language certificate</option>
+                            <option value="Highest qualification certificate">Highest qualification certificate</option>
+                            <option value="Highest qualification transcript">Highest qualification transcript</option>
+                            <option value="Leave to remain">Leave to remain</option>
+                            <option value="Passport">Passport</option>
+                            <option value="Personal statement">Personal statement</option>
+                            <option value="Qualification certificate">Qualification certificate</option>
+                            <option value="Qualification certificate and Transcript">Qualification certificate and Transcript</option>
+                            <option value="Qualification transcript">Qualification transcript</option>
+                            <option value="Work reference letter">Work reference letter</option>
+                            </select>
+                        @endif
+                        @if($application_data->is_academic==2)
+                        <select name="document_type" id="inputState" class="form-select">
+                            <option value="">Choose...</option>
+                            <option value="CV">CV</option>
+                            <option value="Essay">Essay</option>
+                            </select>
+                        @endif
                         @if ($errors->has('document_type'))
                             <span class="text-danger">{{ $errors->first('document_type') }}</span>
                         @endif
@@ -164,6 +172,25 @@
                         <h5 class="text-center">Documents Upload</h5>
                         <hr>
                         <div class="col-12">
+                            <div class="col form-group mb-4">
+                                <input type="hidden" id="get_application_id" name="get_application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
+                                <label for="verticalFormStepform-name">Level Of Education:</label>
+                                <select name="level_of_education" id="level_of_education" class="form-select" onchange="getAcademicData()">
+                                <option {{ (!empty($application_data->is_academic) && $application_data->is_academic==1)?'selected':'' }} value="1">Level 3 or Equavalent</option>
+                                <option {{ (!empty($application_data->is_academic) && $application_data->is_academic==2)?'selected':'' }} value="2">Other</option>
+                                </select>
+
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Academic or Non-Academic:</label>
+                                <select disabled name="document_type" id="inputState" class="form-select">
+                                <option value="">Choose...</option>
+                                <option {{ (!empty($application_data->is_academic) && $application_data->is_academic==1)?'selected':'' }} value="1">Academic</option>
+                                <option {{ (!empty($application_data->is_academic) && $application_data->is_academic==2)?'selected':'' }} value="2">Non-Academic</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
                             <label for="verticalFormInputAddress" class="form-label">Upload Files</label><br>
                             <button type="button" class="btn btn-primary mr-2 _effect--ripple waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 Upload File
@@ -202,13 +229,27 @@
                             </div>
                         </div>
                     </form>
+                    @if(Auth::user()->role=='student')
+                        @if(!empty($application_data) && $application_data->application_status_id==1)
+                        <a href="{{ URL::to('student-portal') }}" class="btn btn-secondary btn-nxt">My Applications</a>
+                        @else
+                        <div class="button-action mt-3">
+                            <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-prev me-3">Prev</a>
+                            @if($document_count > 1)
+                            <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
+                            @else
+                            <button disabled class="btn btn-secondary btn-nxt">Next</button>
+                            @endif
+                        </div>
+                        @endif
+                    @endif
                     @if(Auth::user()->role=='agent')
                         @if(!empty($application_data) && $application_data->application_status_id==1)
                         <a href="{{ URL::to('agent-applications') }}" class="btn btn-secondary btn-nxt">Agent Applications</a>
                         @else
                         <div class="button-action mt-3">
                             <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                            @if($document_count > 2)
+                            @if($document_count > 1)
                             <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
                             @else
                             <button disabled class="btn btn-secondary btn-nxt">Next</button>
@@ -219,7 +260,7 @@
                     @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
                     <div class="button-action mt-3">
                         <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                        @if($document_count > 2)
+                        @if($document_count > 1)
                         <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
                         @else
                         <button disabled class="btn btn-secondary btn-nxt">Next</button>

@@ -57,6 +57,7 @@ class HomeController extends Controller{
     public function student_register_post(Request $request){
         $request->validate([
             'name' => 'required',
+            'phone' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'min:6',
@@ -80,6 +81,7 @@ class HomeController extends Controller{
         $user->last_name = $last_name;
         $user->role = 'student';
         $user->email = $request->email;
+        $user->phone = $request->phone;
         $user->slug = Str::slug($request->name,'-');
         $user->password = Hash::make($request->password);
         $user->save();

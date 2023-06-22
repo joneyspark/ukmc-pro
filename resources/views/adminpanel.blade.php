@@ -3,14 +3,9 @@
 <head>
     @php
     if(Auth::check()){
-        if(Auth::user()->role=='admin' || Auth::user()->role=='adminManager' || Auth::user()->role=='teacher'){
+        if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager' || Auth::user()->role=='teacher' || Auth::user()->role=='agent' || Auth::user()->role=='student'){
             $setting = App\Models\Setting\CompanySetting::where('id',1)->first();
-        }elseif(Auth::user()->role=='agent'){
-            $setting = App\Models\Setting\CompanySetting::where('company_id',Auth::user()->company_id)->first();
-        }else{
-
         }
-
     }
     @endphp
     <meta charset="utf-8">
@@ -306,6 +301,51 @@
                 var status = $('#status').val();
                 var intake = $('#intake').val();
                 window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake;
+            }
+            function getAcademicData(){
+                var level_data = $('#level_of_education').val();
+                if(level_data===null){
+                    return false;
+                }
+                $.post('{{ URL::to('get-academic-data') }}',
+                {
+                    application_id: $('#get_application_id').val(),
+                    level_of_education: $('#level_of_education').val(),
+                },
+                function(data, status){
+                    console.log(data);
+                    if(data['result']['key']===101){
+                        iziToast.show({
+                            title: 'Status',
+                            message: data['result']['val'],
+                            position: 'topRight',
+                            timeout: 8000,
+                            color: 'blue',
+                            balloon: true,
+                            close: true,
+                            progressBarColor: 'yellow',
+                        });
+                        //location.reload(true);
+                    }
+                    if(data['result']['key']===200){
+                        iziToast.show({
+                            title: 'Status',
+                            message: data['result']['val'],
+                            position: 'topRight',
+                            timeout: 8000,
+                            color: 'blue',
+                            balloon: true,
+                            close: true,
+                            progressBarColor: 'yellow',
+                        });
+
+                        setTimeout(function () {
+                            location.reload(true);
+                        }, 1000);
+
+                    }
+                    //alert("Data: " + data + "\nStatus: " + status);
+                });
             }
         </script>
         @include('ajax.application')

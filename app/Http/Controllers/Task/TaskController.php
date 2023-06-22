@@ -31,7 +31,7 @@ class TaskController extends Controller{
         $data['task'] = true;
         $data['task_add'] = true;
         $data['priorities'] = Service::priority();
-        $data['users'] = User::where('role','!=','agent')->where('role','!=','admin')->where('active',1)->get();
+        $data['users'] = User::where('role','!=','agent')->where('role','!=','student')->where('role','!=','admin')->where('active',1)->get();
         return view('task/create',$data);
     }
     public function store(TaskCreateRequest $request){
@@ -105,7 +105,7 @@ class TaskController extends Controller{
         $data['page_title'] = 'Task | Edit';
         $data['task'] = true;
         $data['task_all'] = true;
-        $data['users'] = User::where('role','!=','agent')->where('role','!=','admin')->where('active',1)->get();
+        $data['users'] = User::where('role','!=','agent')->where('role','!=','student')->where('role','!=','admin')->where('active',1)->get();
         $data['priorities'] = Service::priority();
         $data['task_data'] = Task::where('slug',$slug)->first();
         return view('task/edit',$data);

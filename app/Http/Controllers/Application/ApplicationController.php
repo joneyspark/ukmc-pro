@@ -249,7 +249,7 @@ class ApplicationController extends Controller{
         }
         //update step
         $document = ApplicationDocument::where('application_id',$application->id)->count();
-        if($document > 2){
+        if($document > 1){
             $up_step = 4;
             $get_application = Application::where('id',$id)->first();
             $array = explode(",",$get_application->steps);
@@ -894,6 +894,23 @@ class ApplicationController extends Controller{
         $data['student_application'] = Application::where('create_by',Auth::user()->id)->orderBy('id','desc')->get();
         //AddNewLead::dispatch('Hello this is test');
         return view('application/student_portal',$data);
+    }
+    public function get_academic_data(Request $request){
+        $application = Application::where('id',$request->application_id)->first();
+        if(!$application){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Application Data Not Found!'
+            );
+            return response()->json($data,200);
+        }
+        $application->is_academic = $request->level_of_education;
+        $application->save();
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>'Success!'
+        );
+        return response()->json($data,200);
     }
 
 }

@@ -37,6 +37,9 @@ class LoginController extends Controller
                     if(Auth::user()->role=='student'){
                         return redirect('student-portal');
                     }
+                    if(Auth::user()->role=='agent'){
+                        return redirect('agent-applications');
+                    }
                     return redirect('/');
                 }else{
                     Auth::logout();

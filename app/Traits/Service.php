@@ -705,8 +705,8 @@ trait Service
                 'val'=>'Admission Manager',
             ),
             array(
-                'key'=>'teacher',
-                'val'=>'Teacher',
+                'key'=>'student',
+                'val'=>'Student',
             ),
 
         ];

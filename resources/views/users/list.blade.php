@@ -87,7 +87,6 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <li><a class="dropdown-item" href="{{ URL::to('create-admission-manager') }}">Admission Officer</a></li>
-                                <li><a class="dropdown-item" href="{{ URL::to('create-teacher') }}">Teacher</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -116,7 +115,11 @@
                                     <td>
                                         <div class="media">
                                             <div class="avatar me-2">
+                                                @if($row->photo)
                                                 <img alt="avatar" src="{{ asset($row->photo) }}" class="rounded-circle" />
+                                                @else
+                                                <img alt="avatar" src="{{ asset('web/avatar/user.png') }}" class="rounded-circle" />
+                                                @endif
                                             </div>
                                             <div class="media-body align-self-center">
                                                 <h6 class="mb-0">{{ (!empty($row->name))?$row->name:'' }}</h6>
@@ -134,6 +137,8 @@
                                         <span class="text-success">Admission Manager</span>
                                         @elseif($row->role=='teacher')
                                         <span class="text-success">Teacher</span>
+                                        @elseif($row->role=='student')
+                                        <span class="text-success">Student</span>
                                         @else
                                         @endif
 
@@ -151,9 +156,12 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="action-btns">
+                                            @if ($row->role != 'student')
                                             <a onclick="getRoleData({{ $row->id }})" data-id="{{ $row->role }}" data-bs-toggle="modal" data-bs-target="#inputFormModal"  class="get-roll-data{{ $row->id }} badge badge-pill bg-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                             </a>
+                                            @endif
+
                                             @if($row->role=='teacher')
                                             <a href="{{ URL::to('edit-teacher/'.$row->slug) }}" class="badge badge-pill bg-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>

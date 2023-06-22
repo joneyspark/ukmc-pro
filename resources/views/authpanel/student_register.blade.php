@@ -32,6 +32,15 @@
                             @endif
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input value="{{ old('phone') }}" id="phone" name="phone" type="text" class="form-control">
+                            @if ($errors->has('phone'))
+                                <span class="text-danger">{{ $errors->first('phone') }}</span>
+                            @endif
+                        </div>
+                    </div>
                     <div class="col-12">
                         <div class="mb-4">
                             <label class="form-label">Password</label>

@@ -24,7 +24,7 @@
         </div>
     </div>
     {{-- <h5 class="p-3">New Applicant</h5> --}}
-    <div class="row" id="cancel-row">
+    <div class="row col-12" id="cancel-row">
         <div class="container bs-stepper stepper-form-vertical vertical linear mt-3">
             <div class="bs-stepper-header" role="tablist">
                 <div class="step active" data-target="#verticalFormStep-one">
