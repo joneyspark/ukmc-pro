@@ -92,7 +92,7 @@ class ApplicationController extends Controller{
             $application->status = 1;
             $application->create_by = (!empty(Auth::user()->id))?Auth::user()->id:0;
         }
-        $application->company_id = $request->company_id;
+        $application->company_id = ($request->company_id > 0)?$request->company_id:0;
         $application->applicant_fees_funded = $request->applicant_fees_funded;
         $application->current_residential_status = $request->current_residential_status;
         $application->campus_id = $request->campus_id;

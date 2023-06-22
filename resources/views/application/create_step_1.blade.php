@@ -90,7 +90,7 @@
                         <div class="form-group mb-4">
                             <label for="verticalFormStepform-name">Agent/Company/Referral:</label>
                             <select name="company_id" id="company_id" class="form-select">
-                                <option selected>Choose...</option>
+                                <option value="" selected>Choose...</option>
                                 @foreach ($a_company_data as $crow)
                                 <option {{ (!empty($app_data->company_id) && $app_data->company_id==$crow->id)?'selected':'' }} value="{{ $crow->id }}">{{ $crow->company_name }}</option>
                                 @endforeach
@@ -112,7 +112,7 @@
                                 <input type="radio" id="customRadioInline2" name="applicant_fees_funded" {{ (!empty($app_data->applicant_fees_funded) && $app_data->applicant_fees_funded=='no')?'checked':'' }} value="no" class="custom-control-input">
                                 <label class="custom-control-label" for="customRadioInline2">No</label>
                             </div>
-                            
+
                         </div>
                         <div class="form-group mb-4">
                             <label for="verticalFormStepform-name">Select one category that
