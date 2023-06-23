@@ -105,21 +105,7 @@
                             <a href="{{ URL::to('my-notification-list') }}"><h6 class="d-flex justify-content-between"><span class="align-self-center">Notifications</span> <span class="badge badge-primary">Show All</span></h6></a>
                         </div>
                         <div id="notification-item" class="notification-scroll">
-                            <div class="dropdown-item">
-                                <div class="media server-log">
-                                    <img src="{{ asset('backend/src/assets/img/profile-16.jpeg') }}" class="img-fluid me-2" alt="avatar">
-                                    <div class="media-body">
-                                        <div class="data-info">
-                                            <h6 class="">Farjana Khan</h6>
-                                            <p><small class="">Updated application status<span class="text-danger"> hot</span> to <span class="text-success">potential</span> lead.</small></p>
-                                            <p class="">1 hr ago</p>
-                                        </div>
-                                        <div class="icon-status">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
 

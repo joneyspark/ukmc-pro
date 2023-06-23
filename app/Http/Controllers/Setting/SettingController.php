@@ -150,17 +150,5 @@ class SettingController extends Controller{
         Session::flash('success','Company Data Saved Successfully!');
         return redirect('company-settings');
     }
-    public function profile_settings(){
-        $data['page_title'] = 'Profile / Settings';
-        $data['settings'] = true;
-        $data['profile_settings'] = true;
-        return view('setting/profile_settings',$data);
-    }
-
-    public function edit_profile(){
-        $data['page_title'] = 'Edit / Settings';
-        $data['settings'] = true;
-        $data['edit_profile'] = true;
-        return view('setting/edit_profile',$data);
-    }
+    
 }

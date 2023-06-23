@@ -448,4 +448,51 @@ class UserController extends Controller{
             return redirect('user-list');
         }
     }
+    public function profile_settings(){
+        $data['page_title'] = 'Profile / Settings';
+        $data['settings'] = true;
+        $data['profile_settings'] = true;
+        $data['my_data'] = User::where('id',Auth::user()->id)->first();
+        return view('setting/profile_settings',$data);
+    }
+
+    public function edit_profile(){
+        $data['page_title'] = 'Edit / Settings';
+        $data['settings'] = true;
+        $data['edit_profile'] = true;
+        $data['countries'] = Service::countries();
+        return view('setting/edit_profile',$data);
+    }
+    public function my_profile_update(Request $request){
+        if(!Auth::check()){
+            Session::flash('error','Login First Then Update Profile!');
+            return redirect('login');
+        }
+        $user = User::where('id',Auth::user()->id)->first();
+        $user->name = $request->name;
+        $user->country = $request->country;
+        $user->state = $request->state;
+        $user->city = $request->city;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        //photo upload
+        $photo = $request->photo;
+        if ($request->hasFile('photo')) {
+            if (File::exists(public_path($user->photo))) {
+                File::delete(public_path($user->photo));
+            }
+            $ext = $photo->getClientOriginalExtension();
+            $filename = $photo->getClientOriginalName();
+            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+            $image_resize = Image::make($photo->getRealPath());
+            $image_resize->resize(200, 200);
+            $upload_path = 'backend/images/users/photo/';
+            Service::createDirectory($upload_path);
+            $image_resize->save(public_path('backend/images/users/photo/'.$filename));
+            $user->photo = 'backend/images/users/photo/'.$filename;
+        }
+        $user->save();
+        Session::flash('success','Profile Updated Successfully!');
+        return redirect('profile-settings');
+    }
 }

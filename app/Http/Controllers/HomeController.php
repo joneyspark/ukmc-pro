@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application\Application;
 use Illuminate\Http\Request;
 use App\Traits\Service;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,7 @@ use App\Models\Notification\Notification;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class HomeController extends Controller{
     use Service;
@@ -34,8 +36,19 @@ class HomeController extends Controller{
             Session::flash('error','Login First! Then See Dashboard!');
             return redirect('login');
         }
+        $currentDate = Carbon::now();
+
+        // Calculate the date 30 days ago
+        $startDate = $currentDate->subDays(30)->format('Y-m-d');
         $data['page_title'] = 'Dashboard';
         $data['dashboard'] = true;
+        $data['applications'] = Application::where('application_status_id',1)->orderBy('created_at','desc')->take(5)->get();
+        $data['activities'] = Notification::orderBy('id','desc')->take(5)->get();
+        $data['application_count'] = Application::where('application_status_id',1)->where('created_at', '>=', $startDate)->count();
+        $data['application_enrolled_count'] = Application::where('application_status_id',1)->where('created_at', '>=', $startDate)->where('status',5)->count();
+        $data['total_application'] = Application::where('application_status_id',1)->count();
+        $data['total_enrolled'] = Application::where('application_status_id',1)->where('status',5)->count();
+        $data['total_ongoing'] = Application::where('application_status_id',1)->where('status',2)->count();
         return view('dashboard/index',$data);
     }
 
@@ -141,5 +154,17 @@ class HomeController extends Controller{
         $data['all_data'] = Notification::where('user_id',Auth::user()->id)->orderBy('id','desc')->paginate(15);
         return view('home/notification',$data);
     }
-
+    //all my notification
+    public function show_all_activity(){
+        if(!Auth::check()){
+            Session::flash('error','Login First Then See Notification List!');
+            return redirect('login');
+        }
+        $data['page_title'] = 'Archive Campus | List';
+        $data['page_title'] = 'Dashboard';
+        $data['dashboard'] = true;
+        $data['all_data'] = Notification::orderBy('id','desc')->paginate(15);
+        return view('dashboard/all_activity',$data);
+    }
+    
 }

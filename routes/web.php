@@ -21,6 +21,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('get-notification-count', 'get_notification_count');
     Route::get('get-my-notification', 'get_my_notification');
     Route::get('my-notification-list', 'get_all_my_notification');
+    Route::get('show-all-activity', 'show_all_activity');
 });
 Route::controller(TaskController::class)->group(function () {
     Route::get('task-create', 'create');
@@ -47,8 +48,7 @@ Route::controller(AgentTaskController::class)->group(function () {
 Route::controller(SettingController::class)->group(function () {
     Route::get('company-settings', 'company_settings');
     Route::post('company-setting-post', 'company_setting_post');
-    Route::get('profile-settings', 'profile_settings');
-    Route::get('edit_profile', 'edit_profile');
+    
 });
 
 Route::controller(LoginController::class)->group(function () {
@@ -79,4 +79,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('edit-admission-manager/{slug?}', 'edit_admission_manager');
     Route::post('edit-teacher-data-post', 'edit_teacher_data_post');
     Route::post('edit-officer-data-post', 'edit_officer_data_post');
+    Route::get('profile-settings', 'profile_settings');
+    Route::get('edit_profile', 'edit_profile');
+    Route::post('my-profile-update', 'my_profile_update');
 });

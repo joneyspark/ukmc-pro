@@ -63,7 +63,11 @@ class ApplicationController extends Controller{
 
         if($request->application_id){
             $application = Application::where('id',$request->application_id)->first();
-            $application->update_by = (!empty(Auth::user()->id))?Auth::user()->id:0;
+            if(Auth::check()){
+                $application->update_by = Auth::user()->id;
+            }else{
+                $application->update_by = 0;
+            }
             $application->email = $request->email;
         }else{
             $application = new Application();
@@ -90,7 +94,11 @@ class ApplicationController extends Controller{
             }
             //$application->application_process_status = 1;
             $application->status = 1;
-            $application->create_by = (!empty(Auth::user()->id))?Auth::user()->id:0;
+            if(Auth::check()){
+                $application->create_by = Auth::user()->id;
+            }else{
+                $application->create_by = 0;
+            }
         }
         $application->company_id = ($request->company_id > 0)?$request->company_id:0;
         $application->applicant_fees_funded = $request->applicant_fees_funded;
@@ -644,16 +652,140 @@ class ApplicationController extends Controller{
         $data['application_ongoing'] = true;
         return view('application/ongoing',$data);
     }
-    public function enrolled(){
-        $data['page_title'] = 'Application / Enrolled';
+    public function enrolled(Request $request){
+        $data['page_title'] = 'Application | Enrolled';
         $data['application'] = true;
         $data['application_enrolled'] = true;
+        $get_campus = $request->campus;
+        $get_agent = $request->agent;
+        $get_officer = $request->officer;
+        $get_status = $request->status;
+        $get_intake = $request->intake;
+        $search = $request->q;
+        //Session set data
+        Session::put('get_campus',$get_campus);
+        Session::put('get_agent',$get_agent);
+        Session::put('get_officer',$get_officer);
+        Session::put('get_status',$get_status);
+        Session::put('get_intake',$get_intake);
+        Session::put('search',$search);
+
+        $data['campuses'] = Campus::where('active',1)->get();
+        $data['agents'] = User::where('role','agent')->where('active',1)->get();
+        $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
+        $data['statuses'] = Status::where('status',0)->get();
+        $data['intakes'] = $this->unique_intake_info();
+
+        $data['application_list'] = Application::query()
+        ->when($search, function ($query, $search) {
+            return $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            });
+        })
+        ->when($get_campus, function ($query, $get_campus) {
+            return $query->where('campus_id',$get_campus);
+        })
+        ->when($get_agent, function ($query, $get_agent) {
+            return $query->where('company_id',$get_agent);
+        })
+        ->when($get_officer, function ($query, $get_officer) {
+            return $query->where('admission_officer_id',$get_officer);
+        })
+        ->when($get_status, function ($query, $get_status) {
+            return $query->where('status',$get_status);
+        })
+        ->when($get_intake, function ($query, $get_intake) {
+            return $query->where('intake',$get_intake);
+        })
+        ->where('application_status_id','!=',0)
+        ->where('status',5)
+        ->orderBy('id','desc')
+        ->paginate(15)
+        ->appends([
+            'q' => $search,
+            'campus' => $get_campus,
+            'agent' => $get_campus,
+            'officer' => $get_campus,
+            'status' => $get_campus,
+            'intake' => $get_campus,
+        ]);
+
+        $data['get_campus'] = Session::get('get_campus');
+        $data['get_agent'] = Session::get('get_agent');
+        $data['get_officer'] = Session::get('get_officer');
+        $data['get_status'] = Session::get('get_status');
+        $data['get_intake'] = Session::get('get_intake');
+        $data['search'] = Session::get('search');
         return view('application/enrolled',$data);
     }
-    public function archive_students(){
+    public function archive_students(Request $request){
         $data['page_title'] = 'Archived / Students';
         $data['application'] = true;
         $data['application_archived'] = true;
+        $get_campus = $request->campus;
+        $get_agent = $request->agent;
+        $get_officer = $request->officer;
+        $get_status = $request->status;
+        $get_intake = $request->intake;
+        $search = $request->q;
+        //Session set data
+        Session::put('get_campus',$get_campus);
+        Session::put('get_agent',$get_agent);
+        Session::put('get_officer',$get_officer);
+        Session::put('get_status',$get_status);
+        Session::put('get_intake',$get_intake);
+        Session::put('search',$search);
+
+        $data['campuses'] = Campus::where('active',1)->get();
+        $data['agents'] = User::where('role','agent')->where('active',1)->get();
+        $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
+        $data['statuses'] = Status::where('status',0)->get();
+        $data['intakes'] = $this->unique_intake_info();
+
+        $data['application_list'] = Application::query()
+        ->when($search, function ($query, $search) {
+            return $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            });
+        })
+        ->when($get_campus, function ($query, $get_campus) {
+            return $query->where('campus_id',$get_campus);
+        })
+        ->when($get_agent, function ($query, $get_agent) {
+            return $query->where('company_id',$get_agent);
+        })
+        ->when($get_officer, function ($query, $get_officer) {
+            return $query->where('admission_officer_id',$get_officer);
+        })
+        ->when($get_status, function ($query, $get_status) {
+            return $query->where('status',$get_status);
+        })
+        ->when($get_intake, function ($query, $get_intake) {
+            return $query->where('intake',$get_intake);
+        })
+        ->where('application_status_id','!=',0)
+        ->where('status',8)
+        ->orderBy('id','desc')
+        ->paginate(15)
+        ->appends([
+            'q' => $search,
+            'campus' => $get_campus,
+            'agent' => $get_campus,
+            'officer' => $get_campus,
+            'status' => $get_campus,
+            'intake' => $get_campus,
+        ]);
+
+        $data['get_campus'] = Session::get('get_campus');
+        $data['get_agent'] = Session::get('get_agent');
+        $data['get_officer'] = Session::get('get_officer');
+        $data['get_status'] = Session::get('get_status');
+        $data['get_intake'] = Session::get('get_intake');
+        $data['search'] = Session::get('search');
         return view('application/archived',$data);
     }
     public function application_details(){
@@ -679,20 +811,22 @@ class ApplicationController extends Controller{
         $doc->application_id = $application->id;
         $doc->message = $request->message;
         $doc->request_by = Auth::user()->id;
-        $doc->request_to = $application->create_by;
+        $doc->request_to = ($application->create_by > 0)?$application->create_by:0;
         $doc->save();
-        $notification = new Notification();
-        $notification->title = 'Document Request';
-        $notification->description = 'New Document Requested By '.Auth::user()->name;
-        $notification->create_date = time();
-        $notification->create_by = Auth::user()->id;
-        $notification->creator_name = Auth::user()->name;
-        $notification->creator_image = Auth::user()->photo;
-        $notification->user_id = $application->create_by;
-        $notification->is_admin = 1;
-        $notification->application_id = $application->id;
-        $notification->slug = 'application-create/'.$application->id.'/step-4';
-        $notification->save();
+        if($application->create_by > 0){
+            $notification = new Notification();
+            $notification->title = 'Document Request';
+            $notification->description = 'New Document Requested By '.Auth::user()->name;
+            $notification->create_date = time();
+            $notification->create_by = Auth::user()->id;
+            $notification->creator_name = Auth::user()->name;
+            $notification->creator_image = Auth::user()->photo;
+            $notification->user_id = $application->create_by;
+            $notification->is_admin = 1;
+            $notification->application_id = $application->id;
+            $notification->slug = 'application-create/'.$application->id.'/step-4';
+            $notification->save();
+        }
         //make mail to student and agent
         $agentData = User::where('id',$application->create_by)->first();
         $studentEmail = $application->email;
@@ -702,10 +836,11 @@ class ApplicationController extends Controller{
             'message'=>$request->message,
         ];
         Mail::to($studentEmail)->send(new requestDocumentMail($details));
-        Mail::to($agentEmail)->send(new requestDocumentMail($details));
-        event(new AgentEvent($application->create_by,$notification->description,url('application-create/'.$application->id.'/step-4')));
+        if($agentEmail){
+            Mail::to($agentEmail)->send(new requestDocumentMail($details));
+            event(new AgentEvent($application->create_by,$notification->description,url('application-create/'.$application->id.'/step-4')));
+        }
         return redirect('application-create/'.$application->id.'/step-4');
-
     }
 
     public function get_courses_by_campus(Request $request){

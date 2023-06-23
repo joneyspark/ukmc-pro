@@ -77,37 +77,15 @@
                                 <div class="w-browser-details">
                                     <div class="w-browser-info">
                                         <h6>Total Application</h6>
-                                        <p class="browser-count">65</p>
+                                        <p class="browser-count">{{ $application_count }}</p>
                                     </div>
                                     <div class="w-browser-stats">
                                         <div class="progress">
-                                            <div class="progress-bar bg-gradient-primary" role="progressbar" style="width: 65%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar bg-gradient-primary" role="progressbar" style="width: {{ $application_count }}%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="browser-list">
-                                <div class="w-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-compass"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-                                </div>
-                                <div class="w-browser-details">
-
-                                    <div class="w-browser-info">
-                                        <h6>Reject Application</h6>
-                                        <p class="browser-count">25</p>
-                                    </div>
-
-                                    <div class="w-browser-stats">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 35%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
                             <div class="browser-list">
                                 <div class="w-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
@@ -116,12 +94,12 @@
 
                                     <div class="w-browser-info">
                                         <h6>Enrolled Students</h6>
-                                        <p class="browser-count">15</p>
+                                        <p class="browser-count">{{ $application_enrolled_count }}</p>
                                     </div>
 
                                     <div class="w-browser-stats">
                                         <div class="progress">
-                                            <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: {{ $application_enrolled_count }}%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
 
@@ -145,16 +123,12 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                                     </div>
                                     <div class="">
-                                        <p class="w-value">501</p>
-                                        <h5 class="">Total Enrolled</h5>
+                                        <p class="w-value">{{ $total_application }}</p>
+                                        <h5 class="">Total Application</h5>
                                     </div>
                                 </div>
                             </div>
-                            <div class="widget-content">
-                                <div class="w-chart">
-                                    <div id="hybrid_followers"></div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 layout-spacing">
@@ -165,16 +139,12 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                                     </div>
                                     <div class="">
-                                        <p class="w-value">97</p>
-                                        <h5 class="">Total Reject</h5>
+                                        <p class="w-value">{{ $total_enrolled }}</p>
+                                        <h5 class="">Total Enrolled</h5>
                                     </div>
                                 </div>
                             </div>
-                            <div class="widget-content">
-                                <div class="w-chart">
-                                    <div id="hybrid_followers1"></div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 layout-spacing">
@@ -185,16 +155,12 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                                     </div>
                                     <div class="">
-                                        <p class="w-value">389</p>
+                                        <p class="w-value">{{ $total_ongoing }}</p>
                                         <h5 class="">Total Ongoing Application</h5>
                                     </div>
                                 </div>
                             </div>
-                            <div class="widget-content">
-                                <div class="w-chart">
-                                    <div id="hybrid_followers3"></div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -219,42 +185,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if(count($applications) > 0)
+                                    @foreach($applications as $application)
                                     <tr>
-                                        <td><div class="td-content customer-name"><img src="https://statinfer.com/wp-content/uploads/dummy-user.png" alt="avatar"><span>Luke Ivory</span></div></td>
-                                        <td><div class="td-content product-brand text-primary">demo@student.com</div></td>
-                                        <td><div class="td-content product-invoice">+5546894</div></td>
-                                        <td><div class="td-content pricing"><span class="">Birmingham</span></div></td>
-                                        <td><div class="td-content"><span class="badge badge-success">Enrolled</span></div></td>
+                                        <td><div class="td-content customer-name"><span>{{ $application->name }}</span></div></td>
+                                        <td><div class="td-content product-brand text-primary">{{ $application->email }}</div></td>
+                                        <td><div class="td-content product-invoice">{{ $application->phone }}</div></td>
+                                        <td><div class="td-content pricing"><span class="">{{ $application->campus->campus_name }}</span></div></td>
+                                        <td><div class="td-content">
+                                            @if($application->status==1)
+                                            <span class="badge badge-danger">New</span>
+                                            @elseif($application->status==2)
+                                            <span class="badge badge-primary">Elt or Interview Passed</span>
+                                            @elseif($application->status==3)
+                                            <span class="badge badge-primary">Conditional Offer</span>
+                                            @elseif($application->status==4)
+                                            <span class="badge badge-secondary">Unconditional Offer</span>
+                                            @elseif($application->status==5)
+                                            <span class="badge badge-success">Enrolled</span>
+                                            @elseif($application->status==5)
+                                            <span class="badge badge-danger">Rejected</span>
+                                            @else
+                                            @endif
+                                            
+                                        </div></td>
                                     </tr>
-
-                                    <tr>
-                                        <td><div class="td-content customer-name"><img src="https://statinfer.com/wp-content/uploads/dummy-user.png" alt="avatar"><span>Andy King</span></div></td>
-                                        <td><div class="td-content product-brand text-warning">demo@student.com</div></td>
-                                        <td><div class="td-content product-invoice">+5576894</div></td>
-                                        <td><div class="td-content pricing"><span class="">Manchester</span></div></td>
-                                        <td><div class="td-content"><span class="badge badge-primary">Ongoing</span></div></td>
-                                    </tr>
-                                    <tr>
-                                        <td><div class="td-content customer-name"><img src="https://statinfer.com/wp-content/uploads/dummy-user.png" alt="avatar"><span>Laurie Fox</span></div></td>
-                                        <td><div class="td-content product-brand text-danger">demo@student.com</div></td>
-                                        <td><div class="td-content product-invoice">+5566894</div></td>
-                                        <td><div class="td-content pricing"><span class="">Manchester</span></div></td>
-                                        <td><div class="td-content"><span class="badge badge-success">Enrolled</span></div></td>
-                                    </tr>
-                                    <tr>
-                                        <td><div class="td-content customer-name"><img src="https://statinfer.com/wp-content/uploads/dummy-user.png" alt="avatar"><span>Ryan Collins</span></div></td>
-                                        <td><div class="td-content product-brand text-warning">demo@student.com</div></td>
-                                        <td><div class="td-content product-invoice">+5566894</div></td>
-                                        <td><div class="td-content pricing"><span class="">Coventry</span></div></td>
-                                        <td><div class="td-content"><span class="badge badge-primary">Ongoing</span></div></td>
-                                    </tr>
-                                    <tr>
-                                        <td><div class="td-content customer-name"><img src="https://statinfer.com/wp-content/uploads/dummy-user.png" alt="avatar"><span>Irene Collins</span></div></td>
-                                        <td><div class="td-content product-brand text-primary">demo@student.com</div></td>
-                                        <td><div class="td-content product-invoice">+5575844</div></td>
-                                        <td><div class="td-content pricing"><span class="">Coventry</span></div></td>
-                                        <td><div class="td-content"><span class="badge badge-danger">New</span></div></td>
-                                    </tr>
+                                    @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -273,21 +230,23 @@
 
                         <div class="mt-container-ra mx-auto">
                             <div class="timeline-line">
-
+                                @if(count($activities) > 0)
+                                @foreach($activities as $activity)
                                 <div class="item-timeline timeline-primary">
                                     <div class="t-dot" data-original-title="" title="">
                                     </div>
                                     <div class="t-text">
-                                        <p>Rahmin <span>Updated</span> application</p>
-                                        <span class="badge">Ongoing</span>
-                                        <p class="t-time">Just Now</p>
+                                        <span>{{ $activity->description }}</span>
+                                        <p class="t-time">{{ App\Models\Notification\Notification::timeLeft($activity->create_date) }}</p>
                                     </div>
                                 </div>
+                                @endforeach
+                                @endif
                             </div>
                         </div>
 
                         <div class="tm-action-btn">
-                            <button class="btn"><span>View All</span> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+                            <a href="{{ URL::to('show-all-activity') }}" class="btn"><span>View All</span> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
                         </div>
                     </div>
                 </div>
