@@ -43,6 +43,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('meeting-video-post', 'meeting_video_post');
     Route::get('student-portal', 'student_portal');
     Route::post('get-academic-data', 'get_academic_data');
+    Route::get('reset-agent-application-search', 'reset_agent_application_search');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

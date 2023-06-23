@@ -182,7 +182,7 @@
             <!--  BEGIN FOOTER  -->
             <div class="footer-wrapper">
                 <div class="footer-section f-section-1">
-                    <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
+                    <p class="">Copyright © <span class="dynamic-year">{{ date('Y') }}</span> <a target="_blank" href="https://ukmcglobal.com/">UKMC GLOBAL</a>, All rights reserved.</p>
                 </div>
             </div>
             <!--  END FOOTER  -->
@@ -287,6 +287,14 @@
                 var status = $('#status').val();
                 var intake = $('#intake').val();
                 window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake;
+            }
+            //search agent application data
+            function getAgentApplicationData(){
+                var campus = $('#campus').val();
+                var officer = $('#officer').val();
+                var status = $('#status').val();
+                var intake = $('#intake').val();
+                window.location = "{{ URL::to('agent-applications?campus=') }}" + campus + "&officer=" + officer + "&status=" + status + "&intake=" + intake;
             }
             function getAcademicData(){
                 var level_data = $('#level_of_education').val();
