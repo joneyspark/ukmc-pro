@@ -341,6 +341,18 @@
                     //alert("Data: " + data + "\nStatus: " + status);
                 });
             }
+            function change_nationality(){
+                var nationality = $('#nationality').val();
+                if(nationality===""){
+                    return false;
+                }
+                if(nationality==="Other"){
+                    $('#national-other-id').removeClass('national-other-select');
+                }else{
+                    $('#national-other-id').addClass('national-other-select');
+                }
+                
+            }
         </script>
         @include('ajax.application')
 

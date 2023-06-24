@@ -37,8 +37,32 @@ use Illuminate\Support\Facades\File;
 
 class ApplicationController extends Controller{
     use Service;
+    public function application_step1_new($id=NULL){
+        $data['page_title'] = 'Application | Create';
+        $data['application'] = true;
+        $data['application_add'] = true;
+        $data['a_company_data'] = Company::where('status',1)->get();
+        $data['a_campuses_data'] = Campus::where('active',1)->get();
+        $data['intakes'] = Service::get_intake_with_next_year();
+        $data['residential_status'] = Service::residential_status();
+        $data['programs'] = Service::program();
+        $data['course_levels1'] = CourseLevel::where('status',0)->get();
+        $data['delivery_pattern'] = Service::delivery_pattern();
+        $data['name_title'] = Service::name_title();
+        $data['gender'] = Service::gender();
+        $data['apply_apl'] = Service::apply_apl();
+        $data['nationalities'] = Service::nationalities();
+        $data['ethnic_origins'] = Service::ethnic_origin();
+        $data['country_of_birth'] = Service::countries();
+        $data['visa_category'] = Service::visa_category();
+        $data['app_data'] = Application::where('id',$id)->first();
+        if($data['app_data']){
+            $data['course_list_data'] = Course::where('campus_id',$data['app_data']->campus_id)->get();
+        }
+        //AddNewLead::dispatch('Hello this is test');
+        return view('application/new/create_step_1',$data);
+    }
     public function create($id=NULL){
-
         $data['page_title'] = 'Application | Create';
         $data['application'] = true;
         $data['application_add'] = true;

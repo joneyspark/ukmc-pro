@@ -44,6 +44,10 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('student-portal', 'student_portal');
     Route::post('get-academic-data', 'get_academic_data');
     Route::get('reset-agent-application-search', 'reset_agent_application_search');
+
+    //step 1 new system 
+
+    Route::get('application-step1-new/{id?}', 'application_step1_new');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

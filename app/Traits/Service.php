@@ -838,7 +838,11 @@ trait Service
     }
     public static function ethnic_origin(){
         $ethnic = array(
-            'Black',
+            'American Indian or Alaska Native',
+            'Asian',
+            'Black or African American',
+            'Hispanic or Latino',
+            'Native Hawaiian or Other Pacific Islander',
             'White',
             'Other',
 
@@ -903,6 +907,17 @@ trait Service
         $results = array(
             'Yes',
             'No',
+        );
+        return $results;
+    }
+    public static function visa_category(){
+        $results = array(
+            'EU- Settled',
+            'EU - Pre-Settled',
+            'Indefinite Leave to Remain',
+            'Settlement',
+            'Refugee leave to remain',
+            'Asylum leave to remain'
         );
         return $results;
     }
