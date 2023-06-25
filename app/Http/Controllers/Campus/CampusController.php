@@ -20,6 +20,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Session;
 use App\Traits\Service;
 use App\Http\Requests\Campus\CampusRequest;
+use App\Models\University\University;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 
@@ -42,12 +43,14 @@ class CampusController extends Controller{
         $data['campus'] = true;
         $data['campus_add'] = true;
         $data['countries'] = Service::countries();
+        $data['list_of_university'] = University::where('status',0)->get();
         return view('campus/create',$data);
     }
     public function store(CampusRequest $request){
         $campus = new Campus();
         $campus->country = $request->country;
         $campus->campus_name = $request->campus_name;
+        $campus->university_id = $request->university_id;
         //slug create
         $campus->slug = Str::slug($campus->campus_name, '-');
         $campus->website = $request->website;
@@ -150,6 +153,7 @@ class CampusController extends Controller{
         $data['campus_all'] = true;
         $data['campus'] = $getCampus;
         $data['countries'] = Service::countries();
+        $data['list_of_university'] = University::where('status',0)->get();
         $data['campus_contact_persons'] = CampusContactPerson::where('campus_id',$getCampus->id)->get();
         return view('campus/edit',$data);
     }
@@ -161,6 +165,7 @@ class CampusController extends Controller{
             return redirect('all-campus');
         }
         $campus->country = $request->country;
+        $campus->university_id = $request->university_id;
         $campus->campus_name = $request->campus_name;
         $campus->website = $request->website;
         $campus->monthly_living_cost = $request->monthly_living_cost;
@@ -307,6 +312,68 @@ class CampusController extends Controller{
         Session::put('campus_id',$campusData->id);
         Session::flash('success','Campus Archived Successfully!');
         return redirect('all-campus');
+    }
+    //university
+    public function universities($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Course Level!');
+            return redirect('login');
+        }
+        //check as super admin
+        if(Auth::user()->role != 'admin'){
+            Session::flash('error','Login as Super Admin Then Create Course Level!');
+            return redirect('login');
+        }
+        $data['return_university_id'] = Session::get('university_id');
+        $data['page_title'] = 'University | Create';
+        $data['campus'] = true;
+        $data['university'] = true;
+        $data['university_list'] = University::orderBy('id','desc')->paginate(15);
+        if($id){
+            $data['university_data'] = University::where('id',$id)->first();
+        }
+        Session::forget('university_id');
+        return view('campus/university',$data);
+    }
+    //university data post 
+    public function university_store(Request $request){
+        $request->validate([
+            'title' => 'required',
+        ]);
+        $universityId = $request->university_id;
+        if($universityId){
+            $universityData = University::where('id',$universityId)->first();
+        }else{
+            $universityData = new University();
+        }
+        $universityData->title = $request->title;
+        $universityData->save();
+        Session::put('university_id',$universityData->id);
+        Session::flash('success',(!empty($universityId))?'University Data Upadted!':'University Data Saved!');
+        return redirect('universities');
+    }
+    public function university_status_change(Request $request){
+        $university = University::where('id',$request->university_id)->first();
+        if(!$university){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'University Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($university->status==1){
+            $update = University::where('id',$university->id)->update(['status'=>$request->status]);
+            $msg = 'University Activated';
+        }else{
+            $update = University::where('id',$university->id)->update(['status'=>$request->status]);
+            $msg = 'University Deactivated';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
     }
     
 }

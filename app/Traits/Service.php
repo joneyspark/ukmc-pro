@@ -775,12 +775,16 @@ trait Service
     public static function delivery_pattern(){
         $status = [
             array(
-                'id'=>'Evening and Weekend',
-                'val'=>'Evening and Weekend'
+                'id'=>'Weekdays',
+                'val'=>'Weekdays'
             ),
             array(
-                'id'=>'Standard',
-                'val'=>'Standard'
+                'id'=>'Weekend',
+                'val'=>'Weekend'
+            ),
+            array(
+                'id'=>'Weekdays Evening',
+                'val'=>'Weekdays Evening'
             ),
         ];
         return $status;

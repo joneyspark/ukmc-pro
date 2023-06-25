@@ -64,6 +64,22 @@
                                     </div>
                                 </div>
                                 <div class="col">
+                                    <div class="flex space-x-2 md:space-x-4">
+                                        <div class="form-group mb-4 w-full"><label
+                                                for="campus_id">Select University*</label><select
+                                                class="form-control" id="university_id" name="university_id">
+                                                <option value="">--Select One--</option>
+                                                @foreach ($list_of_university as $university1)
+                                                <option value="{{ $university1->id }}">{{ $university1->title }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('university_id'))
+                                                <span class="text-danger">{{ $errors->first('university_id') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
                                     <div class="form-group mb-2">
                                         <label for="exampleFormControlInput1">Campus Name*</label>
                                         <input value="{{ old('campus_name') }}" type="text" class="form-control" name="campus_name">

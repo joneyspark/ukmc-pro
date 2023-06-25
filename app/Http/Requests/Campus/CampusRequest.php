@@ -23,6 +23,7 @@ class CampusRequest extends FormRequest
     {
         return [
             'country' => 'required',
+            'university_id' => 'required',
             'campus_name' => 'required',
             'monthly_living_cost' => 'required',
             'funds_requirements_for_visa' => 'required',

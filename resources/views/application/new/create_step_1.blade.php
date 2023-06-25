@@ -100,94 +100,6 @@
                         @if(Auth::check() && Auth::user()->role=='agent')
                             <input type="hidden" name="company_id" value="{{ Auth::user()->company_id }}" />
                         @endif
-                        
-                        
-                        <div class="row">
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Select Campus:</label>
-                                <select onchange="getCourse()" data-action="{{ URL::to('get-courses-by-campus') }}" id="campus_id" name="campus_id" class="form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($a_campuses_data as $cdata)
-                                    <option {{ (!empty($app_data->campus_id) && $app_data->campus_id==$cdata->id)?'selected':'' }} value="{{ $cdata->id }}">{{ $cdata->campus_name }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('campus_id'))
-                                    <span class="text-danger">{{ $errors->first('campus_id') }}</span>
-                                @endif
-                            </div>
-                            @if(!empty($app_data->course_id))
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Course:</label>
-                                <select onchange="getCourseInfo()" data-action="{{ URL::to('get-course-info') }}" id="course_data" name="course_id" class="get-course-info-data form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($course_list_data as $crow)
-                                    <option {{ (!empty($app_data->course_id) && $app_data->course_id==$crow->id)?'selected':'' }} value="{{ $crow->id }}">{{ $crow->course_name }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('course_id'))
-                                    <span class="text-danger">{{ $errors->first('course_id') }}</span>
-                                @endif
-                            </div>
-                            @else
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Course:</label>
-                                <select onchange="getCourseInfo()" data-action="{{ URL::to('get-course-info') }}" id="course_data" name="course_id" class="get-course-info-data form-select">
-                                    <option value="">Choose...</option>
-                                </select>
-                                @if ($errors->has('course_id'))
-                                    <span class="text-danger">{{ $errors->first('course_id') }}</span>
-                                @endif
-                            </div>
-                            @endif
-
-                        </div>
-                        <div class="row">
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Course fee
-                                    (GBP) Per Year (Local):</label>
-                                <input type="text" value="{{ (!empty($app_data->local_course_fee))?$app_data->local_course_fee:old('local_course_fee') }}" class="course-fee-local-data form-control" id="local_course_fee" name="local_course_fee" placeholder="">
-                                @if ($errors->has('local_course_fee'))
-                                    <span class="text-danger">{{ $errors->first('local_course_fee') }}</span>
-                                @endif
-                            </div>
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Course fee
-                                    (GBP) Per Year (International):</label>
-                                <input value="{{ (!empty($app_data->international_course_fee))?$app_data->international_course_fee:old('international_course_fee') }}" type="text" class="form-control" id="course_fee_international" name="international_course_fee" placeholder="">
-                            </div>
-                        </div>
-                        <div class="row">
-                            
-                            <div class="col form-group mb-4">
-                                <label style="display: flex;" for="verticalFormStepform-name">Intake: <div id="course_intake"></div></label>
-                                <select name="intake" id="inputState" class="form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($intakes as $irow)
-                                    <option {{ (!empty($app_data->intake) && $app_data->intake==$irow['val'])?'selected':'' }} value="{{ $irow['val'] }}">{{ $irow['string'] }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('intake'))
-                                    <span class="text-danger">{{ $errors->first('intake') }}</span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Delivery
-                                    Pattern:</label>
-                                <select name="delivery_pattern" id="inputState" class="form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($delivery_pattern as $pattern)
-                                    <option {{ (!empty($app_data->delivery_pattern) && $app_data->delivery_pattern==$pattern['id'])?'selected':'' }} value="{{ $pattern['id'] }}">{{ $pattern['val'] }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('delivery_pattern'))
-                                    <span class="text-danger">{{ $errors->first('delivery_pattern') }}</span>
-                                @endif
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-2 form-group mb-4">
                                 <label for="verticalFormStepform-name">Title:</label>
@@ -467,7 +379,86 @@
                                 </div>
                             </div>
                         </div>
-                        
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Select Campus:</label>
+                                <select onchange="getCourse()" data-action="{{ URL::to('get-courses-by-campus') }}" id="campus_id" name="campus_id" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach ($a_campuses_data as $cdata)
+                                    <option {{ (!empty($app_data->campus_id) && $app_data->campus_id==$cdata->id)?'selected':'' }} value="{{ $cdata->id }}">{{ $cdata->campus_name }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('campus_id'))
+                                    <span class="text-danger">{{ $errors->first('campus_id') }}</span>
+                                @endif
+                            </div>
+                            @if(!empty($app_data->course_id))
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Course:</label>
+                                <select onchange="getCourseInfo()" data-action="{{ URL::to('get-course-info') }}" id="course_data" name="course_id" class="get-course-info-data form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach ($course_list_data as $crow)
+                                    <option {{ (!empty($app_data->course_id) && $app_data->course_id==$crow->id)?'selected':'' }} value="{{ $crow->id }}">{{ $crow->course_name }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('course_id'))
+                                    <span class="text-danger">{{ $errors->first('course_id') }}</span>
+                                @endif
+                            </div>
+                            @else
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Course:</label>
+                                <select onchange="getCourseInfo()" data-action="{{ URL::to('get-course-info') }}" id="course_data" name="course_id" class="get-course-info-data form-select">
+                                    <option value="">Choose...</option>
+                                </select>
+                                @if ($errors->has('course_id'))
+                                    <span class="text-danger">{{ $errors->first('course_id') }}</span>
+                                @endif
+                            </div>
+                            @endif
+                        </div>
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Course fee
+                                    (GBP) Per Year (Local):</label>
+                                <input type="text" value="{{ (!empty($app_data->local_course_fee))?$app_data->local_course_fee:old('local_course_fee') }}" class="course-fee-local-data form-control" id="local_course_fee" name="local_course_fee" placeholder="">
+                                @if ($errors->has('local_course_fee'))
+                                    <span class="text-danger">{{ $errors->first('local_course_fee') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Course fee
+                                    (GBP) Per Year (International):</label>
+                                <input value="{{ (!empty($app_data->international_course_fee))?$app_data->international_course_fee:old('international_course_fee') }}" type="text" class="form-control" id="course_fee_international" name="international_course_fee" placeholder="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label style="display: flex;" for="verticalFormStepform-name">Intake: <div id="course_intake"></div></label>
+                                <select name="intake" id="inputState" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach ($intakes as $irow)
+                                    <option {{ (!empty($app_data->intake) && $app_data->intake==$irow['val'])?'selected':'' }} value="{{ $irow['val'] }}">{{ $irow['string'] }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('intake'))
+                                    <span class="text-danger">{{ $errors->first('intake') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Delivery
+                                    Pattern:</label>
+                                <select name="delivery_pattern" id="inputState" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach ($delivery_pattern as $pattern)
+                                    <option {{ (!empty($app_data->delivery_pattern) && $app_data->delivery_pattern==$pattern['id'])?'selected':'' }} value="{{ $pattern['id'] }}">{{ $pattern['val'] }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('delivery_pattern'))
+                                    <span class="text-danger">{{ $errors->first('delivery_pattern') }}</span>
+                                @endif
+                            </div>
+                        </div>
                         <div class="button-action mt-3">
                             <button class="btn btn-secondary btn-prev me-3" disabled>Prev</button>
                             <button type="submit" class="btn btn-secondary">Next</button>

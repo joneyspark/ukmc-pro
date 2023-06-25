@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('country')->nullable();
             $table->text('slug')->nullable();
+            $table->integer('university_id')->nullable();
             $table->string('campus_name')->nullable();
             $table->string('website')->nullable();
             $table->string('monthly_living_cost')->nullable();

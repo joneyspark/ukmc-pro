@@ -103,6 +103,11 @@
                     <a href="{{ URL::to('archived-campus') }}"> Archive Campus </a>
                 </li>
                 @endif
+                @if(Auth::check() && Auth::user()->role=='admin')
+                <li class="{{ (!empty($university) && $university==true)?'active':'' }}">
+                    <a href="{{ URL::to('universities') }}"> Universities </a>
+                </li>
+                @endif
             </ul>
         </li>
         @endif
