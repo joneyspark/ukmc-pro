@@ -48,6 +48,8 @@ Route::controller(ApplicationController::class)->group(function () {
     //step 1 new system 
 
     Route::get('application-step1-new/{id?}', 'application_step1_new');
+    Route::get('application-step2-new/{id?}', 'step2_new');
+    Route::post('get-campus-by-university', 'get_campus_by_university');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

@@ -33,6 +33,7 @@ use App\Mail\requestDocumentMail;
 use App\Models\Application\Followup;
 use App\Models\Application\Meeting;
 use App\Models\Application\Status;
+use App\Models\University\University;
 use Illuminate\Support\Facades\File;
 
 class ApplicationController extends Controller{
@@ -55,12 +56,78 @@ class ApplicationController extends Controller{
         $data['ethnic_origins'] = Service::ethnic_origin();
         $data['country_of_birth'] = Service::countries();
         $data['visa_category'] = Service::visa_category();
+        $data['a_list_university'] = University::where('status',0)->get();
         $data['app_data'] = Application::where('id',$id)->first();
         if($data['app_data']){
             $data['course_list_data'] = Course::where('campus_id',$data['app_data']->campus_id)->get();
         }
         //AddNewLead::dispatch('Hello this is test');
         return view('application/new/create_step_1',$data);
+    }
+    //get campus by university
+    public function get_campus_by_university(Request $request){
+        $university = University::where('id',$request->university_id)->first();
+        if(!$university){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'University Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $campuses = Campus::where('university_id',$university->id)->orderBy('campus_name','asc')->get();
+        if($campuses){
+            $select = '';
+            $select .= '<option selected>Choose...</option>';
+            foreach($campuses as $row){
+                $select .= '<option value="'.$row->id.'">'.$row->campus_name.'</option>';
+            }
+            $data['result'] = array(
+                'key'=>200,
+                'val'=>$select
+            );
+            return response()->json($data,200);
+        }else{
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'No Campuses Found! Select Another University!'
+            );
+            return response()->json($data,200);
+        }
+    }
+    public function step2_new($id=NULL){
+        $current_step = 3;
+        $application = Application::where('id',$id)->first();
+        if(!$application){
+            Session::flash('error','Application Data Not Found!');
+            return redirect('application-create');
+        }
+        $step_arr = explode(",",$application->steps);
+        if(!in_array($current_step,$step_arr)){
+            Session::flash('error','Complete Step 3 Then Proced!');
+            return redirect('application-create/'.$application->id.'/step-3');
+        }
+        //update step
+        $document = ApplicationDocument::where('application_id',$application->id)->count();
+        if($document > 1){
+            $up_step = 4;
+            $get_application = Application::where('id',$id)->first();
+            $array = explode(",",$get_application->steps);
+            if(!in_array($up_step,$array)){
+                $update_step = $get_application->steps.','.$up_step;
+                $get_application->steps = $update_step;
+                $get_application->save();
+            }
+        }
+        $data['document_count'] = $document;
+        $data['application_documents'] = ApplicationDocument::where('application_id',$application->id)->get();
+        $data['application_id'] = $application->id;
+        $data['application_data'] = $application;
+        $data['requested_documents'] = RequestDocument::where('application_id',$application->id)->where('status',0)->get();
+        $data['page_title'] = 'Application | Create | Step 4';
+        $data['application'] = true;
+        $data['application_add'] = true;
+        //AddNewLead::dispatch('Hello this is test');
+        return view('application/new/step2',$data);
     }
     public function create($id=NULL){
         $data['page_title'] = 'Application | Create';

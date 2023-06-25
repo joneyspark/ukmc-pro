@@ -381,6 +381,19 @@
                         </div>
                         <div class="row">
                             <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Select University:</label>
+                                <select onchange="getCampus()" data-action="{{ URL::to('get-campus-by-university') }}" id="university_id" name="university_id" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach ($a_list_university as $urow)
+                                    <option {{ (!empty($app_data->university_id) && $app_data->university_id==$urow->id)?'selected':'' }} value="{{ $urow->id }}">{{ $urow->title }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('university_id'))
+                                    <span class="text-danger">{{ $errors->first('university_id') }}</span>
+                                @endif
+                            </div>
+                            @if(!empty($app_data->university_id))
+                            <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Select Campus:</label>
                                 <select onchange="getCourse()" data-action="{{ URL::to('get-courses-by-campus') }}" id="campus_id" name="campus_id" class="form-select">
                                     <option value="">Choose...</option>
@@ -392,6 +405,19 @@
                                     <span class="text-danger">{{ $errors->first('campus_id') }}</span>
                                 @endif
                             </div>
+                            @else
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Select Campus:</label>
+                                <select onchange="getCourse()" data-action="{{ URL::to('get-courses-by-campus') }}" id="campus_id" name="campus_id" class="form-select">
+                                    <option value="">Choose...</option>
+                                    
+                                </select>
+                                @if ($errors->has('campus_id'))
+                                    <span class="text-danger">{{ $errors->first('campus_id') }}</span>
+                                @endif
+                            </div>
+                            @endif
+                            
                             @if(!empty($app_data->course_id))
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Course:</label>

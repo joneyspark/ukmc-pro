@@ -369,6 +369,34 @@ function getCourse(){
     });
 
 }
+function getCampus(){
+    var university_id = $('#university_id').val();
+    var url = $('#university_id').data('action');
+    $.post(url,
+    {
+        university_id: university_id
+    },
+    function(data, status){
+        console.log(data);
+        if(data['result']['key']===101){
+            iziToast.show({
+                title: 'Status',
+                message: data['result']['val'],
+                position: 'topRight',
+                timeout: 8000,
+                color: 'orange',
+                balloon: true,
+                close: true,
+                progressBarColor: 'yellow',
+            });
+        }
+        if(data['result']['key']===200){
+            $('#campus_id').html(data['result']['val'])
+        }
+        //alert("Data: " + data + "\nStatus: " + status);
+    });
+
+}
 function getCourseInfo(){
     var course_id = $('.get-course-info-data').val();
     var url = $('.get-course-info-data').data('action');
