@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('application__step_6s', function (Blueprint $table) {
+        Schema::create('experiences', function (Blueprint $table) {
             $table->id();
             $table->integer('application_id')->nullable();
-            $table->string('interview_date')->nullable();
-            $table->string('interview_time')->nullable();
-            $table->text('results')->nullable();
-            $table->string('show')->nullable();
-            $table->tinyInteger('status')->default(0)->nullable();
+            $table->string('job_title')->nullable();
+            $table->string('employer_name')->nullable();
+            $table->string('start_date')->nullable();
+            $table->string('end_date')->nullable();
+            $table->string('continue')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('application__step_6s');
+        Schema::dropIfExists('experiences');
     }
 };

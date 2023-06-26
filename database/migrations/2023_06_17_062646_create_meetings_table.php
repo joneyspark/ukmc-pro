@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('meeting_date_time')->nullable();
             $table->tinyInteger('notified')->default(0)->nullable();
             $table->text('meeting_notes')->nullable();
+            $table->text('meeting_doc')->nullable();
             $table->text('video')->nullable();
             $table->text('video_url')->nullable();
             $table->tinyInteger('is_meeting_done')->default(0)->nullable();

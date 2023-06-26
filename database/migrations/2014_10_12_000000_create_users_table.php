@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('photo')->nullable();
@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('role')->nullable();
             $table->text('slug')->nullable();
             $table->integer('company_id')->nullable();
+            $table->integer('create_by')->nullable();
             $table->tinyInteger('is_admin')->default(0)->nullable();
             $table->tinyInteger('active')->nullable()->default(1);
             $table->timestamps();

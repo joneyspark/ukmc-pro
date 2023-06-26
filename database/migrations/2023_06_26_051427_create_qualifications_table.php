@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('application__step_5s', function (Blueprint $table) {
+        Schema::create('qualifications', function (Blueprint $table) {
             $table->id();
             $table->integer('application_id')->nullable();
-            $table->integer('user_id')->nullable();
-            $table->tinyInteger('status')->default(0)->nullable();
+            $table->string('name_of_qualification')->nullable();
+            $table->string('name_of_institute')->nullable();
+            $table->string('awarding_organization')->nullable();
+            $table->string('grade')->nullable();
+            $table->string('year_of_completion')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('application__step_5s');
+        Schema::dropIfExists('qualifications');
     }
 };

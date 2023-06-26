@@ -35,6 +35,7 @@ use App\Models\Application\Meeting;
 use App\Models\Application\Status;
 use App\Models\University\University;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 
 class ApplicationController extends Controller{
     use Service;
@@ -63,6 +64,156 @@ class ApplicationController extends Controller{
         }
         //AddNewLead::dispatch('Hello this is test');
         return view('application/new/create_step_1',$data);
+    }
+    //application step1 post
+    public function application_step1_post(Request $request){
+
+        $request->validate([
+            'title' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'gender' => 'required',
+            'date_of_birth' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'password' => 'required_if:auth,false|min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'required_if:auth,false|min:6',
+            'ni_number' => 'required',
+            'emergency_contact_name' => 'required',
+            'emergency_contact_number' => 'required',
+            'house_number' => 'required',
+            'address_line_2' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'postal_code' => 'required',
+            'address_country' => 'required',
+            'same_as' => 'required',
+            'current_house_number' => 'required',
+            'current_address_line_2' => 'required',
+            'current_city' => 'required',
+            'current_state' => 'required',
+            'current_postal_code' => 'required',
+            'current_country' => 'required',
+            'nationality' => 'required',
+            'other_nationality' => 'required_if:nationality,Other',
+            'visa_category' => 'required_if:nationality,Other',
+            'date_entry_of_uk' => 'required_if:nationality,Other',
+            'ethnic_origin' => 'required_if:nationality,Other',
+            'university_id' => 'required',
+            'campus_id' => 'required',
+            'course_id' => 'required',
+            'local_course_fee' => 'required',
+            'intake' => 'required',
+            'delivery_pattern' => 'required',
+
+        ]);
+        if($request->application_id){
+            $application = Application::where('id',$request->application_id)->first();
+            if(Auth::check()){
+                $application->update_by = Auth::user()->id;
+            }else{
+                $application->update_by = 0;
+            }
+            $application->email = $request->email;
+        }else{
+            $application = new Application();
+            $email = $request->email;
+            $checkApp = Application::where('email',$email)->first();
+            if($checkApp){
+                Session::flash('error','Email Already Exists! Use Another Email or Search Application By Email!');
+                return redirect('application-create');
+            }else{
+                $application->email = $email;
+            }
+            $application->steps = '1';
+            $application->admission_officer_id = 0;
+            $application->marketing_officer_id = 0;
+            $application->application_status_id = 0;
+            $application->is_final_interview = 0;
+            $application->manager_id = 0;
+            // 1 for agent, 2 for web
+            if(Auth::check() && Auth::user()->role=='agent'){
+                $application->application_process_status = 1;
+                $application->application_type = 1;
+            }
+            if(Auth::check() && Auth::user()->role=='student'){
+                $application->application_process_status = 2;
+                $application->application_type = 2;
+            }else{
+                $application->application_process_status = 1;
+                $application->application_type = 3;
+            }
+            //$application->application_process_status = 1;
+            $application->status = 1;
+            if(Auth::check()){
+                $application->create_by = Auth::user()->id;
+            }else{
+                $application->create_by = 0;
+            }
+            //craete new user
+            if(!Auth::check()){
+                $user = new User();
+                $user->first_name = $request->first_name;
+                $user->last_name = $request->last_name;
+                $user->name = $request->first_name.' '.$request->last_name;
+                $user->email = $request->email;
+                $user->role = 'Student';
+                $user->password = Hash::make($request->password);
+                $user->save();
+            }
+        }
+        $application->company_id = ($request->company_id > 0)?$request->company_id:0;
+
+        $application->title = $request->title;
+        $application->first_name = $request->first_name;
+        $application->last_name = $request->last_name;
+        $application->name = $request->title.' '.$request->first_name.' '.$request->last_name;
+        $application->gender = $request->gender;
+        $application->date_of_birth = $request->date_of_birth;
+        $application->email = $request->email;
+        $application->phone = $request->phone;
+        $application->ni_number = $request->ni_number;
+        $application->emergency_contact_name = $request->emergency_contact_name;
+        $application->emergency_contact_number = $request->emergency_contact_number;
+        //house info
+        $application->house_number = $request->house_number;
+        $application->address_line_2 = $request->address_line_2;
+        $application->city = $request->city;
+        $application->state = $request->state;
+        $application->postal_code = $request->postal_code;
+        $application->address_country = $request->address_country;
+        $application->same_as = $request->same_as;
+        if($request->same_as=='yes'){
+            $application->current_house_number = $request->house_number;
+            $application->current_address_line_2 = $request->address_line_2;
+            $application->current_city = $request->city;
+            $application->current_state = $request->state;
+            $application->current_postal_code = $request->postal_code;
+            $application->current_country = $request->address_country;
+        }else{
+            $application->current_house_number = $request->current_house_number;
+            $application->current_address_line_2 = $request->current_address_line_2;
+            $application->current_city = $request->current_city;
+            $application->current_state = $request->current_state;
+            $application->current_postal_code = $request->current_postal_code;
+            $application->current_country = $request->current_country;
+        }
+        $application->nationality = $request->nationality;
+        $application->other_nationality = $request->other_nationality;
+        $application->visa_category = $request->visa_category;
+        $application->date_entry_of_uk = $request->date_entry_of_uk;
+        $application->ethnic_origin = $request->ethnic_origin;
+        $application->university_id = $request->university_id;
+        $application->campus_id = $request->campus_id;
+        $application->course_id = $request->course_id;
+        $application->local_course_fee = $request->local_course_fee;
+        $application->international_course_fee = $request->international_course_fee;
+        $application->intake = $request->intake;
+        $application->delivery_pattern = $request->delivery_pattern;
+        $application->save();
+        Session::flash('success','Step 1 Complete. Now Complete Step 2!');
+        return redirect('application-create/'.$application->id.'/step-2');
+
     }
     //get campus by university
     public function get_campus_by_university(Request $request){
@@ -95,7 +246,7 @@ class ApplicationController extends Controller{
         }
     }
     public function step2_new($id=NULL){
-        $current_step = 3;
+        $current_step = 1;
         $application = Application::where('id',$id)->first();
         if(!$application){
             Session::flash('error','Application Data Not Found!');
@@ -109,7 +260,7 @@ class ApplicationController extends Controller{
         //update step
         $document = ApplicationDocument::where('application_id',$application->id)->count();
         if($document > 1){
-            $up_step = 4;
+            $up_step = 2;
             $get_application = Application::where('id',$id)->first();
             $array = explode(",",$get_application->steps);
             if(!in_array($up_step,$array)){
@@ -143,6 +294,11 @@ class ApplicationController extends Controller{
         $data['name_title'] = Service::name_title();
         $data['gender'] = Service::gender();
         $data['apply_apl'] = Service::apply_apl();
+        $data['nationalities'] = Service::nationalities();
+        $data['ethnic_origins'] = Service::ethnic_origin();
+        $data['country_of_birth'] = Service::countries();
+        $data['visa_category'] = Service::visa_category();
+        $data['a_list_university'] = University::where('status',0)->get();
         $data['app_data'] = Application::where('id',$id)->first();
         if($data['app_data']){
             $data['course_list_data'] = Course::where('campus_id',$data['app_data']->campus_id)->get();
@@ -224,20 +380,29 @@ class ApplicationController extends Controller{
         }
         $step_arr = explode(",",$application->steps);
         if(!in_array($current_step,$step_arr)){
-            Session::flash('error','Complete Cerrent Step Then Proced!');
-            return redirect('application-create');
+            Session::flash('error','Complete Step 3 Then Proced!');
+            return redirect('application-create/'.$application->id.'/step-3');
         }
-        $data['page_title'] = 'Application | Create | Step 2';
+        //update step
+        $document = ApplicationDocument::where('application_id',$application->id)->count();
+        if($document > 1){
+            $up_step = 2;
+            $get_application = Application::where('id',$id)->first();
+            $array = explode(",",$get_application->steps);
+            if(!in_array($up_step,$array)){
+                $update_step = $get_application->steps.','.$up_step;
+                $get_application->steps = $update_step;
+                $get_application->save();
+            }
+        }
+        $data['document_count'] = $document;
+        $data['application_documents'] = ApplicationDocument::where('application_id',$application->id)->get();
+        $data['application_id'] = $application->id;
+        $data['application_data'] = $application;
+        $data['requested_documents'] = RequestDocument::where('application_id',$application->id)->where('status',0)->get();
+        $data['page_title'] = 'Application | Create | Step 4';
         $data['application'] = true;
         $data['application_add'] = true;
-        $data['app_data_2'] = Application_Step_2::where('application_id',$id)->first();
-        $data['nationalities'] = Service::nationalities();
-        $data['ethnic_origins'] = Service::ethnic_origin();
-        $data['country_of_birth'] = Service::countries();
-        $data['highest_qualifications'] = Service::highest_qualifications();
-        $data['last_institution_to_be_attend'] = Service::last_institution_to_be_attend();
-        $data['application_id'] = $application->id;
-        //AddNewLead::dispatch('Hello this is test');
         return view('application/create_step_2',$data);
     }
     public function step_2_post(ApplicationStep2Request $request){
@@ -636,7 +801,7 @@ class ApplicationController extends Controller{
         ->when($get_campus, function ($query, $get_campus) {
             return $query->where('campus_id',$get_campus);
         })
-        
+
         ->when($get_officer, function ($query, $get_officer) {
             return $query->where('admission_officer_id',$get_officer);
         })

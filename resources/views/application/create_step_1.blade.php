@@ -49,33 +49,6 @@
                         </span>
                     </button>
                 </div>
-                <div class="line"></div>
-                <div class="step" data-target="#verticalFormStep-four">
-                    <button type="button" class="step-trigger" role="tab">
-                        <span class="bs-stepper-circle">4</span>
-                        <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">Step Four</span>
-                        </span>
-                    </button>
-                </div>
-                <div class="line"></div>
-                <div class="step" data-target="#verticalFormStep-five">
-                    <button type="button" class="step-trigger" role="tab">
-                        <span class="bs-stepper-circle">5</span>
-                        <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">Step Five</span>
-                        </span>
-                    </button>
-                </div>
-                <div class="line"></div>
-                <div class="step" data-target="#verticalFormStep-Six">
-                    <button type="button" class="step-trigger" role="tab">
-                        <span class="bs-stepper-circle">6</span>
-                        <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">Final Step</span>
-                        </span>
-                    </button>
-                </div>
             </div>
 
             <div class="bs-stepper-content">
@@ -83,7 +56,7 @@
 
                     <h5 class="text-center">Applicant and Course Detail</h5>
                     <hr>
-                    <form method="post" action="{{ URL::to('step-1-post') }}">
+                    <form method="post" action="{{ URL::to('application-step1-post') }}">
                         @csrf
                         <input type="hidden" name="application_id" value="{{ (!empty($app_data->id))?$app_data->id:'' }}"/>
                         @if(Auth::check() && Auth::user()->role=='admin')
@@ -100,33 +73,399 @@
                         @if(Auth::check() && Auth::user()->role=='agent')
                             <input type="hidden" name="company_id" value="{{ Auth::user()->company_id }}" />
                         @endif
-                        <div class="form-group mb-4">
-                            <label for="verticalFormStepform-name">Will Applicant fees be
-                                funded by the Student Loan Company / Student Finance
-                                England?</label>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="customRadioInline1" name="applicant_fees_funded" {{ (!empty($app_data->applicant_fees_funded) && $app_data->applicant_fees_funded=='yes')?'checked':'' }} value="yes" class="custom-control-input">
-                                <label class="custom-control-label" for="customRadioInline1">Yes</label>
+                        <div class="row">
+                            <div class="col-2 form-group mb-4">
+                                <label for="verticalFormStepform-name">Title*:</label>
+                                <select name="title" id="inputState" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach ($name_title as $nrow)
+                                    <option {{ (old('title')==$nrow['id'])?'selected':'' }} {{ (!empty($app_data->title) && $app_data->title==$nrow['id'])?'selected':'' }} value="{{ $nrow['id'] }}">{{ $nrow['val'] }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('title'))
+                                    <span class="text-danger">{{ $errors->first('title') }}</span>
+                                @endif
                             </div>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="customRadioInline2" name="applicant_fees_funded" {{ (!empty($app_data->applicant_fees_funded) && $app_data->applicant_fees_funded=='no')?'checked':'' }} value="no" class="custom-control-input">
-                                <label class="custom-control-label" for="customRadioInline2">No</label>
+                            <div class="col-5 form-group mb-4">
+                                <label for="verticalFormStepform-name">First name*:</label>
+                                <input name="first_name" value="{{ (!empty($app_data->first_name))?$app_data->first_name:old('first_name') }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
+                                @if ($errors->has('first_name'))
+                                    <span class="text-danger">{{ $errors->first('first_name') }}</span>
+                                @endif
                             </div>
-
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="verticalFormStepform-name">Select one category that
-                                best describes your current residential status:</label>
-                            <select id="current_residential_status" name="current_residential_status" class="form-select">
-                                <option value="">Choose...</option>
-                                @foreach($residential_status as $rrow)
-                                <option {{ (!empty($app_data->current_residential_status) && $app_data->current_residential_status==$rrow['id'])?'selected':'' }} value="{{ $rrow['id'] }}">{{ $rrow['val'] }}</option>
-                                @endforeach
-                            </select>
+                            <div class="col-5 form-group mb-4">
+                                <label for="verticalFormStepform-name">Last name*:</label>
+                                <input name="last_name" value="{{ (!empty($app_data->last_name))?$app_data->last_name:old('last_name') }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
+                                @if ($errors->has('last_name'))
+                                    <span class="text-danger">{{ $errors->first('last_name') }}</span>
+                                @endif
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Select Campus:</label>
+                                <label for="verticalFormStepform-name">Gender*:</label>
+                                <select name="gender" id="inputState" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach ($gender as $grow)
+                                    <option {{ (old('gender')==$grow['id'])?'selected':'' }} {{ (!empty($app_data->gender) && $app_data->gender==$grow['id'])?'selected':'' }} value="{{ $grow['id'] }}">{{ $grow['val'] }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('gender'))
+                                    <span class="text-danger">{{ $errors->first('gender') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Date of
+                                    Birth*:</label>
+                                <input value="{{ (!empty($app_data->date_of_birth))?$app_data->date_of_birth:old('date_of_birth') }}" name="date_of_birth" type="date" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('date_of_birth'))
+                                    <span class="text-danger">{{ $errors->first('date_of_birth') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Email*:</label>
+                                <input value="{{ (!empty($app_data->email))?$app_data->email:old('email') }}" name="email" type="email" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('email'))
+                                    <span class="text-danger">{{ $errors->first('email') }}</span>
+                                @endif
+                            </div>
+
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Phone*:</label>
+                                <input value="{{ (!empty($app_data->phone))?$app_data->phone:old('phone') }}" type="text" name="phone" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('phone'))
+                                    <span class="text-danger">{{ $errors->first('phone') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        @if(!Auth::check())
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Password*:</label>
+                                <input value="" name="password" type="password" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('password'))
+                                    <span class="text-danger">{{ $errors->first('password') }}</span>
+                                @endif
+                            </div>
+
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Confirm Password*:</label>
+                                <input value="" type="password" name="password_confirmation" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('password_confirmation'))
+                                    <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+                        <div class="row">
+                            <div class="col-8 form-group mb-4">
+                                <label for="verticalFormStepform-name">NI Number*:</label>
+                                <input value="{{ (!empty($app_data->ni_number))?$app_data->ni_number:old('ni_number') }}" type="text" name="ni_number" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('ni_number'))
+                                    <span class="text-danger">{{ $errors->first('ni_number') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Emergency Contact Name*:</label>
+                                <input value="{{ (!empty($app_data->emergency_contact_name))?$app_data->emergency_contact_name:old('emergency_contact_name') }}" type="text" name="emergency_contact_name" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('emergency_contact_name'))
+                                    <span class="text-danger">{{ $errors->first('emergency_contact_name') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Emergency Contact Number:</label>
+                                <input value="{{ (!empty($app_data->emergency_contact_number))?$app_data->emergency_contact_number:old('emergency_contact_number') }}" type="text" name="emergency_contact_number" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('emergency_contact_number'))
+                                    <span class="text-danger">{{ $errors->first('emergency_contact_number') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h5 class="text-center">Permanent home address</h5>
+                            <hr>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">House Number/Name and
+                                    Street*:</label>
+                                <input name="house_number" value="{{ (!empty($app_data->house_number))?$app_data->house_number:old('house_number') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('house_number'))
+                                    <span class="text-danger">{{ $errors->first('house_number') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Address Line
+                                    2*:</label>
+                                <input name="address_line_2" value="{{ (!empty($app_data->address_line_2))?$app_data->address_line_2:old('address_line_2') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('address_line_2'))
+                                    <span class="text-danger">{{ $errors->first('address_line_2') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">City/Town*:</label>
+                                <input name="city" value="{{ (!empty($app_data->city))?$app_data->city:old('city') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('city'))
+                                    <span class="text-danger">{{ $errors->first('city') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">State/Province:</label>
+                                <input name="state" value="{{ (!empty($app_data->state))?$app_data->state:old('state') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('state'))
+                                    <span class="text-danger">{{ $errors->first('state') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Postal Code:</label>
+                                <input name="postal_code" value="{{ (!empty($app_data->postal_code))?$app_data->postal_code:old('postal_code') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('postal_code'))
+                                    <span class="text-danger">{{ $errors->first('postal_code') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Country*:</label>
+                                <select name="address_country" id="inputState" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach ($country_of_birth as $country1)
+                                        <option {{ (!empty($app_data->address_country) && $app_data->address_country==$country1)?'selected':'' }} value="{{ $country1 }}">{{ $country1 }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('address_country'))
+                                    <span class="text-danger">{{ $errors->first('address_country') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h5 class="text-center">Term Time Address</h5>
+                            <hr>
+                        </div>
+                        <div class="col form-group mb-4">
+                            <label for="verticalFormStepform-name">Same as permanent home
+                                address ?</label><br>
+                            <div class="form-check form-check-primary form-check-inline">
+                                <input class="form-check-input" type="radio" {{ (!empty($app_data->same_as) && $app_data->same_as=='no')?'checked':'' }} name="same_as" value="no" id="form-check-radio-primary">
+                                <label class="form-check-label" for="form-check-radio-primary">
+                                    No
+                                </label>
+                            </div>
+                            <div class="form-check form-check-info form-check-inline">
+                                <input class="form-check-input" type="radio" value="yes" name="same_as" {{ (!empty($app_data->same_as) && $app_data->same_as=='yes')?'checked':'' }} id="form-check-radio-info">
+                                <label class="form-check-label" for="form-check-radio-info">
+                                    Yes
+                                </label>
+                            </div>
+                            @if ($errors->has('same_as'))
+                                <span class="text-danger">{{ $errors->first('same_as') }}</span>
+                            @endif
+                        </div>
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">House Number/Name and
+                                    Street:</label>
+                                <input type="text" name="current_house_number" value="{{ (!empty($app_data->current_house_number))?$app_data->current_house_number:old('current_house_number') }}" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('current_house_number'))
+                                    <span class="text-danger">{{ $errors->first('current_house_number') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Address Line
+                                    2:</label>
+                                <input type="text" name="current_address_line_2" value="{{ (!empty($app_data->current_address_line_2))?$app_data->current_address_line_2:old('current_address_line_2') }}" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('current_address_line_2'))
+                                    <span class="text-danger">{{ $errors->first('current_address_line_2') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">City/Town:</label>
+                                <input name="current_city" value="{{ (!empty($app_data->current_city))?$app_data->current_city:old('current_city') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('current_city'))
+                                    <span class="text-danger">{{ $errors->first('current_city') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">County/State/Province:</label>
+                                <input name="current_state" value="{{ (!empty($app_data->current_state))?$app_data->current_state:old('current_state') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('current_state'))
+                                    <span class="text-danger">{{ $errors->first('current_state') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Postal Code:</label>
+                                <input name="current_postal_code" value="{{ (!empty($app_data->current_postal_code))?$app_data->current_postal_code:old('current_postal_code') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                @if($errors->has('current_postal_code'))
+                                    <span class="text-danger">{{ $errors->first('current_postal_code') }}</span>
+                                @endif
+                            </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Country of permanent
+                                residence:</label>
+                                <select name="current_country" id="inputState" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach ($country_of_birth as $country2)
+                                        <option {{ (!empty($app_data->current_country) && $app_data->current_country==$country2)?'selected':'' }} value="{{ $country2 }}">{{ $country2 }}</option>
+                                    @endforeach
+                                </select>
+                                @if($errors->has('current_country'))
+                                    <span class="text-danger">{{ $errors->first('current_country') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 form-group mb-4">
+                                <label for="verticalFormStepform-name">Nationality*:</label>
+                                <select name="nationality" id="nationality" class="form-select" onchange="change_nationality()">
+                                    <option value="">Choose...</option>
+                                    <option {{ (!empty($app_data->nationality) && $app_data->nationality=='UK National')?'selected':'' }} value="UK National">UK National</option>
+                                    <option {{ (!empty($app_data->nationality) && $app_data->nationality=='Other')?'selected':'' }} value="Other">Other Nationality</option>
+                                </select>
+                                @if ($errors->has('nationality'))
+                                    <span class="text-danger">{{ $errors->first('nationality') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        @if(!empty($app_data->nationality) && $app_data->nationality=="Other")
+                        <div id="national-other-id" class="">
+                            <div class="row">
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">Other
+                                        Nationality*:</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                        </div>
+                                        <select name="other_nationality" id="inputState" class="form-select">
+                                            <option value="">Choose...</option>
+                                            @foreach ($nationalities as $nrow)
+                                                <option {{ (!empty($app_data->other_nationality) && $app_data->other_nationality==$nrow)?'selected':'' }} value="{{ $nrow }}">{{ $nrow }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if ($errors->has('other_nationality'))
+                                            <span class="text-danger">{{ $errors->first('other_nationality') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">Visa Category*:</label>
+                                    <div class="input-group mb-3">
+                                        <select name="visa_category" id="visa_category" class="form-select">
+                                            <option value="">Choose...</option>
+                                            @foreach ($visa_category as $vrow)
+                                                <option {{ (old('visa_category')==$vrow)?'selected':'' }} {{ (!empty($app_data->visa_category) && $app_data->visa_category==$vrow)?'selected':'' }} value="{{ $vrow }}">{{ $vrow }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('visa_category'))
+                                            <span class="text-danger">{{ $errors->first('visa_category') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">Date Entry Of UK*:</label>
+                                    <input name="date_entry_of_uk" value="{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:old('date_entry_of_uk') }}" type="datetime-local" class="form-control" id="verticalFormStepform-name">
+                                    @if ($errors->has('date_entry_of_uk'))
+                                        <span class="text-danger">{{ $errors->first('date_entry_of_uk') }}</span>
+                                    @endif
+                                </div>
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepEmailAddress">Ethnic
+                                        Origin*:</label>
+                                    <select name="ethnic_origin" id="inputState" class="form-select">
+                                        <option value="">Choose...</option>
+                                        @foreach ($ethnic_origins as $erow)
+                                            <option {{ (old('ethnic_origin')==$erow)?'selected':'' }} {{ (!empty($app_data->ethnic_origin) && $app_data->ethnic_origin==$erow)?'selected':'' }} value="{{ $erow }}">{{ $erow }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('ethnic_origin'))
+                                        <span class="text-danger">{{ $errors->first('ethnic_origin') }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                        <div id="national-other-id" class="national-other-select">
+                            <div class="row">
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">Other
+                                        Nationality*:</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                        </div>
+                                        <select name="other_nationality" id="inputState" class="form-select">
+                                            <option value="">Choose...</option>
+                                            @foreach ($nationalities as $nrow)
+                                                <option {{ (!empty($app_data->other_nationality) && $app_data->other_nationality==$nrow)?'selected':'' }} value="{{ $nrow }}">{{ $nrow }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if ($errors->has('other_nationality'))
+                                            <span class="text-danger">{{ $errors->first('other_nationality') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">Visa Category*:</label>
+                                    <div class="input-group mb-3">
+                                        <select name="visa_category" id="visa_category" class="form-select">
+                                            <option value="">Choose...</option>
+                                            @foreach ($visa_category as $vrow)
+                                                <option {{ (old('visa_category')==$vrow)?'selected':'' }} {{ (!empty($app_data->visa_category) && $app_data->visa_category==$vrow)?'selected':'' }} value="{{ $vrow }}">{{ $vrow }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('visa_category'))
+                                            <span class="text-danger">{{ $errors->first('visa_category') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">Date Entry Of UK*:</label>
+                                    <input name="date_entry_of_uk" value="{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:old('date_entry_of_uk') }}" type="datetime-local" class="form-control" id="verticalFormStepform-name">
+                                    @if ($errors->has('date_entry_of_uk'))
+                                        <span class="text-danger">{{ $errors->first('date_entry_of_uk') }}</span>
+                                    @endif
+                                </div>
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepEmailAddress">Ethnic
+                                        Origin*:</label>
+                                    <select name="ethnic_origin" id="inputState" class="form-select">
+                                        <option value="">Choose...</option>
+                                        @foreach ($ethnic_origins as $erow)
+                                            <option {{ (old('ethnic_origin')==$erow)?'selected':'' }} {{ (!empty($app_data->ethnic_origin) && $app_data->ethnic_origin==$erow)?'selected':'' }} value="{{ $erow }}">{{ $erow }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('ethnic_origin'))
+                                        <span class="text-danger">{{ $errors->first('ethnic_origin') }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        <div class="row">
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Select University*:</label>
+                                <select onchange="getCampus()" data-action="{{ URL::to('get-campus-by-university') }}" id="university_id" name="university_id" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach ($a_list_university as $urow)
+                                    <option {{ (old('university_id')==$urow->id)?'selected':'' }} {{ (!empty($app_data->university_id) && $app_data->university_id==$urow->id)?'selected':'' }} value="{{ $urow->id }}">{{ $urow->title }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('university_id'))
+                                    <span class="text-danger">{{ $errors->first('university_id') }}</span>
+                                @endif
+                            </div>
+                            @if(!empty($app_data->university_id))
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Select Campus*:</label>
                                 <select onchange="getCourse()" data-action="{{ URL::to('get-courses-by-campus') }}" id="campus_id" name="campus_id" class="form-select">
                                     <option value="">Choose...</option>
                                     @foreach ($a_campuses_data as $cdata)
@@ -137,9 +476,22 @@
                                     <span class="text-danger">{{ $errors->first('campus_id') }}</span>
                                 @endif
                             </div>
+                            @else
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Select Campus*:</label>
+                                <select onchange="getCourse()" data-action="{{ URL::to('get-courses-by-campus') }}" id="campus_id" name="campus_id" class="form-select">
+                                    <option value="">Choose...</option>
+
+                                </select>
+                                @if ($errors->has('campus_id'))
+                                    <span class="text-danger">{{ $errors->first('campus_id') }}</span>
+                                @endif
+                            </div>
+                            @endif
+
                             @if(!empty($app_data->course_id))
                             <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Course:</label>
+                                <label for="verticalFormStepform-name">Course*:</label>
                                 <select onchange="getCourseInfo()" data-action="{{ URL::to('get-course-info') }}" id="course_data" name="course_id" class="get-course-info-data form-select">
                                     <option value="">Choose...</option>
                                     @foreach ($course_list_data as $crow)
@@ -152,7 +504,7 @@
                             </div>
                             @else
                             <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Course:</label>
+                                <label for="verticalFormStepform-name">Course*:</label>
                                 <select onchange="getCourseInfo()" data-action="{{ URL::to('get-course-info') }}" id="course_data" name="course_id" class="get-course-info-data form-select">
                                     <option value="">Choose...</option>
                                 </select>
@@ -161,7 +513,6 @@
                                 @endif
                             </div>
                             @endif
-
                         </div>
                         <div class="row">
                             <div class="col form-group mb-4">
@@ -175,47 +526,20 @@
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Course fee
                                     (GBP) Per Year (International):</label>
-                                <input value="{{ (!empty($app_data->international_course_fee))?$app_data->international_course_fee:old('international_course_fee') }}" type="text" class="form-control" id="course_fee_international" name="international_course_fee" placeholder="">
+                                <input value="{{ (!empty($app_data->international_course_fee))?$app_data->international_course_fee:old('international_course_fee') }}" type="text" class="form-control" id="international_course_fee" name="international_course_fee" placeholder="">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Programme:</label>
-                                <select name="course_program" id="inputState" class="form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($programs as $prow)
-                                    <option {{ (!empty($app_data->course_program) && $app_data->course_program==$prow['id'])?'selected':'' }} value="{{ $prow['id'] }}">{{ $prow['val'] }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('course_program'))
-                                    <span class="text-danger">{{ $errors->first('course_program') }}</span>
-                                @endif
-                            </div>
                             <div class="col form-group mb-4">
                                 <label style="display: flex;" for="verticalFormStepform-name">Intake: <div id="course_intake"></div></label>
                                 <select name="intake" id="inputState" class="form-select">
                                     <option value="">Choose...</option>
                                     @foreach ($intakes as $irow)
-                                    <option {{ (!empty($app_data->intake) && $app_data->intake==$irow['val'])?'selected':'' }} value="{{ $irow['val'] }}">{{ $irow['string'] }}</option>
+                                    <option {{ (old('intake')==$irow['val'])?'selected':'' }} {{ (!empty($app_data->intake) && $app_data->intake==$irow['val'])?'selected':'' }} value="{{ $irow['val'] }}">{{ $irow['string'] }}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('intake'))
                                     <span class="text-danger">{{ $errors->first('intake') }}</span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Course level:</label>
-                                <select name="course_level" id="course_level" class="form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($course_levels1 as $level)
-                                        <option {{ (!empty($app_data->course_level) && $app_data->course_level==$level->id)?'selected':'' }} value="{{ $level->id }}">{{ $level->title }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('course_level'))
-                                    <span class="text-danger">{{ $errors->first('course_level') }}</span>
                                 @endif
                             </div>
                             <div class="col form-group mb-4">
@@ -224,93 +548,11 @@
                                 <select name="delivery_pattern" id="inputState" class="form-select">
                                     <option value="">Choose...</option>
                                     @foreach ($delivery_pattern as $pattern)
-                                    <option {{ (!empty($app_data->delivery_pattern) && $app_data->delivery_pattern==$pattern['id'])?'selected':'' }} value="{{ $pattern['id'] }}">{{ $pattern['val'] }}</option>
+                                    <option {{ (old('delivery_pattern')==$pattern['id'])?'selected':'' }} {{ (!empty($app_data->delivery_pattern) && $app_data->delivery_pattern==$pattern['id'])?'selected':'' }} value="{{ $pattern['id'] }}">{{ $pattern['val'] }}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('delivery_pattern'))
                                     <span class="text-danger">{{ $errors->first('delivery_pattern') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2 form-group mb-4">
-                                <label for="verticalFormStepform-name">Title:</label>
-                                <select name="title" id="inputState" class="form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($name_title as $nrow)
-                                    <option {{ (old('title')==$nrow['id'])?'selected':'' }} {{ (!empty($app_data->title) && $app_data->title==$nrow['id'])?'selected':'' }} value="{{ $nrow['id'] }}">{{ $nrow['val'] }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('title'))
-                                    <span class="text-danger">{{ $errors->first('title') }}</span>
-                                @endif
-                            </div>
-                            <div class="col-5 form-group mb-4">
-                                <label for="verticalFormStepform-name">First name:</label>
-                                <input name="first_name" value="{{ (!empty($app_data->first_name))?$app_data->first_name:old('first_name') }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
-                                @if ($errors->has('first_name'))
-                                    <span class="text-danger">{{ $errors->first('first_name') }}</span>
-                                @endif
-                            </div>
-                            <div class="col-5 form-group mb-4">
-                                <label for="verticalFormStepform-name">Last name:</label>
-                                <input name="last_name" value="{{ (!empty($app_data->last_name))?$app_data->last_name:old('last_name') }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
-                                @if ($errors->has('last_name'))
-                                    <span class="text-danger">{{ $errors->first('last_name') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Gender:</label>
-                                <select name="gender" id="inputState" class="form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($gender as $grow)
-                                    <option {{ (!empty($app_data->gender) && $app_data->gender==$grow['id'])?'selected':'' }} value="{{ $grow['id'] }}">{{ $grow['val'] }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('gender'))
-                                    <span class="text-danger">{{ $errors->first('gender') }}</span>
-                                @endif
-                            </div>
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Date of
-                                    Birth:</label>
-                                <input value="{{ (!empty($app_data->date_of_birth))?$app_data->date_of_birth:old('date_of_birth') }}" name="date_of_birth" type="date" class="form-control" id="verticalFormStepform-name">
-                                @if ($errors->has('date_of_birth'))
-                                    <span class="text-danger">{{ $errors->first('date_of_birth') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Email:</label>
-                                <input value="{{ (!empty($app_data->email))?$app_data->email:old('email') }}" name="email" type="email" class="form-control" id="verticalFormStepform-name">
-                                @if ($errors->has('email'))
-                                    <span class="text-danger">{{ $errors->first('email') }}</span>
-                                @endif
-                            </div>
-
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Phone:</label>
-                                <input value="{{ (!empty($app_data->phone))?$app_data->phone:old('phone') }}" type="text" name="phone" class="form-control" id="verticalFormStepform-name">
-                                @if ($errors->has('phone'))
-                                    <span class="text-danger">{{ $errors->first('phone') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-8 form-group mb-4">
-                                <label for="verticalFormStepform-name">Are you applying for
-                                    advanced entry (APL):</label>
-                                <select name="is_applying_advanced_entry" id="inputState" class="form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($apply_apl as $apl)
-                                    <option {{ (!empty($app_data->is_applying_advanced_entry) && $app_data->is_applying_advanced_entry==$apl['id'])?'selected':'' }} value="{{ $apl['id'] }}">{{ $apl['val'] }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('is_applying_advanced_entry'))
-                                    <span class="text-danger">{{ $errors->first('is_applying_advanced_entry') }}</span>
                                 @endif
                             </div>
                         </div>
@@ -326,5 +568,9 @@
     </div>
 
 </div>
-
+<style>
+    .national-other-select{
+        display: none;
+    }
+</style>
 @stop
