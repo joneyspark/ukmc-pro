@@ -302,7 +302,7 @@ class ApplicationController extends Controller{
         Session::flash('success','Qualification Data Saved Successfully!');
         return redirect('application-create/'.$qualification->application_id.'/step-2');
     }
-    //experience post 
+    //experience post
     public function experience_post(Request $request){
         $request->validate([
             'job_title' => 'required',
@@ -420,41 +420,42 @@ class ApplicationController extends Controller{
         }
         $step_arr = explode(",",$application->steps);
         if(!in_array($current_step,$step_arr)){
-            Session::flash('error','Complete Step 3 Then Proced!');
+            Session::flash('error','Complete Step 1 Then Proced!');
             return redirect('application-create/'.$application->id.'/step-3');
         }
         //update step
         $document = ApplicationDocument::where('application_id',$application->id)->count();
-        if($document > 1){
-            $up_step = 2;
-            $get_application = Application::where('id',$id)->first();
-            $array = explode(",",$get_application->steps);
-            if(!in_array($up_step,$array)){
-                $update_step = $get_application->steps.','.$up_step;
-                $get_application->steps = $update_step;
-                $get_application->save();
-            }
-        }
+        // if($document > 1){
+        //     $up_step = 2;
+        //     $get_application = Application::where('id',$id)->first();
+        //     $array = explode(",",$get_application->steps);
+        //     if(!in_array($up_step,$array)){
+        //         $update_step = $get_application->steps.','.$up_step;
+        //         $get_application->steps = $update_step;
+        //         $get_application->save();
+        //     }
+        // }
         $data['document_count'] = $document;
         $data['application_documents'] = ApplicationDocument::where('application_id',$application->id)->get();
         $data['application_id'] = $application->id;
         $data['application_data'] = $application;
+        $data['application_step2_data'] = Application_Step_2::where('application_id',$application->id)->first();
         $data['requested_documents'] = RequestDocument::where('application_id',$application->id)->where('status',0)->get();
         $data['qualification_list'] = Qualification::where('application_id',$application->id)->get();
         $data['job_list'] = Experience::where('application_id',$application->id)->get();
-        $data['page_title'] = 'Application | Create | Step 4';
+        $data['page_title'] = 'Application | Create | Step 2';
         $data['application'] = true;
         $data['application_add'] = true;
         return view('application/create_step_2',$data);
     }
-    public function step_2_post(ApplicationStep2Request $request){
-        $application = Application::where('id',$request->application_id)->first();
+    public function step_2_post(Request $request){
+        $application = Application::where('id',$request->get_application_id)->first();
         if(!$application){
             Session::flash('error','Internal Server Error!');
             return redirect('application-create');
         }
-        if($request->app_step_2_id){
-            $application_step2 = Application_Step_2::where('id',$request->app_step_2_id)->first();
+        if($request->application_step2_id){
+            $application_step2 = Application_Step_2::where('id',$request->application_step2_id)->first();
         }else{
             //update step
             $application->steps = $application->steps.','.'2';
@@ -462,40 +463,8 @@ class ApplicationController extends Controller{
             $application_step2 = new Application_Step_2();
         }
         $application_step2->application_id = $application->id;
-        $application_step2->nationality = $request->nationality;
-        $application_step2->other_nationality = $request->other_nationality;
-        $application_step2->ethnic_origin = $request->ethnic_origin;
-        $application_step2->country = $request->country;
-        $application_step2->highest_qualification_entry = $request->highest_qualification_entry;
-        $application_step2->highest_qualification = $request->highest_qualification;
-        $application_step2->last_institution_you_attended = $request->last_institution_you_attended;
-        $application_step2->unique_learner_number = $request->unique_learner_number;
-        $application_step2->name_of_qualification = $request->name_of_qualification;
-        $application_step2->you_obtained = $request->you_obtained;
-        $application_step2->subject = $request->subject;
-        $application_step2->grade = $request->grade;
-        $application_step2->passport_no = $request->passport_no;
-        $application_step2->passport_expiry = $request->passport_expiry;
-        $application_step2->passport_place = $request->passport_place;
-        $application_step2->spent_public_care = $request->spent_public_care;
-        $application_step2->disability = $request->disability;
-        $application_step2->house_number = $request->house_number;
-        $application_step2->address_line_2 = $request->address_line_2;
-        $application_step2->city = $request->city;
-        $application_step2->state = $request->state;
-        $application_step2->postal_code = $request->postal_code;
-        $application_step2->address_country = $request->address_country;
-        $application_step2->same_as = $request->same_as;
-        $application_step2->current_house_number = $request->current_house_number;
-        $application_step2->current_address_line_2 = $request->current_address_line_2;
-        $application_step2->current_city = $request->current_city;
-        $application_step2->current_state = $request->current_state;
-        $application_step2->current_postal_code = $request->current_postal_code;
-        $application_step2->current_country = $request->current_country;
-        $application_step2->kin_name = $request->kin_name;
-        $application_step2->kin_relation = $request->kin_relation;
-        $application_step2->kin_email = $request->kin_email;
-        $application_step2->kin_phone = $request->kin_phone;
+        $application_step2->disabilities = $request->disabilities;
+        $application_step2->criminal_convictions = $request->criminal_convictions;
         $application_step2->save();
         Session::flash('success','Step 2 Complete. Goto Step 3');
         return redirect('application-create/'.$application->id.'/step-3');
@@ -513,11 +482,11 @@ class ApplicationController extends Controller{
             Session::flash('error','Complete Step 2 Then Proced!');
             return redirect('application-create/'.$application->id.'/step-2');
         }
-        $data['app_data3'] = Application_Step_3::where('application_id',$application->id)->first();
-        $data['application_id'] = $application->id;
         $data['page_title'] = 'Application | Create | Step 3';
         $data['application'] = true;
         $data['application_add'] = true;
+        $data['app_step_3'] = Application_Step_3::where('application_id',$application->id)->first();
+        $data['app_data'] = $application;
         //AddNewLead::dispatch('Hello this is test');
         return view('application/create_step_3',$data);
     }

@@ -275,7 +275,7 @@
                                 <td>Grade</td>
                                 <td>Year of Completion</td>
                             </tr>
-                            
+
                             @forelse ($qualification_list as $qlist)
                             <tr>
                                 <td>{{ $qlist->name_of_qualification }}</td>
@@ -285,9 +285,9 @@
                                 <td>{{ $qlist->year_of_completion }}</td>
                             </tr>
                             @empty
-                                
+
                             @endforelse
-                            
+
 
                         </table>
                     </div>
@@ -349,62 +349,107 @@
                                 <td>{{ (!empty($jlist->end_date))?$jlist->end_date:$jlist->continue }}</td>
                             </tr>
                             @empty
-                                
+
                             @endforelse
                         </table>
-                    </div>
+                    </div><hr>
                     @endif
-                    @if(Auth::user()->role=='student')
-                        @if(!empty($application_data) && $application_data->application_status_id==1)
-                        <a href="{{ URL::to('student-portal') }}" class="btn btn-secondary btn-nxt">My Applications</a>
-                        @else
-                        <div class="button-action mt-3">
-                            <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                            @if($document_count > 1)
-                            <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
-                            @else
-                            <button disabled class="btn btn-secondary btn-nxt">Next</button>
-                            @endif
-                        </div>
-                        @endif
-                    @endif
-                    @if(Auth::user()->role=='agent')
-                        @if(!empty($application_data) && $application_data->application_status_id==1)
-                        <a href="{{ URL::to('agent-applications') }}" class="btn btn-secondary btn-nxt">Agent Applications</a>
-                        @else
-                        <div class="button-action mt-3">
-                            <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                            @if($document_count > 1)
-                            <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
-                            @else
-                            <button disabled class="btn btn-secondary btn-nxt">Next</button>
-                            @endif
-                        </div>
-                        @endif
-                    @endif
-                    @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
-                    <div class="button-action mt-3">
-                        <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                        @if($document_count > 1)
-                        <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-nxt">Next</a>
-                        @else
-                        <button disabled class="btn btn-secondary btn-nxt">Next</button>
-                        @endif
-                        <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="btn btn-warning btn-nxt">Request For Document</a>
-                    </div>
-                    @endif
+                    <div class="row"><hr>
+                        <form method="post" action="{{ URL::to('step-2-post') }}" class="form">
+                            @csrf
+                            <div class="row">
+                                <input type="hidden" id="get_application_id" name="get_application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
+                                <input type="hidden" id="get_application_id" name="application_step2_id" value="{{ (!empty($application_step2_data->id))?$application_step2_data->id:'' }}" />
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">Disabilities</label><br>
+                                    <div class="form-check form-check-primary form-check-inline">
+                                        <input class="form-check-input" type="radio" {{ (!empty($application_step2_data->disabilities) && $application_step2_data->disabilities=='no')?'checked':'' }} name="disabilities" value="no" id="form-check-radio-primary">
+                                        <label class="form-check-label" for="form-check-radio-primary">
+                                            No
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-info form-check-inline">
+                                        <input class="form-check-input" type="radio" value="yes" name="disabilities" {{ (!empty($application_step2_data->disabilities) && $application_step2_data->disabilities=='yes')?'checked':'' }} id="form-check-radio-info">
+                                        <label class="form-check-label" for="form-check-radio-info">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    @if ($errors->has('disabilities'))
+                                        <span class="text-danger">{{ $errors->first('disabilities') }}</span>
+                                    @endif
+                                </div>
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">Criminal Convictions</label><br>
+                                    <div class="form-check form-check-primary form-check-inline">
+                                        <input class="form-check-input" type="radio" {{ (!empty($application_step2_data->criminal_convictions) && $application_step2_data->criminal_convictions=='no')?'checked':'' }} name="criminal_convictions" value="no" id="form-check-radio-primary">
+                                        <label class="form-check-label" for="form-check-radio-primary">
+                                            No
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-info form-check-inline">
+                                        <input class="form-check-input" type="radio" value="yes" name="criminal_convictions" {{ (!empty($application_step2_data->criminal_convictions) && $application_step2_data->criminal_convictions=='yes')?'checked':'' }} id="form-check-radio-info">
+                                        <label class="form-check-label" for="form-check-radio-info">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    @if ($errors->has('criminal_convictions'))
+                                        <span class="text-danger">{{ $errors->first('criminal_convictions') }}</span>
+                                    @endif
+                                </div>
 
-                    @if(Auth::user()->role=='student')
-                    <div class="button-action mt-3">
-                        <a href="{{ URL::to('application-create/'.$application_id.'/step-3') }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                        @if($document_count > 2)
-                        <a href="{{ URL::to('application-create/'.$application_id.'/step-5') }}" class="btn btn-secondary btn-nxt">Next</a>
-                        @else
-                        <button disabled class="btn btn-secondary btn-nxt">Next</button>
-                        @endif
-                    </div>
-                    @endif
+                            </div>
+                            @if(Auth::user()->role=='student')
+                                @if(!empty($application_data) && $application_data->application_status_id==1)
+                                <a href="{{ URL::to('student-portal') }}" class="btn btn-secondary btn-nxt">My Applications</a>
+                                @else
+                                <div class="button-action mt-3">
+                                    <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
+                                    @if($document_count > 1)
+                                    <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
+                                    @else
+                                    <button disabled class="btn btn-secondary btn-nxt">Next</button>
+                                    @endif
+                                </div>
+                                @endif
+                            @endif
+                            @if(Auth::user()->role=='agent')
+                                @if(!empty($application_data) && $application_data->application_status_id==1)
+                                <a href="{{ URL::to('agent-applications') }}" class="btn btn-secondary btn-nxt">Agent Applications</a>
+                                @else
+                                <div class="button-action mt-3">
+                                    <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
+                                    @if($document_count > 1)
+                                    <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
+                                    @else
+                                    <button disabled class="btn btn-secondary btn-nxt">Next</button>
+                                    @endif
+                                </div>
+                                @endif
+                            @endif
+                            @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                            <div class="button-action mt-3">
+                                <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
+                                @if($document_count > 1)
+                                <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
+                                @else
+                                <button disabled class="btn btn-secondary btn-nxt">Next</button>
+                                @endif
+                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="btn btn-warning btn-nxt">Request For Document</a>
+                            </div>
+                            @endif
 
+                            @if(Auth::user()->role=='student')
+                            <div class="button-action mt-3">
+                                <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
+                                @if($document_count > 1)
+                                <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
+                                @else
+                                <button disabled class="btn btn-secondary btn-nxt">Next</button>
+                                @endif
+                            </div>
+                            @endif
+                        </form><hr>
+                    </div>
                 </div><br>
             </div>
         </div>
