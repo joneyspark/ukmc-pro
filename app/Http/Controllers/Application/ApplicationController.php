@@ -30,8 +30,10 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\requestDocumentMail;
+use App\Models\Application\Experience;
 use App\Models\Application\Followup;
 use App\Models\Application\Meeting;
+use App\Models\Application\Qualification;
 use App\Models\Application\Status;
 use App\Models\University\University;
 use Illuminate\Support\Facades\File;
@@ -67,7 +69,6 @@ class ApplicationController extends Controller{
     }
     //application step1 post
     public function application_step1_post(Request $request){
-
         $request->validate([
             'title' => 'required',
             'first_name' => 'required',
@@ -274,11 +275,50 @@ class ApplicationController extends Controller{
         $data['application_id'] = $application->id;
         $data['application_data'] = $application;
         $data['requested_documents'] = RequestDocument::where('application_id',$application->id)->where('status',0)->get();
+        $data['qualification_list'] = Qualification::where('application_id',$application->id)->get();
         $data['page_title'] = 'Application | Create | Step 4';
         $data['application'] = true;
         $data['application_add'] = true;
         //AddNewLead::dispatch('Hello this is test');
         return view('application/new/step2',$data);
+    }
+    //name of qualifications post
+    public function qualification_post(Request $request){
+        $request->validate([
+            'name_of_qualification' => 'required',
+            'name_of_institute' => 'required',
+            'awarding_organization' => 'required',
+            'grade' => 'required',
+            'year_of_completion' => 'required',
+        ]);
+        $qualification = new Qualification();
+        $qualification->application_id = $request->get_application_id;
+        $qualification->name_of_qualification = $request->name_of_qualification;
+        $qualification->name_of_institute = $request->name_of_institute;
+        $qualification->awarding_organization = $request->awarding_organization;
+        $qualification->grade = $request->grade;
+        $qualification->year_of_completion = $request->year_of_completion;
+        $qualification->save();
+        Session::flash('success','Qualification Data Saved Successfully!');
+        return redirect('application-create/'.$qualification->application_id.'/step-2');
+    }
+    //experience post 
+    public function experience_post(Request $request){
+        $request->validate([
+            'job_title' => 'required',
+            'employer_name' => 'required',
+            'start_date' => 'required',
+        ]);
+        $job = new Experience();
+        $job->application_id = $request->get_application_id;
+        $job->job_title = $request->job_title;
+        $job->employer_name = $request->employer_name;
+        $job->start_date = $request->start_date;
+        $job->end_date = $request->end_date;
+        $job->continue = $request->continue;
+        $job->save();
+        Session::flash('success','Experience Data Saved Successfully!');
+        return redirect('application-create/'.$job->application_id.'/step-2');
     }
     public function create($id=NULL){
         $data['page_title'] = 'Application | Create';
@@ -400,6 +440,8 @@ class ApplicationController extends Controller{
         $data['application_id'] = $application->id;
         $data['application_data'] = $application;
         $data['requested_documents'] = RequestDocument::where('application_id',$application->id)->where('status',0)->get();
+        $data['qualification_list'] = Qualification::where('application_id',$application->id)->get();
+        $data['job_list'] = Experience::where('application_id',$application->id)->get();
         $data['page_title'] = 'Application | Create | Step 4';
         $data['application'] = true;
         $data['application_add'] = true;

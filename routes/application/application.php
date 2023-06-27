@@ -51,6 +51,8 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('application-step1-post', 'application_step1_post');
     Route::get('application-step2-new/{id?}', 'step2_new');
     Route::post('get-campus-by-university', 'get_campus_by_university');
+    Route::post('qualification-post', 'qualification_post');
+    Route::post('experience-post', 'experience_post');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

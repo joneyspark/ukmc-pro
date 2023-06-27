@@ -222,30 +222,46 @@
                     @if($application_data->is_academic==1)
                     <div class="row">
                         <h5>Create</h5>
-                        <form class="form">
+                        <form method="post" action="{{ URL::to('qualification-post') }}" enctype="multipart/form-data" class="form">
+                            @csrf
                             <div class="row">
                                 <input type="hidden" id="get_application_id" name="get_application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Name of Qualifications:</label>
-                                    <input class="form-control" type="text" id="get_application_id" name="name_of_qualification" value="" />
+                                    <input class="form-control" type="text" id="name_of_qualification" name="name_of_qualification" value="" />
+                                    @if ($errors->has('name_of_qualification'))
+                                        <span class="text-danger">{{ $errors->first('name_of_qualification') }}</span>
+                                    @endif
                                 </div>
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Name of Institution:</label>
-                                    <input class="form-control" type="text" id="get_application_id" name="name_of_institution" value="" />
+                                    <input class="form-control" type="text" id="name_of_institute" name="name_of_institute" value="" />
+                                    @if ($errors->has('name_of_institute'))
+                                        <span class="text-danger">{{ $errors->first('name_of_institute') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Awarding Organization:</label>
-                                    <input class="form-control" type="text" id="get_application_id" name="awarding_organization" value="" />
+                                    <input class="form-control" type="text" id="awarding_organization" name="awarding_organization" value="" />
+                                    @if ($errors->has('awarding_organization'))
+                                        <span class="text-danger">{{ $errors->first('awarding_organization') }}</span>
+                                    @endif
                                 </div>
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Grade:</label>
                                     <input class="form-control" type="text" id="grade" name="grade" value="" />
+                                    @if ($errors->has('grade'))
+                                        <span class="text-danger">{{ $errors->first('grade') }}</span>
+                                    @endif
                                 </div>
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Year of Completion:</label>
                                     <input class="form-control" type="datetime-local" id="year_of_completion" name="year_of_completion" value="" />
+                                    @if ($errors->has('year_of_completion'))
+                                        <span class="text-danger">{{ $errors->first('year_of_completion') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-secondary btn-nxt">Submit</button>
@@ -259,6 +275,19 @@
                                 <td>Grade</td>
                                 <td>Year of Completion</td>
                             </tr>
+                            
+                            @forelse ($qualification_list as $qlist)
+                            <tr>
+                                <td>{{ $qlist->name_of_qualification }}</td>
+                                <td>{{ $qlist->name_of_institute }}</td>
+                                <td>{{ $qlist->awarding_organization }}</td>
+                                <td>{{ $qlist->grade }}</td>
+                                <td>{{ $qlist->year_of_completion }}</td>
+                            </tr>
+                            @empty
+                                
+                            @endforelse
+                            
 
                         </table>
                     </div>
@@ -266,44 +295,62 @@
                     @if($application_data->is_academic==2)
                     <div class="row">
                         <h5>Job Create</h5>
-                        <form class="form">
+                        <form method="post" action="{{ URL::to('experience-post') }}" class="form">
+                            @csrf
                             <div class="row">
                                 <input type="hidden" id="get_application_id" name="get_application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Job Title:</label>
                                     <input class="form-control" type="text" id="job_title" name="job_title" value="" />
+                                    @if ($errors->has('job_title'))
+                                        <span class="text-danger">{{ $errors->first('job_title') }}</span>
+                                    @endif
                                 </div>
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Employer Name:</label>
                                     <input class="form-control" type="text" id="employer_name" name="employer_name" value="" />
+                                    @if ($errors->has('employer_name'))
+                                        <span class="text-danger">{{ $errors->first('employer_name') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Start Date:</label>
                                     <input class="form-control" type="datetime-local" id="start_date" name="start_date" value="" />
+                                    @if ($errors->has('start_date'))
+                                        <span class="text-danger">{{ $errors->first('start_date') }}</span>
+                                    @endif
                                 </div>
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">End Date:</label>
                                     <input class="form-control" type="datetime-local" id="end_date" name="end_date" value="" />
                                 </div>
                                 <div class="col form-group mb-4">
-                                    <label for="verticalFormStepform-name">Year of Completion:</label>
-                                    <input class="form-control" type="datetime-local" id="year_of_completion" name="year_of_completion" value="" />
+                                    <label for="verticalFormStepform-name">Continue:</label>
+                                    <input class="form-check-input checkbox_child" name="continue" value="continue" type="checkbox">
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-secondary btn-nxt">Submit</button>
                         </form><hr>
-                        <h5>Qualification List</h5>
+                        <h5>Experience List</h5>
                         <table class="table table-responsive">
                             <tr>
-                                <td>Name of Qualifications</td>
-                                <td>Name of Institution</td>
-                                <td>Awarding Organization</td>
-                                <td>Grade</td>
-                                <td>Year of Completion</td>
+                                <td>Job Title</td>
+                                <td>Employer Name</td>
+                                <td>Start Date</td>
+                                <td>End Date</td>
                             </tr>
-
+                            @forelse ($job_list as $jlist)
+                            <tr>
+                                <td>{{ $jlist->job_title }}</td>
+                                <td>{{ $jlist->employer_name }}</td>
+                                <td>{{ $jlist->start_date }}</td>
+                                <td>{{ (!empty($jlist->end_date))?$jlist->end_date:$jlist->continue }}</td>
+                            </tr>
+                            @empty
+                                
+                            @endforelse
                         </table>
                     </div>
                     @endif
