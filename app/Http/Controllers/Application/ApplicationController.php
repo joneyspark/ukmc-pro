@@ -425,16 +425,7 @@ class ApplicationController extends Controller{
         }
         //update step
         $document = ApplicationDocument::where('application_id',$application->id)->count();
-        // if($document > 1){
-        //     $up_step = 2;
-        //     $get_application = Application::where('id',$id)->first();
-        //     $array = explode(",",$get_application->steps);
-        //     if(!in_array($up_step,$array)){
-        //         $update_step = $get_application->steps.','.$up_step;
-        //         $get_application->steps = $update_step;
-        //         $get_application->save();
-        //     }
-        // }
+        
         $data['document_count'] = $document;
         $data['application_documents'] = ApplicationDocument::where('application_id',$application->id)->get();
         $data['application_id'] = $application->id;
@@ -470,81 +461,6 @@ class ApplicationController extends Controller{
         return redirect('application-create/'.$application->id.'/step-3');
 
     }
-    public function create_step_3($id=NULL){
-        $current_step = 2;
-        $application = Application::where('id',$id)->first();
-        if(!$application){
-            Session::flash('error','Application Data Not Found!');
-            return redirect('application-create');
-        }
-        $step_arr = explode(",",$application->steps);
-        if(!in_array($current_step,$step_arr)){
-            Session::flash('error','Complete Step 2 Then Proced!');
-            return redirect('application-create/'.$application->id.'/step-2');
-        }
-        $data['page_title'] = 'Application | Create | Step 3';
-        $data['application'] = true;
-        $data['application_add'] = true;
-        $data['app_step_3'] = Application_Step_3::where('application_id',$application->id)->first();
-        $data['app_data'] = $application;
-        //AddNewLead::dispatch('Hello this is test');
-        return view('application/create_step_3',$data);
-    }
-    public function step_3_post(ApplicationStep3Request $request){
-        $application = Application::where('id',$request->application_id)->first();
-        if(!$application){
-            Session::flash('error','Internal Server Error!');
-            return redirect('application-create');
-        }
-        if($request->application_step3_id){
-            $application_step3 = Application_Step_3::where('id',$request->application_step3_id)->first();
-        }else{
-            //update step
-            $application->steps = $application->steps.','.'3';
-            $application->save();
-            $application_step3 = new Application_Step_3();
-        }
-        $application_step3->application_id = $application->id;
-        $application_step3->personal_statement = $request->personal_statement;
-        $application_step3->save();
-        Session::flash('success','Step 3 Complete. Goto Step 4');
-        return redirect('application-create/'.$application->id.'/step-4');
-    }
-    public function create_step_4($id=NULL){
-        $current_step = 3;
-        $application = Application::where('id',$id)->first();
-        if(!$application){
-            Session::flash('error','Application Data Not Found!');
-            return redirect('application-create');
-        }
-        $step_arr = explode(",",$application->steps);
-        if(!in_array($current_step,$step_arr)){
-            Session::flash('error','Complete Step 3 Then Proced!');
-            return redirect('application-create/'.$application->id.'/step-3');
-        }
-        //update step
-        $document = ApplicationDocument::where('application_id',$application->id)->count();
-        if($document > 1){
-            $up_step = 4;
-            $get_application = Application::where('id',$id)->first();
-            $array = explode(",",$get_application->steps);
-            if(!in_array($up_step,$array)){
-                $update_step = $get_application->steps.','.$up_step;
-                $get_application->steps = $update_step;
-                $get_application->save();
-            }
-        }
-        $data['document_count'] = $document;
-        $data['application_documents'] = ApplicationDocument::where('application_id',$application->id)->get();
-        $data['application_id'] = $application->id;
-        $data['application_data'] = $application;
-        $data['requested_documents'] = RequestDocument::where('application_id',$application->id)->where('status',0)->get();
-        $data['page_title'] = 'Application | Create | Step 4';
-        $data['application'] = true;
-        $data['application_add'] = true;
-        //AddNewLead::dispatch('Hello this is test');
-        return view('application/create_step_4',$data);
-    }
     //step 4 post
     public function step_4_post(Request $request){
         $validator = Validator::make($request->all(), [
@@ -574,10 +490,10 @@ class ApplicationController extends Controller{
         }
         $document->save();
         Session::flash('success','Document Saved Successfully!');
-        return redirect('application-create/'.$application->id.'/step-4');
+        return redirect('application-create/'.$application->id.'/step-2');
     }
-    public function create_step_5($id=NULL){
-        $current_step = 4;
+    public function create_step_3($id=NULL){
+        $current_step = 2;
         $application = Application::where('id',$id)->first();
         if(!$application){
             Session::flash('error','Application Data Not Found!');
@@ -585,30 +501,29 @@ class ApplicationController extends Controller{
         }
         $step_arr = explode(",",$application->steps);
         if(!in_array($current_step,$step_arr)){
-            Session::flash('error','Complete Step 4 Then Proced!');
-            return redirect('application-create/'.$application->id.'/step-4');
+            Session::flash('error','Complete Step 2 Then Proced!');
+            return redirect('application-create/'.$application->id.'/step-2');
         }
-        $data['page_title'] = 'Application | Create | Step 5';
+        $data['page_title'] = 'Application | Create | Step 3';
         $data['application'] = true;
         $data['application_add'] = true;
-        $data['app_step_5'] = Application_Step_5::where('application_id',$application->id)->first();
+        $data['app_step_3'] = Application_Step_3::where('application_id',$application->id)->first();
         $data['app_data'] = $application;
         //AddNewLead::dispatch('Hello this is test');
-        return view('application/create_step_5',$data);
+        return view('application/create_step_3',$data);
     }
-    //step 5 post
-    public function step_5_post(Request $request){
+    public function step_3_post(Request $request){
         $role = Auth::user()->role;
         $application = Application::where('id',$request->application_id)->first();
         if(!$application){
             Session::flash('error','Internal Server Error!');
             return redirect('application-create');
         }
-        if($request->application_step5_id){
-            $application_step5 = Application_Step_5::where('id',$request->application_step5_id)->first();
+        if($request->application_step3_id){
+            $application_step3 = Application_Step_3::where('id',$request->application_step3_id)->first();
         }else{
             //update step
-            $application->steps = $application->steps.','.'5';
+            $application->steps = $application->steps.','.'3';
             $application->application_status_id = 1;
             $application->save();
             //make notification
@@ -622,6 +537,7 @@ class ApplicationController extends Controller{
                 $notification->creator_image = Auth::user()->photo;
                 $notification->user_id = 1;
                 $notification->is_admin = 1;
+                $notification->manager_id = 1;
                 $notification->application_id = $application->id;
                 $notification->slug = 'application/'.$application->id.'/details';
                 $notification->save();
@@ -640,6 +556,7 @@ class ApplicationController extends Controller{
                 $notification->creator_image = Auth::user()->photo;
                 $notification->user_id = 1;
                 $notification->is_admin = 1;
+                $notification->manager_id = 1;
                 $notification->application_id = $application->id;
                 $notification->slug = 'application/'.$application->id.'/details';
                 $notification->save();
@@ -657,6 +574,7 @@ class ApplicationController extends Controller{
                 $notification->creator_image = Auth::user()->photo;
                 $notification->user_id = 1;
                 $notification->is_admin = 1;
+                $notification->manager_id = 1;
                 $notification->application_id = $application->id;
                 $notification->slug = 'application/'.$application->id.'/details';
                 $notification->save();
@@ -665,70 +583,17 @@ class ApplicationController extends Controller{
                 $url = url('application/'.$application->id.'/details');
                 event(new AddNewLead($message,$url));
             }
-            $application_step5 = new Application_Step_5();
-            $application_step5->user_id = Auth::user()->id;
+            $application_step3 = new Application_Step_3();
         }
-        $application_step5->application_id = $application->id;
-        $application_step5->save();
+        $application_step3->application_id = $application->id;
+        $application_step3->save();
+        Session::flash('success','Application Successfully Submitted!');
         if($role=='agent'){
-            Session::flash('success','Application Successfully Submitted!');
             return redirect('agent-applications');
         }
         if($role=='student'){
-            Session::flash('success','Application Successfully Submitted!');
             return redirect('student-portal');
         }
-        //if create by superadmin or admimission manager then go proced
-        Session::flash('success','Application Submitted! Wait for Interview!');
-        return redirect('application-create/'.$application->id.'/step-6');
-
-    }
-
-    public function create_step_6($id=NULL){
-        $current_step = 5;
-        $application = Application::where('id',$id)->first();
-        if(!$application){
-            Session::flash('error','Application Data Not Found!');
-            return redirect('application-create');
-        }
-        $step_arr = explode(",",$application->steps);
-        if(!in_array($current_step,$step_arr)){
-            Session::flash('error','Application Is Not Ready For Interview!');
-            return redirect('application-create/'.$application->id.'/step-3');
-        }
-        $data['app_step6'] = Application_Step_6::where('application_id',$application->id)->first();
-        $data['result_shows'] = Service::result_shows();
-        $data['page_title'] = 'Application | Create | Step 6';
-        $data['application_id'] = $application->id;
-        $data['application'] = true;
-        $data['application_add'] = true;
-        //AddNewLead::dispatch('Hello this is test');
-        return view('application/create_step_6',$data);
-    }
-    //step 6 post
-    public function step_6_post(Request $request){
-        $role = Auth::user()->role;
-        $application = Application::where('id',$request->application_id)->first();
-        if(!$application){
-            Session::flash('error','Internal Server Error!');
-            return redirect('application-create');
-        }
-        if($request->app_step6_id){
-            $application_step6 = Application_Step_6::where('id',$request->app_step6_id)->first();
-        }else{
-            //update step
-            $application->steps = $application->steps.','.'6';
-            $application->is_final_interview = 1;
-            $application->save();
-            $application_step6 = new Application_Step_6();
-            $application_step6->interview_date = $request->interview_date;
-            $application_step6->interview_time = $request->interview_time;
-            $application_step6->results = $request->results;
-            $application_step6->show = $request->show;
-        }
-        $application_step6->application_id = $application->id;
-        $application_step6->save();
-        Session::flash('success','Interview Done of This Application');
         return redirect('all-application');
     }
     public function application_details_by_admin($id=NULL){

@@ -21,7 +21,7 @@
                             <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="#">Application</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Pending Applications</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Application Processing</li>
                                 </ol>
                             </nav>
 
@@ -37,7 +37,7 @@
                     <div class="row">
                         <div class="col col-md-6 mb-4">
 
-                            <h5 class="pb-2">Personal Information <a href="{{ URL::to('application-create/'.$application_info->id.'/step-2') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Basic Info <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
+                            <h5 class="pb-2">Personal Information <a href="{{ URL::to('application-create/'.$application_info->id) }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Basic Info <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
                             <div class="table-responsive">
                                 <table class="table-bordered mb-4 table">
                                     <tbody>
@@ -54,40 +54,40 @@
                                             <td>{{ (!empty($application_info->email))?$application_info->email:'' }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Nationality</td>
-                                            <td>{{ (!empty($application_info->step2Data->nationality))?$application_info->step2Data->nationality:'' }}</td>
+                                            <td>Gender</td>
+                                            <td>{{ (!empty($application_info->gender))?$application_info->gender:'' }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Other Nationality</td>
-                                            <td>{{ (!empty($application_info->step2Data->other_nationality))?$application_info->step2Data->other_nationality:'' }}</td>
+                                            <td>Nationality</td>
+                                            <td>{{ (!empty($application_info->nationality))?$application_info->nationality:'' }}</td>
                                         </tr>
                                         <tr>
                                             <td>Date of Birth</td>
                                             <td>{{ (!empty($application_info->date_of_birth))?$application_info->date_of_birth:'' }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Passport No</td>
-                                            <td>{{ (!empty($application_info->step2Data->passport_no))?$application_info->step2Data->passport_no:'' }}</td>
+                                            <td>NI Number</td>
+                                            <td>{{ (!empty($application_info->ni_number))?$application_info->ni_number:'' }}</td>
                                         </tr>
                                         <tr>
                                             <td>Living Country</td>
-                                            <td>{{ (!empty($application_info->step2Data->current_country))?$application_info->step2Data->current_country:'' }}</td>
+                                            <td>{{ (!empty($application_info->current_country))?$application_info->current_country:'' }}</td>
                                         </tr>
                                         <tr>
                                             <td>Living State</td>
-                                            <td>{{ (!empty($application_info->step2Data->current_state))?$application_info->step2Data->current_state:'' }}</td>
+                                            <td>{{ (!empty($application_info->current_state))?$application_info->current_state:'' }}</td>
                                         </tr>
                                         <tr>
                                             <td>Living City</td>
-                                            <td>{{ (!empty($application_info->step2Data->current_city))?$application_info->step2Data->current_city:'' }}</td>
+                                            <td>{{ (!empty($application_info->current_city))?$application_info->current_city:'' }}</td>
                                         </tr>
                                         <tr>
                                             <td>Zip Code</td>
-                                            <td>{{ (!empty($application_info->step2Data->current_postal_code))?$application_info->step2Data->current_postal_code:'' }}</td>
+                                            <td>{{ (!empty($application_info->current_postal_code))?$application_info->current_postal_code:'' }}</td>
                                         </tr>
                                         <tr>
                                             <td>Living Address Details</td>
-                                            <td>{{ (!empty($application_info->step2Data->current_address_line_2))?$application_info->step2Data->current_address_line_2:'' }}</td>
+                                            <td>{{ (!empty($application_info->current_address_line_2))?$application_info->current_address_line_2:'' }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -181,10 +181,14 @@
                             </div>
                         </div>
                         <div class="col col-md-6 mb-4">
-                            <h5 class="pb-2">Admission Information <a href="{{ URL::to('application-create/'.$application_info->id.'/step-1') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Admission Info <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
+                            <h5 class="pb-2">Admission Information <a href="{{ URL::to('application/'.$application_info->id.'/details') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex">Show Full Information <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
                             <div class="table-responsive">
                                 <table class="table-bordered mb-4 table">
                                     <tbody>
+                                        <tr>
+                                            <td>Application Type</td>
+                                            <td>{{ ($application_info->is_academic==1)?'Academic':'Non-academic' }}</td>
+                                        </tr>
                                         <tr>
                                             <td>Campus/University</td>
                                             <td>{{ (!empty($application_info->campus->campus_name))?$application_info->campus->campus_name:'' }}</td>
@@ -297,7 +301,7 @@
                             </div>
                         </div>
                         <div class="col col-md-12 mb-4">
-                            <h5 class="pb-2">Application Document <a href="{{ URL::to('application-create/'.$application_info->id.'/step-4') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Document <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
+                            <h5 class="pb-2">Application Document <a href="{{ URL::to('application-create/'.$application_info->id.'/step-2') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Document <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>

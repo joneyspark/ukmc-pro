@@ -2,8 +2,10 @@
 
 namespace App\Models\Application;
 
+use App\Models\Agent\Company;
 use App\Models\Campus\Campus;
 use App\Models\Course\Course;
+use App\Models\University\University;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -95,5 +97,11 @@ class Application extends Model
     }
     public function followups(){
         return $this->hasMany(Followup::class);
+    }
+    public function company(){
+        return $this->belongsTo(Company::class);
+    }
+    public function university(){
+        return $this->belongsTo(University::class);
     }
 }

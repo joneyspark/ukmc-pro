@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('application_step_3s', function (Blueprint $table) {
             $table->id();
             $table->integer('application_id')->nullable();
-            $table->string('disabilities')->nullable();
-            $table->string('criminal_convictions')->nullable();
             $table->tinyInteger('status')->default(0)->nullable();
             $table->timestamps();
         });
