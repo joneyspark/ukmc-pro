@@ -59,19 +59,39 @@
                     <form method="post" action="{{ URL::to('application-step1-post') }}">
                         @csrf
                         <input type="hidden" name="application_id" value="{{ (!empty($app_data->id))?$app_data->id:'' }}"/>
-                        @if(Auth::check() && Auth::user()->role=='admin')
-                        <div class="form-group mb-4">
-                            <label for="verticalFormStepform-name">Agent/Company/Referral:</label>
-                            <select name="company_id" id="company_id" class="form-select">
-                                <option value="" selected>Choose...</option>
-                                @foreach ($a_company_data as $crow)
-                                <option {{ (!empty($app_data->company_id) && $app_data->company_id==$crow->id)?'selected':'' }} value="{{ $crow->id }}">{{ $crow->company_name }}</option>
-                                @endforeach
-                            </select>
+                        @if(!Auth::check())
+                        <div class="col-7 form-group mb-4">
+                            <label for="verticalFormStepform-name">Reference (Optional):</label>
+                            <input name="reference" value="{{ (!empty($app_data->reference))?$app_data->reference:'' }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
                         </div>
                         @endif
-                        @if(Auth::check() && Auth::user()->role=='agent')
-                            <input type="hidden" name="company_id" value="{{ Auth::user()->company_id }}" />
+                        @if(Auth::check())
+                            @if(Auth::user()->role=='student')
+                            <div class="col-7 form-group mb-4">
+                                <label for="verticalFormStepform-name">Reference (Optional):</label>
+                                <input name="reference" value="{{ (!empty($app_data->reference))?$app_data->reference:'' }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
+                            </div>
+                            @else
+                            <input name="reference" value="NIL" type="hidden" class="form-control" id="verticalFormStepform-name" placeholder="">
+                            @endif
+                        @endif
+                        @if(Auth::check())
+                            @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager')
+                            <div class="form-group mb-4">
+                                <label for="verticalFormStepform-name">Agent/Company/Referral:</label>
+                                <select name="company_id" id="company_id" class="form-select">
+                                    <option value="" selected>Choose...</option>
+                                    @foreach ($a_company_data as $crow)
+                                    <option {{ (!empty($app_data->company_id) && $app_data->company_id==$crow->id)?'selected':'' }} value="{{ $crow->id }}">{{ $crow->company_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif
+                        @endif
+                        @if(Auth::check())
+                            @if(Auth::user()->role=='agent')
+                                <input type="hidden" name="company_id" value="{{ Auth::user()->company_id }}" />
+                            @endif
                         @endif
                         <div class="row">
                             <div class="col-2 form-group mb-4">
@@ -140,7 +160,7 @@
                                 @endif
                             </div>
                         </div>
-                        @if(!Auth::check())
+                        @if(!Auth::check() && empty($app_data))
                         <div class="row">
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Password*:</label>

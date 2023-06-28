@@ -35,7 +35,8 @@
 
     });
 </script>
-@if(Auth::check() && Auth::user()->role=='admin')
+@if(Auth::check())
+@if(Auth::user()->role=='admin')
 <script>
     Pusher.logToConsole = true;
     var pusher = new Pusher('ef4fd77f0ef3365b974c', {
@@ -58,3 +59,5 @@
     });
 </script>
 @endif
+@endif
+

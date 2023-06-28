@@ -89,7 +89,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun light-mode"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                     </a>
                 </li>
-
+                @if(Auth::check())
                 <li class="nav-item dropdown notification-dropdown">
                     @php
                         $notify_count = App\Models\Notification\Notification::where('is_view',0)->where('user_id',Auth::user()->id)->count();
@@ -98,8 +98,6 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                         <span id="notification-badge" class="custom-badge badge badge-success">{{ $notify_count }}</span>
                     </a>
-
-
                     <div class="dropdown-menu position-absolute" aria-labelledby="notificationDropdown">
                         <div class="drodpown-title message">
                             <a href="{{ URL::to('my-notification-list') }}"><h6 class="d-flex justify-content-between"><span class="align-self-center">Notifications</span> <span class="badge badge-primary">Show All</span></h6></a>
@@ -108,8 +106,8 @@
                             
                         </div>
                     </div>
-
                 </li>
+                @endif
 
                 <li class="nav-item dropdown user-profile-dropdown  order-lg-0 order-1">
                     <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="userProfileDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -228,6 +226,7 @@
 		</script>
 
         <script src="{{ asset('web/js/pusher.js') }}"></script>
+        @if (Auth::check())
         @if(Auth::user()->role=='admin' || Auth::user()->role=='adminManager')
         <script>
             Pusher.logToConsole = true;
@@ -250,6 +249,7 @@
                 this.get_notifications();
             });
         </script>
+        @endif
         @endif
         <!--task event create -->
         @include('ajax.taskUser')

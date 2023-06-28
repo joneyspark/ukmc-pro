@@ -333,7 +333,7 @@
                         <input type="hidden" name="application_id" value="{{ (!empty($app_data->id))?$app_data->id:'' }}" />
                         <input type="hidden" name="application_step3_id" value="{{ (!empty($app_step_3->id))?$app_step_3->id:'' }}" />
                         <div class="button-action mt-3 ms-3">
-                            <a href="{{ URL::to('application-create/'.$app_data->id.'/step-4') }}" class="btn btn-secondary btn-prev me-3">Back</a>
+                            <a href="{{ URL::to('application-create/'.$app_data->id.'/step-2') }}" class="btn btn-secondary btn-prev me-3">Back</a>
                             <button class="btn btn-success btn-nxt me-3">Submit</button>
                             <a onclick="window.print()" class="btn btn-warning">Print</a>
                         </div>

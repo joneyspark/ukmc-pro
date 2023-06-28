@@ -387,6 +387,7 @@ class ApplicationController extends Controller{
                 $application->create_by = 0;
             }
         }
+        $application->reference = $request->reference;
         $application->company_id = ($request->company_id > 0)?$request->company_id:0;
         $application->applicant_fees_funded = $request->applicant_fees_funded;
         $application->current_residential_status = $request->current_residential_status;
@@ -513,7 +514,11 @@ class ApplicationController extends Controller{
         return view('application/create_step_3',$data);
     }
     public function step_3_post(Request $request){
-        $role = Auth::user()->role;
+        $role = '';
+        if(Auth::check()){
+            $role = Auth::user()->role;
+        }
+        
         $application = Application::where('id',$request->application_id)->first();
         if(!$application){
             Session::flash('error','Internal Server Error!');
@@ -527,62 +532,83 @@ class ApplicationController extends Controller{
             $application->application_status_id = 1;
             $application->save();
             //make notification
-            if(Auth::user()->role=='agent'){
+            if(Auth::check()){
+                if(Auth::user()->role=='agent'){
+                    $notification = new Notification();
+                    $notification->title = 'New Application';
+                    $notification->description = 'New Application Create By '.Auth::user()->name;
+                    $notification->create_date = time();
+                    $notification->create_by = Auth::user()->id;
+                    $notification->creator_name = Auth::user()->name;
+                    $notification->creator_image = Auth::user()->photo;
+                    $notification->user_id = 1;
+                    $notification->is_admin = 1;
+                    $notification->manager_id = 1;
+                    $notification->application_id = $application->id;
+                    $notification->slug = 'application/'.$application->id.'/details';
+                    $notification->save();
+                    //make instant messaging
+                    $message = 'New Application Create By '.Auth::user()->name;
+                    $url = url('application/'.$application->id.'/details');
+                    event(new AddNewLead($message,$url));
+                }
+                if(Auth::user()->role=='admin' || Auth::user()->role=='adminManager'){
+                    $notification = new Notification();
+                    $notification->title = 'New Application';
+                    $notification->description = 'New Application Create By '.Auth::user()->name;
+                    $notification->create_date = time();
+                    $notification->create_by = Auth::user()->id;
+                    $notification->creator_name = Auth::user()->name;
+                    $notification->creator_image = Auth::user()->photo;
+                    $notification->user_id = 1;
+                    $notification->is_admin = 1;
+                    $notification->manager_id = 1;
+                    $notification->application_id = $application->id;
+                    $notification->slug = 'application/'.$application->id.'/details';
+                    $notification->save();
+                    $message = 'New Application Create By '.Auth::user()->name;
+                    $url = url('application/'.$application->id.'/details');
+                    event(new AddNewLead($message,$url));
+                }
+                if(Auth::user()->role=='student'){
+                    $notification = new Notification();
+                    $notification->title = 'New Application From Web Portal';
+                    $notification->description = 'New Application Create By '.Auth::user()->name;
+                    $notification->create_date = time();
+                    $notification->create_by = Auth::user()->id;
+                    $notification->creator_name = Auth::user()->name;
+                    $notification->creator_image = Auth::user()->photo;
+                    $notification->user_id = 1;
+                    $notification->is_admin = 1;
+                    $notification->manager_id = 1;
+                    $notification->application_id = $application->id;
+                    $notification->slug = 'application/'.$application->id.'/details';
+                    $notification->save();
+                    //make instant messaging
+                    $message = 'New Application Create By '.Auth::user()->name;
+                    $url = url('application/'.$application->id.'/details');
+                    event(new AddNewLead($message,$url));
+                }
+            }else{
                 $notification = new Notification();
-                $notification->title = 'New Application';
-                $notification->description = 'New Application Create By '.Auth::user()->name;
-                $notification->create_date = time();
-                $notification->create_by = Auth::user()->id;
-                $notification->creator_name = Auth::user()->name;
-                $notification->creator_image = Auth::user()->photo;
-                $notification->user_id = 1;
-                $notification->is_admin = 1;
-                $notification->manager_id = 1;
-                $notification->application_id = $application->id;
-                $notification->slug = 'application/'.$application->id.'/details';
-                $notification->save();
-                //make instant messaging
-                $message = 'New Application Create By '.Auth::user()->name;
-                $url = url('application/'.$application->id.'/details');
-                event(new AddNewLead($message,$url));
+                    $notification->title = 'New Application From Web Portal';
+                    $notification->description = 'New Application Create By '.$application->name;
+                    $notification->create_date = time();
+                    $notification->create_by = $application->id;
+                    $notification->creator_name = $application->name;
+                    $notification->creator_image = url('web/avatar/user.png');
+                    $notification->user_id = 1;
+                    $notification->is_admin = 1;
+                    $notification->manager_id = 1;
+                    $notification->application_id = $application->id;
+                    $notification->slug = 'application/'.$application->id.'/details';
+                    $notification->save();
+                    //make instant messaging
+                    $message = 'New Application Create By '.$application->name;
+                    $url = url('application/'.$application->id.'/details');
+                    event(new AddNewLead($message,$url));
             }
-            if(Auth::user()->role=='admin' || Auth::user()->role=='adminManager'){
-                $notification = new Notification();
-                $notification->title = 'New Application';
-                $notification->description = 'New Application Create By '.Auth::user()->name;
-                $notification->create_date = time();
-                $notification->create_by = Auth::user()->id;
-                $notification->creator_name = Auth::user()->name;
-                $notification->creator_image = Auth::user()->photo;
-                $notification->user_id = 1;
-                $notification->is_admin = 1;
-                $notification->manager_id = 1;
-                $notification->application_id = $application->id;
-                $notification->slug = 'application/'.$application->id.'/details';
-                $notification->save();
-                $message = 'New Application Create By '.Auth::user()->name;
-                $url = url('application/'.$application->id.'/details');
-                event(new AddNewLead($message,$url));
-            }
-            if(Auth::user()->role=='student'){
-                $notification = new Notification();
-                $notification->title = 'New Application From Web Portal';
-                $notification->description = 'New Application Create By '.Auth::user()->name;
-                $notification->create_date = time();
-                $notification->create_by = Auth::user()->id;
-                $notification->creator_name = Auth::user()->name;
-                $notification->creator_image = Auth::user()->photo;
-                $notification->user_id = 1;
-                $notification->is_admin = 1;
-                $notification->manager_id = 1;
-                $notification->application_id = $application->id;
-                $notification->slug = 'application/'.$application->id.'/details';
-                $notification->save();
-                //make instant messaging
-                $message = 'New Application Create By '.Auth::user()->name;
-                $url = url('application/'.$application->id.'/details');
-                event(new AddNewLead($message,$url));
-            }
+            
             $application_step3 = new Application_Step_3();
         }
         $application_step3->application_id = $application->id;
@@ -594,7 +620,10 @@ class ApplicationController extends Controller{
         if($role=='student'){
             return redirect('student-portal');
         }
-        return redirect('all-application');
+        if($role=='admin' || $role=='manager'){
+            return redirect('all-application');
+        }
+        return view('application/thankyou');
     }
     public function application_details_by_admin($id=NULL){
         if(!Auth::user()){

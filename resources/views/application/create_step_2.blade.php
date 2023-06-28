@@ -197,27 +197,30 @@
                             </div>
                         </div>
                     </form>
-                    @if(Auth::user()->role=='agent' && count($requested_documents) > 0)
-                    <div class="row">
-                        <h5>Requested Document</h5>
-                        <table class="table table-responsive">
-                            <tr>
-                                <td>Title</td>
-                                <td>Request By</td>
-                                <td>Action</td>
-                            </tr>
-                            @foreach($requested_documents as $drow)
-                            <tr>
-                                <td>{{ (!empty($drow->message))?$drow->message:'' }}</td>
-                                <td>{{ (!empty($drow->document_by->name))?$drow->document_by->name:'' }}</td>
-                                <td>
-                                    <a href="javascript:void(0)" onclick="if(confirm('Are you sure to Confirm this Document Data?')) location.href='{{ URL::to('confirm-request-document/'.$drow->id) }}'; return false;"><span class="badge badge-light-warning">Confirm</span></a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </table>
-                    </div>
+                    @if(Auth::user())
+                        @if(Auth::user()->role=='agent' && count($requested_documents) > 0)
+                        <div class="row">
+                            <h5>Requested Document</h5>
+                            <table class="table table-responsive">
+                                <tr>
+                                    <td>Title</td>
+                                    <td>Request By</td>
+                                    <td>Action</td>
+                                </tr>
+                                @foreach($requested_documents as $drow)
+                                <tr>
+                                    <td>{{ (!empty($drow->message))?$drow->message:'' }}</td>
+                                    <td>{{ (!empty($drow->document_by->name))?$drow->document_by->name:'' }}</td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="if(confirm('Are you sure to Confirm this Document Data?')) location.href='{{ URL::to('confirm-request-document/'.$drow->id) }}'; return false;"><span class="badge badge-light-warning">Confirm</span></a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </table>
+                        </div>
+                        @endif
                     @endif
+                    
                     <!-- academic or nonacademic check -->
                     @if($application_data->is_academic==1)
                     <div class="row">
@@ -398,6 +401,7 @@
                                 </div>
 
                             </div>
+                            @if(Auth::check())
                             @if(Auth::user()->role=='student')
                                 @if(!empty($application_data) && $application_data->application_status_id==1)
                                 <a href="{{ URL::to('student-portal') }}" class="btn btn-secondary btn-nxt">My Applications</a>
@@ -439,6 +443,17 @@
                             @endif
 
                             @if(Auth::user()->role=='student')
+                            <div class="button-action mt-3">
+                                <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
+                                @if($document_count > 1)
+                                <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
+                                @else
+                                <button disabled class="btn btn-secondary btn-nxt">Next</button>
+                                @endif
+                            </div>
+                            @endif
+                            @endif
+                            @if(!Auth::check())
                             <div class="button-action mt-3">
                                 <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
                                 @if($document_count > 1)
