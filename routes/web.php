@@ -69,6 +69,10 @@ Route::get('test', function () {
 Route::controller(UserController::class)->group(function () {
     Route::get('user-list', 'user_list');
     Route::get('create-teacher', 'create_teacher');
+    Route::get('create-manager', 'create_manager');
+    Route::get('edit-manager/{slug?}', 'edit_manager');
+    Route::post('edit-manager-data-post', 'edit_manager_data_post');
+    Route::post('create-manager-post-data', 'create_manager_post_data');
     Route::get('create-admission-manager', 'create_admission_manager');
     Route::post('create-admission-manager-post-data', 'create_admission_manager_post_data');
     Route::post('create-teacher-post-data', 'create_teacher_post_data');

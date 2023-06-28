@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 Use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Login\LoginRequest;
+use App\Http\Requests\Manager\CreateManagerRequest;
+use App\Http\Requests\Manager\EditManagerRequest;
 use App\Http\Requests\Teacher\EditTeacherRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -78,6 +80,80 @@ class UserController extends Controller{
         Session::forget('get_role');
         Session::forget('get_name');
         return redirect('user-list');
+    }
+    public function create_manager(){
+        if(!Auth::check() && Auth::user()->role != 'admin'){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
+        $data['page_title'] = 'User | Create Manager';
+        $data['usermanagement'] = true;
+        $data['get_campuses'] = Campus::where('active',1)->get();
+        $data['countries'] = Service::countries();
+        return view('users/create_manager',$data);
+    }
+    public function create_manager_post_data(CreateManagerRequest $request){
+        //first create user
+        $first_name = "";
+        $last_name = "";
+        $user = new User();
+        $user->name = $request->name;
+        if($user->name){
+            $array = explode(" ",$user->name);
+            foreach($array as $key=>$row){
+                if($key==0){
+                    $first_name = $row;
+                }
+                if(!empty($row) && $key != 0){
+                    $last_name .= $row.' ';
+                }
+            }
+        }
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->role = 'manager';
+        $user->email = $request->email;
+        $user->phone = $request->officer_phone;
+        $user->slug = Str::slug($request->name,'-');
+        //photo upload
+        $photo = $request->photo;
+        if ($request->hasFile('photo')) {
+            // if (File::exists(public_path('backend/images/company_logo/'.$company->company_logo))) {
+            //     File::delete(public_path('backend/images/company_logo/'.$company->company_logo));
+            // }
+            $ext = $photo->getClientOriginalExtension();
+            $filename = $photo->getClientOriginalName();
+            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+            $image_resize = Image::make($photo->getRealPath());
+            $image_resize->resize(200, 200);
+            $upload_path = 'backend/images/users/admission_manager/';
+            Service::createDirectory($upload_path);
+            $image_resize->save(public_path('backend/images/users/admission_manager/'.$filename));
+            $user->photo = 'backend/images/users/admission_manager/'.$filename;
+        }
+        $user->password = Hash::make($request->password);
+        $user->save();
+        //create admission officer now
+        $officer = new AdmissionOfficer();
+        $officer->user_id = $user->id;
+        $officer->officer_name = $request->officer_name;
+        $officer->officer_phone = $request->officer_phone;
+        $officer->officer_email = $request->officer_email;
+        $officer->officer_alternative_contact = $request->officer_alternative_contact;
+        $officer->officer_nid_or_passport = $request->officer_nid_or_passport;
+        $officer->nationality = $request->nationality;
+        $officer->country = $request->country;
+        $officer->state = $request->state;
+        $officer->city = $request->city;
+        $officer->address = $request->address;
+        $officer->save();
+        Session::put('saved_user_id',$user->id);
+        Session::flash('success','Admission Officer Created Successfully');
+        if(!empty(Session::get('current_url'))){
+            return redirect(Session::get('current_url'));
+        }else{
+            return redirect('user-list');
+        }
     }
     public function create_teacher(){
         if(!Auth::check() && Auth::user()->role != 'admin'){
@@ -166,6 +242,90 @@ class UserController extends Controller{
             return redirect('user-list');
         }
 
+    }
+    //edit manager data 
+    //edit admission manager
+    public function edit_manager($slug=NULL){
+        if(!Auth::check() && Auth::user()->role != 'admin'){
+            Session::flash('error','Login First! Then Update Admission Manager Information!');
+            return redirect('login');
+        }
+        $data['officer_data'] = User::with(['officer'])->where('slug',$slug)->first();
+        //dd($data['teacher_data']);
+        if(!$data['officer_data']){
+            Session::flash('error','Admission Manager Data Not Found! Server Error!');
+            if(Session::get('current_url')){
+                return redirect(Session::get('current_url'));
+            }else{
+                return redirect('user-list');
+            }
+        }
+        $data['page_title'] = 'User | Edit Admission Manager';
+        $data['usermanagement'] = true;
+        $data['get_campuses'] = Campus::where('active',1)->get();
+        $data['countries'] = Service::countries();
+        return view('users/edit_manager',$data);
+    }
+    //edit manager data post
+    public function edit_manager_data_post(EditManagerRequest $request){
+        //first create user
+        $first_name = "";
+        $last_name = "";
+        $user = User::where('id',$request->user_id)->first();
+        $user->name = $request->name;
+        if($user->name){
+            $array = explode(" ",$user->name);
+            foreach($array as $key=>$row){
+                if($key==0){
+                    $first_name = $row;
+                }
+                if(!empty($row) && $key != 0){
+                    $last_name .= $row.' ';
+                }
+            }
+        }
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->phone = $request->officer_phone;
+        //photo upload
+        $photo = $request->photo;
+        if ($request->hasFile('photo')) {
+            if (File::exists(public_path($user->photo))) {
+                File::delete(public_path($user->photo));
+            }
+            $ext = $photo->getClientOriginalExtension();
+            $filename = $photo->getClientOriginalName();
+            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+            $image_resize = Image::make($photo->getRealPath());
+            $image_resize->resize(200, 200);
+            $upload_path = 'backend/images/users/admission_manager/';
+            Service::createDirectory($upload_path);
+            $image_resize->save(public_path('backend/images/users/admission_manager/'.$filename));
+            $user->photo = 'backend/images/users/admission_manager/'.$filename;
+        }
+        $user->save();
+        //create admission officer now
+        $officer = AdmissionOfficer::where('user_id',$user->id)->first();
+        $officer->campus_id = $request->campus_id;
+        $officer->user_id = $user->id;
+        $officer->officer_name = $request->officer_name;
+        $officer->officer_phone = $request->officer_phone;
+        $officer->officer_email = $request->officer_email;
+        $officer->officer_alternative_contact = $request->officer_alternative_contact;
+        $officer->officer_nid_or_passport = $request->officer_nid_or_passport;
+        $officer->nationality = $request->nationality;
+        $officer->country = $request->country;
+        $officer->state = $request->state;
+        $officer->city = $request->city;
+        $officer->address = $request->address;
+        $officer->save();
+        Session::put('saved_user_id',$user->id);
+        Session::flash('success','Successfully Updated Admission Manager Information!');
+        if(!empty(Session::get('current_url'))){
+            return redirect(Session::get('current_url'));
+        }else{
+            return redirect('user-list');
+        }
     }
     //create teacher
     public function create_teacher_post_data(TeacherCreateRequest $request){

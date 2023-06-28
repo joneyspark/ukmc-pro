@@ -133,23 +133,28 @@ class ApplicationController extends Controller{
             $application->is_final_interview = 0;
             $application->manager_id = 0;
             // 1 for agent, 2 for web
-            if(Auth::check() && Auth::user()->role=='agent'){
-                $application->application_process_status = 1;
-                $application->application_type = 1;
+            if(Auth::check()){
+                if(Auth::user()->role=='agent'){
+                    $application->application_process_status = 1;
+                    $application->application_type = 1;
+                }
             }
-            if(Auth::check() && Auth::user()->role=='student'){
-                $application->application_process_status = 2;
-                $application->application_type = 2;
-            }else{
-                $application->application_process_status = 1;
-                $application->application_type = 3;
+            if(Auth::check()){
+                if(Auth::user()->role=='student'){
+                    $application->application_process_status = 2;
+                    $application->application_type = 2;
+                }
+            }
+            if(Auth::check()){
+                if(Auth::user()->role=='admin' || Auth::user()->role=='manager'){
+                    $application->application_process_status = 1;
+                    $application->application_type = 3;
+                }
             }
             //$application->application_process_status = 1;
             $application->status = 1;
             if(Auth::check()){
                 $application->create_by = Auth::user()->id;
-            }else{
-                $application->create_by = 0;
             }
             //craete new user
             if(!Auth::check()){
@@ -158,13 +163,16 @@ class ApplicationController extends Controller{
                 $user->last_name = $request->last_name;
                 $user->name = $request->first_name.' '.$request->last_name;
                 $user->email = $request->email;
-                $user->role = 'Student';
+                $user->role = 'student';
                 $user->password = Hash::make($request->password);
                 $user->save();
+                $application->create_by = $user->id;
+                $application->application_process_status = 2;
+                $application->application_type = 2;
             }
         }
+        $application->reference = $request->reference;
         $application->company_id = ($request->company_id > 0)?$request->company_id:0;
-
         $application->title = $request->title;
         $application->first_name = $request->first_name;
         $application->last_name = $request->last_name;
@@ -212,6 +220,7 @@ class ApplicationController extends Controller{
         $application->intake = $request->intake;
         $application->delivery_pattern = $request->delivery_pattern;
         $application->save();
+        Session::put('set_application_id',$application->id);
         Session::flash('success','Step 1 Complete. Now Complete Step 2!');
         return redirect('application-create/'.$application->id.'/step-2');
 
@@ -413,6 +422,10 @@ class ApplicationController extends Controller{
     }
 
     public function create_step_2($id=NULL){
+        if($id != Session::get('set_application_id')){
+            Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
+            return redirect('application-create/'.Session::get('set_application_id'));
+        }
         $current_step = 1;
         $application = Application::where('id',$id)->first();
         if(!$application){
@@ -441,6 +454,10 @@ class ApplicationController extends Controller{
         return view('application/create_step_2',$data);
     }
     public function step_2_post(Request $request){
+        if($request->get_application_id != Session::get('set_application_id')){
+            Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
+            return redirect('application-create/'.Session::get('set_application_id'));
+        }
         $application = Application::where('id',$request->get_application_id)->first();
         if(!$application){
             Session::flash('error','Internal Server Error!');
@@ -494,6 +511,10 @@ class ApplicationController extends Controller{
         return redirect('application-create/'.$application->id.'/step-2');
     }
     public function create_step_3($id=NULL){
+        if($id != Session::get('set_application_id')){
+            Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
+            return redirect('application-create/'.Session::get('set_application_id'));
+        }
         $current_step = 2;
         $application = Application::where('id',$id)->first();
         if(!$application){
@@ -514,6 +535,10 @@ class ApplicationController extends Controller{
         return view('application/create_step_3',$data);
     }
     public function step_3_post(Request $request){
+        if($request->application_id != Session::get('set_application_id')){
+            Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
+            return redirect('application-create/'.Session::get('set_application_id'));
+        }
         $role = '';
         if(Auth::check()){
             $role = Auth::user()->role;
@@ -613,6 +638,7 @@ class ApplicationController extends Controller{
         }
         $application_step3->application_id = $application->id;
         $application_step3->save();
+        Session::forget('set_application_id');
         Session::flash('success','Application Successfully Submitted!');
         if($role=='agent'){
             return redirect('agent-applications');

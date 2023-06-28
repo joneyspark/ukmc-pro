@@ -60,9 +60,7 @@
                                             <option value="">No Data</option>
                                             @endforelse
                                         </select>
-                                        @if ($errors->has('campus_id'))
-                                            <span class="text-danger">{{ $errors->first('campus_id') }}</span>
-                                        @endif
+                                        
                                         <!---->
                                     </div>
                                 </div>

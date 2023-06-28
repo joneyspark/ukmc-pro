@@ -92,12 +92,8 @@
                                     </td>
                                     <td>
                                         @if(!in_array(2,explode(",",$row->steps)))
-                                        <span class="badge badge-warning">2nd Step Not Completed</span>
-                                        @elseif(!in_array(3,explode(",",$row->steps)))
-                                        <span class="badge badge-warning">Personal Statement Not Completed</span>
-                                        @elseif(!in_array(4,explode(",",$row->steps)))
                                         <span class="badge badge-warning">Document Missing</span>
-                                        @elseif(!in_array(5,explode(",",$row->steps)))
+                                        @elseif(!in_array(3,explode(",",$row->steps)))
                                         <span class="badge badge-warning">Application Not Submitted</span>
                                         @else
                                         <span class="badge badge-success">Application Submitted</span>

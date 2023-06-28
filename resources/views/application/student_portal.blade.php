@@ -67,12 +67,8 @@
                                     </td>
                                     <td>
                                         @if(!in_array(2,explode(",",$row->steps)))
-                                        <span class="badge badge-warning">2nd Step Not Completed</span>
-                                        @elseif(!in_array(3,explode(",",$row->steps)))
-                                        <span class="badge badge-warning">Personal Statement Not Completed</span>
-                                        @elseif(!in_array(4,explode(",",$row->steps)))
                                         <span class="badge badge-warning">Document Missing</span>
-                                        @elseif(!in_array(5,explode(",",$row->steps)))
+                                        @elseif(!in_array(3,explode(",",$row->steps)))
                                         <span class="badge badge-warning">Application Not Submitted</span>
                                         @else
                                         <span class="badge badge-success">Application Submitted</span>
@@ -91,14 +87,6 @@
                                             </a>
                                             @elseif(!in_array(3,explode(",",$row->steps)))
                                             <a href="{{ URL::to('application-create/'.$row->id.'/step-3') }}" class="badge badge-pill bg-warning">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                            </a>
-                                            @elseif(!in_array(4,explode(",",$row->steps)))
-                                            <a href="{{ URL::to('application-create/'.$row->id.'/step-4') }}" class="badge badge-pill bg-warning">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                            </a>
-                                            @elseif(!in_array(5,explode(",",$row->steps)))
-                                            <a href="{{ URL::to('application-create/'.$row->id.'/step-5') }}" class="badge badge-pill bg-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             </a>
                                             @else

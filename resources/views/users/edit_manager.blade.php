@@ -30,7 +30,7 @@
                     </header>
                 </div>
             </div>
-            <form method="post" action="{{ URL::to('edit-officer-data-post') }}" enctype="multipart/form-data">
+            <form method="post" action="{{ URL::to('edit-manager-data-post') }}" enctype="multipart/form-data">
                 @csrf
                 <div id="card_1" class="col-lg-12 layout-spacing layout-top-spacing">
                     <div class="statbox widget box box-shadow">
@@ -51,20 +51,6 @@
                                 </div>
                                 <div class="col">
                                     <input type="hidden" value="{{ $officer_data->id }}" name="user_id" />
-                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Teacher for
-                                            Campus</label><select name="campus_id" class="form-control">
-                                            <option value="">Select a Campus</option>
-                                            @forelse ($get_campuses as $campus)
-                                            <option {{ (!empty($officer_data->officer->campus_id) && $officer_data->officer->campus_id==$campus->id)?'selected':'' }} value="{{ $campus->id }}">{{ $campus->campus_name }}</option>
-                                            @empty
-                                            <option value="">No Data</option>
-                                            @endforelse
-                                        </select>
-                                        
-                                        <!---->
-                                    </div>
-                                </div>
-                                <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">Officer
                                             Name</label>
                                             <input name="officer_name" value="{{ (!empty($officer_data->officer->officer_name))?$officer_data->officer->officer_name:old('officer_name') }}" type="text" class="form-control">

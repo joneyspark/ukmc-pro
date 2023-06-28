@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\AdmissionManager;
+namespace App\Http\Requests\Manager;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AdmissionManagerRequest extends FormRequest
+class CreateManagerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
