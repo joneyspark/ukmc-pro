@@ -701,6 +701,10 @@ trait Service
                 'val'=>'Super Admin',
             ),
             array(
+                'key'=>'manager',
+                'val'=>'Manager',
+            ),
+            array(
                 'key'=>'adminManager',
                 'val'=>'Admission Manager',
             ),

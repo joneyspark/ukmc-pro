@@ -53,6 +53,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('get-campus-by-university', 'get_campus_by_university');
     Route::post('qualification-post', 'qualification_post');
     Route::post('experience-post', 'experience_post');
+    Route::post('application-assign-to', 'application_assign_to');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

@@ -20,7 +20,7 @@
     <div class="shadow-bottom"></div>
     @if(Auth::check())
     <ul class="list-unstyled menu-categories" id="accordionExample" >
-        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
+        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
         <li class="menu {{ (!empty($dashboard) && $dashboard==true)?'active':'' }}">
             <a href="{{ URL::to('/') }}" data-bs-toggle="" aria-expanded="true" class="dropdown-toggle">
                 <div class="">
@@ -55,7 +55,7 @@
                     <a href="{{ URL::to('agent-applications') }}"> Agent Applications </a>
                 </li>
                 @endif
-                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager')
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
                 <li class="{{ (!empty($application_pending) && $application_pending==true)?'active':'' }}">
                     <a href="{{ URL::to('pending-applications') }}"> Pending Application </a>
                 </li>
@@ -63,7 +63,7 @@
                     <a href="{{ URL::to('all-application') }}"> All Application </a>
                 </li>
                 @endif
-                @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
+                @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
                 <li class="{{ (!empty($interview_list) && $interview_list==true)?'active':'' }}">
                     <a href="{{ URL::to('interview-list') }}"> Interview Schedule </a>
                 </li>
@@ -88,7 +88,7 @@
                 </div>
             </a>
             <ul class="{{ (!empty($campus) && $campus==true)?'collapse show':'collapse' }} submenu list-unstyled" id="datatables2" data-bs-parent="#accordionExample">
-                @if(Auth::check() && Auth::user()->role=='admin')
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
                 <li class="{{ (!empty($campus_add) && $campus_add==true)?'active':'' }}">
                     <a href="{{ URL::to('campus-create') }}"> Add Campus</a>
                 </li>
@@ -98,12 +98,12 @@
                     <a href="{{ URL::to('all-campus') }}"> All Campus </a>
                 </li>
                 @endif
-                @if(Auth::check() && Auth::user()->role=='admin')
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
                 <li class="{{ (!empty($campus_archive) && $campus_archive==true)?'active':'' }}">
                     <a href="{{ URL::to('archived-campus') }}"> Archive Campus </a>
                 </li>
                 @endif
-                @if(Auth::check() && Auth::user()->role=='admin')
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
                 <li class="{{ (!empty($university) && $university==true)?'active':'' }}">
                     <a href="{{ URL::to('universities') }}"> Universities </a>
                 </li>
@@ -111,7 +111,7 @@
             </ul>
         </li>
         @endif
-        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
+        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
         <li class="menu {{ (!empty($course) && $course==true)?'active':'' }}">
             <a href="#datatables3" data-bs-toggle="collapse" aria-expanded="{{ (!empty($course) && $course==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">
@@ -123,7 +123,7 @@
                 </div>
             </a>
             <ul class="{{ (!empty($course) && $course==true)?'collapse show':'collapse' }} submenu list-unstyled" id="datatables3" data-bs-parent="#accordionExample">
-                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager')
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager' || Auth::user()->role=='manager')
                 <li class="{{ (!empty($course_add) && $course_add==true)?'active':'' }}">
                     <a href="{{ URL::to('course-create') }}"> Add Course</a>
                 </li>
@@ -132,7 +132,7 @@
                 <li class="{{ (!empty($course_all) && $course_all==true)?'active':'' }}">
                     <a href="{{ URL::to('all-course') }}"> All Course </a>
                 </li>
-                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager')
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager' || Auth::user()->role=='manager')
                 <li class="{{ (!empty($course_archive) && $course_archive==true)?'active':'' }}">
                     <a href="{{ URL::to('archived-courses') }}"> Archive Course </a>
                 </li>
@@ -162,6 +162,16 @@
                 <div class="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     <span>Users</span>
+                </div>
+            </a>
+        </li>
+        @endif
+        @if(Auth::check() && Auth::user()->role=='manager')
+        <li class="menu {{ (!empty($usermanagement) && $usermanagement==true)?'active':'' }}">
+            <a href="{{ URL::to('my-team-list') }}" data-bs-toggle="" aria-expanded="false" class="dropdown-toggle">
+                <div class="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>My Team</span>
                 </div>
             </a>
         </li>
@@ -196,7 +206,7 @@
                     <a href="{{ URL::to('task-list') }}"> All Task </a>
                 </li>
                 @endif
-                @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='teacher')
+                @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='manager')
                 <li class="{{ (!empty($task_my) && $task_my==true)?'active':'' }}">
                     <a href="{{ URL::to('my-tasks') }}"> My Tasks </a>
                 </li>
@@ -232,7 +242,7 @@
             </ul>
         </li>
         @endif
-        @if(Auth::check() && Auth::user()->role=='admin')
+        @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
         <li class="menu {{ (!empty($settings) && $settings==true)?'active':'' }}">
             <a href="#users" data-bs-toggle="collapse" aria-expanded="{{ (!empty($settings) && $settings==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">

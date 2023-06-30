@@ -855,6 +855,8 @@ class ApplicationController extends Controller{
             'intake' => $get_campus,
         ]);
 
+        $data['my_teams'] = User::where('role','adminManager')->where('create_by',Auth::user()->id)->get();
+
         $data['get_campus'] = Session::get('get_campus');
         $data['get_agent'] = Session::get('get_agent');
         $data['get_officer'] = Session::get('get_officer');
@@ -1300,6 +1302,46 @@ class ApplicationController extends Controller{
             'val'=>'Success!'
         );
         return response()->json($data,200);
+    }
+    //application assign to user 
+    public function application_assign_to(Request $request){
+        $request->validate([
+            'assign_to_user_id'=>'required',
+        ]);
+        $getIds = $request->assign_application_ids;
+        if(!$getIds){
+            Session::flash('error','Internal Server Error! Application Data Not Found!');
+            return redirect('all-application');
+        }
+        $array = explode(",",$getIds);
+        foreach($array as $row){
+            $getApp = Application::where('id',$row)->where('admission_officer_id',0)->first();
+            if($getApp){
+                $getApp->admission_officer_id = $request->assign_to_user_id;
+                $getApp->manager_id = Auth::user()->id;
+                $getApp->save();
+            }
+        }
+        $count = count($array);
+        //create notification 
+        $notification = new Notification();
+        $notification->title = 'Assign Lead';
+        $notification->description = $count.' New Application Assigned By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = url(Auth::user()->photo);
+        $notification->user_id = $request->assign_to_user_id;
+        $notification->is_admin = 1;
+        $notification->manager_id = 0;
+        $notification->application_id = 0;
+        $notification->slug = 'my-application';
+        $notification->save();
+        //make instant messaging
+        $url = url('my-application');
+        event(new AddNewLead($notification->description,$url));
+        Session::flash('success',$count.' Application Assigned Successfully!');
+        return redirect('all-application');
     }
 
 }

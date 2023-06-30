@@ -51,15 +51,18 @@
                                 </div>
                                 <div class="col">
                                     <input type="hidden" value="{{ $officer_data->id }}" name="user_id" />
-                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Teacher for
-                                            Campus</label><select name="campus_id" class="form-control">
-                                            <option value="">Select a Campus</option>
-                                            @forelse ($get_campuses as $campus)
-                                            <option {{ (!empty($officer_data->officer->campus_id) && $officer_data->officer->campus_id==$campus->id)?'selected':'' }} value="{{ $campus->id }}">{{ $campus->campus_name }}</option>
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Manager</label>
+                                        <select name="manager_id" class="form-control">
+                                            <option value="">Select a Manager</option>
+                                            @forelse ($managers as $mlist)
+                                            <option {{ (!empty($officer_data->create_by) && $officer_data->create_by==$mlist->id)?'selected':'' }} value="{{ $mlist->id }}">{{ $mlist->name }}</option>
                                             @empty
                                             <option value="">No Data</option>
                                             @endforelse
                                         </select>
+                                        @if ($errors->has('manager_id'))
+                                            <span class="text-danger">{{ $errors->first('manager_id') }}</span>
+                                        @endif
                                         
                                         <!---->
                                     </div>
@@ -215,7 +218,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="email">Email</label>
-                                        <input disabled value="{{ (!empty($teacher_data->email))?$teacher_data->email:old('email') }}" type="email" class="form-control">
+                                        <input disabled value="{{ (!empty($officer_data->email))?$officer_data->email:old('email') }}" type="email" class="form-control">
                                     </div>
                                 </div>
                             </div>

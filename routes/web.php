@@ -86,4 +86,9 @@ Route::controller(UserController::class)->group(function () {
     Route::get('profile-settings', 'profile_settings');
     Route::get('edit_profile', 'edit_profile');
     Route::post('my-profile-update', 'my_profile_update');
+    Route::get('my-team-list', 'my_team_list');
+    Route::get('create-admission-manager-by-manager', 'create_admission_manager_by_manager');
+    Route::post('create-admission-manager-by-manager-post', 'create_admission_manager_by_manager_post');
+    Route::get('edit-admission-manager-by-manager/{slug?}', 'edit_admission_manager_by_manager');
+    Route::post('edit-admission-manager-by-manager-post', 'edit_admission_manager_by_manager_post');
 });

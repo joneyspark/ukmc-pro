@@ -36,7 +36,7 @@ class UserController extends Controller{
     //
     public function user_list(Request $request){
         if(!Auth::check() && Auth::user()->role != 'admin'){
-            Session::flash('error','Login First! Create Campus!');
+            Session::flash('error','Login First! Then See User List!');
             return redirect('login');
         }
         $data['page_title'] = 'User Management';
@@ -73,6 +73,27 @@ class UserController extends Controller{
         Session::forget('saved_user_id');
         Session::put('current_url',URL::full());
         return view('users/list',$data);
+    }
+    public function my_team_list(){
+        if(!Auth::check() && Auth::user()->role != 'manager'){
+            Session::flash('error','Login First! Then See User List!');
+            return redirect('login');
+        }
+        $data['page_title'] = 'User Management';
+        $data['usermanagement'] = true;
+        $getUserId = Session::get('saved_user_id');
+        $data['return_user_id'] = $getUserId;
+        $data['role_list'] = Service::get_roles();
+
+        //query
+        $data['user_list_data'] = User::query()
+        ->where('role','adminManager')
+        ->orderBy('id','desc')
+        ->paginate(10);
+
+        Session::forget('saved_user_id');
+        Session::put('current_url',URL::full());
+        return view('users/my_team_list',$data);
     }
     public function reset_user_list(){
         Session::forget('saved_user_id');
@@ -173,9 +194,104 @@ class UserController extends Controller{
         }
         $data['page_title'] = 'User | Create Admission Manager';
         $data['usermanagement'] = true;
+        $data['managers'] = User::where('role','manager')->where('active',1)->get();
         $data['get_campuses'] = Campus::where('active',1)->get();
         $data['countries'] = Service::countries();
         return view('users/create_admiossion_manager',$data);
+    }
+    public function create_admission_manager_by_manager(){
+        if(!Auth::check() && Auth::user()->role != 'admin'){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
+        $data['page_title'] = 'User | Create Admission Manager';
+        $data['usermanagement'] = true;
+        $data['managers'] = User::where('role','manager')->where('active',1)->get();
+        $data['get_campuses'] = Campus::where('active',1)->get();
+        $data['countries'] = Service::countries();
+        return view('users/create_admiossion_manager_by_manager',$data);
+    }
+    public function create_admission_manager_by_manager_post(Request $request){
+        $request->validate([
+            'officer_name' => 'required',
+            'officer_phone' => 'required',
+            'officer_email' => 'required',
+            'officer_alternative_contact' => 'required',
+            'officer_nid_or_passport' => 'required',
+            'nationality' => 'required',
+            'country' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'address' => 'required',
+            'photo' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'min:6',
+        ]);
+        //first create user
+        $first_name = "";
+        $last_name = "";
+        $user = new User();
+        $user->name = $request->name;
+        if($user->name){
+            $array = explode(" ",$user->name);
+            foreach($array as $key=>$row){
+                if($key==0){
+                    $first_name = $row;
+                }
+                if(!empty($row) && $key != 0){
+                    $last_name .= $row.' ';
+                }
+            }
+        }
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->role = 'adminManager';
+        $user->email = $request->email;
+        $user->phone = $request->officer_phone;
+        $user->create_by = Auth::user()->id;
+        $user->slug = Str::slug($request->name,'-');
+        //photo upload
+        $photo = $request->photo;
+        if ($request->hasFile('photo')) {
+            // if (File::exists(public_path('backend/images/company_logo/'.$company->company_logo))) {
+            //     File::delete(public_path('backend/images/company_logo/'.$company->company_logo));
+            // }
+            $ext = $photo->getClientOriginalExtension();
+            $filename = $photo->getClientOriginalName();
+            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+            $image_resize = Image::make($photo->getRealPath());
+            $image_resize->resize(200, 200);
+            $upload_path = 'backend/images/users/admission_officer/';
+            Service::createDirectory($upload_path);
+            $image_resize->save(public_path('backend/images/users/admission_officer/'.$filename));
+            $user->photo = 'backend/images/users/admission_officer/'.$filename;
+        }
+        $user->password = Hash::make($request->password);
+        $user->save();
+        //create admission officer now
+        $officer = new AdmissionOfficer();
+        $officer->campus_id = $request->campus_id;
+        $officer->user_id = $user->id;
+        $officer->officer_name = $request->officer_name;
+        $officer->officer_phone = $request->officer_phone;
+        $officer->officer_email = $request->officer_email;
+        $officer->officer_alternative_contact = $request->officer_alternative_contact;
+        $officer->officer_nid_or_passport = $request->officer_nid_or_passport;
+        $officer->nationality = $request->nationality;
+        $officer->country = $request->country;
+        $officer->state = $request->state;
+        $officer->city = $request->city;
+        $officer->address = $request->address;
+        $officer->save();
+        Session::put('saved_user_id',$user->id);
+        Session::flash('success','Admission Officer Created Successfully');
+        if(!empty(Session::get('current_url'))){
+            return redirect(Session::get('current_url'));
+        }else{
+            return redirect('my-team-list');
+        }
     }
     //create admission manager post data
     public function create_admission_manager_post_data(AdmissionManagerRequest $request){
@@ -200,6 +316,7 @@ class UserController extends Controller{
         $user->role = 'adminManager';
         $user->email = $request->email;
         $user->phone = $request->officer_phone;
+        $user->create_by = $request->manager_id;
         $user->slug = Str::slug($request->name,'-');
         //photo upload
         $photo = $request->photo;
@@ -243,6 +360,102 @@ class UserController extends Controller{
         }
 
     }
+    public function edit_admission_manager_by_manager($slug=NULL){
+        if(!Auth::check() && Auth::user()->role != 'manager'){
+            Session::flash('error','Login First! Then Update Admission Officer Information!');
+            return redirect('login');
+        }
+        $data['officer_data'] = User::with(['officer'])->where('slug',$slug)->first();
+        //dd($data['teacher_data']);
+        if(!$data['officer_data']){
+            Session::flash('error','Admission Officer Data Not Found! Server Error!');
+            if(Session::get('current_url')){
+                return redirect(Session::get('current_url'));
+            }else{
+                return redirect('user-list');
+            }
+        }
+        $data['page_title'] = 'User | Edit Admission Officer';
+        $data['usermanagement'] = true;
+        $data['managers'] = User::where('role','manager')->where('active',1)->get();
+        $data['get_campuses'] = Campus::where('active',1)->get();
+        $data['countries'] = Service::countries();
+        return view('users/edit_admission_manager_by_manager',$data);
+    }
+    public function edit_admission_manager_by_manager_post(Request $request){
+        $request->validate([
+            'officer_name' => 'required',
+            'officer_phone' => 'required',
+            'officer_email' => 'required',
+            'officer_alternative_contact' => 'required',
+            'officer_nid_or_passport' => 'required',
+            'nationality' => 'required',
+            'country' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'address' => 'required',
+            'name' => 'required',
+        ]);
+        //first create user
+        $first_name = "";
+        $last_name = "";
+        $user = User::where('id',$request->user_id)->first();
+        $user->name = $request->name;
+        if($user->name){
+            $array = explode(" ",$user->name);
+            foreach($array as $key=>$row){
+                if($key==0){
+                    $first_name = $row;
+                }
+                if(!empty($row) && $key != 0){
+                    $last_name .= $row.' ';
+                }
+            }
+        }
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->phone = $request->officer_phone;
+        $user->create_by = Auth::user()->id;
+        //photo upload
+        $photo = $request->photo;
+        if ($request->hasFile('photo')) {
+            if (File::exists(public_path($user->photo))) {
+                File::delete(public_path($user->photo));
+            }
+            $ext = $photo->getClientOriginalExtension();
+            $filename = $photo->getClientOriginalName();
+            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+            $image_resize = Image::make($photo->getRealPath());
+            $image_resize->resize(200, 200);
+            $upload_path = 'backend/images/users/admission_manager/';
+            Service::createDirectory($upload_path);
+            $image_resize->save(public_path('backend/images/users/admission_manager/'.$filename));
+            $user->photo = 'backend/images/users/admission_manager/'.$filename;
+        }
+        $user->save();
+        //create admission officer now
+        $officer = AdmissionOfficer::where('user_id',$user->id)->first();
+        $officer->campus_id = $request->campus_id;
+        $officer->user_id = $user->id;
+        $officer->officer_name = $request->officer_name;
+        $officer->officer_phone = $request->officer_phone;
+        $officer->officer_email = $request->officer_email;
+        $officer->officer_alternative_contact = $request->officer_alternative_contact;
+        $officer->officer_nid_or_passport = $request->officer_nid_or_passport;
+        $officer->nationality = $request->nationality;
+        $officer->country = $request->country;
+        $officer->state = $request->state;
+        $officer->city = $request->city;
+        $officer->address = $request->address;
+        $officer->save();
+        Session::put('saved_user_id',$user->id);
+        Session::flash('success','Successfully Updated Admission Manager Information!');
+        if(!empty(Session::get('current_url'))){
+            return redirect(Session::get('current_url'));
+        }else{
+            return redirect('my-team-list');
+        }
+    }
     //edit manager data 
     //edit admission manager
     public function edit_manager($slug=NULL){
@@ -262,6 +475,7 @@ class UserController extends Controller{
         }
         $data['page_title'] = 'User | Edit Admission Manager';
         $data['usermanagement'] = true;
+        //$data['managers'] = User::where('role','manager')->where('active',1)->get();
         $data['get_campuses'] = Campus::where('active',1)->get();
         $data['countries'] = Service::countries();
         return view('users/edit_manager',$data);
@@ -287,6 +501,7 @@ class UserController extends Controller{
         $user->first_name = $first_name;
         $user->last_name = $last_name;
         $user->phone = $request->officer_phone;
+        //$user->create_by = $request->manager_id;
         //photo upload
         $photo = $request->photo;
         if ($request->hasFile('photo')) {
@@ -543,6 +758,7 @@ class UserController extends Controller{
         }
         $data['page_title'] = 'User | Edit Admission Officer';
         $data['usermanagement'] = true;
+        $data['managers'] = User::where('role','manager')->where('active',1)->get();
         $data['get_campuses'] = Campus::where('active',1)->get();
         $data['countries'] = Service::countries();
         return view('users/edit_admission_manager',$data);
@@ -567,6 +783,7 @@ class UserController extends Controller{
         }
         $user->first_name = $first_name;
         $user->last_name = $last_name;
+        $user->create_by = $request->manager_id;
         $user->phone = $request->officer_phone;
         //photo upload
         $photo = $request->photo;

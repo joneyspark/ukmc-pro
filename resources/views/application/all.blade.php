@@ -1,5 +1,43 @@
 @extends('adminpanel')
 @section('admin')
+<div class="modal fade inputForm-modal" id="assignToModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header" id="inputFormModalLabel">
+            <h5 class="modal-title"><b>Assign To Manager</b></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <div class="mt-0">
+            <form action="{{ URL::to('application-assign-to') }}" id="" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Assign To User:</label>
+                                <input type="hidden" name="assign_application_ids" id="assign_application_ids" />
+                                <select name="assign_to_user_id" id="assign_to_user_id" class="form-select">
+                                    <option value="" selected>Choose...</option>
+                                    @foreach ($my_teams as $urow)
+                                    <option value="{{ $urow->id }}">{{ $urow->name }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('assign_to_user_id'))
+                                    <span class="text-danger">{{ $errors->first('assign_to_user_id') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
+                    <button id="btn-note-submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" >Submit</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+</div>
 <div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -200,14 +238,18 @@
         </div>
         
         <h5 class="pt-3">All Application Here</h5>
+        
         <div class="row layout-top-spacing">
-
+            <a data-bs-toggle="modal" data-bs-target="#assignToModal" class="assignToDisplay assignToBtn dropdown-item" href="#">Assign To</a>
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-8">
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
+                                    <th class="checkbox-area" scope="col">
+                                        
+                                    </th>
                                     <th>Application ID</th>
                                     <th>Name</th>
                                     <th>Campus</th>
@@ -222,6 +264,11 @@
                             <tbody>
                                 @forelse ($application_list as $row)
                                 <tr>
+                                    <td>
+                                        <div class="form-check form-check-primary">
+                                            <input value="{{ (!empty($row->id)?$row->id:'') }}" class="assignto{{ $row->id }} form-check-input striped_child" type="checkbox">
+                                        </div>
+                                    </td>
                                     <td>{{ (!empty($row->id)?'UKMC-'.$row->id:'') }}</td>
                                     <td>
                                         <div class="media">
@@ -375,5 +422,45 @@
     .error{
         color: #a90606 !important;
     }
+    .assignToDisplay{
+        display: none;
+    }
+    .assignToBtn{
+        color: #f7bd1a !important;
+        margin-left: 14px;
+        font-size: 15px !important;
+    }
 </style>
+<script src="{{ asset('web/js/jquery.js') }}"></script>
+<script>
+    var selectedValues = [];
+    $('.form-check-input').on('change', function() {
+    if ($(this).is(':checked')) {
+        var value = $(this).val();
+        selectedValues.push(value);
+        $('.assignToDisplay').show();
+        $('#assign_application_ids').val(selectedValues);
+    } else {
+        var valueIndex = selectedValues.indexOf($(this).val());
+        if (valueIndex !== -1) {
+            selectedValues.splice(valueIndex, 1);
+        }
+        if(selectedValues.length === 0){
+            $('.assignToDisplay').hide();
+        }
+        $('#assign_application_ids').val(selectedValues);
+    }
+
+    var selectedValue = selectedValues.join(',');
+    console.log(selectedValue);
+    // Perform any further actions with the selected values
+});
+</script>
+@if($errors->has('assign_to_user_id'))
+<script>
+    $(document).ready(function() {
+        $('#assignToModal').modal('show');
+    });
+</script>
+@endif
 @stop

@@ -22,6 +22,7 @@ class EditAdmissionManagerRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'manager_id' => 'required',
             'officer_name' => 'required',
             'officer_phone' => 'required',
             'officer_email' => 'required',

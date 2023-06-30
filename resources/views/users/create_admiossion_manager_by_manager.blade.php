@@ -30,7 +30,7 @@
                     </header>
                 </div>
             </div>
-            <form method="post" action="{{ URL::to('create-admission-manager-post-data') }}" enctype="multipart/form-data">
+            <form method="post" action="{{ URL::to('create-admission-manager-by-manager-post') }}" enctype="multipart/form-data">
                 @csrf
                 <div id="card_1" class="col-lg-12 layout-spacing layout-top-spacing">
                     <div class="statbox widget box box-shadow">
@@ -39,7 +39,7 @@
                                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                                     <div class="d-flex align-items-start justify-content-between">
                                         <h4>Admission Officer Information</h4>
-                                        <a href="{{ URL::to('user-list') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex items-center"> User
+                                        <a href="{{ URL::to('my-team-list') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex items-center"> My Team
                                             List <svg xmlns="http://www.w3.org/2000/svg" width="20"
                                                 height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -49,23 +49,6 @@
                                                 </circle>
                                             </svg></a>
                                     </div><br>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Manager</label>
-                                        <select name="manager_id" class="form-control">
-                                            <option value="">Select a Manager</option>
-                                            @forelse ($managers as $mlist)
-                                            <option value="{{ $mlist->id }}">{{ $mlist->name }}</option>
-                                            @empty
-                                            <option value="">No Data</option>
-                                            @endforelse
-                                        </select>
-                                        @if ($errors->has('manager_id'))
-                                            <span class="text-danger">{{ $errors->first('manager_id') }}</span>
-                                        @endif
-                                        
-                                        <!---->
-                                    </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">Officer
