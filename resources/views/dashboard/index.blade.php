@@ -1,6 +1,6 @@
 @extends('adminpanel')
 @section('admin')
-@if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
+@if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
 <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <!--  BEGIN BREADCRUMBS  -->
@@ -128,7 +128,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 layout-spacing">
@@ -144,7 +144,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 layout-spacing">
@@ -160,7 +160,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -207,7 +207,7 @@
                                             <span class="badge badge-danger">Rejected</span>
                                             @else
                                             @endif
-                                            
+
                                         </div></td>
                                     </tr>
                                     @endforeach

@@ -1,92 +1,6 @@
 @extends('adminpanel')
 @section('admin')
-@if(Auth::user()->role=='manager')
-<div class="modal fade inputForm-modal" id="assignToModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
 
-        <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Assign To Manager</b></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-        </div>
-        <div class="mt-0">
-            <form action="{{ URL::to('application-assign-to') }}" id="" method="post">
-                @csrf
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="col">
-                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Assign To User:</label>
-                                <input type="hidden" name="assign_application_ids" id="assign_application_ids" />
-                                <select name="assign_to_user_id" id="assign_to_user_id" class="form-select">
-                                    <option value="" selected>Choose...</option>
-                                    @foreach ($my_teams as $urow)
-                                    <option value="{{ $urow->id }}">{{ $urow->name }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('assign_to_user_id'))
-                                    <span class="text-danger">{{ $errors->first('assign_to_user_id') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                    <button id="btn-note-submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" >Submit</button>
-                </div>
-            </form>
-        </div>
-      </div>
-    </div>
-</div>
-@endif
-@if(Auth::user()->role=='admin')
-<div class="modal fade inputForm-modal" id="assignToModal1" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-
-        <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Assign To Admission Manager Manager</b></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-        </div>
-        <div class="mt-0">
-            <form action="{{ URL::to('application-assign-to-manager') }}" id="" method="post">
-                @csrf
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="col">
-                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Assign To User:</label>
-                                <input type="hidden" name="assign_application_ids" id="assign_application_ids" />
-                                <select name="assign_to_manager_id" id="assign_to_manager_id" class="form-select" onchange="getAdmissionOfficer()">
-                                    <option value="" selected>Choose...</option>
-                                    @foreach ($admin_managers as $amrow)
-                                    <option value="{{ $amrow->id }}">{{ $amrow->name }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('assign_to_manager_id'))
-                                    <span class="text-danger">{{ $errors->first('assign_to_manager_id') }}</span>
-                                @endif
-                                <br>
-                                <select name="assign_to_admission_manager_id" id="assign_to_admission_manager_id" class="assign-to-list form-select">
-                                    <option value="" selected>Choose...</option>
-                                </select>
-                                @if ($errors->has('assign_to_admission_manager_id'))
-                                    <span class="text-danger">{{ $errors->first('assign_to_admission_manager_id') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                    <button id="btn-note-submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" >Submit</button>
-                </div>
-            </form>
-        </div>
-      </div>
-    </div>
-</div>
-@endif
 <div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -219,7 +133,7 @@
                  <div class="row">
                      <div class="row mb-2">
                         <div class="col-4">
-                            <select id="campus" name="campus" class="form-control" onchange="getApplicationData()">
+                            <select id="campus" name="campus" class="form-control" onchange="getAssignedApplicationData()">
                                 <option value="">Select Campus</option>
                                 @if(count($campuses) > 0)
                                 @foreach ($campuses as $campus1)
@@ -229,17 +143,17 @@
                             </select>
                          </div>
                          <div class="col-4">
-                            <select id="agent" name="agent" class="form-control" onchange="getApplicationData()">
+                            <select id="agent" name="agent" class="form-control" onchange="getAssignedApplicationData()">
                                 <option value="">Select Agent</option>
                                 @if(count($agents) > 0)
                                 @foreach ($agents as $agent)
-                                <option {{ (!empty($get_agent) && $get_agent==$agent->id)?'selected':'' }} value="{{ $agent->id }}">{{ $agent->name }}</option>
+                                <option {{ (!empty($get_agent) && $get_agent==$agent->id)?'selected':'' }} value="{{ $agent->id }}">{{ $agent->company_name }}</option>
                                 @endforeach
                                 @endif
                             </select>
                          </div>
                          <div class="col-4">
-                            <select id="officer" name="officer" class="form-control" onchange="getApplicationData()">
+                            <select id="officer" name="officer" class="form-control" onchange="getAssignedApplicationData()">
                                 <option value="">Select Admission Manager</option>
                                 @if(count($officers) > 0)
                                 @foreach ($officers as $officer)
@@ -251,7 +165,7 @@
                      </div>
                      <div class="row">
                         <div class="col-3">
-                            <select id="status" name="status" class="form-control" onchange="getApplicationData()">
+                            <select id="status" name="status" class="form-control" onchange="getAssignedApplicationData()">
                                 <option value="">Select Status</option>
                                 @if(count($statuses) > 0)
                                 @foreach ($statuses as $status)
@@ -261,7 +175,7 @@
                             </select>
                          </div>
                          <div class="col-2">
-                            <select id="intake" name="intake" class="form-control" onchange="getApplicationData()">
+                            <select id="intake" name="intake" class="form-control" onchange="getAssignedApplicationData()">
                                 <option value="">Select Intake</option>
                                 @if(count($intakes) > 0)
                                 @foreach ($intakes as $intake)
@@ -277,7 +191,7 @@
                             <input type="submit" value="Filter" name="time" class="btn btn-warning">
                          </div>
                          <div class="col-1">
-                            <a href="{{ URL::to('reset-application-search') }}" class="btn btn-danger">Reset</a>
+                            <a href="{{ URL::to('reset-my-assigned-application-search') }}" class="btn btn-danger">Reset</a>
                          </div>
                      </div>
 
@@ -289,12 +203,6 @@
         <h5 class="pt-3">All Application Here</h5>
 
         <div class="row layout-top-spacing">
-            @if(Auth::user()->role=='manager')
-            <a data-bs-toggle="modal" data-bs-target="#assignToModal" class="assignToDisplay assignToBtn dropdown-item" href="#">Assign To</a>
-            @endif
-            @if(Auth::user()->role=='admin')
-            <a data-bs-toggle="modal" data-bs-target="#assignToModal1" class="assignToDisplay1 assignToBtn1 dropdown-item" href="#">Assign To</a>
-            @endif
 
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-8">
@@ -302,9 +210,6 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="checkbox-area" scope="col">
-
-                                    </th>
                                     <th>Application ID</th>
                                     <th>Name</th>
                                     <th>Campus</th>
@@ -319,11 +224,6 @@
                             <tbody>
                                 @forelse ($application_list as $row)
                                 <tr>
-                                    <td>
-                                        <div class="form-check form-check-primary">
-                                            <input value="{{ (!empty($row->id)?$row->id:'') }}" class="assignto{{ $row->id }} form-check-input striped_child" type="checkbox">
-                                        </div>
-                                    </td>
                                     <td>{{ (!empty($row->id)?'UKMC-'.$row->id:'') }}</td>
                                     <td>
                                         <div class="media">
@@ -369,24 +269,7 @@
                                     </td>
 
                                     <td>
-                                        @if(Auth::user()->role=='adminManager')
-                                            @if($row->admission_officer_id==0 || $row->admission_officer_id==Auth::user()->id)
-                                            <div
-                                                class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
-                                                <div class="input-checkbox">
-                                                    <span class="switch-chk-label label-left">On</span>
-                                                    <input {{ ($row->admission_officer_id==Auth::user()->id)?'checked':'' }} data-action="{{ URL::to('application/assign-to-me') }}" data-id="{{ $row->id }}" class="assign-to-me-status switch-input" type="checkbox"
-                                                                                role="switch" id="form-custom-switch-inner-text">
-                                                    <span class="switch-chk-label label-right">Off</span>
-                                                </div>
-                                            </div>
-                                            @else
-                                            <span>
-                                                {{ (!empty($row->assign->name))?$row->assign->name:'' }}
-                                            </span>
-                                            @endif
-                                        @endif
-                                        @if(Auth::user()->role=='admin')
+                                        @if(Auth::user()->role=='manager')
                                         <span>
                                             {{ (!empty($row->assign->name))?$row->assign->name:'' }}
                                         </span>
@@ -495,84 +378,16 @@
     }
 </style>
 <script src="{{ asset('web/js/jquery.js') }}"></script>
+<script>
+    function getAssignedApplicationData(){
+        var campus = $('#campus').val();
+        var agent = $('#agent').val();
+        var officer = $('#officer').val();
+        var status = $('#status').val();
+        var intake = $('#intake').val();
+        window.location = "{{ URL::to('my-assigned-applications?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake;
+    }
+</script>
 
-@if(Auth::user()->role=='manager')
-    <script>
-        var selectedValues = [];
-        $('.form-check-input').on('change', function() {
-        if ($(this).is(':checked')) {
-            var value = $(this).val();
-            selectedValues.push(value);
-            $('.assignToDisplay').show();
-            $('#assign_application_ids').val(selectedValues);
-        } else {
-            var valueIndex = selectedValues.indexOf($(this).val());
-            if (valueIndex !== -1) {
-                selectedValues.splice(valueIndex, 1);
-            }
-            if(selectedValues.length === 0){
-                $('.assignToDisplay').hide();
-            }
-            $('#assign_application_ids').val(selectedValues);
-        }
-
-        var selectedValue = selectedValues.join(',');
-        console.log(selectedValue);
-        // Perform any further actions with the selected values
-    });
-    </script>
-    @if($errors->has('assign_to_user_id'))
-    <script>
-        $(document).ready(function() {
-            $('#assignToModal').modal('show');
-        });
-    </script>
-    @endif
-@endif
-
-@if(Auth::user()->role=='admin')
-    <script>
-        var selectedValues = [];
-        $('.form-check-input').on('change', function() {
-        if ($(this).is(':checked')) {
-            var value = $(this).val();
-            selectedValues.push(value);
-            $('.assignToDisplay1').show();
-            $('#assign_application_ids').val(selectedValues);
-        } else {
-            var valueIndex = selectedValues.indexOf($(this).val());
-            if (valueIndex !== -1) {
-                selectedValues.splice(valueIndex, 1);
-            }
-            if(selectedValues.length === 0){
-                $('.assignToDisplay1').hide();
-            }
-            $('#assign_application_ids').val(selectedValues);
-        }
-
-        var selectedValue = selectedValues.join(',');
-        console.log(selectedValue);
-        // Perform any further actions with the selected values
-    });
-    </script>
-    @if($errors->has('assign_to_admission_manager_id') || $errors->has('assign_to_manager_id'))
-    <script>
-        $(document).ready(function() {
-            $('#assignToModal1').modal('show');
-        });
-    </script>
-    @endif
-    <script>
-        function getAdmissionOfficer(){
-            var getId = $('#assign_to_manager_id').val();
-            $.get('{{ URL::to('get-admission-officer-by-manager') }}/'+getId,function(data,status){
-                if(data['result']['key']===200){
-                    console.log(data['result']['val']);
-                    $('#assign_to_admission_manager_id').html(data['result']['val']);
-                }
-            });
-        }
-    </script>
-@endif
 
 @stop

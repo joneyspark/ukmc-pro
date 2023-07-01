@@ -50,6 +50,16 @@
                     <a href="{{ URL::to('student-portal') }}"> My Application</a>
                 </li>
                 @endif
+                @if(Auth::check() && Auth::user()->role=='adminManager')
+                <li class="{{ (!empty($my_application_list) && $my_application_list==true)?'active':'' }}">
+                    <a href="{{ URL::to('my-applications') }}"> My Application</a>
+                </li>
+                @endif
+                @if(Auth::check() && Auth::user()->role=='manager')
+                <li class="{{ (!empty($my_assigned_application_list) && $my_assigned_application_list==true)?'active':'' }}">
+                    <a href="{{ URL::to('my-assigned-applications') }}"> My Application</a>
+                </li>
+                @endif
                 @if(Auth::check() && Auth::user()->role=='agent')
                 <li class="{{ (!empty($application_all) && $application_all==true)?'active':'' }}">
                     <a href="{{ URL::to('agent-applications') }}"> Agent Applications </a>

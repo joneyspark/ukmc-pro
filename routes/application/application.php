@@ -44,8 +44,8 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('student-portal', 'student_portal');
     Route::post('get-academic-data', 'get_academic_data');
     Route::get('reset-agent-application-search', 'reset_agent_application_search');
-
-    //step 1 new system
+    Route::post('application-assign-to-manager', 'application_assign_to_manager');
+    Route::get('get-admission-officer-by-manager/{id?}', 'get_admission_officer_by_manager');
 
     Route::get('application-step1-new/{id?}', 'application_step1_new');
     Route::post('application-step1-post', 'application_step1_post');
@@ -54,6 +54,11 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('qualification-post', 'qualification_post');
     Route::post('experience-post', 'experience_post');
     Route::post('application-assign-to', 'application_assign_to');
+    Route::get('my-applications', 'my_applications');
+    Route::get('reset-my-application-search', 'reset_my_application_search');
+
+    Route::get('my-assigned-applications', 'my_assigned_applications');
+    Route::get('reset-my-assigned-application-search', 'reset_my_assigned_application_search');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

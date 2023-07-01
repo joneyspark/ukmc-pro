@@ -439,7 +439,7 @@ class ApplicationController extends Controller{
         }
         //update step
         $document = ApplicationDocument::where('application_id',$application->id)->count();
-        
+
         $data['document_count'] = $document;
         $data['application_documents'] = ApplicationDocument::where('application_id',$application->id)->get();
         $data['application_id'] = $application->id;
@@ -543,7 +543,7 @@ class ApplicationController extends Controller{
         if(Auth::check()){
             $role = Auth::user()->role;
         }
-        
+
         $application = Application::where('id',$request->application_id)->first();
         if(!$application){
             Session::flash('error','Internal Server Error!');
@@ -633,7 +633,7 @@ class ApplicationController extends Controller{
                     $url = url('application/'.$application->id.'/details');
                     event(new AddNewLead($message,$url));
             }
-            
+
             $application_step3 = new Application_Step_3();
         }
         $application_step3->application_id = $application->id;
@@ -648,6 +648,9 @@ class ApplicationController extends Controller{
         }
         if($role=='admin' || $role=='manager'){
             return redirect('all-application');
+        }
+        if($role=='adminManager'){
+            return redirect('my-applications');
         }
         return view('application/thankyou');
     }
@@ -767,6 +770,7 @@ class ApplicationController extends Controller{
         $data['page_title'] = 'Application | All';
         $data['application'] = true;
         $data['application_all'] = true;
+        $data['my_application_list'] = true;
         if(Auth::user()->role=='agent'){
             $data['app_data'] = Application::where('company_id',Auth::user()->company_id)->where('id',$id)->first();
         }else{
@@ -844,7 +848,8 @@ class ApplicationController extends Controller{
             return $query->where('intake',$get_intake);
         })
         ->where('application_status_id','!=',0)
-        ->orderBy('id','desc')
+        ->where('admission_officer_id',0)
+        ->orderBy('created_at','desc')
         ->paginate(15)
         ->appends([
             'q' => $search,
@@ -856,6 +861,7 @@ class ApplicationController extends Controller{
         ]);
 
         $data['my_teams'] = User::where('role','adminManager')->where('create_by',Auth::user()->id)->get();
+        $data['admin_managers'] = User::where('role','manager')->where('active',1)->get();
 
         $data['get_campus'] = Session::get('get_campus');
         $data['get_agent'] = Session::get('get_agent');
@@ -874,6 +880,23 @@ class ApplicationController extends Controller{
         Session::put('get_intake','');
         Session::put('search','');
         return redirect('all-application');
+    }
+    public function reset_my_assigned_application_search(){
+        Session::put('get_campus','');
+        Session::put('get_agent','');
+        Session::put('get_officer','');
+        Session::put('get_status','');
+        Session::put('get_intake','');
+        Session::put('search','');
+        return redirect('my-assigned-applications');
+    }
+    public function reset_my_application_search(){
+        Session::put('get_campus','');
+        Session::put('get_agent','');
+        Session::put('get_status','');
+        Session::put('get_intake','');
+        Session::put('search','');
+        return redirect('my-applications');
     }
     public function reset_agent_application_search(){
         Session::put('get_campus','');
@@ -1303,7 +1326,7 @@ class ApplicationController extends Controller{
         );
         return response()->json($data,200);
     }
-    //application assign to user 
+    //application assign to user
     public function application_assign_to(Request $request){
         $request->validate([
             'assign_to_user_id'=>'required',
@@ -1323,7 +1346,7 @@ class ApplicationController extends Controller{
             }
         }
         $count = count($array);
-        //create notification 
+        //create notification
         $notification = new Notification();
         $notification->title = 'Assign Lead';
         $notification->description = $count.' New Application Assigned By '.Auth::user()->name;
@@ -1342,6 +1365,204 @@ class ApplicationController extends Controller{
         event(new AddNewLead($notification->description,$url));
         Session::flash('success',$count.' Application Assigned Successfully!');
         return redirect('all-application');
+    }
+    //application assign to Manager
+    public function application_assign_to_manager(Request $request){
+        $request->validate([
+            'assign_to_admission_manager_id'=>'required',
+            'assign_to_manager_id'=>'required',
+        ]);
+        $getIds = $request->assign_application_ids;
+        if(!$getIds){
+            Session::flash('error','Internal Server Error! Application Data Not Found!');
+            return redirect('all-application');
+        }
+        $array = explode(",",$getIds);
+        foreach($array as $row){
+            $getApp = Application::where('id',$row)->where('admission_officer_id',0)->first();
+            if($getApp){
+                $getApp->admission_officer_id = $request->assign_to_admission_manager_id;
+                $getApp->manager_id = $request->assign_to_manager_id;
+                $getApp->save();
+            }
+        }
+        $count = count($array);
+        //create notification
+        $notification = new Notification();
+        $notification->title = 'Assign Lead';
+        $notification->description = $count.' New Application Assigned By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = url(Auth::user()->photo);
+        $notification->user_id = $request->assign_to_admission_manager_id;
+        $notification->is_admin = 1;
+        $notification->manager_id = 1;
+        $notification->application_id = 0;
+        $notification->slug = 'my-application';
+        $notification->save();
+        //make instant messaging
+        $url = url('my-application');
+        event(new AddNewLead($notification->description,$url));
+        Session::flash('success',$count.' Application Assigned Successfully!');
+        return redirect('all-application');
+    }
+    //get admission officer by manager id
+    public function get_admission_officer_by_manager($id=NULL){
+        $officers = User::where('create_by',$id)->where('role','adminManager')->where('active',1)->get();
+        $select = '';
+        $select .= '<option value="" selected>Choose...</option>';
+        foreach($officers as $officer){
+            $select .= '<option value="'.$officer->id.'">'.$officer->name.'</option>';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select,
+        );
+        return response()->json($data,200);
+    }
+    //get my application
+    public function my_applications(Request $request){
+        $data['page_title'] = 'Application | All';
+        $data['application'] = true;
+        $data['my_application_list'] = true;
+        $get_campus = $request->campus;
+        $get_agent = $request->agent;
+        $get_officer = $request->officer;
+        $get_status = $request->status;
+        $get_intake = $request->intake;
+        $search = $request->q;
+        //Session set data
+        Session::put('get_campus',$get_campus);
+        Session::put('get_agent',$get_agent);
+        Session::put('get_officer',$get_officer);
+        Session::put('get_status',$get_status);
+        Session::put('get_intake',$get_intake);
+        Session::put('search',$search);
+
+        $data['campuses'] = Campus::where('active',1)->get();
+        $data['agents'] = Company::where('status',1)->get();
+        $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
+        $data['statuses'] = Status::where('status',0)->get();
+        $data['intakes'] = $this->unique_intake_info();
+
+        $data['application_list'] = Application::query()
+        ->when($search, function ($query, $search) {
+            return $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            });
+        })
+        ->when($get_campus, function ($query, $get_campus) {
+            return $query->where('campus_id',$get_campus);
+        })
+        ->when($get_agent, function ($query, $get_agent) {
+            return $query->where('company_id',$get_agent);
+        })
+        ->when($get_officer, function ($query, $get_officer) {
+            return $query->where('admission_officer_id',$get_officer);
+        })
+        ->when($get_status, function ($query, $get_status) {
+            return $query->where('status',$get_status);
+        })
+        ->when($get_intake, function ($query, $get_intake) {
+            return $query->where('intake',$get_intake);
+        })
+        ->where('application_status_id','!=',0)
+        ->where('admission_officer_id',Auth::user()->id)
+        ->orderBy('created_at','desc')
+        ->paginate(15)
+        ->appends([
+            'q' => $search,
+            'campus' => $get_campus,
+            'agent' => $get_campus,
+            'officer' => $get_campus,
+            'status' => $get_campus,
+            'intake' => $get_campus,
+        ]);
+
+        $data['my_teams'] = User::where('role','adminManager')->where('create_by',Auth::user()->id)->get();
+        $data['admin_managers'] = User::where('role','manager')->where('active',1)->get();
+
+        $data['get_campus'] = Session::get('get_campus');
+        $data['get_agent'] = Session::get('get_agent');
+        $data['get_officer'] = Session::get('get_officer');
+        $data['get_status'] = Session::get('get_status');
+        $data['get_intake'] = Session::get('get_intake');
+        $data['search'] = Session::get('search');
+        //$data['application_list'] = Application::where('application_status_id','!=',0)->orderBy('id','desc')->paginate(15);
+        return view('application/my_application',$data);
+    }
+    public function my_assigned_applications(Request $request){
+        $data['page_title'] = 'Application | All';
+        $data['application'] = true;
+        $data['my_assigned_application_list'] = true;
+        $get_campus = $request->campus;
+        $get_agent = $request->agent;
+        $get_officer = $request->officer;
+        $get_status = $request->status;
+        $get_intake = $request->intake;
+        $search = $request->q;
+        //Session set data
+        Session::put('get_campus',$get_campus);
+        Session::put('get_agent',$get_agent);
+        Session::put('get_officer',$get_officer);
+        Session::put('get_status',$get_status);
+        Session::put('get_intake',$get_intake);
+        Session::put('search',$search);
+
+        $data['campuses'] = Campus::where('active',1)->get();
+        $data['agents'] = Company::where('status',1)->get();
+        $data['officers'] = User::where('role','adminManager')->where('create_by',Auth::user()->id)->where('active',1)->get();
+        $data['statuses'] = Status::where('status',0)->get();
+        $data['intakes'] = $this->unique_intake_info();
+
+        $data['application_list'] = Application::query()
+        ->when($search, function ($query, $search) {
+            return $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            });
+        })
+        ->when($get_campus, function ($query, $get_campus) {
+            return $query->where('campus_id',$get_campus);
+        })
+        ->when($get_agent, function ($query, $get_agent) {
+            return $query->where('company_id',$get_agent);
+        })
+        ->when($get_officer, function ($query, $get_officer) {
+            return $query->where('admission_officer_id',$get_officer);
+        })
+        ->when($get_status, function ($query, $get_status) {
+            return $query->where('status',$get_status);
+        })
+        ->when($get_intake, function ($query, $get_intake) {
+            return $query->where('intake',$get_intake);
+        })
+        ->where('application_status_id','!=',0)
+        ->where('manager_id',Auth::user()->id)
+        ->orderBy('created_at','desc')
+        ->paginate(15)
+        ->appends([
+            'q' => $search,
+            'campus' => $get_campus,
+            'agent' => $get_campus,
+            'officer' => $get_campus,
+            'status' => $get_campus,
+            'intake' => $get_campus,
+        ]);
+        $data['get_campus'] = Session::get('get_campus');
+        $data['get_agent'] = Session::get('get_agent');
+        $data['get_officer'] = Session::get('get_officer');
+        $data['get_status'] = Session::get('get_status');
+        $data['get_intake'] = Session::get('get_intake');
+        $data['search'] = Session::get('search');
+
+        //dd($data['application_list']);
+        //$data['application_list'] = Application::where('application_status_id','!=',0)->orderBy('id','desc')->paginate(15);
+        return view('application/my_assigned_application',$data);
     }
 
 }
