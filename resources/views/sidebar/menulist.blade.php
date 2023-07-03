@@ -8,7 +8,7 @@
                 </a>
             </div>
             <div class="nav-item theme-text">
-                <a href="#" class="nav-link"> UKMC </a>
+                <a href="#" class="nav-link"> MyMac </a>
             </div>
         </div>
         <div class="nav-item sidebar-toggle">
@@ -148,9 +148,6 @@
                     <a href="{{ URL::to('all-course') }}"> All Course </a>
                 </li>
                 @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager' || Auth::user()->role=='manager')
-                <li class="{{ (!empty($course_archive) && $course_archive==true)?'active':'' }}">
-                    <a href="{{ URL::to('archived-courses') }}"> Archive Course </a>
-                </li>
                 <li class="{{ (!empty($course_categories) && $course_categories==true)?'active':'' }}">
                     <a href="{{ URL::to('course-categories') }}"> Course Categories </a>
                 </li>

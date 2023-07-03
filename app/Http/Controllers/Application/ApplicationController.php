@@ -1294,6 +1294,20 @@ class ApplicationController extends Controller{
             $request->file('video')->move(public_path('backend/images/meeting/video_file/'), $doc_file_name);
             $meeting->video = $upload_path1.$doc_file_name;
         }
+        //meeting doc file upload
+        $meeting_doc = $request->meeting_doc;
+        if ($request->hasFile('meeting_doc')) {
+            if (File::exists(public_path($meeting->meeting_doc))) {
+                File::delete(public_path($meeting->meeting_doc));
+            }
+            $ext = $meeting_doc->getClientOriginalExtension();
+            $doc_file_name = $meeting_doc->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $upload_path1 = 'backend/images/meeting/meeting_doc/';
+            Service::createDirectory($upload_path1);
+            $request->file('meeting_doc')->move(public_path('backend/images/meeting/meeting_doc/'), $doc_file_name);
+            $meeting->meeting_doc = $upload_path1.$doc_file_name;
+        }
         if($request->video_link){
             $meeting->video_url = $request->video_link;
         }

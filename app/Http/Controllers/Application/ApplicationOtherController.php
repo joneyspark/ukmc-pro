@@ -243,6 +243,18 @@ class ApplicationOtherController extends Controller
         $note->application_id = $request->application_id;
         $note->meeting_notes = $request->application_meeting;
         $note->meeting_date_time = $request->meeting_date;
+        //meeting doc file upload
+        $meeting_doc = $request->meeting_doc;
+        if ($request->hasFile('meeting_doc')) {
+
+            $ext = $meeting_doc->getClientOriginalExtension();
+            $doc_file_name = $meeting_doc->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $upload_path1 = 'backend/images/meeting/meeting_doc/';
+            Service::createDirectory($upload_path1);
+            $request->file('meeting_doc')->move(public_path('backend/images/meeting/meeting_doc/'), $doc_file_name);
+            $note->meeting_doc = $upload_path1.$doc_file_name;
+        }
         $note->user_id = Auth::user()->id;
         $note->save();
         //make notification

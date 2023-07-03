@@ -78,6 +78,11 @@
                                         <a style="color: rgb(36, 36, 240);" href="{{ $meeting_data->video_url }}" target="_blank">Video Link</a>
                                     </div>
                                 </div>
+                                <div class="col">
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Meeting Doc File</label>
+                                        <a download style="color: rgb(36, 36, 240);" href="{{ asset($meeting_data->meeting_doc) }}" target="_blank">Doc File Link</a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-12">
@@ -91,6 +96,10 @@
                                         <div class="col-5">
                                             <div class="form-group"><label for="exampleFormControlInput1">Video Link</label></div>
                                             <input name="video_link" id="video_link" type="text" class="form-control">
+                                        </div><br>
+                                        <div class="col-5">
+                                            <div class="form-group"><label for="exampleFormControlInput1">Meeting Doc File</label></div>
+                                            <input name="meeting_doc" id="meeting_doc" type="file" class="form-control">
                                         </div>
                                         <div class="col-2">
                                             <button type="submit" class="btn btn-primary btn-lg mr-2"> Submit </button>

@@ -6,7 +6,7 @@
       <div class="modal-content">
 
         <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Assign To Manager</b></h5>
+            <h5 class="modal-title"><b>Assign To Manager by Admin</b></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div class="mt-0">
@@ -46,7 +46,7 @@
       <div class="modal-content">
 
         <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Assign To Admission Manager Manager</b></h5>
+            <h5 class="modal-title"><b>Assign To Admission Manager by Manager</b></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div class="mt-0">
@@ -162,7 +162,7 @@
             <h5 class="modal-title"><b>Meetings</b></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
-        <form id="meeting-form" method="post" class="mt-0">
+        <form id="meeting-form" enctype="multipart/form-data" class="mt-0">
             <div class="modal-body">
                 <div id="meetingnote-data">
 
@@ -170,6 +170,7 @@
                 <div class="form-group">
                     <div class="col">
                         <div class="form-group mb-4"><label for="exampleFormControlInput1">Note:</label>
+                            <input type="hidden" value="{{ URL::to('application-meeting-note-post') }}" id="meeting_url" />
                             <input type="hidden" name="meeting_application_id" id="meeting_application_id" />
                             <textarea id="application_meeting" name="application_meeting" class="form-control" rows="2"></textarea>
                         </div>
@@ -178,6 +179,12 @@
                         <div class="form-group mb-4"><label for="exampleFormControlInput1">Meeting Date:</label>
                             <input name="meeting_date" id="meeting_date" type="datetime-local" class="form-control" />
                         </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Meeting Doc File:</label>
+                            <input name="meeting_doc" id="meeting_doc" type="file" class="form-control" />
+                        </div>
+
                     </div>
                 </div>
             </div>

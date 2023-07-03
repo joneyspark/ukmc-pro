@@ -282,14 +282,19 @@
                                         @endif
                                     </div>
                                     <div class="card-body custom-card-body">
-                                        <form id="meeting-form" method="post">
+                                        <form enctype="multipart/form-data" id="meeting-form" method="post">
                                             <div class="col col-md-12 p-0">
                                                 <div class="form-group lead-drawer-form">
-                                                    <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="meeting_application_id" id="meeting_application_id" />
-                                                    <textarea id="application_meeting" name="application_meeting" class="form-control" rows="2"></textarea>
+
+                                                    <input type="hidden" value="{{ URL::to('application-meeting-note-post') }}" id="meeting_url" />
+                                                    <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" id="meeting_application_id" />
+                                                    <textarea name="application_meeting" id="application_meeting" class="form-control" rows="2"></textarea>
                                                 </div><br>
                                                 <div class="col col-md-12 p-0">
                                                     <input name="meeting_date" id="meeting_date" type="datetime-local" class="form-control" />
+                                                </div><br>
+                                                <div class="col col-md-12 p-0">
+                                                    <input name="meeting_doc" id="meeting_doc" type="file" class="form-control" />
                                                 </div>
                                                 <button id="btn-meeting-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Save</button>
                                             </div>
