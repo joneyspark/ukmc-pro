@@ -96,9 +96,6 @@
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">National ID or
                                             Passport</label>
                                             <input name="officer_nid_or_passport" value="{{ old('officer_nid_or_passport') }}" type="text" class="form-control">
-                                            @if ($errors->has('officer_nid_or_passport'))
-                                                <span class="text-danger">{{ $errors->first('officer_nid_or_passport') }}</span>
-                                            @endif
                                         <!---->
                                     </div>
                                 </div>
@@ -106,9 +103,6 @@
                                     <div class="form-group mb-4"><label
                                             for="exampleFormControlInput1">Nationality</label>
                                             <input name="nationality" value="{{ old('nationality') }}" type="text" class="form-control">
-                                            @if ($errors->has('nationality'))
-                                                <span class="text-danger">{{ $errors->first('nationality') }}</span>
-                                            @endif
                                         <!---->
                                     </div>
                                 </div>
@@ -125,27 +119,20 @@
 
                                             @endforelse
                                         </select>
-                                        @if ($errors->has('country'))
-                                            <span class="text-danger">{{ $errors->first('country') }}</span>
-                                        @endif
                                         <!---->
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">State</label>
                                         <input name="state" value="{{ old('state') }}" type="text" class="form-control">
-                                        @if ($errors->has('state'))
-                                            <span class="text-danger">{{ $errors->first('state') }}</span>
-                                        @endif
+
                                         <!---->
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">City</label>
                                         <input name="city" value="{{ old('city') }}" type="text" class="form-control">
-                                        @if ($errors->has('city'))
-                                            <span class="text-danger">{{ $errors->first('city') }}</span>
-                                        @endif
+
                                         <!---->
                                     </div>
                                 </div>
@@ -156,9 +143,7 @@
                                     <div class="form-group mb-4"><label for="exampleFormControlTextarea1">Address in
                                             Details</label>
                                         <textarea name="address" id="exampleFormControlTextarea1" class="form-control" rows="1" spellcheck="false">{{ old('address') }}</textarea>
-                                        @if ($errors->has('address'))
-                                            <span class="text-danger">{{ $errors->first('address') }}</span>
-                                        @endif
+                                        
                                         <!---->
                                     </div>
                                 </div>

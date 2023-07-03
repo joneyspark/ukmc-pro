@@ -26,12 +26,12 @@ class EditManagerRequest extends FormRequest
             'officer_phone' => 'required',
             'officer_email' => 'required',
             'officer_alternative_contact' => 'required',
-            'officer_nid_or_passport' => 'required',
-            'nationality' => 'required',
-            'country' => 'required',
-            'state' => 'required',
-            'city' => 'required',
-            'address' => 'required',
+            //'officer_nid_or_passport' => 'required',
+            //'nationality' => 'required',
+            //'country' => 'required',
+            //'state' => 'required',
+            //'city' => 'required',
+            //'address' => 'required',
             'name' => 'required',
         ];
     }

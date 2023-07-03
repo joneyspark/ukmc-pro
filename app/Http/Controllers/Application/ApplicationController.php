@@ -81,8 +81,8 @@ class ApplicationController extends Controller{
             'password' => 'required_if:auth,false|min:6|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'required_if:auth,false|min:6',
             'ni_number' => 'required',
-            'emergency_contact_name' => 'required',
-            'emergency_contact_number' => 'required',
+            //'emergency_contact_name' => 'required',
+            //'emergency_contact_number' => 'required',
             'house_number' => 'required',
             'address_line_2' => 'required',
             'city' => 'required',
@@ -423,10 +423,10 @@ class ApplicationController extends Controller{
     }
 
     public function create_step_2($id=NULL){
-        if($id != Session::get('set_application_id')){
-            Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
-            return redirect('application-create/'.Session::get('set_application_id'));
-        }
+        // if($id != Session::get('set_application_id')){
+        //     Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
+        //     return redirect('application-create/'.Session::get('set_application_id'));
+        // }
         $current_step = 1;
         $application = Application::where('id',$id)->first();
         if(!$application){
@@ -512,10 +512,10 @@ class ApplicationController extends Controller{
         return redirect('application-create/'.$application->id.'/step-2');
     }
     public function create_step_3($id=NULL){
-        if($id != Session::get('set_application_id')){
-            Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
-            return redirect('application-create/'.Session::get('set_application_id'));
-        }
+        // if($id != Session::get('set_application_id')){
+        //     Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
+        //     return redirect('application-create/'.Session::get('set_application_id'));
+        // }
         $current_step = 2;
         $application = Application::where('id',$id)->first();
         if(!$application){

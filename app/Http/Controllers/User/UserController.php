@@ -217,12 +217,12 @@ class UserController extends Controller{
             'officer_phone' => 'required',
             'officer_email' => 'required',
             'officer_alternative_contact' => 'required',
-            'officer_nid_or_passport' => 'required',
-            'nationality' => 'required',
-            'country' => 'required',
-            'state' => 'required',
-            'city' => 'required',
-            'address' => 'required',
+            //'officer_nid_or_passport' => 'required',
+            //'nationality' => 'required',
+            //'country' => 'required',
+            //'state' => 'required',
+            //'city' => 'required',
+            //'address' => 'required',
             'photo' => 'required',
             'name' => 'required',
             'email' => 'required|email|unique:users',
@@ -388,12 +388,12 @@ class UserController extends Controller{
             'officer_phone' => 'required',
             'officer_email' => 'required',
             'officer_alternative_contact' => 'required',
-            'officer_nid_or_passport' => 'required',
-            'nationality' => 'required',
-            'country' => 'required',
-            'state' => 'required',
-            'city' => 'required',
-            'address' => 'required',
+            //'officer_nid_or_passport' => 'required',
+            //'nationality' => 'required',
+            //'country' => 'required',
+            //'state' => 'required',
+            //'city' => 'required',
+            //'address' => 'required',
             'name' => 'required',
         ]);
         //first create user
@@ -456,7 +456,7 @@ class UserController extends Controller{
             return redirect('my-team-list');
         }
     }
-    //edit manager data 
+    //edit manager data
     //edit admission manager
     public function edit_manager($slug=NULL){
         if(!Auth::check() && Auth::user()->role != 'admin'){

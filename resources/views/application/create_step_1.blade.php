@@ -190,18 +190,12 @@
                         </div>
                         <div class="row">
                             <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Emergency Contact Name*:</label>
+                                <label for="verticalFormStepform-name">Emergency Contact Name:</label>
                                 <input value="{{ (!empty($app_data->emergency_contact_name))?$app_data->emergency_contact_name:old('emergency_contact_name') }}" type="text" name="emergency_contact_name" class="form-control" id="verticalFormStepform-name">
-                                @if ($errors->has('emergency_contact_name'))
-                                    <span class="text-danger">{{ $errors->first('emergency_contact_name') }}</span>
-                                @endif
                             </div>
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Emergency Contact Number:</label>
                                 <input value="{{ (!empty($app_data->emergency_contact_number))?$app_data->emergency_contact_number:old('emergency_contact_number') }}" type="text" name="emergency_contact_number" class="form-control" id="verticalFormStepform-name">
-                                @if ($errors->has('emergency_contact_number'))
-                                    <span class="text-danger">{{ $errors->first('emergency_contact_number') }}</span>
-                                @endif
                             </div>
                         </div>
                         <div class="row">
