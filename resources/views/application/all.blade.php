@@ -327,9 +327,11 @@
                                 @forelse ($application_list as $row)
                                 <tr>
                                     <td>
+                                        @if($row->admission_officer_id == 0)
                                         <div class="form-check form-check-primary">
                                             <input value="{{ (!empty($row->id)?$row->id:'') }}" class="assignto{{ $row->id }} form-check-input striped_child" type="checkbox">
                                         </div>
+                                        @endif
                                     </td>
                                     <td>{{ (!empty($row->id)?'UKMC-'.$row->id:'') }}</td>
                                     <td>
