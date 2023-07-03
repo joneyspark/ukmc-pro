@@ -251,7 +251,7 @@
                             <div class="card no-outer-spacing no-border-custom">
                                 <div class="card-header">
                                     <section class="mb-0 mt-0">
-                                        <div role="menu" class="" data-toggle="">Meeting</div>
+                                        <div role="menu" class="" data-toggle="">Meeting / Interview</div>
                                     </section>
                                 </div>
                                 <div id="" class="" aria-labelledby="headingTwo2" data-parent="#withoutSpacing">
