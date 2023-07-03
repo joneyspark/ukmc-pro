@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\requestDocumentMail;
+use App\Models\Application\ApplicationStatus;
 use App\Models\Application\Followup;
 use App\Models\Application\Meeting;
 use App\Models\Application\Note;
@@ -643,6 +644,62 @@ class ApplicationOtherController extends Controller
             Session::flash('error','Already Confirmed This Followup!');
             return redirect('interview-list');
         }
+    }
+    //application status
+    public function all_application_status($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Then Create Status!');
+            return redirect('login');
+        }
+        $data['return_application_status_id'] = Session::get('application_status_id');
+        $data['page_title'] = 'Application | Status';
+        $data['application'] = true;
+        $data['application_status'] = true;
+        $data['get_application_status'] = ApplicationStatus::orderBy('id','desc')->paginate(15);
+        if($id){
+            $data['applicatoin_status_data'] = ApplicationStatus::where('id',$id)->first();
+        }
+        Session::forget('application_status_id');
+        return view('application/status/application_status',$data);
+    }
+    public function application_status_store(Request $request){
+        $request->validate([
+            'title' => 'required',
+        ]);
+        $ApplicationId = $request->application_status_id;
+        if($ApplicationId){
+            $ApplicationStatus = ApplicationStatus::where('id',$ApplicationId)->first();
+        }else{
+            $ApplicationStatus = new ApplicationStatus();
+        }
+        $ApplicationStatus->title = $request->title;
+        $ApplicationStatus->save();
+        Session::put('application_status_id',$ApplicationStatus->id);
+        Session::flash('success',(!empty($ApplicationId))?'Application Status Upadted!':'Application Status Saved!');
+        return redirect('all-application-status');
+    }
+    public function application_main_status_change(Request $request){
+        $application_status = ApplicationStatus::where('id',$request->application_status_id)->first();
+        if(!$application_status){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Applicaton Status Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($application_status->status==1){
+            $update = ApplicationStatus::where('id',$application_status->id)->update(['status'=>$request->status]);
+            $msg = 'Applicaton Status Activated';
+        }else{
+            $update = ApplicationStatus::where('id',$application_status->id)->update(['status'=>$request->status]);
+            $msg = 'Applicaton Status Deactivated';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
     }
 
 }

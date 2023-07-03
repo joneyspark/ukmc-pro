@@ -78,4 +78,8 @@ Route::controller(ApplicationOtherController::class)->group(function () {
     Route::get('followup-status-change/{id?}', 'followup_status_change');
     Route::get('direct-meeting-status-change/{id?}', 'direct_meeting_status_change');
     Route::get('direct-followup-status-change/{id?}', 'direct_followup_status_change');
+
+    Route::get('all-application-status/{id?}', 'all_application_status');
+    Route::post('application-status-store', 'application_status_store');
+    Route::post('application-main-status-change', 'application_main_status_change');
 });

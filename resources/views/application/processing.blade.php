@@ -235,10 +235,10 @@
                                     <div class="row">
                                         <div style="margin: 5px;" class="col-10">
                                             <div class="form-group mb-2"><label for="exampleFormControlInput1">Select Status</label>
-                                                @if(count($application_status) > 0)
+                                                @if(count($application_status_list) > 0)
                                                 <select data-id="{{ (!empty($application_info->id))?$application_info->id:'' }}" data-action="{{ URL::to('application-status-change') }}" name="status" class="application-status-change form-control" onchange="application_status_change()">
                                                     <option value="">--Select One--</option>
-                                                    @foreach ($application_status as $status)
+                                                    @foreach ($application_status_list as $status)
                                                     <option {{ ($application_info->status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
                                                     @endforeach
                                                 </select>

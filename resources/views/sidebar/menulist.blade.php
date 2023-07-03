@@ -84,6 +84,11 @@
                     <a href="{{ URL::to('archive-students') }}"> Archive Students </a>
                 </li>
                 @endif
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                <li class="{{ (!empty($application_status) && $application_status==true)?'active':'' }}">
+                    <a href="{{ URL::to('all-application-status') }}"> Application Status </a>
+                </li>
+                @endif
             </ul>
         </li>
         @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin')

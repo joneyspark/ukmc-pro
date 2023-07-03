@@ -79,7 +79,7 @@
 
                 </li>
                 <li class="nav-item theme-text">
-                    <a href="#" class="nav-link"> {{ (!empty($setting->company_name))?$setting->company_name:'AMS' }} </a>
+                    <a href="#" class="nav-link"> {{ (!empty($setting->company_name))?$setting->company_name:'MyMac' }} </a>
                 </li>
             </ul>
             <ul class="navbar-item flex-row ms-lg-auto ms-0 action-area">
@@ -103,7 +103,7 @@
                             <a href="{{ URL::to('my-notification-list') }}"><h6 class="d-flex justify-content-between"><span class="align-self-center">Notifications</span> <span class="badge badge-primary">Show All</span></h6></a>
                         </div>
                         <div id="notification-item" class="notification-scroll">
-                            
+
                         </div>
                     </div>
                 </li>
@@ -351,7 +351,7 @@
                 }else{
                     $('#national-other-id').addClass('national-other-select');
                 }
-                
+
             }
         </script>
         @include('ajax.application')

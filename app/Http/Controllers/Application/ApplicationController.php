@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\requestDocumentMail;
+use App\Models\Application\ApplicationStatus;
 use App\Models\Application\Experience;
 use App\Models\Application\Followup;
 use App\Models\Application\Meeting;
@@ -721,7 +722,7 @@ class ApplicationController extends Controller{
         $data['campuses'] = Campus::where('active',1)->get();
         //$data['agents'] = User::where('role','agent')->where('active',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
-        $data['statuses'] = Status::where('status',0)->get();
+        $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
 
         $data['agent_applications'] = Application::query()
@@ -797,7 +798,7 @@ class ApplicationController extends Controller{
         $data['application'] = true;
         $data['application_all'] = true;
         $data['application_info'] = Application::where('id',$id)->first();
-        $data['application_status'] = Status::where('status',0)->get();
+        $data['application_status_list'] = ApplicationStatus::where('status',0)->get();
         return view('application/processing',$data);
     }
     public function all(Request $request){
@@ -821,7 +822,7 @@ class ApplicationController extends Controller{
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = User::where('role','agent')->where('active',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
-        $data['statuses'] = Status::where('status',0)->get();
+        $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
 
         $data['application_list'] = Application::query()
@@ -952,7 +953,7 @@ class ApplicationController extends Controller{
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = User::where('role','agent')->where('active',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
-        $data['statuses'] = Status::where('status',0)->get();
+        $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
 
         $data['application_list'] = Application::query()
@@ -1020,7 +1021,7 @@ class ApplicationController extends Controller{
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = User::where('role','agent')->where('active',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
-        $data['statuses'] = Status::where('status',0)->get();
+        $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
 
         $data['application_list'] = Application::query()
@@ -1238,8 +1239,8 @@ class ApplicationController extends Controller{
             );
             return response()->json($data,200);
         }
-        $current_status = Status::where('id',$application->status)->first();
-        $update_status = Status::where('id',$request->status)->first();
+        $current_status = ApplicationStatus::where('id',$application->status)->first();
+        $update_status = ApplicationStatus::where('id',$request->status)->first();
         $application->status = $request->status;
         $application->update_by = Auth::user()->id;
         $application->save();
@@ -1443,7 +1444,7 @@ class ApplicationController extends Controller{
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = Company::where('status',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
-        $data['statuses'] = Status::where('status',0)->get();
+        $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
 
         $data['application_list'] = Application::query()
@@ -1515,7 +1516,7 @@ class ApplicationController extends Controller{
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = Company::where('status',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('create_by',Auth::user()->id)->where('active',1)->get();
-        $data['statuses'] = Status::where('status',0)->get();
+        $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
 
         $data['application_list'] = Application::query()
