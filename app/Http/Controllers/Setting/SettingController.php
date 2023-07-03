@@ -36,7 +36,7 @@ class SettingController extends Controller{
             Session::flash('error','Login First! Then See Company Setting!');
             return redirect('login');
         }
-        if(Auth::user()->role=='admin'){
+        if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager'){
             $company = CompanySetting::where('id',1)->first();
             if(!$company){
                 $company = new CompanySetting();

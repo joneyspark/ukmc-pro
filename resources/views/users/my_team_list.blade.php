@@ -60,7 +60,7 @@
         <h5 class="p-3">My Team List</h5>
         <div class="row mb-4">
             <div class="col">
-               <a style="float: right;" href="{{ route('reset_user_list') }}" class="btn btn-warning">Create Admission Oficer</a>
+               <a style="float: right;" href="{{ URL::to('create-admission-manager-by-manager') }}" class="btn btn-warning">Create Admission Oficer</a>
             </div>
         </div>
         <div class="row layout-top-spacing">

@@ -84,13 +84,14 @@
                             <option value="Residency">Residency</option>
                             <option value="SOP">SOP</option>
                             <option value="Qualification transcript">Qualification transcript</option>
-                            <option value="Work reference letter">Work reference letter</option>
                             </select>
                         @endif
                         @if($application_data->is_academic==2)
                         <select name="document_type" id="inputState" class="form-select">
                             <option value="">Choose...</option>
+                            <option value="Passport">Passport</option>
                             <option value="SOP">SOP</option>
+                            <option value="Residency">Residency</option>
                             <option value="Proof of Address">Proof of Address</option>
                             <option value="CV">CV</option>
                             <option value="Essay">Essay</option>
