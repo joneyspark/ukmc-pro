@@ -349,7 +349,7 @@
                                     <td>{{ (!empty($row->campus->campus_name)?$row->campus->campus_name:'') }}</td>
                                     <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>
                                     <td>
-                                        @if(Auth::user()->role=='admin' || Auth::user()->id==$row->admission_officer_id)
+                                        @if(Auth::user()->role=='admin' || Auth::user()->id==$row->manager_id || Auth::user()->id==$row->admission_officer_id)
                                         <div class="is-action{{ $row->id }} dropdown">
                                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
@@ -439,7 +439,7 @@
                                             @endif
 
                                         @endif
-                                        @if(Auth::user()->role=='admin' || Auth::user()->id==$row->admission_officer_id)
+                                        @if(Auth::user()->role=='admin' || Auth::user()->id==$row->manager_id || Auth::user()->id==$row->admission_officer_id)
                                         <span>
                                             <a href="{{ URL::to('application/'.$row->id.'/processing') }}" class="badge badge-pill bg-secondary">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.75 5H8.25C7.55964 5 7 5.58763 7 6.3125V19L12 15.5L17 19V6.3125C17 5.58763 16.4404 5 15.75 5Z" stroke="#464455" stroke-linecap="round" stroke-linejoin="round"/></svg>
