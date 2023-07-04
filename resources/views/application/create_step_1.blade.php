@@ -206,7 +206,7 @@
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">House Number/Name and
                                     Street*:</label>
-                                <input name="house_number" value="{{ (!empty($app_data->house_number))?$app_data->house_number:old('house_number') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                <input id="house_number" name="house_number" value="{{ (!empty($app_data->house_number))?$app_data->house_number:old('house_number') }}" type="text" class="form-control">
                                 @if ($errors->has('house_number'))
                                     <span class="text-danger">{{ $errors->first('house_number') }}</span>
                                 @endif
@@ -214,14 +214,14 @@
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Address Line
                                     2*:</label>
-                                <input name="address_line_2" value="{{ (!empty($app_data->address_line_2))?$app_data->address_line_2:old('address_line_2') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                <input id="address_line_2" name="address_line_2" value="{{ (!empty($app_data->address_line_2))?$app_data->address_line_2:old('address_line_2') }}" type="text" class="form-control">
                                 @if ($errors->has('address_line_2'))
                                     <span class="text-danger">{{ $errors->first('address_line_2') }}</span>
                                 @endif
                             </div>
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">City/Town*:</label>
-                                <input name="city" value="{{ (!empty($app_data->city))?$app_data->city:old('city') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                <input id="city" name="city" value="{{ (!empty($app_data->city))?$app_data->city:old('city') }}" type="text" class="form-control">
                                 @if ($errors->has('city'))
                                     <span class="text-danger">{{ $errors->first('city') }}</span>
                                 @endif
@@ -230,21 +230,21 @@
                         <div class="row">
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">State/Province:</label>
-                                <input name="state" value="{{ (!empty($app_data->state))?$app_data->state:old('state') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                <input id="state" name="state" value="{{ (!empty($app_data->state))?$app_data->state:old('state') }}" type="text" class="form-control">
                                 @if ($errors->has('state'))
                                     <span class="text-danger">{{ $errors->first('state') }}</span>
                                 @endif
                             </div>
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Postal Code:</label>
-                                <input name="postal_code" value="{{ (!empty($app_data->postal_code))?$app_data->postal_code:old('postal_code') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                <input id="postal_code" name="postal_code" value="{{ (!empty($app_data->postal_code))?$app_data->postal_code:old('postal_code') }}" type="text" class="form-control">
                                 @if ($errors->has('postal_code'))
                                     <span class="text-danger">{{ $errors->first('postal_code') }}</span>
                                 @endif
                             </div>
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Country*:</label>
-                                <select name="address_country" id="inputState" class="form-select">
+                                <select name="address_country" id="address_country" class="form-select">
                                     <option value="">Choose...</option>
                                     @foreach ($country_of_birth as $country1)
                                         <option {{ (!empty($app_data->address_country) && $app_data->address_country==$country1)?'selected':'' }} value="{{ $country1 }}">{{ $country1 }}</option>
@@ -263,7 +263,7 @@
                             <label for="verticalFormStepform-name">Same as permanent home
                                 address ?</label><br>
                             <div class="form-check form-check-primary form-check-inline">
-                                <input class="form-check-input" type="radio" {{ (!empty($app_data->same_as) && $app_data->same_as=='no')?'checked':'' }} name="same_as" value="no" id="form-check-radio-primary">
+                                <input class="form-check-input" type="radio" {{ (!empty($app_data->same_as) && $app_data->same_as=='no')?'checked':'' }} name="same_as" value="no" id="form-check-radio-info">
                                 <label class="form-check-label" for="form-check-radio-primary">
                                     No
                                 </label>
@@ -282,7 +282,7 @@
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">House Number/Name and
                                     Street:</label>
-                                <input type="text" name="current_house_number" value="{{ (!empty($app_data->current_house_number))?$app_data->current_house_number:old('current_house_number') }}" class="form-control" id="verticalFormStepform-name">
+                                <input type="text" id="current_house_number" name="current_house_number" value="{{ (!empty($app_data->current_house_number))?$app_data->current_house_number:old('current_house_number') }}" class="form-control">
                                 @if ($errors->has('current_house_number'))
                                     <span class="text-danger">{{ $errors->first('current_house_number') }}</span>
                                 @endif
@@ -290,14 +290,14 @@
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Address Line
                                     2:</label>
-                                <input type="text" name="current_address_line_2" value="{{ (!empty($app_data->current_address_line_2))?$app_data->current_address_line_2:old('current_address_line_2') }}" class="form-control" id="verticalFormStepform-name">
+                                <input id="current_address_line_2" type="text" name="current_address_line_2" value="{{ (!empty($app_data->current_address_line_2))?$app_data->current_address_line_2:old('current_address_line_2') }}" class="form-control">
                                 @if ($errors->has('current_address_line_2'))
                                     <span class="text-danger">{{ $errors->first('current_address_line_2') }}</span>
                                 @endif
                             </div>
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">City/Town:</label>
-                                <input name="current_city" value="{{ (!empty($app_data->current_city))?$app_data->current_city:old('current_city') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                <input id="current_city" name="current_city" value="{{ (!empty($app_data->current_city))?$app_data->current_city:old('current_city') }}" type="text" class="form-control">
                                 @if ($errors->has('current_city'))
                                     <span class="text-danger">{{ $errors->first('current_city') }}</span>
                                 @endif
@@ -306,14 +306,14 @@
                         <div class="row">
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">County/State/Province:</label>
-                                <input name="current_state" value="{{ (!empty($app_data->current_state))?$app_data->current_state:old('current_state') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                <input id="current_state" name="current_state" value="{{ (!empty($app_data->current_state))?$app_data->current_state:old('current_state') }}" type="text" class="form-control">
                                 @if ($errors->has('current_state'))
                                     <span class="text-danger">{{ $errors->first('current_state') }}</span>
                                 @endif
                             </div>
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Postal Code:</label>
-                                <input name="current_postal_code" value="{{ (!empty($app_data->current_postal_code))?$app_data->current_postal_code:old('current_postal_code') }}" type="text" class="form-control" id="verticalFormStepform-name">
+                                <input id="current_postal_code" name="current_postal_code" value="{{ (!empty($app_data->current_postal_code))?$app_data->current_postal_code:old('current_postal_code') }}" type="text" class="form-control">
                                 @if($errors->has('current_postal_code'))
                                     <span class="text-danger">{{ $errors->first('current_postal_code') }}</span>
                                 @endif
@@ -321,7 +321,7 @@
                             <div class="col form-group mb-4">
                                 <label for="verticalFormStepform-name">Country of permanent
                                 residence:</label>
-                                <select name="current_country" id="inputState" class="form-select">
+                                <select name="current_country" id="current_country" class="form-select">
                                     <option value="">Choose...</option>
                                     @foreach ($country_of_birth as $country2)
                                         <option {{ (!empty($app_data->current_country) && $app_data->current_country==$country2)?'selected':'' }} value="{{ $country2 }}">{{ $country2 }}</option>
@@ -582,6 +582,38 @@
     </div>
 
 </div>
+<script src="{{ asset('web/js/jquery.js') }}"></script>
+<script>
+    $(document).ready(function() {
+    $('input[name="same_as"]').change(function() {
+      var selectedValue = $('input[name="same_as"]:checked').val();
+      if(selectedValue==='yes'){
+        //alert('Selected same: ' + selectedValue);
+        var house_number = $('#house_number').val();
+        var address_line_2 = $('#address_line_2').val();
+        var city = $('#city').val();
+        var state = $('#state').val();
+        var postal_code = $('#postal_code').val();
+        var address_country = $('#address_country').val();
+
+        $('#current_house_number').val(house_number);
+        $('#current_address_line_2').val(address_line_2);
+        $('#current_city').val(city);
+        $('#current_state').val(state);
+        $('#current_postal_code').val(postal_code);
+        $('#current_country').val(address_country);
+      }else{
+        $('#current_house_number').val("");
+        $('#current_address_line_2').val("");
+        $('#current_city').val("");
+        $('#current_state').val("");
+        $('#current_postal_code').val("");
+        $('#current_country').val("");
+      }
+      
+    });
+  });
+</script>
 <style>
     .national-other-select{
         display: none;
