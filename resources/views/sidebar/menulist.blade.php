@@ -80,9 +80,6 @@
                 <li class="{{ (!empty($application_enrolled) && $application_enrolled==true)?'active':'' }}">
                     <a href="{{ URL::to('enrolled-students') }}"> Enrolled Students </a>
                 </li>
-                <li class="{{ (!empty($application_archived) && $application_archived==true)?'active':'' }}">
-                    <a href="{{ URL::to('archive-students') }}"> Archive Students </a>
-                </li>
                 @endif
                 @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
                 <li class="{{ (!empty($application_status) && $application_status==true)?'active':'' }}">

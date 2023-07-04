@@ -68,19 +68,19 @@
                                                     </div>
                                                     <ul class="list-group custom-list-group-branch me-1">
                                                         <li class="d-flex justify-content-between align-items-center mb-1">
-                                                            <h6 class="count-warning">Total Courses</h6><a href="" class=""><span class="badge badge-warning">0</span></a></li>
+                                                            <h6 class="count-warning">Total Courses</h6><a href="" class=""><span class="badge badge-warning">{{ count($campus->courses) }}</span></a></li>
                                                         <li class="d-flex justify-content-between align-items-center mb-1">
-                                                            <h6 class="count-primary">All Application</h6><span class="badge badge-primary">8</span></li>
+                                                            <h6 class="count-primary">All Application</h6><span class="badge badge-primary">{{ count($campus->total_applications) }}</span></li>
                                                         <li class="d-flex justify-content-between align-items-center mb-1">
-                                                            <h6 class="count-primary">New Application</h6><span class="badge badge-info">0</span></li>
+                                                            <h6 class="count-primary">New Application</h6><span class="badge badge-info">{{ count($campus->new_applications) }}</span></li>
                                                         <li class="d-flex justify-content-between align-items-center mb-1">
-                                                            <h6 class="count-success">Sub-Agent Application</h6><span class="badge badge-secondary">0</span></li>
+                                                            <h6 class="count-success">Sub-Agent Application</h6><span class="badge badge-secondary">{{ count($campus->agent_applications) }}</span></li>
                                                         <li class="d-flex justify-content-between align-items-center mb-1">
-                                                            <h6 class="count-success">Conditional/ Unconditional</h6><span class="badge badge-success">0</span></li>
+                                                            <h6 class="count-success">Conditional/ Unconditional</h6><span class="badge badge-success">{{ count($campus->conditional_applications) }}</span></li>
                                                         <li class="d-flex justify-content-between align-items-center mb-1">
-                                                            <h6 class="count-success">Enrolled Students</h6><span class="badge badge-success">0</span></li>
+                                                            <h6 class="count-success">Enrolled Students</h6><span class="badge badge-success">{{ count($campus->enrolled_applications) }}</span></li>
                                                         <li class="d-flex justify-content-between align-items-center mb-1">
-                                                            <h6 class="count-danger">Reject Applications</h6><span class="badge badge-danger">0</span></li>
+                                                            <h6 class="count-danger">Reject Applications</h6><span class="badge badge-danger">{{ count($campus->reject_applications) }}</span></li>
                                                     </ul>
                                                 </div>
                                             </div>

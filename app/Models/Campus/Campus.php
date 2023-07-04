@@ -18,4 +18,23 @@ class Campus extends Model
     public function application(){
         return $this->hasOne(Application::class);
     }
+
+    public function total_applications(){
+        return $this->hasMany(Application::class);
+    }
+    public function new_applications(){
+        return $this->hasMany(Application::class)->where('status',1);
+    }
+    public function agent_applications(){
+        return $this->hasMany(Application::class)->where('company_id','!=',0);
+    }
+    public function conditional_applications(){
+        return $this->hasMany(Application::class)->where('status',9);
+    }
+    public function enrolled_applications(){
+        return $this->hasMany(Application::class)->where('status',11);
+    }
+    public function reject_applications(){
+        return $this->hasMany(Application::class)->where('status',12);
+    }
 }

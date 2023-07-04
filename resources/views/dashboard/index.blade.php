@@ -185,25 +185,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(count($applications) > 0)
-                                    @foreach($applications as $application)
+                                    @if(count($applications_list) > 0)
+                                    @foreach($applications_list as $applicationRow)
                                     <tr>
-                                        <td><div class="td-content customer-name"><span>{{ $application->name }}</span></div></td>
-                                        <td><div class="td-content product-brand text-primary">{{ $application->email }}</div></td>
-                                        <td><div class="td-content product-invoice">{{ $application->phone }}</div></td>
-                                        <td><div class="td-content pricing"><span class="">{{ $application->campus->campus_name }}</span></div></td>
+                                        <td><div class="td-content customer-name"><span>{{ $applicationRow->name }}</span></div></td>
+                                        <td><div class="td-content product-brand text-primary">{{ $applicationRow->email }}</div></td>
+                                        <td><div class="td-content product-invoice">{{ $applicationRow->phone }}</div></td>
+                                        <td><div class="td-content pricing"><span class="">{{ $applicationRow->campus->campus_name }}</span></div></td>
                                         <td><div class="td-content">
-                                            @if($application->status==1)
+                                            @if($applicationRow->status==1)
                                             <span class="badge badge-danger">New</span>
-                                            @elseif($application->status==2)
+                                            @elseif($applicationRow->status==2)
                                             <span class="badge badge-primary">Elt or Interview Passed</span>
-                                            @elseif($application->status==3)
+                                            @elseif($applicationRow->status==3)
                                             <span class="badge badge-primary">Conditional Offer</span>
-                                            @elseif($application->status==4)
+                                            @elseif($applicationRow->status==4)
                                             <span class="badge badge-secondary">Unconditional Offer</span>
-                                            @elseif($application->status==5)
+                                            @elseif($applicationRow->status==5)
                                             <span class="badge badge-success">Enrolled</span>
-                                            @elseif($application->status==5)
+                                            @elseif($applicationRow->status==5)
                                             <span class="badge badge-danger">Rejected</span>
                                             @else
                                             @endif

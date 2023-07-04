@@ -42,7 +42,7 @@ class HomeController extends Controller{
         $startDate = $currentDate->subDays(30)->format('Y-m-d');
         $data['page_title'] = 'Dashboard';
         $data['dashboard'] = true;
-        $data['applications'] = Application::where('application_status_id',1)->orderBy('created_at','desc')->take(5)->get();
+        $data['applications_list'] = Application::where('application_status_id',1)->orderBy('created_at','desc')->take(5)->get();
         $data['activities'] = Notification::orderBy('id','desc')->take(5)->get();
         $data['application_count'] = Application::where('application_status_id',1)->where('created_at', '>=', $startDate)->count();
         $data['application_enrolled_count'] = Application::where('application_status_id',1)->where('created_at', '>=', $startDate)->where('status',5)->count();
