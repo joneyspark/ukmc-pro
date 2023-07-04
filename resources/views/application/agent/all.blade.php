@@ -39,20 +39,7 @@
                                 @endif
                             </select>
                          </div>
-                         
                          <div class="col-4">
-                            <select id="officer" name="officer" class="form-control" onchange="getAgentApplicationData()">
-                                <option value="">Select Admission Manager</option>
-                                @if(count($officers) > 0)
-                                @foreach ($officers as $officer)
-                                <option {{ (!empty($get_officer) && $get_officer==$officer->id)?'selected':'' }} value="{{ $officer->id }}">{{ $officer->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div>
-                     </div>
-                     <div class="row">
-                        <div class="col-3">
                             <select id="status" name="status" class="form-control" onchange="getAgentApplicationData()">
                                 <option value="">Select Status</option>
                                 @if(count($statuses) > 0)
@@ -62,7 +49,7 @@
                                 @endif
                             </select>
                          </div>
-                         <div class="col-2">
+                         <div class="col-3">
                             <select id="intake" name="intake" class="form-control" onchange="getAgentApplicationData()">
                                 <option value="">Select Intake</option>
                                 @if(count($intakes) > 0)
@@ -72,6 +59,9 @@
                                 @endif
                             </select>
                          </div>
+                     </div>
+                     <div class="row">
+                        
                          <div class="col-5">
                              <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter Name,Email,Phone">
                          </div>

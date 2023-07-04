@@ -384,7 +384,7 @@
                             <div class="row">
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Date Entry Of UK*:</label>
-                                    <input name="date_entry_of_uk" value="{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:old('date_entry_of_uk') }}" type="datetime-local" class="form-control" id="verticalFormStepform-name">
+                                    <input name="date_entry_of_uk" value="{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:old('date_entry_of_uk') }}" type="date" class="form-control" id="verticalFormStepform-name">
                                     @if ($errors->has('date_entry_of_uk'))
                                         <span class="text-danger">{{ $errors->first('date_entry_of_uk') }}</span>
                                     @endif
@@ -443,7 +443,7 @@
                             <div class="row">
                                 <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Date Entry Of UK*:</label>
-                                    <input name="date_entry_of_uk" value="{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:old('date_entry_of_uk') }}" type="datetime-local" class="form-control" id="verticalFormStepform-name">
+                                    <input name="date_entry_of_uk" value="{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:old('date_entry_of_uk') }}" type="date" class="form-control" id="verticalFormStepform-name">
                                     @if ($errors->has('date_entry_of_uk'))
                                         <span class="text-danger">{{ $errors->first('date_entry_of_uk') }}</span>
                                     @endif

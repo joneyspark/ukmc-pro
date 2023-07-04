@@ -702,29 +702,25 @@ class ApplicationController extends Controller{
     }
 
     public function agent_applications(Request $request){
-        $data['page_title'] = 'Application | Details';
+        $data['page_title'] = 'Agent | Applications';
         $data['application'] = true;
         $data['application_all'] = true;
         $get_campus = $request->campus;
         //$get_agent = $request->agent;
-        $get_officer = $request->officer;
         $get_status = $request->status;
         $get_intake = $request->intake;
         $search = $request->q;
         //Session set data
         Session::put('get_campus',$get_campus);
         //Session::put('get_agent',$get_agent);
-        Session::put('get_officer',$get_officer);
         Session::put('get_status',$get_status);
         Session::put('get_intake',$get_intake);
         Session::put('search',$search);
-
         $data['campuses'] = Campus::where('active',1)->get();
         //$data['agents'] = User::where('role','agent')->where('active',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
-
         $data['agent_applications'] = Application::query()
         ->when($search, function ($query, $search) {
             return $query->where(function ($query) use ($search) {
@@ -735,10 +731,6 @@ class ApplicationController extends Controller{
         })
         ->when($get_campus, function ($query, $get_campus) {
             return $query->where('campus_id',$get_campus);
-        })
-
-        ->when($get_officer, function ($query, $get_officer) {
-            return $query->where('admission_officer_id',$get_officer);
         })
         ->when($get_status, function ($query, $get_status) {
             return $query->where('status',$get_status);
@@ -752,14 +744,11 @@ class ApplicationController extends Controller{
         ->appends([
             'q' => $search,
             'campus' => $get_campus,
-            'officer' => $get_campus,
             'status' => $get_campus,
             'intake' => $get_campus,
         ]);
-
         $data['get_campus'] = Session::get('get_campus');
         //$data['get_agent'] = Session::get('get_agent');
-        $data['get_officer'] = Session::get('get_officer');
         $data['get_status'] = Session::get('get_status');
         $data['get_intake'] = Session::get('get_intake');
         $data['search'] = Session::get('search');

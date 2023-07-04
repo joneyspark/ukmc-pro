@@ -291,10 +291,9 @@
             //search agent application data
             function getAgentApplicationData(){
                 var campus = $('#campus').val();
-                var officer = $('#officer').val();
                 var status = $('#status').val();
                 var intake = $('#intake').val();
-                window.location = "{{ URL::to('agent-applications?campus=') }}" + campus + "&officer=" + officer + "&status=" + status + "&intake=" + intake;
+                window.location = "{{ URL::to('agent-applications?campus=') }}" + campus + "&status=" + status + "&intake=" + intake;
             }
             function getAcademicData(){
                 var level_data = $('#level_of_education').val();
