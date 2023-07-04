@@ -746,7 +746,6 @@ class ApplicationController extends Controller{
         ->when($get_intake, function ($query, $get_intake) {
             return $query->where('intake',$get_intake);
         })
-        ->where('application_status_id','!=',0)
         ->where('company_id',Auth::user()->company_id)
         ->orderBy('id','desc')
         ->paginate(15)
