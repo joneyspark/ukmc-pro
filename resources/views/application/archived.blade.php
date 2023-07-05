@@ -109,7 +109,7 @@
                                     <th>Name</th>
                                     <th>Campus</th>
                                     <th>Create date</th>
-                                    
+
                                     <th>Intake</th>
                                     <th>Assign</th>
                                     <th>Status</th>
@@ -228,6 +228,9 @@
 
                             </tbody>
                         </table>
+                        <div style="text-align: center;" class="pagination-custom_solid">
+                            {{ $application_list->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

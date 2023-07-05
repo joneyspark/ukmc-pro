@@ -240,7 +240,7 @@
                                 <option value="">Select Agent</option>
                                 @if(count($agents) > 0)
                                 @foreach ($agents as $agent)
-                                <option {{ (!empty($get_agent) && $get_agent==$agent->id)?'selected':'' }} value="{{ $agent->id }}">{{ $agent->name }}</option>
+                                <option {{ (!empty($get_agent) && $get_agent==$agent->id)?'selected':'' }} value="{{ $agent->id }}">{{ $agent->company_name }}</option>
                                 @endforeach
                                 @endif
                             </select>

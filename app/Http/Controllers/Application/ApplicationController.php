@@ -810,7 +810,7 @@ class ApplicationController extends Controller{
         Session::put('search',$search);
 
         $data['campuses'] = Campus::where('active',1)->get();
-        $data['agents'] = User::where('role','agent')->where('active',1)->get();
+        $data['agents'] = Company::where('status',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
@@ -940,7 +940,7 @@ class ApplicationController extends Controller{
         Session::put('search',$search);
 
         $data['campuses'] = Campus::where('active',1)->get();
-        $data['agents'] = User::where('role','agent')->where('active',1)->get();
+        $data['agents'] = Company::where('status',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
@@ -1008,7 +1008,7 @@ class ApplicationController extends Controller{
         Session::put('search',$search);
 
         $data['campuses'] = Campus::where('active',1)->get();
-        $data['agents'] = User::where('role','agent')->where('active',1)->get();
+        $data['agents'] = Company::where('status',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();

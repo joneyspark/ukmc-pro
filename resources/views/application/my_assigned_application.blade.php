@@ -342,6 +342,9 @@
 
                             </tbody>
                         </table>
+                        <div style="text-align: center;" class="pagination-custom_solid">
+                            {{ $application_list->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
