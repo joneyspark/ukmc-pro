@@ -676,6 +676,7 @@ class ApplicationController extends Controller{
             Session::flash('error','Requested Document Data Not Found!');
             return redirect('all-application');
         }
+        $get_application = Application::where('id',$check->application_id)->first();
         $update = RequestDocument::where('id',$check->id)->update(['status'=>1]);
         $notification = new Notification();
         $notification->title = 'Document Confirmation';
@@ -685,12 +686,13 @@ class ApplicationController extends Controller{
         $notification->creator_name = Auth::user()->name;
         $notification->creator_image = Auth::user()->photo;
         $notification->user_id = $check->request_by;
+        $notification->manager_id = ($get_application->manager_id > 0)?$get_application->manager_id:0;
         $notification->is_admin = 0;
         $notification->application_id = $check->application_id;
-        $notification->slug = 'application-create/'.$check->application_id.'/step-4';
+        $notification->slug = 'application-create/'.$check->application_id.'/step-2';
         $notification->save();
         event(new AddNewLead($notification->description,url($notification->slug)));
-        return redirect('application-create/'.$check->application_id.'/step-4');
+        return redirect('application-create/'.$check->application_id.'/step-2');
     }
     public function interview_list(){
         $data['page_title'] = 'Application | Details';
@@ -838,7 +840,7 @@ class ApplicationController extends Controller{
         })
         ->where('application_status_id','!=',0)
         ->orderBy('created_at','desc')
-        ->paginate(15)
+        ->paginate(1)
         ->appends([
             'q' => $search,
             'campus' => $get_campus,
@@ -1072,7 +1074,12 @@ class ApplicationController extends Controller{
         $application = Application::where('id',$request->set_application_id)->first();
         if(!$application){
             Session::flash('error','Application Data Not Found! Server Error!');
-            return redirect('all-application');
+            if(Auth::user()->role=='admin' || Auth::user()->role=='adminManager'){
+                return redirect('all-application');
+            }
+            if(Auth::user()->role=='adminManager'){
+                return redirect('my-applications');
+            }
         }
         $doc = new RequestDocument();
         $doc->application_id = $application->id;
@@ -1091,23 +1098,28 @@ class ApplicationController extends Controller{
             $notification->user_id = $application->create_by;
             $notification->is_admin = 1;
             $notification->application_id = $application->id;
-            $notification->slug = 'application-create/'.$application->id.'/step-4';
+            $notification->slug = 'application-create/'.$application->id.'/step-2';
             $notification->save();
         }
         //make mail to student and agent
         $agentData = User::where('id',$application->create_by)->first();
         $studentEmail = $application->email;
-        $agentEmail = $agentData->email;
+        if($agentData){
+            $agentEmail = $agentData->email;
+        }
         $details = [
             'create_by'=>Auth::user()->name,
             'message'=>$request->message,
         ];
-        Mail::to($studentEmail)->send(new requestDocumentMail($details));
+        //return $studentEmail.' '.$agentEmail;
+        if($studentEmail){
+            Mail::to($studentEmail)->send(new requestDocumentMail($details));
+        }
         if($agentEmail){
             Mail::to($agentEmail)->send(new requestDocumentMail($details));
-            event(new AgentEvent($application->create_by,$notification->description,url('application-create/'.$application->id.'/step-4')));
+            event(new AgentEvent($application->create_by,$notification->description,url('application-create/'.$application->id.'/step-2')));
         }
-        return redirect('application-create/'.$application->id.'/step-4');
+        return redirect('application-create/'.$application->id.'/step-2');
     }
 
     public function get_courses_by_campus(Request $request){

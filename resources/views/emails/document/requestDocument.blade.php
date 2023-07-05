@@ -8,12 +8,12 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-  
+
 <div class="container-fluid">
   <h5>Dear,</h5>
-  <p>{{ $details['message'] }}</p><br>
+  <p>{{ (!empty($details['message']))?$details['message']:'Request For Document' }}</p><br>
   <p>Regards,</p>
-  <p>{{ $details['create_by'] }}</p>     
+  <p>{{ (!empty($details['create_by']))?$details['create_by']:'' }}</p>
 </div>
 
 </body>
