@@ -840,7 +840,7 @@ class ApplicationController extends Controller{
         })
         ->where('application_status_id','!=',0)
         ->orderBy('created_at','desc')
-        ->paginate(1)
+        ->paginate(15)
         ->appends([
             'q' => $search,
             'campus' => $get_campus,
