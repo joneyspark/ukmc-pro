@@ -667,7 +667,7 @@ class ApplicationOtherController extends Controller
         $data['page_title'] = 'Application | Status';
         $data['application'] = true;
         $data['application_status'] = true;
-        $data['get_application_status'] = ApplicationStatus::orderBy('id','desc')->paginate(15);
+        $data['get_application_status'] = ApplicationStatus::orderBy('id','desc')->get();
         if($id){
             $data['applicatoin_status_data'] = ApplicationStatus::where('id',$id)->first();
         }
