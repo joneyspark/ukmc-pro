@@ -145,7 +145,7 @@
                                 <div class="col">Course Fee International : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->international_course_fee))?$app_data->course->international_course_fee:'' }}</span></div>
                             </div>
-                            
+
                             <div class="row mb-4 px-5">
                                 <div class="col">Course Intake :</div>
                                 <div class="col">
@@ -258,28 +258,10 @@
                             <div id="MainContent_dv_Declaration_Text" class="row mb-4 px-5">
                                 <div class="col">
                                     <p id="MainContent_Declaration_Text" class="text-white">
-                                        I agree to <span id="MainContent_UniLongName">{{ (!empty($app_data->campus->campus_name))?$app_data->campus->campus_name:'' }}</span> (<span
-                                            id="MainContent_UniAbbriv1">{{ (!empty($app_data->campus->campus_name))?$app_data->campus->campus_name:'' }}</span>) processing personal data contained in this
-                                        form or
-                                        other data
-                                        which <span id="MainContent_UniAbbriv2">{{ (!empty($app_data->campus->campus_name))?$app_data->campus->campus_name:'' }}</span> may obtain from other people. I agree
-                                        to
-                                        the processing of such data for any purposes connected with my
-                                        studies or my health and safety whilst on the premises or for any legitimate reason
-                                        including
-                                        communication with me
-                                        following the completion of my studies. In addition, I agree to <span
-                                            id="MainContent_UniAbbriv3">{{ (!empty($app_data->campus->campus_name))?$app_data->campus->campus_name:'' }}</span> processing personal data described as Special
-                                        Category Data as defined under the General Data Protection Regulation, such processing to be
-                                        undertaken for any
-                                        purposes as indicated in the declaration above. In addition to the Privacy Notice linked to
-                                        this
-                                        form please also
-                                        see our Corporate Privacy Policy on our website -
-                                        <a href="{{ (!empty($app_data->campus->website))?$app_data->campus->website:'' }}" target="_blank">
-                                            <font style="color: Blue; text-decoration: underline;">
-                                                {{ (!empty($app_data->campus->website))?$app_data->campus->website:'' }}</font>
-                                        </a>.
+                                        I hereby, confirm that the information provided on this application form is accurate. I accept that the UKMC/Partner University reserves the right to cancel my application if any of the information that I have submitted is subsequently found to be false or inaccurate and that by signing this declaration, I am bound by the terms and conditions as outlined by the UKMC/Partner University.
+                                    </p>
+                                    <p id="MainContent_Declaration_Text" class="text-white">
+                                        I hereby, confirm that the information provided on this application form is accurate. I accept that the UKMC/Partner University reserves the right to cancel my application if any of the information that I have submitted is subsequently found to be false or inaccurate and that by signing this declaration, I am bound by the terms and conditions as outlined by the UKMC/Partner University.
                                     </p>
                                 </div>
                             </div>

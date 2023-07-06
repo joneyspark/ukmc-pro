@@ -84,6 +84,7 @@
                             <option value="Residency">Residency</option>
                             <option value="SOP">SOP</option>
                             <option value="Qualification transcript">Qualification transcript</option>
+                            <option value="Additional Documents">Additional Documents</option>
                             </select>
                         @endif
                         @if($application_data->is_academic==2)
@@ -95,6 +96,7 @@
                             <option value="Proof of Address">Proof of Address</option>
                             <option value="CV">CV</option>
                             <option value="Essay">Essay</option>
+                            <option value="Additional Documents">Additional Documents</option>
                             </select>
                         @endif
                         @if ($errors->has('document_type'))
