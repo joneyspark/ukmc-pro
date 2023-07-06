@@ -1356,6 +1356,7 @@ class ApplicationController extends Controller{
             if($getApp){
                 $getApp->admission_officer_id = $request->assign_to_user_id;
                 $getApp->manager_id = Auth::user()->id;
+                $getApp->status = 2;
                 $getApp->save();
             }
         }
@@ -1397,6 +1398,7 @@ class ApplicationController extends Controller{
             if($getApp){
                 $getApp->admission_officer_id = $request->assign_to_admission_manager_id;
                 $getApp->manager_id = $request->assign_to_manager_id;
+                $getApp->status = 2;
                 $getApp->save();
             }
         }
