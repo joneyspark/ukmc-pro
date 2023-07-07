@@ -203,28 +203,42 @@
                         </div>
                     </form>
                     @if(Auth::user())
-                        @if(Auth::user()->role=='agent' && count($requested_documents) > 0)
+                        
                         <div class="row">
                             <h5>Requested Document</h5>
                             <table class="table table-responsive">
                                 <tr>
                                     <td>Title</td>
                                     <td>Request By</td>
+                                    <td>Status</td>
+                                    @if(Auth::user()->role=='agent' || Auth::user()->role=='student')
                                     <td>Action</td>
+                                    @endif
                                 </tr>
                                 @foreach($requested_documents as $drow)
                                 <tr>
                                     <td>{{ (!empty($drow->message))?$drow->message:'' }}</td>
                                     <td>{{ (!empty($drow->document_by->name))?$drow->document_by->name:'' }}</td>
                                     <td>
+                                        @if($drow->status==0)
+                                        <span class="badge badge-warning">Pending</span>
+                                        @else
+                                        <span class="badge badge-success">Complete</span>
+                                        @endif
+                                    </td>
+                                    @if(Auth::user()->role=='agent' || Auth::user()->role=='student')
+                                    <td>
                                         <a href="javascript:void(0)" onclick="if(confirm('Are you sure to Confirm this Document Data?')) location.href='{{ URL::to('confirm-request-document/'.$drow->id) }}'; return false;"><span class="badge badge-light-warning">Confirm</span></a>
                                     </td>
+                                    @endif
                                 </tr>
                                 @endforeach
                             </table>
                         </div>
-                        @endif
+                        
                     @endif
+                    <!-- request document see by admin -->
+
 
                     <!-- academic or nonacademic check -->
                     @if($application_data->is_academic==1)

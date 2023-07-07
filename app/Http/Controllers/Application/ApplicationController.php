@@ -446,7 +446,7 @@ class ApplicationController extends Controller{
         $data['application_id'] = $application->id;
         $data['application_data'] = $application;
         $data['application_step2_data'] = Application_Step_2::where('application_id',$application->id)->first();
-        $data['requested_documents'] = RequestDocument::where('application_id',$application->id)->where('status',0)->get();
+        $data['requested_documents'] = RequestDocument::where('application_id',$application->id)->get();
         $data['qualification_list'] = Qualification::where('application_id',$application->id)->get();
         $data['job_list'] = Experience::where('application_id',$application->id)->get();
         $data['page_title'] = 'Application | Create | Step 2';
@@ -1074,7 +1074,7 @@ class ApplicationController extends Controller{
         $application = Application::where('id',$request->set_application_id)->first();
         if(!$application){
             Session::flash('error','Application Data Not Found! Server Error!');
-            if(Auth::user()->role=='admin' || Auth::user()->role=='adminManager'){
+            if(Auth::user()->role=='admin' || Auth::user()->role=='manager'){
                 return redirect('all-application');
             }
             if(Auth::user()->role=='adminManager'){
@@ -1087,6 +1087,7 @@ class ApplicationController extends Controller{
         $doc->request_by = Auth::user()->id;
         $doc->request_to = ($application->create_by > 0)?$application->create_by:0;
         $doc->save();
+        $agentData = User::where('company_id',$application->company_id)->where('is_admin',1)->first();
         if($application->create_by > 0){
             $notification = new Notification();
             $notification->title = 'Document Request';
@@ -1095,30 +1096,30 @@ class ApplicationController extends Controller{
             $notification->create_by = Auth::user()->id;
             $notification->creator_name = Auth::user()->name;
             $notification->creator_image = Auth::user()->photo;
-            $notification->user_id = $application->create_by;
+            $notification->user_id = $agentData->user_id;
             $notification->is_admin = 1;
             $notification->application_id = $application->id;
             $notification->slug = 'application-create/'.$application->id.'/step-2';
             $notification->save();
         }
         //make mail to student and agent
-        $agentData = User::where('id',$application->create_by)->first();
+        
         $studentEmail = $application->email;
-        if($agentData){
-            $agentEmail = $agentData->email;
-        }
+        
         $details = [
             'create_by'=>Auth::user()->name,
             'message'=>$request->message,
         ];
+        if($agentData){
+            $agentEmail = $agentData->email;
+            Mail::to($agentEmail)->send(new requestDocumentMail($details));
+        }
         //return $studentEmail.' '.$agentEmail;
         if($studentEmail){
             Mail::to($studentEmail)->send(new requestDocumentMail($details));
         }
-        if($agentEmail){
-            Mail::to($agentEmail)->send(new requestDocumentMail($details));
-            event(new AgentEvent($application->create_by,$notification->description,url('application-create/'.$application->id.'/step-2')));
-        }
+        //event(new AgentEvent($agentData->id,$notification->description,url('application-create/'.$application->id.'/step-2')));
+        
         Session::flash('success','Document Request Sent Successfully');
         return redirect('application-create/'.$application->id.'/step-2');
     }
