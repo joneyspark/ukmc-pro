@@ -91,4 +91,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('create-admission-manager-by-manager-post', 'create_admission_manager_by_manager_post');
     Route::get('edit-admission-manager-by-manager/{slug?}', 'edit_admission_manager_by_manager');
     Route::post('edit-admission-manager-by-manager-post', 'edit_admission_manager_by_manager_post');
+
+    Route::get('student-list', 'student_list');
+    Route::get('reset-student-list', 'reset_student_list')->name('reset-student-list');
 });

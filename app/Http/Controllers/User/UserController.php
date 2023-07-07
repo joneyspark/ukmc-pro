@@ -74,6 +74,52 @@ class UserController extends Controller{
         Session::put('current_url',URL::full());
         return view('users/list',$data);
     }
+    public function student_list(Request $request){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Then See Student List!');
+            return redirect('login');
+        }
+        $data['page_title'] = 'Student List';
+        $data['studentmanagement'] = true;
+        $getUserId = Session::get('saved_user_id');
+        $data['return_user_id'] = $getUserId;
+
+        //work on search option
+        $role = $request->get('role');
+        $name = $request->get('name');
+        Session::put('get_role',$role);
+        Session::put('get_name',$name);
+        //query
+        $data['user_list_data'] = User::query()
+        ->when($name, function ($query, $name) {
+            return $query->where('name', 'like', '%' . $name . '%');
+        })
+        ->when($role, function ($query, $role) {
+            return $query->where('role', $role);
+        })
+        ->where('id','!=',Auth::user()->id)
+        ->where('role','student')
+        ->orderBy('id','desc')
+        ->paginate(10)
+        ->appends([
+            'name' => $name,
+            'role' => $role,
+        ]);
+
+        $data['get_role'] = Session::get('get_role');
+        $data['get_name'] = Session::get('get_name');
+        $data['role_list'] = Service::get_roles();
+
+        Session::forget('saved_user_id');
+        Session::put('current_url',URL::full());
+        return view('users/student_list',$data);
+    }
+    public function reset_student_list(){
+        Session::forget('saved_user_id');
+        Session::forget('current_url');
+        Session::forget('get_name');
+        return redirect('student-list');
+    }
     public function my_team_list(){
         if(!Auth::check() && Auth::user()->role != 'manager'){
             Session::flash('error','Login First! Then See User List!');
@@ -176,17 +222,7 @@ class UserController extends Controller{
             return redirect('user-list');
         }
     }
-    public function create_teacher(){
-        if(!Auth::check() && Auth::user()->role != 'admin'){
-            Session::flash('error','Login First! Create Campus!');
-            return redirect('login');
-        }
-        $data['page_title'] = 'User | Create Teacher';
-        $data['usermanagement'] = true;
-        $data['get_campuses'] = Campus::where('active',1)->get();
-        $data['countries'] = Service::countries();
-        return view('users/create_teacher',$data);
-    }
+    
     public function create_admission_manager(){
         if(!Auth::check() && Auth::user()->role != 'admin'){
             Session::flash('error','Login First! Create Campus!');
@@ -542,6 +578,69 @@ class UserController extends Controller{
             return redirect('user-list');
         }
     }
+    
+    //user status change
+    public function user_status_chnage(Request $request){
+        $userData = User::where('id',$request->user_id)->first();
+        if(!$userData){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'User Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($userData->active==1){
+            $update = User::where('id',$userData->id)->update(['active'=>$request->active]);
+            $msg = 'User Deactivated';
+        }else{
+            $update = User::where('id',$userData->id)->update(['active'=>$request->active]);
+            $msg = 'User Activated';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
+    }
+    //user role confirm
+    public function user_role_confirm(Request $request){
+        if(!Auth::check() && Auth::user()->role != 'admin'){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
+        $roll_name = $request->roll_name;
+        if(!$roll_name){
+            Session::flash('error','You don,t select any roll Name. Please Select When Pop Up!');
+            if(Session::get('current_url')){
+                return redirect(Session::get('current_url'));
+            }else{
+                return redirect('user-list');
+            }
+        }
+        $getUserData = User::where('id',$request->user_id)->first();
+        $getUserData->role = $roll_name;
+        $getUserData->save();
+        Session::put('saved_user_id',$getUserData->id);
+        Session::flash('success','Successfully Changed The Current User Role!');
+        if(Session::get('current_url')){
+            return redirect(Session::get('current_url'));
+        }else{
+            return redirect('user-list');
+        }
+    }
+    //create teacher function 
+    public function create_teacher(){
+        if(!Auth::check() && Auth::user()->role != 'admin'){
+            Session::flash('error','Login First! Create Interviewer!');
+            return redirect('login');
+        }
+        $data['page_title'] = 'User | Create Teacher';
+        $data['usermanagement'] = true;
+        $data['get_campuses'] = Campus::where('active',1)->get();
+        $data['countries'] = Service::countries();
+        return view('users/create_teacher',$data);
+    }
     //create teacher
     public function create_teacher_post_data(TeacherCreateRequest $request){
         //first create user
@@ -602,56 +701,6 @@ class UserController extends Controller{
         Session::put('saved_user_id',$user->id);
         Session::flash('success','Successfully Saved Teacher Information!');
         if(!empty(Session::get('current_url'))){
-            return redirect(Session::get('current_url'));
-        }else{
-            return redirect('user-list');
-        }
-    }
-    //user status change
-    public function user_status_chnage(Request $request){
-        $userData = User::where('id',$request->user_id)->first();
-        if(!$userData){
-            $data['result'] = array(
-                'key'=>101,
-                'val'=>'User Data Not Found! Server Error!'
-            );
-            return response()->json($data,200);
-        }
-        $msg = '';
-        if($userData->active==1){
-            $update = User::where('id',$userData->id)->update(['active'=>$request->active]);
-            $msg = 'User Deactivated';
-        }else{
-            $update = User::where('id',$userData->id)->update(['active'=>$request->active]);
-            $msg = 'User Activated';
-        }
-        $data['result'] = array(
-            'key'=>200,
-            'val'=>$msg
-        );
-        return response()->json($data,200);
-    }
-    //user role confirm
-    public function user_role_confirm(Request $request){
-        if(!Auth::check() && Auth::user()->role != 'admin'){
-            Session::flash('error','Login First! Create Campus!');
-            return redirect('login');
-        }
-        $roll_name = $request->roll_name;
-        if(!$roll_name){
-            Session::flash('error','You don,t select any roll Name. Please Select When Pop Up!');
-            if(Session::get('current_url')){
-                return redirect(Session::get('current_url'));
-            }else{
-                return redirect('user-list');
-            }
-        }
-        $getUserData = User::where('id',$request->user_id)->first();
-        $getUserData->role = $roll_name;
-        $getUserData->save();
-        Session::put('saved_user_id',$getUserData->id);
-        Session::flash('success','Successfully Changed The Current User Role!');
-        if(Session::get('current_url')){
             return redirect(Session::get('current_url'));
         }else{
             return redirect('user-list');
