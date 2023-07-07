@@ -741,7 +741,7 @@ class ApplicationController extends Controller{
             return $query->where('intake',$get_intake);
         })
         ->where('company_id',Auth::user()->company_id)
-        ->orderBy('id','desc')
+        ->orderBy('created_at','desc')
         ->paginate(15)
         ->appends([
             'q' => $search,
@@ -1119,6 +1119,7 @@ class ApplicationController extends Controller{
             Mail::to($agentEmail)->send(new requestDocumentMail($details));
             event(new AgentEvent($application->create_by,$notification->description,url('application-create/'.$application->id.'/step-2')));
         }
+        Session::flash('success','Document Request Sent Successfully');
         return redirect('application-create/'.$application->id.'/step-2');
     }
 

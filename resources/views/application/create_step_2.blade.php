@@ -164,7 +164,7 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <label for="verticalFormInputAddress" class="form-label">Upload Files</label><br>
+                            <label for="verticalFormInputAddress" class="form-label">Upload Files (Note: Please Upload jpg,jpeg,png and PDF file Format)</label><br>
                             <button type="button" class="btn btn-primary mr-2 _effect--ripple waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 Upload File
                               </button>
@@ -190,7 +190,7 @@
                                                 <span class="table-inner-text">{{ date('F d Y',strtotime($doc->created_at)) }}</span>
                                             </td>
                                             <td>
-                                                <a download href="{{ asset($doc->doc) }}"><span class="badge badge-light-success">Download</span></a>
+                                                <a target="_blank" href="{{ asset($doc->doc) }}"><span class="badge badge-light-success">Preview</span></a>
                                             </td>
                                         </tr>
                                         @empty

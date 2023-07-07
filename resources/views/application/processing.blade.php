@@ -325,7 +325,7 @@
                                                 <span class="table-inner-text">{{ date('F d Y',strtotime($doc->created_at)) }}</span>
                                             </td>
                                             <td>
-                                                <a download href="{{ asset($doc->doc) }}"><span class="badge badge-light-success">Download</span></a>
+                                                <a target="_blank" href="{{ asset($doc->doc) }}"><span class="badge badge-light-success">Preview</span></a>
                                             </td>
                                         </tr>
                                         @empty
