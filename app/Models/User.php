@@ -14,6 +14,7 @@ use App\Models\Application\Note;
 use App\Models\Application\RequestDocument;
 use App\Models\Task\Task;
 use App\Models\Teacher\Teacher;
+use App\Models\Interviewer\Interviewer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -55,6 +56,9 @@ class User extends Authenticatable
 
     public function teacher(){
         return $this->hasOne(Teacher::class);
+    }
+    public function interviewer(){
+        return $this->hasOne(Interviewer::class);
     }
     public function officer(){
         return $this->hasOne(AdmissionOfficer::class);

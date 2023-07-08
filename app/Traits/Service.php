@@ -705,6 +705,10 @@ trait Service
                 'val'=>'Manager',
             ),
             array(
+                'key'=>'interviewer',
+                'val'=>'Interviewer',
+            ),
+            array(
                 'key'=>'adminManager',
                 'val'=>'Admission Manager',
             ),

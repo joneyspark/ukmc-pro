@@ -59,6 +59,8 @@ Route::controller(ApplicationController::class)->group(function () {
 
     Route::get('my-assigned-applications', 'my_assigned_applications');
     Route::get('reset-my-assigned-application-search', 'reset_my_assigned_application_search');
+    Route::get('interviewer-applications', 'interviewer_applications');
+    Route::get('reset-interviewer-application-search', 'reset_interviewer_application_search');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

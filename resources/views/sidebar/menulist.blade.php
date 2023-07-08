@@ -20,7 +20,7 @@
     <div class="shadow-bottom"></div>
     @if(Auth::check())
     <ul class="list-unstyled menu-categories" id="accordionExample" >
-        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
         <li class="menu {{ (!empty($dashboard) && $dashboard==true)?'active':'' }}">
             <a href="{{ URL::to('/') }}" data-bs-toggle="" aria-expanded="true" class="dropdown-toggle">
                 <div class="">
@@ -65,6 +65,11 @@
                     <a href="{{ URL::to('agent-applications') }}"> Agent Applications </a>
                 </li>
                 @endif
+                @if(Auth::check() && Auth::user()->role=='interviewer')
+                <li class="{{ (!empty($application_all) && $application_all==true)?'active':'' }}">
+                    <a href="{{ URL::to('interviewer-applications') }}"> My Applications </a>
+                </li>
+                @endif
                 @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
                 <li class="{{ (!empty($application_pending) && $application_pending==true)?'active':'' }}">
                     <a href="{{ URL::to('pending-applications') }}"> Pending Application </a>
@@ -73,7 +78,7 @@
                     <a href="{{ URL::to('all-application') }}"> All Application </a>
                 </li>
                 @endif
-                @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
                 <li class="{{ (!empty($interview_list) && $interview_list==true)?'active':'' }}">
                     <a href="{{ URL::to('interview-list') }}"> Interview Schedule </a>
                 </li>
@@ -86,9 +91,14 @@
                     <a href="{{ URL::to('all-application-status') }}"> Application Status </a>
                 </li>
                 @endif
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='interviewer')
+                <li class="{{ (!empty($application_status) && $application_status==true)?'active':'' }}">
+                    <a href="{{ URL::to('all-interview-status') }}"> Interview Status </a>
+                </li>
+                @endif
             </ul>
         </li>
-        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
+        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='interviewer')
         <li class="menu {{ (!empty($campus) && $campus==true)?'active':'' }}">
             <a href="#datatables2" data-bs-toggle="collapse" aria-expanded="{{ (!empty($campus) && $campus==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">
@@ -123,7 +133,7 @@
             </ul>
         </li>
         @endif
-        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
         <li class="menu {{ (!empty($course) && $course==true)?'active':'' }}">
             <a href="#datatables3" data-bs-toggle="collapse" aria-expanded="{{ (!empty($course) && $course==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">
@@ -205,7 +215,7 @@
             </a>
         </li>
         @endif
-        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='teacher' || Auth::user()->role=='admin')
+        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='interviewer' || Auth::user()->role=='admin')
         <li class="menu {{ (!empty($task) && $task==true)?'active':'' }}">
             <a href="#menuLevel1" data-bs-toggle="collapse" aria-expanded="{{ (!empty($course) && $course==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">
@@ -225,7 +235,7 @@
                     <a href="{{ URL::to('task-list') }}"> All Task </a>
                 </li>
                 @endif
-                @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='manager')
+                @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
                 <li class="{{ (!empty($task_my) && $task_my==true)?'active':'' }}">
                     <a href="{{ URL::to('my-tasks') }}"> My Tasks </a>
                 </li>

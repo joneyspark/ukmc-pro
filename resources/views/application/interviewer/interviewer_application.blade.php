@@ -118,7 +118,7 @@
                             <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="#">Application</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Create</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Interviewer Application List</li>
                                 </ol>
                             </nav>
 
@@ -133,7 +133,7 @@
                  <div class="row">
                      <div class="row mb-2">
                         <div class="col-4">
-                            <select id="campus" name="campus" class="form-control" onchange="getMyApplicationData()">
+                            <select id="campus" name="campus" class="form-control" onchange="interviewerApplicationData()">
                                 <option value="">Select Campus</option>
                                 @if(count($campuses) > 0)
                                 @foreach ($campuses as $campus1)
@@ -143,7 +143,7 @@
                             </select>
                          </div>
                          <div class="col-4">
-                            <select id="agent" name="agent" class="form-control" onchange="getMyApplicationData()">
+                            <select id="agent" name="agent" class="form-control" onchange="interviewerApplicationData()">
                                 <option value="">Select Agent</option>
                                 @if(count($agents) > 0)
                                 @foreach ($agents as $agent)
@@ -153,7 +153,7 @@
                             </select>
                          </div>
                          <div class="col-4">
-                            <select id="status" name="status" class="form-control" onchange="getMyApplicationData()">
+                            <select id="status" name="status" class="form-control" onchange="interviewerApplicationData()">
                                 <option value="">Select Status</option>
                                 @if(count($statuses) > 0)
                                 @foreach ($statuses as $status)
@@ -166,7 +166,7 @@
                      <div class="row">
 
                          <div class="col-3">
-                            <select id="intake" name="intake" class="form-control" onchange="getMyApplicationData()">
+                            <select id="intake" name="intake" class="form-control" onchange="interviewerApplicationData()">
                                 <option value="">Select Intake</option>
                                 @if(count($intakes) > 0)
                                 @foreach ($intakes as $intake)
@@ -182,7 +182,7 @@
                             <input type="submit" value="Filter" name="time" class="btn btn-warning">
                          </div>
                          <div class="col-1">
-                            <a href="{{ URL::to('reset-my-application-search') }}" class="btn btn-danger">Reset</a>
+                            <a href="{{ URL::to('reset-interviewer-application-search') }}" class="btn btn-danger">Reset</a>
                          </div>
                      </div>
 
@@ -237,7 +237,7 @@
                                     <td>{{ (!empty($row->campus->campus_name)?$row->campus->campus_name:'') }}</td>
                                     <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>
                                     <td>
-                                        @if(Auth::user()->role=='admin' || Auth::user()->id==$row->admission_officer_id)
+                                        @if(Auth::user()->role=='admin' || Auth::user()->id==$row->interviewer_id)
                                         <div class="is-action{{ $row->id }} dropdown">
                                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
@@ -246,17 +246,6 @@
                                                 <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="dropdown-item" onclick="get_application_notes({{ $row->id }})" href="#">Notes</a>
                                                 <a data-bs-toggle="modal" data-bs-target="#inputFormModal1" class="dropdown-item" onclick="get_application_followups({{ $row->id }})" href="javascript:void(0);">Follow Up</a>
                                                 <a data-bs-toggle="modal" data-bs-target="#inputFormModal2" class="dropdown-item" onclick="get_application_meetings({{ $row->id }})" href="javascript:void(0);">Meeting</a>
-                                            </div>
-                                        </div>
-                                        @else
-                                        <div class="is-action-data is-action{{ $row->id }} dropdown">
-                                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                                            </a>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink6" style="">
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="dropdown-item" href="#">Notes</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal1" class="dropdown-item" href="javascript:void(0);">Follow Up</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#inputFormModal2" class="dropdown-item" href="javascript:void(0);">Meeting</a>
                                             </div>
                                         </div>
                                         @endif

@@ -88,6 +88,9 @@
                                 <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <li><a class="dropdown-item" href="{{ URL::to('create-manager') }}">Manager</a></li>
                                 <li><a class="dropdown-item" href="{{ URL::to('create-admission-manager') }}">Admission Officer</a></li>
+                                @if(Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                                <li><a class="dropdown-item" href="{{ URL::to('create-interviewer') }}">Interviewer</a></li>
+                                @endif
                                 </ul>
                             </div>
                         </div>
@@ -138,6 +141,8 @@
                                         <span class="text-success">Admission Officer</span>
                                         @elseif($row->role=='manager')
                                         <span class="text-success">Manager</span>
+                                        @elseif($row->role=='interviewer')
+                                        <span class="text-success">Interviewer</span>
                                         @elseif($row->role=='teacher')
                                         <span class="text-success">Teacher</span>
                                         @elseif($row->role=='student')
@@ -167,6 +172,10 @@
 
                                             @if($row->role=='manager')
                                             <a href="{{ URL::to('edit-manager/'.$row->slug) }}" class="badge badge-pill bg-warning">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                            </a>
+                                            @elseif($row->role=='interviewer')
+                                            <a href="{{ URL::to('edit-interviewer/'.$row->slug) }}" class="badge badge-pill bg-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             </a>
                                             @elseif($row->role=='adminManager')

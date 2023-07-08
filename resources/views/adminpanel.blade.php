@@ -288,6 +288,15 @@
                 var intake = $('#intake').val();
                 window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake;
             }
+            //search application data
+            function interviewerApplicationData(){
+                var campus = $('#campus').val();
+                var agent = $('#agent').val();
+                var officer = $('#officer').val();
+                var status = $('#status').val();
+                var intake = $('#intake').val();
+                window.location = "{{ URL::to('interviewer-applications?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake;
+            }
             //search agent application data
             function getAgentApplicationData(){
                 var campus = $('#campus').val();

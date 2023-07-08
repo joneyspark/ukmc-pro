@@ -48,7 +48,7 @@ Route::controller(AgentTaskController::class)->group(function () {
 Route::controller(SettingController::class)->group(function () {
     Route::get('company-settings', 'company_settings');
     Route::post('company-setting-post', 'company_setting_post');
-    
+
 });
 
 Route::controller(LoginController::class)->group(function () {
@@ -94,4 +94,9 @@ Route::controller(UserController::class)->group(function () {
 
     Route::get('student-list', 'student_list');
     Route::get('reset-student-list', 'reset_student_list')->name('reset-student-list');
+
+    Route::get('create-interviewer','create_interviewer');
+    Route::post('create-interviewer-data-post','create_interviewer_data_post');
+    Route::get('edit-interviewer/{slug}','edit_interviewer');
+    Route::post('edit-interviewer-data-post','edit_interviewer_data_post');
 });

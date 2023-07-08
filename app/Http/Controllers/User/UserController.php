@@ -29,6 +29,7 @@ use App\Models\Admission\AdmissionOfficer;
 use Intervention\Image\Facades\Image;
 use App\Models\Teacher\Teacher;
 use App\Http\Requests\Teacher\TeacherCreateRequest;
+use App\Models\Interviewer\Interviewer;
 use Illuminate\Support\Facades\File;
 
 class UserController extends Controller{
@@ -223,7 +224,7 @@ class UserController extends Controller{
             return redirect('user-list');
         }
     }
-    
+
     public function create_admission_manager(){
         if(!Auth::check() && Auth::user()->role != 'admin'){
             Session::flash('error','Login First! Create Campus!');
@@ -579,7 +580,7 @@ class UserController extends Controller{
             return redirect('user-list');
         }
     }
-    
+
     //user status change
     public function user_status_chnage(Request $request){
         $userData = User::where('id',$request->user_id)->first();
@@ -630,7 +631,7 @@ class UserController extends Controller{
             return redirect('user-list');
         }
     }
-    //create teacher function 
+    //create teacher function
     public function create_teacher(){
         if(!Auth::check() && Auth::user()->role != 'admin'){
             Session::flash('error','Login First! Create Interviewer!');
@@ -921,5 +922,179 @@ class UserController extends Controller{
         $user->save();
         Session::flash('success','Profile Updated Successfully!');
         return redirect('profile-settings');
+    }
+    //interviewer function
+    public function create_interviewer(){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Interviewer!');
+            return redirect('login');
+        }
+        $data['page_title'] = 'User | Create Interviewer';
+        $data['usermanagement'] = true;
+        $data['get_campuses'] = Campus::where('active',1)->get();
+        $data['countries'] = Service::countries();
+        return view('users/interviewer/create_interviewer',$data);
+    }
+    public function create_interviewer_data_post(Request $request){
+        $request->validate([
+            'interviewer_name' => 'required',
+            'interviewer_phone' => 'required',
+            'interviewer_email' => 'required',
+            'interviewer_alternative_contact' => 'required',
+            'photo' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'min:6',
+        ]);
+        $first_name = "";
+        $last_name = "";
+        $user = new User();
+        $user->name = $request->name;
+        if($user->name){
+            $array = explode(" ",$user->name);
+            foreach($array as $key=>$row){
+                if($key==0){
+                    $first_name = $row;
+                }
+                if(!empty($row) && $key != 0){
+                    $last_name .= $row.' ';
+                }
+            }
+        }
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->role = 'interviewer';
+        $user->email = $request->email;
+        $user->phone = $request->interviewer_phone;
+        $user->slug = Str::slug($request->name,'-');
+        //photo upload
+        $photo = $request->photo;
+        if ($request->hasFile('photo')) {
+            // if (File::exists(public_path('backend/images/company_logo/'.$company->company_logo))) {
+            //     File::delete(public_path('backend/images/company_logo/'.$company->company_logo));
+            // }
+            $ext = $photo->getClientOriginalExtension();
+            $filename = $photo->getClientOriginalName();
+            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+            $image_resize = Image::make($photo->getRealPath());
+            $image_resize->resize(200, 200);
+            $upload_path = 'backend/images/users/interviewer/';
+            Service::createDirectory($upload_path);
+            $image_resize->save(public_path('backend/images/users/interviewer/'.$filename));
+            $user->photo = 'backend/images/users/interviewer/'.$filename;
+        }
+        $user->password = Hash::make($request->password);
+        $user->save();
+        //create admission officer now
+        $interviewer = new Interviewer();
+        $interviewer->user_id = $user->id;
+        $interviewer->interviewer_name = $request->interviewer_name;
+        $interviewer->interviewer_phone = $request->interviewer_phone;
+        $interviewer->interviewer_email = $request->interviewer_email;
+        $interviewer->interviewer_alternative_contact = $request->interviewer_alternative_contact;
+        $interviewer->interviewer_nid_or_passport = $request->interviewer_nid_or_passport;
+        $interviewer->nationality = $request->nationality;
+        $interviewer->country = $request->country;
+        $interviewer->state = $request->state;
+        $interviewer->city = $request->city;
+        $interviewer->address = $request->address;
+        $interviewer->save();
+        Session::put('saved_user_id',$user->id);
+        Session::flash('success','Successfully Saved Interviewer Information!');
+        if(!empty(Session::get('current_url'))){
+            return redirect(Session::get('current_url'));
+        }else{
+            return redirect('user-list');
+        }
+    }
+    public function edit_interviewer($slug=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Then Update Interviewer Information!');
+            return redirect('login');
+        }
+        $data['officer_data'] = User::with(['interviewer'])->where('slug',$slug)->first();
+        //dd($data['teacher_data']);
+        if(!$data['officer_data']){
+            Session::flash('error','Interviewer Data Not Found! Server Error!');
+            if(Session::get('current_url')){
+                return redirect(Session::get('current_url'));
+            }else{
+                return redirect('user-list');
+            }
+        }
+        $data['page_title'] = 'User | Edit Interviewer';
+        $data['usermanagement'] = true;
+        //$data['managers'] = User::where('role','manager')->where('active',1)->get();
+        $data['get_campuses'] = Campus::where('active',1)->get();
+        $data['countries'] = Service::countries();
+        return view('users/interviewer/edit_interviewer',$data);
+    }
+    public function edit_interviewer_data_post(Request $request){
+        $request->validate([
+            'interviewer_name' => 'required',
+            'interviewer_phone' => 'required',
+            'interviewer_email' => 'required',
+            'interviewer_alternative_contact' => 'required',
+            'name' => 'required',
+        ]);
+        //first create user
+        $first_name = "";
+        $last_name = "";
+        $user = User::where('id',$request->user_id)->first();
+        $user->name = $request->name;
+        if($user->name){
+            $array = explode(" ",$user->name);
+            foreach($array as $key=>$row){
+                if($key==0){
+                    $first_name = $row;
+                }
+                if(!empty($row) && $key != 0){
+                    $last_name .= $row.' ';
+                }
+            }
+        }
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->create_by = Auth::user()->id;
+        $user->phone = $request->interviewer_phone;
+        //photo upload
+        $photo = $request->photo;
+        if ($request->hasFile('photo')) {
+            if (File::exists(public_path($user->photo))) {
+                File::delete(public_path($user->photo));
+            }
+            $ext = $photo->getClientOriginalExtension();
+            $filename = $photo->getClientOriginalName();
+            $filename = Service::slug_create($filename).rand(1100, 99999).'.'.$ext;
+            $image_resize = Image::make($photo->getRealPath());
+            $image_resize->resize(200, 200);
+            $upload_path = 'backend/images/users/interviewer/';
+            Service::createDirectory($upload_path);
+            $image_resize->save(public_path('backend/images/users/interviewer/'.$filename));
+            $user->photo = 'backend/images/users/interviewer/'.$filename;
+        }
+        $user->save();
+        //create admission officer now
+        $interviewer = Interviewer::where('user_id',$user->id)->first();
+        $interviewer->user_id = $user->id;
+        $interviewer->interviewer_name = $request->interviewer_name;
+        $interviewer->interviewer_phone = $request->interviewer_phone;
+        $interviewer->interviewer_email = $request->interviewer_email;
+        $interviewer->interviewer_alternative_contact = $request->interviewer_alternative_contact;
+        $interviewer->interviewer_nid_or_passport = $request->interviewer_nid_or_passport;
+        $interviewer->nationality = $request->nationality;
+        $interviewer->country = $request->country;
+        $interviewer->state = $request->state;
+        $interviewer->city = $request->city;
+        $interviewer->address = $request->address;
+        $interviewer->save();
+        Session::put('saved_user_id',$user->id);
+        Session::flash('success','Successfully Updated Interviewer Information!');
+        if(!empty(Session::get('current_url'))){
+            return redirect(Session::get('current_url'));
+        }else{
+            return redirect('user-list');
+        }
     }
 }
