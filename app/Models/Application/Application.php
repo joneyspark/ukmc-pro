@@ -106,4 +106,7 @@ class Application extends Model
     public function university(){
         return $this->belongsTo(University::class);
     }
+    public function interviewer(){
+        return $this->belongsTo(User::class,'interviewer_id','id');
+    }
 }

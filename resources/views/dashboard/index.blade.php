@@ -236,7 +236,7 @@
                                     <div class="t-dot" data-original-title="" title="">
                                     </div>
                                     <div class="t-text">
-                                        <span>{{ $activity->description }}</span>
+                                        <span>{!! $activity->description !!}</span>
                                         <p class="t-time">{{ App\Models\Notification\Notification::timeLeft($activity->create_date) }}</p>
                                     </div>
                                 </div>

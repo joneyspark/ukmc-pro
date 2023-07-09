@@ -33,6 +33,7 @@ use App\Mail\requestDocumentMail;
 use App\Models\Application\ApplicationStatus;
 use App\Models\Application\Experience;
 use App\Models\Application\Followup;
+use App\Models\Application\InterviewStatus;
 use App\Models\Application\Meeting;
 use App\Models\Application\Qualification;
 use App\Models\Application\Status;
@@ -812,7 +813,9 @@ class ApplicationController extends Controller{
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = Company::where('status',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
+        $data['interviewer_list'] = User::where('role','interviewer')->where('active',1)->get();
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
+        $data['interview_statuses'] = InterviewStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
 
         $data['application_list'] = Application::query()
@@ -1662,6 +1665,46 @@ class ApplicationController extends Controller{
         Session::put('get_intake','');
         Session::put('search','');
         return redirect('interviewer-applications');
+    }
+    //application assign to Interviewer
+    public function application_assign_to_interviewer(Request $request){
+        $request->validate([
+            'assign_to_interviewer_id'=>'required',
+        ]);
+        $getIds = $request->assign_interviewer_application_ids;
+        if(!$getIds){
+            Session::flash('error','Internal Server Error! Application Data Not Found!');
+            return redirect('all-application');
+        }
+        $array = explode(",",$getIds);
+        foreach($array as $row){
+            $getApp = Application::where('id',$row)->where('interviewer_id',0)->first();
+            if($getApp){
+                $getApp->interviewer_id = $request->assign_to_interviewer_id;
+                $getApp->interview_status = 1;
+                $getApp->save();
+            }
+        }
+        $count = count($array);
+        //create notification
+        $notification = new Notification();
+        $notification->title = 'Assign Interviewer Application';
+        $notification->description = $count.' New Application Assigned By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = url(Auth::user()->photo);
+        $notification->user_id = $request->assign_to_interviewer_id;
+        $notification->is_admin = 1;
+        $notification->manager_id = 0;
+        $notification->application_id = 0;
+        $notification->slug = 'interviewer-applications';
+        $notification->save();
+        //make instant messaging
+        $url = url('interviewer-applications');
+        event(new AddNewLead($notification->description,$url));
+        Session::flash('success',$count.' Application Assigned Successfully!');
+        return redirect('all-application');
     }
 
 }

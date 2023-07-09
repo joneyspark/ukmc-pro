@@ -90,4 +90,7 @@ class User extends Authenticatable
     public function meetings(){
         return $this->hasMany(Meeting::class);
     }
+    public function interviewer_applications(){
+        return $this->hasMany(Application::class,'interviewer_id','id');
+    }
 }
