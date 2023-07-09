@@ -84,4 +84,8 @@ Route::controller(ApplicationOtherController::class)->group(function () {
     Route::get('all-application-status/{id?}', 'all_application_status');
     Route::post('application-status-store', 'application_status_store');
     Route::post('application-main-status-change', 'application_main_status_change');
+
+    Route::get('all-interview-status/{id?}', 'all_interview_status');
+    Route::post('interview-status-store', 'interview_status_store');
+    Route::post('interview-main-status-change', 'interview_main_status_change');
 });

@@ -92,7 +92,7 @@
                 </li>
                 @endif
                 @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='interviewer')
-                <li class="{{ (!empty($application_status) && $application_status==true)?'active':'' }}">
+                <li class="{{ (!empty($application_interview_status) && $application_interview_status==true)?'active':'' }}">
                     <a href="{{ URL::to('all-interview-status') }}"> Interview Status </a>
                 </li>
                 @endif

@@ -57,6 +57,8 @@ class Application extends Model
         'admission_officer_id',
         'marketing_officer_id',
         'manager_id',
+        'interviewer_id',
+        'interview_status',
         'is_academic',
         'application_status_id',
         'is_final_interview',

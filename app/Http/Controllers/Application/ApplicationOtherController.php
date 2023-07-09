@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\requestDocumentMail;
 use App\Models\Application\ApplicationStatus;
 use App\Models\Application\Followup;
+use App\Models\Application\InterviewStatus;
 use App\Models\Application\Meeting;
 use App\Models\Application\Note;
 
@@ -706,6 +707,63 @@ class ApplicationOtherController extends Controller
         }else{
             $update = ApplicationStatus::where('id',$application_status->id)->update(['status'=>$request->status]);
             $msg = 'Applicaton Status Deactivated';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
+    }
+    //interview status
+    public function all_interview_status($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Then Create Interview Status!');
+            return redirect('login');
+        }
+        $data['return_interview_status_id'] = Session::get('interview_status_id');
+        $data['page_title'] = 'Application | Interview Status';
+        $data['application'] = true;
+        $data['application_interview_status'] = true;
+        $data['get_interview_status'] = InterviewStatus::orderBy('id','desc')->get();
+        if($id){
+            $data['interview_status_data'] = InterviewStatus::where('id',$id)->first();
+        }
+        Session::forget('interview_status_id');
+        return view('application/status/interview_status',$data);
+    }
+    //interview status store
+    public function interview_status_store(Request $request){
+        $request->validate([
+            'title' => 'required',
+        ]);
+        $ApplicationId = $request->interview_status_id;
+        if($ApplicationId){
+            $ApplicationStatus = InterviewStatus::where('id',$ApplicationId)->first();
+        }else{
+            $ApplicationStatus = new InterviewStatus();
+        }
+        $ApplicationStatus->title = $request->title;
+        $ApplicationStatus->save();
+        Session::put('interview_status_id',$ApplicationStatus->id);
+        Session::flash('success',(!empty($ApplicationId))?'Interview Status Upadted!':'Interview Status Saved!');
+        return redirect('all-interview-status');
+    }
+    public function interview_main_status_change(Request $request){
+        $application_status = InterviewStatus::where('id',$request->interview_status_id)->first();
+        if(!$application_status){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Interview Status Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($application_status->status==1){
+            $update = InterviewStatus::where('id',$application_status->id)->update(['status'=>$request->status]);
+            $msg = 'Interview Status Activated';
+        }else{
+            $update = InterviewStatus::where('id',$application_status->id)->update(['status'=>$request->status]);
+            $msg = 'Interview Status Deactivated';
         }
         $data['result'] = array(
             'key'=>200,
