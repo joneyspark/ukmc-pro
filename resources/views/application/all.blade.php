@@ -459,15 +459,15 @@
                                         @endif
                                     </td>
                                     <td>
-
-                                    </td>
                                     @if(count($interview_statuses) > 0)
                                         @foreach ($interview_statuses as $isrow)
                                             @if($row->interview_status==$isrow->id)
-                                            <span class="shadow-none badge badge-danger">{{ $isrow->title }}</span>
+                                            <span class="shadow-none badge badge-success">{{ $isrow->title }}</span>
                                             @endif
                                         @endforeach
                                     @endif
+                                    </td>
+                                    
                                     <td>
                                         @if (count($statuses) > 0)
                                             @foreach ($statuses as $srow)

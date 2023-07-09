@@ -790,6 +790,7 @@ class ApplicationController extends Controller{
         $data['application_all'] = true;
         $data['application_info'] = Application::where('id',$id)->first();
         $data['application_status_list'] = ApplicationStatus::where('status',0)->get();
+        $data['interview_status_list'] = InterviewStatus::where('status',0)->get();
         return view('application/processing',$data);
     }
     public function all(Request $request){
@@ -1705,6 +1706,50 @@ class ApplicationController extends Controller{
         event(new AddNewLead($notification->description,$url));
         Session::flash('success',$count.' Application Assigned Successfully!');
         return redirect('all-application');
+    }
+    //application status change
+    public function interview_status_change(Request $request){
+        $application = Application::where('id',$request->application_id)->first();
+        if(!$application){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Application Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        if(!$request->status){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Application Status Not Found! Please Select!'
+            );
+            return response()->json($data,200);
+        }
+        $current_status = InterviewStatus::where('id',$application->interview_status)->first();
+        $update_status = InterviewStatus::where('id',$request->status)->first();
+        $application->interview_status = $request->status;
+        $application->update_by = Auth::user()->id;
+        $application->save();
+        //make notification to admin
+        $notification = new Notification();
+        $notification->title = 'Interview Status Change';
+        $notification->description = 'Interview Status Change From <span style="color:red;">'.$current_status->title.'</span> to <span style="color:green;">'.$update_status->title.'</span> By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->manager_id = 1;
+        $notification->application_id = $application->id;
+        $notification->slug = 'application/'.$application->id.'/processing';
+        $notification->save();
+        //make instant notification for super admin
+        event(new AdminMsgEvent($notification->description,url('application/'.$application->id.'/processing')));
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$notification->description,
+        );
+        return response()->json($data,200);
     }
 
 }

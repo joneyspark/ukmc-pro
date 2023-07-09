@@ -1,6 +1,6 @@
 @extends('adminpanel')
 @section('admin')
-@if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+@if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
 <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <!--  BEGIN BREADCRUMBS  -->

@@ -597,3 +597,47 @@ $(function(){
 
     });
 });
+
+//application status change
+function interview_status_change(){
+    var status = $('.interview-status-change').val();
+    var application_id = $('.interview-status-change').data('id');
+    var url = $('.interview-status-change').data('action');
+        $.post(url,
+        {
+            application_id: application_id,
+            status: status
+        },
+        function(data, status){
+            console.log(data);
+            if(data['result']['key']===101){
+                iziToast.show({
+                    title: 'Status',
+                    message: data['result']['val'],
+                    position: 'topRight',
+                    timeout: 8000,
+                    color: 'orange',
+                    balloon: true,
+                    close: true,
+                    progressBarColor: 'yellow',
+                });
+            }
+            if(data['result']['key']===200){
+                iziToast.show({
+                    title: 'Status',
+                    message: data['result']['val'],
+                    position: 'topRight',
+                    timeout: 8000,
+                    color: 'green',
+                    balloon: true,
+                    close: true,
+                    progressBarColor: 'yellow',
+                });
+
+            }
+            //alert("Data: " + data + "\nStatus: " + status);
+        });
+        // setTimeout(function () {
+        //     location.reload(true);
+        // }, 3000);
+}

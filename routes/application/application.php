@@ -62,6 +62,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('interviewer-applications', 'interviewer_applications');
     Route::get('reset-interviewer-application-search', 'reset_interviewer_application_search');
     Route::post('application_assign_to_interviewer', 'application_assign_to_interviewer');
+    Route::post('interview-status-change', 'interview_status_change');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

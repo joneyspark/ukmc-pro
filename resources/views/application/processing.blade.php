@@ -225,6 +225,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager')
                             <div class="card no-outer-spacing no-border-custom">
                                 <div class="card-header">
                                     <section class="mb-0 mt-0">
@@ -248,6 +249,34 @@
                                     </div>
                                 </div>
                             </div><br>
+                            @endif
+                            @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+                            <div class="card no-outer-spacing no-border-custom">
+                                <div class="card-header">
+                                    <section class="mb-0 mt-0">
+                                        <h5>Change Interview Status</h5>
+                                    </section>
+                                </div>
+                                <div id="" class="" aria-labelledby="headingTwo2" data-parent="#withoutSpacing">
+                                    <div class="row">
+                                        <div style="margin: 5px;" class="col-10">
+                                            <div class="form-group mb-2"><label for="exampleFormControlInput1">Select Status</label>
+                                                @if(count($interview_status_list) > 0)
+                                                <select data-id="{{ (!empty($application_info->id))?$application_info->id:'' }}" data-action="{{ URL::to('interview-status-change') }}" name="status" class="interview-status-change form-control" onchange="interview_status_change()">
+                                                    <option value="">--Select One--</option>
+                                                    @foreach ($interview_status_list as $status)
+                                                    <option {{ ($application_info->interview_status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><br>
+                            @endif
+                            
+                            @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
                             <div class="card no-outer-spacing no-border-custom">
                                 <div class="card-header">
                                     <section class="mb-0 mt-0">
@@ -304,6 +333,8 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
+                            
                         </div>
                         <div class="col col-md-12 mb-4">
                             <h5 class="pb-2">Application Document <a href="{{ URL::to('application-create/'.$application_info->id.'/step-2') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Document <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
