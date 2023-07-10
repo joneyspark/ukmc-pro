@@ -66,7 +66,7 @@
                 </li>
                 @endif
                 @if(Auth::check() && Auth::user()->role=='interviewer')
-                <li class="{{ (!empty($application_all) && $application_all==true)?'active':'' }}">
+                <li class="{{ (!empty($interviewer_application_list) && $interviewer_application_list==true)?'active':'' }}">
                     <a href="{{ URL::to('interviewer-applications') }}"> My Applications </a>
                 </li>
                 @endif

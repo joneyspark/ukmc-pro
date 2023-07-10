@@ -37,6 +37,7 @@ use App\Models\Application\InterviewStatus;
 use App\Models\Application\Meeting;
 use App\Models\Application\Qualification;
 use App\Models\Application\Status;
+use App\Models\Setting\CompanySetting;
 use App\Models\University\University;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -1111,8 +1112,10 @@ class ApplicationController extends Controller{
         $studentEmail = $application->email;
 
         $details = [
-            'create_by'=>Auth::user()->name,
+            'create_by'=>Auth::user(),
             'message'=>$request->message,
+            'application_info'=>$application,
+            'company'=>CompanySetting::where('id',1)->first(),
         ];
         if($agentData){
             $agentEmail = $agentData->email;
@@ -1609,6 +1612,7 @@ class ApplicationController extends Controller{
         $data['agents'] = Company::where('status',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
+        $data['interview_statuses'] = InterviewStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
 
         $data['application_list'] = Application::query()

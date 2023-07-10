@@ -219,6 +219,7 @@
                                     <th>Campus</th>
                                     <th>Create date</th>
                                     <th>Follow Up</th>
+                                    <th>Interview Status</th>
                                     <th>Intake</th>
 
                                     <th>Status</th>
@@ -258,6 +259,15 @@
                                             </div>
                                         </div>
                                         @endif
+                                    </td>
+                                    <td>
+                                    @if(count($interview_statuses) > 0)
+                                        @foreach ($interview_statuses as $isrow)
+                                            @if($row->interview_status==$isrow->id)
+                                            <span class="shadow-none badge badge-success">{{ $isrow->title }}</span>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                     </td>
                                     <td>
                                         {{ date('F Y',strtotime($row->intake)) }}
