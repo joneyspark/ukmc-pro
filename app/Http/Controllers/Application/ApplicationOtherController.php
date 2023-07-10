@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Events\AddNewLead;
 use App\Events\AdminMsgEvent;
 use App\Events\AgentEvent;
+use App\Mail\Application\meetingNoteConfirm;
 use App\Models\Notification\Notification;
 use App\Models\User;
 use Carbon\Carbon;
@@ -16,11 +17,13 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\requestDocumentMail;
+use App\Models\Application\Application;
 use App\Models\Application\ApplicationStatus;
 use App\Models\Application\Followup;
 use App\Models\Application\InterviewStatus;
 use App\Models\Application\Meeting;
 use App\Models\Application\Note;
+use App\Models\Setting\CompanySetting;
 
 class ApplicationOtherController extends Controller
 {
@@ -258,6 +261,7 @@ class ApplicationOtherController extends Controller
         }
         $note->user_id = Auth::user()->id;
         $note->save();
+        $application_info = Application::where('id',$request->application_id)->first();
         //make notification
         $notification = new Notification();
         $notification->title = 'Meeting Date Create';
@@ -300,6 +304,15 @@ class ApplicationOtherController extends Controller
                 $select .= '</p><hr>';
             }
         }
+        //make meeting confirm mail
+        $details = [
+            'application_info'=>$application_info,
+            'company'=>CompanySetting::where('id',1)->first(),
+            'meeting_date'=>$note->meeting_date_time,
+            'meeting_time'=>$note->meeting_date_time,
+            'create_user'=>User::where('id',Auth::user()->id)->first(),
+        ];
+        Mail::to($application_info->email)->send(new meetingNoteConfirm($details));
         //make instant notification for super admin
         event(new AdminMsgEvent($notification->description,url('application/'.$request->application_id.'/processing')));
         $data['result'] = array(
