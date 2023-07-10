@@ -10,6 +10,7 @@ use App\Events\AgentEvent;
 use App\Http\Requests\Application\ApplicationStep2Request;
 use App\Http\Requests\Application\ApplicationStep3Request;
 use App\Http\Requests\Application\Step1Request;
+use App\Mail\Application\applicationStatusUpdateMail;
 use App\Models\Agent\Company;
 use App\Models\Application\Application;
 use App\Models\Application\Application_Step_2;
@@ -1265,6 +1266,14 @@ class ApplicationController extends Controller{
         $notification->application_id = $application->id;
         $notification->slug = 'application/'.$application->id.'/processing';
         $notification->save();
+        //make mail
+        $details = [
+            'application_data'=>$application,
+            'current_status'=>$current_status,
+            'update_status'=>$update_status,
+            'company'=>CompanySetting::where('id',1)->first(),
+        ];
+        Mail::to($application->email)->send(new applicationStatusUpdateMail($details));
         //make instant notification for super admin
         event(new AdminMsgEvent($notification->description,url('application/'.$application->id.'/processing')));
         $data['result'] = array(
