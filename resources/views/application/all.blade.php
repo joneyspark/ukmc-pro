@@ -467,7 +467,7 @@
                                         @endforeach
                                     @endif
                                     </td>
-                                    
+
                                     <td>
                                         @if (count($statuses) > 0)
                                             @foreach ($statuses as $srow)
@@ -580,7 +580,6 @@
     }
 </style>
 <script src="{{ asset('web/js/jquery.js') }}"></script>
-assignToInterviewerModal
 @if(Auth::user()->role=='manager' || Auth::user()->role=='admin')
     <script>
         var selectedValues = [];

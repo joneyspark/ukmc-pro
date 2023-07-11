@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Events\AddNewLead;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdmissionManager\AdmissionManagerRequest;
 use App\Http\Requests\AdmissionManager\EditAdmissionManagerRequest;
@@ -29,7 +30,9 @@ use App\Models\Admission\AdmissionOfficer;
 use Intervention\Image\Facades\Image;
 use App\Models\Teacher\Teacher;
 use App\Http\Requests\Teacher\TeacherCreateRequest;
+use App\Models\Application\Application;
 use App\Models\Interviewer\Interviewer;
+use App\Models\Notification\Notification;
 use Illuminate\Support\Facades\File;
 
 class UserController extends Controller{
@@ -136,6 +139,7 @@ class UserController extends Controller{
         //query
         $data['user_list_data'] = User::query()
         ->where('role','adminManager')
+        ->where('create_by',Auth::user()->id)
         ->orderBy('id','desc')
         ->paginate(10);
 
@@ -149,6 +153,63 @@ class UserController extends Controller{
         Session::forget('get_role');
         Session::forget('get_name');
         return redirect('user-list');
+    }
+    public function get_assign_to_user($id=NULL){
+        $users = User::where('create_by',Auth::user()->id)->where('role','adminManager')->where('id','!=',$id)->get();
+        $select = '';
+        if(count($users) > 0){
+            $select .= '<option value="">Select User</option>';
+            foreach($users as $row){
+                $select .= '<option value="'.$row->id.'">'.$row->name.'</option>';
+            }
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select
+        );
+        return response()->json($data,200);
+    }
+    public function transfer_assign_to_user(Request $request){
+        $request->validate([
+            'assign_to_user_id'=>'required',
+        ]);
+        $assign_to = User::where('id',$request->assign_to_user_id)->first();
+        if(!$assign_to){
+            Session::flash('error','Assign To User Data Not Found! Server Error!');
+            return redirect('my-team-list');
+        }
+        $getApplication = Application::where('admission_officer_id',$request->assign_user_id)->get();
+        if(count($getApplication) > 0){
+            foreach($getApplication as $row){
+                $application = Application::where('id',$row->id)->first();
+                $application->admission_officer_id = $request->assign_to_user_id;
+                $application->manager_id = Auth::user()->id;
+                $application->save();
+            }
+        }else{
+            Session::flash('error','This User Don,t have any assigned application!');
+            return redirect('my-team-list');
+        }
+        //create notification
+        $notification = new Notification();
+        $notification->title = 'Application Transfer To Other User';
+        $notification->description = count($getApplication).' Application Transfer to '.$assign_to->name.' by '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->manager_id = 1;
+        $notification->application_id = 0;
+        $notification->slug = 'all-application';
+        $notification->save();
+        //make instant messaging
+        $message = count($getApplication).' Application Transfer to '.$assign_to->name.' by '.Auth::user()->name;
+        $url = url('all-application');
+        event(new AddNewLead($message,$url));
+        Session::flash('success',count($getApplication).' Application Transfer to '.$assign_to->name.' by '.Auth::user()->name);
+        return redirect('my-team-list');
     }
     public function create_manager(){
         if(!Auth::check() && Auth::user()->role != 'admin'){
