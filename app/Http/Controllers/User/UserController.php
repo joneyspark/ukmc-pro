@@ -33,6 +33,7 @@ use App\Http\Requests\Teacher\TeacherCreateRequest;
 use App\Models\Application\Application;
 use App\Models\Interviewer\Interviewer;
 use App\Models\Notification\Notification;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 
 class UserController extends Controller{
@@ -47,7 +48,8 @@ class UserController extends Controller{
         $data['usermanagement'] = true;
         $getUserId = Session::get('saved_user_id');
         $data['return_user_id'] = $getUserId;
-
+        $data['interviewer_list'] = User::where('role','interviewer')->where('active',1)->get();
+        $data['manager_list'] = User::where('role','manager')->where('active',1)->get();
         //work on search option
         $role = $request->get('role');
         $name = $request->get('name');
@@ -78,6 +80,110 @@ class UserController extends Controller{
         Session::forget('saved_user_id');
         Session::put('current_url',URL::full());
         return view('users/list',$data);
+    }
+    //confirm transfer to interviewer application
+    public function confirm_transfer_application_to_interviewer(Request $request){
+        $request->validate([
+            'assign_to_interviewer_user_id'=>'required',
+        ]);
+        $assign_from = User::where('id',$request->interviewer_user_id)->first();
+        if(!$assign_from){
+            Session::flash('error','Assign From User Data Not Found! Server Error!');
+            return redirect('user-list');
+        }
+        $getApplication = Application::where('interviewer_id',$request->interviewer_user_id)->get();
+        if(count($getApplication) > 0){
+            foreach($getApplication as $row){
+                $application = Application::where('id',$row->id)->first();
+                $application->interviewer_id = $request->assign_to_interviewer_user_id;
+                $application->save();
+            }
+        }else{
+            Session::flash('error','This User Don,t have any assigned application!');
+            return redirect('user-list');
+        }
+        $assign_to_user = User::where('id',$request->assign_to_interviewer_user_id)->first();
+        //create notification
+        $notification = new Notification();
+        $notification->title = 'Application Transfer To Other Interviewer';
+        $notification->description = count($getApplication).' Application Transfer From '.$assign_from->name.' to '.$assign_to_user->name.' by '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->manager_id = 1;
+        $notification->application_id = 0;
+        $notification->slug = 'all-application';
+        $notification->save();
+        //make instant messaging
+        $message = count($getApplication).' Application Transfer From '.$assign_from->name.' to '.$assign_to_user->name.' by '.Auth::user()->name;
+        $url = url('all-application');
+        event(new AddNewLead($message,$url));
+        Session::put('saved_user_id',$assign_to_user->id);
+        Session::flash('success',count($getApplication).' Application Transfer From '.$assign_from->name. ' to '.$assign_to_user->name.' by '.Auth::user()->name);
+        return redirect('user-list');
+    }
+    //transfer application to admission officer
+    public function confirm_transfer_application_to_admission_officer(Request $request){
+        $request->validate([
+            'manager_id'=>'required',
+            'admission_officer_id'=>'required',
+        ]);
+        //return $request->all();
+        $fromOfficer = User::where('id',$request->from_admission_officer_id)->first();
+        if(!$fromOfficer){
+            Session::flash('error','From Admission Officer Data Not Found! Internal Server Error');
+            return redirect('user-list');
+        }
+        $getApplication = Application::where('admission_officer_id',$fromOfficer->id)->get();
+        if(count($getApplication) > 0){
+            foreach($getApplication as $row){
+                $application = Application::where('id',$row->id)->first();
+                $application->admission_officer_id = $request->admission_officer_id;
+                $application->manager_id = $request->manager_id;
+                $application->save();
+            }
+        }else{
+            Session::flash('error','This User Don,t have any assigning Application!');
+            return redirect('user-list');
+        }
+        $assign_to_user = User::where('id',$request->admission_officer_id)->first();
+        //create notification
+        $notification = new Notification();
+        $notification->title = 'Application Transfer From '.$fromOfficer->name.' To Other Admission Officer';
+        $notification->description = count($getApplication).' Application Transfer From '.$fromOfficer->name.' to '.$assign_to_user->name.' by '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->manager_id = 1;
+        $notification->application_id = 0;
+        $notification->slug = 'all-application';
+        $notification->save();
+        //make instant messaging
+        $message = count($getApplication).' Application Transfer From '.$fromOfficer->name.' to '.$assign_to_user->name.' by '.Auth::user()->name;
+        $url = url('all-application');
+        event(new AddNewLead($message,$url));
+        Session::put('saved_user_id',$assign_to_user->id);
+        Session::flash('success',count($getApplication).' Application Transfer From '.$fromOfficer->name.' to '.$assign_to_user->name.' by '.Auth::user()->name);
+        return redirect('user-list');
+    }
+    public function get_admission_officer_by_manager($manager_id=NULL){
+        $officers = User::where('create_by',$manager_id)->get();
+        $select = '';
+        $select .= '<option value="">Select Admission Manager</option>';
+        foreach($officers as $row){
+            $select .= '<option value="'.$row->id.'">'.$row->name.'</option>';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select
+        );
+        return response()->json($data,200);
     }
     public function student_list(Request $request){
         if(!Auth::check()){

@@ -89,6 +89,9 @@ Route::controller(UserController::class)->group(function () {
     Route::get('my-team-list', 'my_team_list');
     Route::get('get-assign-to-user/{id?}', 'get_assign_to_user');
     Route::post('transfer_assign_to_user', 'transfer_assign_to_user');
+    Route::post('confirm_transfer_application_to_interviewer', 'confirm_transfer_application_to_interviewer');
+    Route::post('confirm_transfer_application_to_admission_officer', 'confirm_transfer_application_to_admission_officer');
+    Route::get('get-admission-officer-by-manager','get_admission_officer_by_manager');
     Route::get('create-admission-manager-by-manager', 'create_admission_manager_by_manager');
     Route::post('create-admission-manager-by-manager-post', 'create_admission_manager_by_manager_post');
     Route::get('edit-admission-manager-by-manager/{slug?}', 'edit_admission_manager_by_manager');

@@ -150,7 +150,7 @@
 
                                     </td>
                                     <td>
-                                        {{ count($row->applications) }}
+                                        <span class="badge badge-success">{{ count($row->applications) }}</span>
                                     </td>
                                     <td class="text-center">
                                         <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">

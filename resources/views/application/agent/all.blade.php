@@ -61,7 +61,7 @@
                          </div>
                      </div>
                      <div class="row">
-                        
+
                          <div class="col-5">
                              <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter Name,Email,Phone">
                          </div>
@@ -92,6 +92,7 @@
                                     <th>Create date</th>
                                     <th>Intake</th>
                                     <th>Application Status</th>
+                                    <th>Interview Status</th>
                                     <th>Status</th>
                                     <th class="text-center">Action</th>
                                 </tr>
@@ -126,7 +127,24 @@
                                         <span class="badge badge-success">Application Submitted</span>
                                         @endif
                                     </td>
-                                    <td><span class="shadow-none badge badge-danger">New</span></td>
+                                    <td>
+                                        @if(count($interview_statuses) > 0)
+                                            @foreach ($interview_statuses as $isrow)
+                                                @if($row->interview_status==$isrow->id)
+                                                <span class="shadow-none badge badge-success">{{ $isrow->title }}</span>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if (count($statuses) > 0)
+                                            @foreach ($statuses as $srow)
+                                                @if($row->status==$srow->id)
+                                                <span class="shadow-none badge badge-danger">{{ $srow->title }}</span>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    </td>
                                     <td>
                                         @if($row->application_status_id==1)
                                         <a href="{{ URL::to('agent-applications/'.$row->id.'/details') }}" class="badge badge-pill bg-primary">

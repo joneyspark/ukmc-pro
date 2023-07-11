@@ -724,7 +724,9 @@ class ApplicationController extends Controller{
         $data['campuses'] = Campus::where('active',1)->get();
         //$data['agents'] = User::where('role','agent')->where('active',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
+        $data['interviewer_list'] = User::where('role','interviewer')->where('active',1)->get();
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
+        $data['interview_statuses'] = InterviewStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
         $data['agent_applications'] = Application::query()
         ->when($search, function ($query, $search) {
