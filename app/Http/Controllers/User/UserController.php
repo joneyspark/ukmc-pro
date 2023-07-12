@@ -1223,7 +1223,7 @@ class UserController extends Controller{
         }
         $user->first_name = $first_name;
         $user->last_name = $last_name;
-        $user->create_by = Auth::user()->id;
+        //$user->create_by = Auth::user()->id;
         $user->phone = $request->interviewer_phone;
         //photo upload
         $photo = $request->photo;

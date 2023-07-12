@@ -63,8 +63,8 @@
 
     <p>
       <strong>Application Id:</strong> {{ (!empty($details['application_data']->id))?'ukmc-'.$details['application_data']->id:'' }}<br>
-	  <strong>Applicant Email:</strong> {{ (!empty($details['application_data']->email))?$details['application_data']->email:'' }}<br>
-      <strong>Applicant Phone:</strong> {{ (!empty($details['application_data']->phone))?$details['application_data']->phone:'' }}
+	    <strong>Course Title:</strong> {{ (!empty($details['application_data']->course->course_name))?$details['application_data']->course->course_name:'' }}<br>
+      <strong>Intake:</strong> {{ (!empty($details['application_data']->intake))?date('F Y',strtotime($details['application_data']->intake)):'' }}
     </p><br>
 
     <p>The status of your application, which was previously <span class="spn-from">{{ (!empty($details['current_status']->title))?$details['current_status']->title:'' }}</span> has been updated to <span class="spn-to">{{ (!empty($details['update_status']->title))?$details['update_status']->title:'' }}</span></p>
