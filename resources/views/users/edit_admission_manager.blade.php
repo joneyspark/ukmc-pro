@@ -206,7 +206,10 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="email">Email</label>
-                                        <input disabled value="{{ (!empty($officer_data->email))?$officer_data->email:old('email') }}" type="email" class="form-control">
+                                        <input name="email" value="{{ (!empty($officer_data->email))?$officer_data->email:old('email') }}" type="email" class="form-control">
+                                        @if ($errors->has('email'))
+                                            <span class="text-danger">{{ $errors->first('email') }}</span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

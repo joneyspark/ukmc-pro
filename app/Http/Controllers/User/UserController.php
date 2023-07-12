@@ -350,7 +350,17 @@ class UserController extends Controller{
         $user->role = 'manager';
         $user->email = $request->email;
         $user->phone = $request->officer_phone;
-        $user->slug = Str::slug($request->name,'-');
+        //$user->slug = Str::slug($request->name,'-');
+        //slug create
+        $url_modify = Service::slug_create($request->name);
+        $checkSlug = User::where('slug', 'LIKE', '%' . $url_modify . '%')->count();
+        if ($checkSlug > 0) {
+            $new_number = $checkSlug + 1;
+            $new_slug = $url_modify . '-' . $new_number;
+            $user->slug = $new_slug;
+        } else {
+            $user->slug = $url_modify;
+        }
         //photo upload
         $photo = $request->photo;
         if ($request->hasFile('photo')) {
@@ -522,7 +532,17 @@ class UserController extends Controller{
         $user->email = $request->email;
         $user->phone = $request->officer_phone;
         $user->create_by = $request->manager_id;
-        $user->slug = Str::slug($request->name,'-');
+        //$user->slug = Str::slug($request->name,'-');
+        //slug create
+        $url_modify = Service::slug_create($request->name);
+        $checkSlug = User::where('slug', 'LIKE', '%' . $url_modify . '%')->count();
+        if ($checkSlug > 0) {
+            $new_number = $checkSlug + 1;
+            $new_slug = $url_modify . '-' . $new_number;
+            $user->slug = $new_slug;
+        } else {
+            $user->slug = $url_modify;
+        }
         //photo upload
         $photo = $request->photo;
         if ($request->hasFile('photo')) {
@@ -686,12 +706,21 @@ class UserController extends Controller{
         return view('users/edit_manager',$data);
     }
     //edit manager data post
-    public function edit_manager_data_post(EditManagerRequest $request){
+    public function edit_manager_data_post(Request $request){
+        $request->validate([
+            'officer_name' => 'required',
+            'officer_phone' => 'required',
+            'officer_email' => 'required',
+            'officer_alternative_contact' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$request->user_id,
+        ]);
         //first create user
         $first_name = "";
         $last_name = "";
         $user = User::where('id',$request->user_id)->first();
         $user->name = $request->name;
+        $user->email = $request->email;
         if($user->name){
             $array = explode(" ",$user->name);
             foreach($array as $key=>$row){
@@ -833,7 +862,17 @@ class UserController extends Controller{
         $user->role = 'teacher';
         $user->email = $request->email;
         $user->phone = $request->teacher_phone;
-        $user->slug = Str::slug($request->name,'-');
+        //$user->slug = Str::slug($request->name,'-');
+        //slug create
+        $url_modify = Service::slug_create($request->name);
+        $checkSlug = User::where('slug', 'LIKE', '%' . $url_modify . '%')->count();
+        if ($checkSlug > 0) {
+            $new_number = $checkSlug + 1;
+            $new_slug = $url_modify . '-' . $new_number;
+            $user->slug = $new_slug;
+        } else {
+            $user->slug = $url_modify;
+        }
         //photo upload
         $photo = $request->photo;
         if ($request->hasFile('photo')) {
@@ -982,12 +1021,22 @@ class UserController extends Controller{
         return view('users/edit_admission_manager',$data);
     }
     //officer edit data post
-    public function edit_officer_data_post(EditAdmissionManagerRequest $request){
+    public function edit_officer_data_post(Request $request){
+        $request->validate([
+            'manager_id' => 'required',
+            'officer_name' => 'required',
+            'officer_phone' => 'required',
+            'officer_email' => 'required',
+            'officer_alternative_contact' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$request->user_id,
+        ]);
         //first create user
         $first_name = "";
         $last_name = "";
         $user = User::where('id',$request->user_id)->first();
         $user->name = $request->name;
+        $user->email = $request->email;
         if($user->name){
             $array = explode(" ",$user->name);
             foreach($array as $key=>$row){
@@ -1134,7 +1183,16 @@ class UserController extends Controller{
         $user->role = 'interviewer';
         $user->email = $request->email;
         $user->phone = $request->interviewer_phone;
-        $user->slug = Str::slug($request->name,'-');
+        //slug create
+        $url_modify = Service::slug_create($request->name);
+        $checkSlug = User::where('slug', 'LIKE', '%' . $url_modify . '%')->count();
+        if ($checkSlug > 0) {
+            $new_number = $checkSlug + 1;
+            $new_slug = $url_modify . '-' . $new_number;
+            $user->slug = $new_slug;
+        } else {
+            $user->slug = $url_modify;
+        }
         //photo upload
         $photo = $request->photo;
         if ($request->hasFile('photo')) {
@@ -1204,12 +1262,14 @@ class UserController extends Controller{
             'interviewer_email' => 'required',
             'interviewer_alternative_contact' => 'required',
             'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$request->user_id,
         ]);
         //first create user
         $first_name = "";
         $last_name = "";
         $user = User::where('id',$request->user_id)->first();
         $user->name = $request->name;
+        $user->email = $request->email;
         if($user->name){
             $array = explode(" ",$user->name);
             foreach($array as $key=>$row){
