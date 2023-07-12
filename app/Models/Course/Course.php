@@ -86,8 +86,6 @@ class Course extends Model
     public function applications(){
         return $this->hasMany(Application::class);
     }
-    public function application(){
-        return $this->hasOne(Application::class);
-    }
+    
     
 }

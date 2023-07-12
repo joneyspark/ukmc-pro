@@ -54,14 +54,11 @@
 		<strong>Application Id:</strong>{{ (!empty($details['application_info']->id))?'ukmc-'.$details['application_info']->id:'' }} <br>
 		<strong>Applicant Email:</strong> {{ (!empty($details['application_info']->email))?$details['application_info']->email:'' }}<br>
     <strong>Applicant Phone:</strong> {{ (!empty($details['application_info']->phone))?$details['application_info']->phone:'' }}<br>
-    <strong>Course Title:</strong> {{ (!empty($details['application_data']->course->course_name))?$details['application_data']->course->course_name:'' }}<br>
-    <strong>Intake:</strong> {{ (!empty($details['application_data']->intake))?date('F Y',strtotime($details['application_data']->intake)):'' }}
+    <strong>Course Title:</strong> {{ (!empty($details['application_info']->course->course_name))?$details['application_info']->course->course_name:'' }}<br>
+    <strong>Intake:</strong> {{ (!empty($details['application_info']->intake))?date('F Y',strtotime($details['application_info']->intake)):'' }}
 	</p>
 	<p>Note: If you sent your document directly by mail, please mention your Application ID, Email, and Phone.</p>
-	<p>
-      <strong>Send Document Via:</strong> {{ (!empty($details['create_by']->email))?$details['create_by']->email:'' }}<br>
-      <strong>Or Direct Contact:</strong> {{ (!empty($details['create_by']->phone))?$details['create_by']->phone:'' }}
-    </p>
+	
 
     <p>Should you have any questions or require further information, please do not hesitate to contact our Admissions Team via email at <a href="mailto:{{ (!empty($details['company']->email))?$details['company']->email:'' }}">{{ (!empty($details['company']->email))?$details['company']->email:'' }}</a> or by phone at <a href="tel:{{ (!empty($details['company']->phone))?$details['company']->phone:'' }}">{{ (!empty($details['company']->phone))?$details['company']->phone:'' }}</a>.</p>
 

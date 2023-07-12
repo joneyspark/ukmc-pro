@@ -1104,7 +1104,7 @@ class ApplicationController extends Controller{
             $notification->create_by = Auth::user()->id;
             $notification->creator_name = Auth::user()->name;
             $notification->creator_image = Auth::user()->photo;
-            $notification->user_id = $agentData->user_id;
+            $notification->user_id = $agentData->id;
             $notification->is_admin = 1;
             $notification->application_id = $application->id;
             $notification->slug = 'application-create/'.$application->id.'/step-2';
