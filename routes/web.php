@@ -104,4 +104,11 @@ Route::controller(UserController::class)->group(function () {
     Route::post('create-interviewer-data-post','create_interviewer_data_post');
     Route::get('edit-interviewer/{slug}','edit_interviewer');
     Route::post('edit-interviewer-data-post','edit_interviewer_data_post');
+
+    Route::get('get-interviewer-application/{id?}','get_interviewer_application');
+    Route::get('reset-interviewer-application-search-list','reset_interviewer_application_search_list');
+    Route::post('application_assign_to_other_interviewer','application_assign_to_other_interviewer');
+    Route::get('get-admission-officer-application/{id?}','get_admission_officer_application');
+
+    Route::post('application_assign_to_manager_by_admin','application_assign_to_manager_by_admin');
 });
