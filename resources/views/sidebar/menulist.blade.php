@@ -175,7 +175,7 @@
             </a>
         </li>
         @endif
-        @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
+        @if(Auth::check() && Auth::user()->role=='admin')
         <li class="menu {{ (!empty($usermanagement) && $usermanagement==true)?'active':'' }}">
             <a href="{{ URL::to('user-list') }}" data-bs-toggle="" aria-expanded="false" class="dropdown-toggle">
                 <div class="">

@@ -111,4 +111,6 @@ Route::controller(UserController::class)->group(function () {
     Route::get('get-admission-officer-application/{id?}','get_admission_officer_application');
 
     Route::post('application_assign_to_manager_by_admin','application_assign_to_manager_by_admin');
+    Route::post('application_assign_to_officer_by_manager','application_assign_to_officer_by_manager');
+    Route::post('application_transfer_to_other_officer_by_officer','application_transfer_to_other_officer_by_officer');
 });

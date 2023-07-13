@@ -1470,7 +1470,7 @@ class UserController extends Controller{
     //get application by admission officer
     public function get_admission_officer_application(Request $request,$id=NULL){
         $data['page_title'] = 'Admission Officer Application';
-        $data['usermanagement'] = true;
+        $data['usermanagement1'] = true;
         $get_campus = $request->campus;
         $get_agent = $request->agent;
         $get_officer = $request->officer;
@@ -1560,11 +1560,10 @@ class UserController extends Controller{
         $assignTo = User::where('id',$request->assign_to_admission_manager_id)->first();
         $array = explode(",",$getIds);
         foreach($array as $row){
-            $getApp = Application::where('id',$row)->where('admission_officer_id',0)->first();
+            $getApp = Application::where('id',$row)->first();
             if($getApp){
                 $getApp->admission_officer_id = $request->assign_to_admission_manager_id;
                 $getApp->manager_id = $request->assign_to_manager_id;
-                $getApp->status = 2;
                 $getApp->save();
             }
         }
@@ -1585,8 +1584,91 @@ class UserController extends Controller{
         $notification->save();
         //make instant messaging
         $url = url('my-application');
-        event(new AddNewLead($notification->description,$url));
+        //event(new AddNewLead($notification->description,$url));
         Session::flash('success',$notification->description);
         return redirect('get-admission-officer-application/'.$request->admission_officer_id);
+    }
+    //application assign to user
+    public function application_assign_to_officer_by_manager(Request $request){
+        $request->validate([
+            'assign_to_user_id'=>'required',
+        ]);
+        $getIds = $request->assign_application_ids;
+        if(!$getIds){
+            Session::flash('error','Internal Server Error! Application Data Not Found!');
+            return redirect('all-application');
+        }
+        $fromOfficer = User::where('id',$request->admission_officer_id)->first();
+        $toOfficer = User::where('id',$request->assign_to_user_id)->first();
+        $array = explode(",",$getIds);
+        foreach($array as $row){
+            $getApp = Application::where('id',$row)->first();
+            if($getApp){
+                $getApp->admission_officer_id = $request->assign_to_user_id;
+                $getApp->manager_id = Auth::user()->id;
+                $getApp->save();
+            }
+        }
+        $count = count($array);
+        //create notification
+        $notification = new Notification();
+        $notification->title = 'Assign Lead';
+        $notification->description = $count.' Application Transfer From '.$fromOfficer->name.' To '.$toOfficer->name.' Assigned By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = url(Auth::user()->photo);
+        $notification->user_id = $request->assign_to_user_id;
+        $notification->is_admin = 1;
+        $notification->manager_id = 0;
+        $notification->application_id = 0;
+        $notification->slug = 'my-application';
+        $notification->save();
+        //make instant messaging
+        $url = url('my-application');
+        event(new AddNewLead($notification->description,$url));
+        Session::flash('success',$notification->description);
+        return redirect('get-admission-officer-application/'.$fromOfficer->id);
+    }
+    //application transfer to other application officer
+    public function application_transfer_to_other_officer_by_officer(Request $request){
+        $request->validate([
+            'assign_to_user_id'=>'required',
+        ]);
+        $getIds = $request->assign_application_ids;
+        if(!$getIds){
+            Session::flash('error','Internal Server Error! Application Data Not Found!');
+            return redirect('all-application');
+        }
+        $fromOfficer = User::where('id',$request->admission_officer_id)->first();
+        $toOfficer = User::where('id',$request->assign_to_user_id)->first();
+        $array = explode(",",$getIds);
+        foreach($array as $row){
+            $getApp = Application::where('id',$row)->first();
+            if($getApp){
+                $getApp->admission_officer_id = $request->assign_to_user_id;
+                $getApp->save();
+            }
+        }
+        $count = count($array);
+        //create notification
+        $notification = new Notification();
+        $notification->title = 'Assign Lead';
+        $notification->description = $count.' Application Transfer From '.$fromOfficer->name.' To '.$toOfficer->name.' Assigned By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = url(Auth::user()->photo);
+        $notification->user_id = $request->assign_to_user_id;
+        $notification->is_admin = 1;
+        $notification->manager_id = 0;
+        $notification->application_id = 0;
+        $notification->slug = 'my-application';
+        $notification->save();
+        //make instant messaging
+        $url = url('my-application');
+        event(new AddNewLead($notification->description,$url));
+        Session::flash('success',$notification->description);
+        return redirect('my-applications');
     }
 }
