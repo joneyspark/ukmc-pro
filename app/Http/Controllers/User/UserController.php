@@ -613,19 +613,15 @@ class UserController extends Controller{
             'officer_phone' => 'required',
             'officer_email' => 'required',
             'officer_alternative_contact' => 'required',
-            //'officer_nid_or_passport' => 'required',
-            //'nationality' => 'required',
-            //'country' => 'required',
-            //'state' => 'required',
-            //'city' => 'required',
-            //'address' => 'required',
             'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$request->user_id,
         ]);
         //first create user
         $first_name = "";
         $last_name = "";
         $user = User::where('id',$request->user_id)->first();
         $user->name = $request->name;
+        $user->email = $request->email;
         if($user->name){
             $array = explode(" ",$user->name);
             foreach($array as $key=>$row){

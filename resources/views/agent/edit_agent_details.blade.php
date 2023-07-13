@@ -39,7 +39,7 @@
                             <div class="row mb-4">
                                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                                     <div class="d-flex align-items-start justify-content-between">
-                                        <h4>New Agent Information</h4>
+                                        <h4>Edit Agent Information</h4>
                                     </div><br>
                                 </div>
                                 <div class="col">
@@ -178,6 +178,33 @@
                                         </div>
                                     </div>
                                 </div>
+
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                    <div class="d-flex align-items-start justify-content-between">
+                                        <h4>Edit Agent Login Details</h4>
+                                    </div><br>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Name*</label>
+                                        <input name="name" value="{{ $agent_data->name }}" type="text" class="form-control">
+                                        @if ($errors->has('name'))
+                                            <span class="text-danger">{{ $errors->first('name') }}</span>
+                                        @endif
+                                        <!---->
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Email*</label>
+                                        <input name="email" value="{{ $agent_data->email }}" type="text" class="form-control">
+                                        @if ($errors->has('email'))
+                                            <span class="text-danger">{{ $errors->first('email') }}</span>
+                                        @endif
+                                        <!---->
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col text-right">
                                         <div class="row">

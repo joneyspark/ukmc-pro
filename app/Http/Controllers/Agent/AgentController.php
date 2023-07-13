@@ -441,7 +441,21 @@ class AgentController extends Controller{
         $data['agent'] = true;
         return view('agent/edit_agent_details',$data);
     }
-    public function edit_agent_by_super_admin_post(EditEmpAgentRequest $request){
+    public function edit_agent_by_super_admin_post(Request $request){
+        $request->validate([
+            'agent_name' => 'required',
+            'agent_phone' => 'required',
+            'agent_email' => 'required',
+            'nid_or_passport' => 'required',
+            'nationality' => 'required',
+            'agent_country' => 'required',
+            'agent_state' => 'required',
+            'agent_city' => 'required',
+            'agent_zip_code' => 'required',
+            'agent_address' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$request->user_id,
+        ]);
         if(!Auth::check()){
             Session::flash('error','Login First! Create Campus!');
             return redirect('login');
@@ -462,6 +476,8 @@ class AgentController extends Controller{
             $image_resize->save(public_path('backend/images/users/agent/'.$filename));
             $user->photo = 'backend/images/users/agent/'.$filename;
         }
+        $user->name = $request->name;
+        $user->email = $request->email;
         $user->save();
         //create agent information
         $agent = Agent::where('user_id',$user->id)->first();

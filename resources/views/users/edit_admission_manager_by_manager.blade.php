@@ -146,7 +146,7 @@
                                     <div class="form-group mb-4"><label for="exampleFormControlTextarea1">Address in
                                             Details</label>
                                         <textarea name="address" id="exampleFormControlTextarea1" class="form-control" rows="1" spellcheck="false">{{ (!empty($officer_data->officer->address))?$officer_data->officer->address:old('address') }}</textarea>
-                                        
+
                                         <!---->
                                     </div>
                                 </div>
@@ -176,7 +176,7 @@
                         <div class="widget-content widget-content-area">
                             <div class="row mb-4">
                                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                    <h4>Teacher Login Information</h4><br>
+                                    <h4>Admission Manager Login Information</h4><br>
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="personName">Person Name</label>
@@ -189,7 +189,10 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="email">Email</label>
-                                        <input disabled value="{{ (!empty($officer_data->email))?$officer_data->email:old('email') }}" type="email" class="form-control">
+                                        <input name="email" value="{{ (!empty($officer_data->email))?$officer_data->email:old('email') }}" type="email" class="form-control">
+                                        @if ($errors->has('email'))
+                                            <span class="text-danger">{{ $errors->first('email') }}</span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
