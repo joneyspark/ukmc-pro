@@ -807,6 +807,9 @@ class ApplicationController extends Controller{
         $get_status = $request->status;
         $get_intake = $request->intake;
         $search = $request->q;
+        $get_interview_status = $request->interview_status;
+        $get_from_date = $request->from_date;
+        $get_to_date = $request->to_date;
         //Session set data
         Session::put('get_campus',$get_campus);
         Session::put('get_agent',$get_agent);
@@ -814,6 +817,9 @@ class ApplicationController extends Controller{
         Session::put('get_status',$get_status);
         Session::put('get_intake',$get_intake);
         Session::put('search',$search);
+        Session::put('get_interview_status',$get_interview_status);
+        Session::put('get_from_date',$get_from_date);
+        Session::put('get_to_date',$get_to_date);
 
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = Company::where('status',1)->get();
@@ -828,11 +834,20 @@ class ApplicationController extends Controller{
             return $query->where(function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%')
                     ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('id', 'like', '%' . $search . '%')
                     ->orWhere('phone', 'like', '%' . $search . '%');
             });
         })
+        ->when($request->has('from_date') && $request->has('to_date'), function ($query) use ($request) {
+            $fromDate = date('Y-m-d 00:00:00', strtotime($request->from_date));
+            $toDate = date('Y-m-d 23:59:59', strtotime($request->to_date));
+            return $query->whereBetween('created_at', [$fromDate, $toDate]);
+        })
         ->when($get_campus, function ($query, $get_campus) {
             return $query->where('campus_id',$get_campus);
+        })
+        ->when($get_interview_status, function ($query, $get_interview_status) {
+            return $query->where('interview_status',$get_interview_status);
         })
         ->when($get_agent, function ($query, $get_agent) {
             return $query->where('company_id',$get_agent);
@@ -856,6 +871,9 @@ class ApplicationController extends Controller{
             'officer' => $get_campus,
             'status' => $get_campus,
             'intake' => $get_campus,
+            'interview_status' => $get_interview_status,
+            'from_date' => $get_from_date,
+            'to_date' => $get_to_date,
         ]);
 
         $data['my_teams'] = User::where('role','adminManager')->where('create_by',Auth::user()->id)->get();
@@ -867,6 +885,9 @@ class ApplicationController extends Controller{
         $data['get_status'] = Session::get('get_status');
         $data['get_intake'] = Session::get('get_intake');
         $data['search'] = Session::get('search');
+        $data['get_interview_status'] = Session::get('get_interview_status');
+        $data['get_from_date'] = Session::get('get_from_date');
+        $data['get_to_date'] = Session::get('get_to_date');
         //$data['application_list'] = Application::where('application_status_id','!=',0)->orderBy('id','desc')->paginate(15);
         return view('application/all',$data);
     }
@@ -877,6 +898,9 @@ class ApplicationController extends Controller{
         Session::put('get_status','');
         Session::put('get_intake','');
         Session::put('search','');
+        Session::put('get_interview_status','');
+        Session::put('get_from_date','');
+        Session::put('get_to_date','');
         return redirect('all-application');
     }
     public function reset_my_assigned_application_search(){

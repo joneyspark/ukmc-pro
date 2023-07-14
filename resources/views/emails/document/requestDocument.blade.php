@@ -52,8 +52,6 @@
     <p>{{ (!empty($details['message']))?$details['message']:'' }}</p>
 	<p>
 		<strong>Application Id:</strong>{{ (!empty($details['application_info']->id))?'ukmc-'.$details['application_info']->id:'' }} <br>
-		<strong>Applicant Email:</strong> {{ (!empty($details['application_info']->email))?$details['application_info']->email:'' }}<br>
-    <strong>Applicant Phone:</strong> {{ (!empty($details['application_info']->phone))?$details['application_info']->phone:'' }}<br>
     <strong>Course Title:</strong> {{ (!empty($details['application_info']->course->course_name))?$details['application_info']->course->course_name:'' }}<br>
     <strong>Intake:</strong> {{ (!empty($details['application_info']->intake))?date('F Y',strtotime($details['application_info']->intake)):'' }}
 	</p>

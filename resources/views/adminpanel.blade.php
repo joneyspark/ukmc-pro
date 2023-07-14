@@ -286,7 +286,10 @@
                 var officer = $('#officer').val();
                 var status = $('#status').val();
                 var intake = $('#intake').val();
-                window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake;
+                var interview_status = $('#interview_status').val();
+                var from_date = $('#from_date').val();
+                var to_date = $('#to_date').val();
+                window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date;
             }
             //search application data
             function interviewerApplicationData(){
