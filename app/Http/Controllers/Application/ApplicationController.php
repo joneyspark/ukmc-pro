@@ -838,7 +838,7 @@ class ApplicationController extends Controller{
                     ->orWhere('phone', 'like', '%' . $search . '%');
             });
         })
-        ->when($request->has('from_date') && $request->has('to_date'), function ($query) use ($request) {
+        ->when($request->get('from_date') && $request->get('to_date'), function ($query) use ($request) {
             $fromDate = date('Y-m-d 00:00:00', strtotime($request->from_date));
             $toDate = date('Y-m-d 23:59:59', strtotime($request->to_date));
             return $query->whereBetween('created_at', [$fromDate, $toDate]);
@@ -867,10 +867,10 @@ class ApplicationController extends Controller{
         ->appends([
             'q' => $search,
             'campus' => $get_campus,
-            'agent' => $get_campus,
-            'officer' => $get_campus,
-            'status' => $get_campus,
-            'intake' => $get_campus,
+            'agent' => $get_agent,
+            'officer' => $get_officer,
+            'status' => $get_status,
+            'intake' => $get_intake,
             'interview_status' => $get_interview_status,
             'from_date' => $get_from_date,
             'to_date' => $get_to_date,
