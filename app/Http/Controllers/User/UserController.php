@@ -53,6 +53,7 @@ class UserController extends Controller{
         $data['return_user_id'] = $getUserId;
         $data['interviewer_list'] = User::where('role','interviewer')->where('active',1)->get();
         $data['manager_list'] = User::where('role','manager')->where('active',1)->get();
+        $data['officer_list'] = User::where('role','adminManager')->where('active',1)->get();
         //work on search option
         $role = $request->get('role');
         $name = $request->get('name');
@@ -176,7 +177,7 @@ class UserController extends Controller{
         return redirect('user-list');
     }
     public function get_admission_officer_by_manager($manager_id=NULL){
-        $officers = User::where('create_by',$manager_id)->get();
+        $officers = User::where('role','adminManager')->where('active',1)->get();
         $select = '';
         $select .= '<option value="">Select Admission Manager</option>';
         foreach($officers as $row){

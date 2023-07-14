@@ -48,8 +48,8 @@
                     <div class="col">
                         <div class="form-group mb-4"><label for="exampleFormControlInput1">Role</label>
                             <input type="hidden" value="" name="from_admission_officer_id" id="from_admission_officer_id" />
-                            <select id="manager_id" name="manager_id" class="form-control" onchange="getAdmissionOfficer()">
-                                <option value="">Select Manager</option>
+                            <select id="manager_id" name="manager_id" class="form-control">
+                                <option value="" selected>Select Manager</option>
                                 @foreach ($manager_list as $manager)
                                 @if($manager->role=='manager')
                                 <option value="{{ $manager->id }}">{{ $manager->name }}</option>
@@ -62,6 +62,10 @@
                         </div>
                         <div class="form-group mb-4"><label for="exampleFormControlInput1">Role</label>
                             <select id="admission_officer_id" name="admission_officer_id" class="form-control">
+                                <option value="" selected>Select Admission Officer</option>
+                                @foreach ($officer_list as $urow)
+                                    <option value="{{ $urow->id }}">{{ $urow->name }}</option>
+                                @endforeach
                             </select>
                             @if ($errors->has('admission_officer_id'))
                                 <span class="text-danger">{{ $errors->first('admission_officer_id') }}</span>
