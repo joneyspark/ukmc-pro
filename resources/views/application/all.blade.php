@@ -6,7 +6,7 @@
       <div class="modal-content">
 
         <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Assign To Manager by Admin</b></h5>
+            <h5 class="modal-title"><b>Assign To Admission Officer by Manager</b></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div class="mt-0">
@@ -46,7 +46,7 @@
       <div class="modal-content">
 
         <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Assign To Admission Manager by Manager</b></h5>
+            <h5 class="modal-title"><b>Assign To Admission Officer by Admin</b></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div class="mt-0">
@@ -57,7 +57,7 @@
                         <div class="col">
                             <div class="form-group mb-4"><label for="exampleFormControlInput1">Assign To User:</label>
                                 <input type="hidden" name="assign_application_ids" id="assign_application_ids" />
-                                <select name="assign_to_manager_id" id="assign_to_manager_id" class="form-select" onchange="getAdmissionOfficer()">
+                                <select name="assign_to_manager_id" id="assign_to_manager_id" class="form-select">
                                     <option value="" selected>Choose...</option>
                                     @foreach ($admin_managers as $amrow)
                                     <option value="{{ $amrow->id }}">{{ $amrow->name }}</option>
@@ -69,6 +69,9 @@
                                 <br>
                                 <select name="assign_to_admission_manager_id" id="assign_to_admission_manager_id" class="assign-to-list form-select">
                                     <option value="" selected>Choose...</option>
+                                    @foreach ($my_teams as $urow)
+                                    <option value="{{ $urow->id }}">{{ $urow->name }}</option>
+                                    @endforeach
                                 </select>
                                 @if ($errors->has('assign_to_admission_manager_id'))
                                     <span class="text-danger">{{ $errors->first('assign_to_admission_manager_id') }}</span>

@@ -248,7 +248,7 @@ class UserController extends Controller{
         //query
         $data['user_list_data'] = User::query()
         ->where('role','adminManager')
-        ->where('create_by',Auth::user()->id)
+        ->where('active',1)
         ->orderBy('id','desc')
         ->paginate(10);
 
@@ -534,7 +534,7 @@ class UserController extends Controller{
         $user->role = 'adminManager';
         $user->email = $request->email;
         $user->phone = $request->officer_phone;
-        $user->create_by = $request->manager_id;
+        $user->create_by = Auth::user()->id;
         //$user->slug = Str::slug($request->name,'-');
         //slug create
         $url_modify = Service::slug_create($request->name);
@@ -1022,7 +1022,6 @@ class UserController extends Controller{
     //officer edit data post
     public function edit_officer_data_post(Request $request){
         $request->validate([
-            'manager_id' => 'required',
             'officer_name' => 'required',
             'officer_phone' => 'required',
             'officer_email' => 'required',
@@ -1049,7 +1048,7 @@ class UserController extends Controller{
         }
         $user->first_name = $first_name;
         $user->last_name = $last_name;
-        $user->create_by = $request->manager_id;
+        $user->create_by = Auth::user()->id;
         $user->phone = $request->officer_phone;
         //photo upload
         $photo = $request->photo;
@@ -1532,7 +1531,7 @@ class UserController extends Controller{
             'intake' => $get_campus,
         ]);
 
-        $data['my_teams'] = User::where('role','adminManager')->where('create_by',Auth::user()->id)->get();
+        $data['my_teams'] = User::where('role','adminManager')->where('active',1)->get();
         $data['admin_managers'] = User::where('role','manager')->where('active',1)->get();
 
         $data['get_campus'] = Session::get('get_campus');

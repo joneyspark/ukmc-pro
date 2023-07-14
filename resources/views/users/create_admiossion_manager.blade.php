@@ -50,23 +50,7 @@
                                             </svg></a>
                                     </div><br>
                                 </div>
-                                <div class="col">
-                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Manager</label>
-                                        <select name="manager_id" class="form-control">
-                                            <option value="">Select a Manager</option>
-                                            @forelse ($managers as $mlist)
-                                            <option value="{{ $mlist->id }}">{{ $mlist->name }}</option>
-                                            @empty
-                                            <option value="">No Data</option>
-                                            @endforelse
-                                        </select>
-                                        @if ($errors->has('manager_id'))
-                                            <span class="text-danger">{{ $errors->first('manager_id') }}</span>
-                                        @endif
-
-                                        <!---->
-                                    </div>
-                                </div>
+                                
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">Officer
                                             Name</label>

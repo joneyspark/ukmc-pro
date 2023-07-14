@@ -1,12 +1,12 @@
 @extends('adminpanel')
 @section('admin')
-@if(Auth::user()->role=='manager')
+@if(Auth::user()->role=='manager' || Auth::user()->role=='admin')
 <div class="modal fade inputForm-modal" id="assignToModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
 
         <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Assign To Manager by Admin</b></h5>
+            <h5 class="modal-title"><b>Transfer Application To Other Admission Manager</b></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div class="mt-0">
@@ -300,12 +300,10 @@
         <h5 class="pt-3">All Application Here</h5>
 
         <div class="row layout-top-spacing">
-            @if(Auth::user()->role=='manager')
+            @if(Auth::user()->role=='manager' || Auth::user()->role=='admin')
             <a data-bs-toggle="modal" data-bs-target="#assignToModal" class="assignToDisplay assignToBtn dropdown-item" href="#">Transfer Application To Other Admission Officer</a>
             @endif
-            @if(Auth::user()->role=='admin')
-            <a data-bs-toggle="modal" data-bs-target="#assignToModal1" class="assignToDisplay1 assignToBtn1 dropdown-item" href="#">Transfer Application To Other Admission Officer</a>
-            @endif
+            
 
 
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
@@ -547,7 +545,7 @@
     </script>
     @endif
 @endif
-@if(Auth::user()->role=='manager')
+@if(Auth::user()->role=='manager' || Auth::user()->role=='admin')
     <script>
         var selectedValues = [];
         $('.assign-to-adminmanager').on('change', function() {
@@ -582,30 +580,7 @@
 @endif
 
 @if(Auth::user()->role=='admin')
-    <script>
-        var selectedValues = [];
-        $('.assign-to-adminmanager').on('change', function() {
-        if ($(this).is(':checked')) {
-            var value = $(this).val();
-            selectedValues.push(value);
-            $('.assignToDisplay1').show();
-            $('#assign_application_ids').val(selectedValues);
-        } else {
-            var valueIndex = selectedValues.indexOf($(this).val());
-            if (valueIndex !== -1) {
-                selectedValues.splice(valueIndex, 1);
-            }
-            if(selectedValues.length === 0){
-                $('.assignToDisplay1').hide();
-            }
-            $('#assign_application_ids').val(selectedValues);
-        }
-
-        var selectedValue = selectedValues.join(',');
-        console.log(selectedValue);
-        // Perform any further actions with the selected values
-    });
-    </script>
+    
     @if($errors->has('assign_to_admission_manager_id') || $errors->has('assign_to_manager_id'))
     <script>
         $(document).ready(function() {

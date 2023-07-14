@@ -1,5 +1,5 @@
 @if(Auth::check())
-@if(Auth::user()->role=='teacher' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='agent' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+@if(Auth::user()->role=='teacher' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
 <script>
     var userId = {{ Auth::user()->id }};
 

@@ -22,17 +22,11 @@ class AdmissionManagerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'manager_id' => 'required',
             'officer_name' => 'required',
             'officer_phone' => 'required',
             'officer_email' => 'required',
             'officer_alternative_contact' => 'required',
-            //'officer_nid_or_passport' => 'required',
-            //'nationality' => 'required',
-            //'country' => 'required',
-            //'state' => 'required',
-            //'city' => 'required',
-            //'address' => 'required',
+            
             'photo' => 'required',
             'name' => 'required',
             'email' => 'required|email|unique:users',

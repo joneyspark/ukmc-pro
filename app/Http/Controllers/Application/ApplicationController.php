@@ -876,7 +876,7 @@ class ApplicationController extends Controller{
             'to_date' => $get_to_date,
         ]);
 
-        $data['my_teams'] = User::where('role','adminManager')->where('create_by',Auth::user()->id)->get();
+        $data['my_teams'] = User::where('role','adminManager')->where('active',1)->get();
         $data['admin_managers'] = User::where('role','manager')->where('active',1)->get();
 
         $data['get_campus'] = Session::get('get_campus');
@@ -1505,7 +1505,7 @@ class ApplicationController extends Controller{
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
-        $data['my_teams1'] = User::where('role','adminManager')->where('create_by',Auth::user()->create_by)->get();
+        $data['my_teams1'] = User::where('role','adminManager')->where('active',1)->get();
         $data['interview_statuses'] = InterviewStatus::where('status',0)->get();
         
 

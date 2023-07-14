@@ -49,27 +49,11 @@
                                                 </svg></a>
                                     </div><br>
                                 </div>
-                                <div class="col">
-                                    <input type="hidden" value="{{ $officer_data->id }}" name="user_id" />
-                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Manager</label>
-                                        <select name="manager_id" class="form-control">
-                                            <option value="">Select a Manager</option>
-                                            @forelse ($managers as $mlist)
-                                            <option {{ (!empty($officer_data->create_by) && $officer_data->create_by==$mlist->id)?'selected':'' }} value="{{ $mlist->id }}">{{ $mlist->name }}</option>
-                                            @empty
-                                            <option value="">No Data</option>
-                                            @endforelse
-                                        </select>
-                                        @if ($errors->has('manager_id'))
-                                            <span class="text-danger">{{ $errors->first('manager_id') }}</span>
-                                        @endif
-
-                                        <!---->
-                                    </div>
-                                </div>
+                                
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">Officer
                                             Name</label>
+                                            <input type="hidden" value="{{ $officer_data->id }}" name="user_id" />
                                             <input name="officer_name" value="{{ (!empty($officer_data->officer->officer_name))?$officer_data->officer->officer_name:old('officer_name') }}" type="text" class="form-control">
                                             @if ($errors->has('officer_name'))
                                                 <span class="text-danger">{{ $errors->first('officer_name') }}</span>
