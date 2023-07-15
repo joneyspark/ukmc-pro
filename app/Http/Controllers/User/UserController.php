@@ -1691,4 +1691,19 @@ class UserController extends Controller{
         }
         return redirect('user-list');
     }
+    public function my_password_change(Request $request){
+        $request->validate([
+            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'min:6',
+        ]);
+        $getUser = User::where('id',Auth::user()->id)->first();
+        if(!$getUser){
+            Session::flash('error','User Data Not Found! Server Error!');
+            return redirect('edit_profile');
+        }
+        $getUser->password = Hash::make($request->password);
+        $getUser->save();
+        Session::flash('success','Password Changed Successfully!');
+        return redirect('edit_profile');
+    }
 }

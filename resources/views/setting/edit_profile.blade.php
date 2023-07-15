@@ -94,8 +94,8 @@
                                                     id="location" value="{{ Auth::user()->city }}" placeholder="City">
                                             </div>
                                         </div>
-                                        
-                                        
+
+
                                     </div>
                                     <div class="row">
                                         <div class="col">
@@ -129,6 +129,43 @@
                                     <div class="col-md-12 mt-1">
                                         <div class="form-group text-start">
                                             <button class="btn btn-secondary">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+                            <form method="post" action="{{ URL::to('my-password-change') }}" enctype="multipart/form-data" class="section general-info">
+                                @csrf
+                                <div class="info">
+                                    <h5 class="py-3 text-center">Change Password Section</h5>
+                                    <div class="row mb-3">
+
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="fullName">New Password</label>
+                                                <input name="password" type="password" class="form-control">
+                                                @if ($errors->has('password'))
+                                                    <span class="text-danger">{{ $errors->first('password') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="fullName">Confirm New Password</label>
+                                                <input name="password_confirmation" type="password" class="form-control">
+                                                @if ($errors->has('password_confirmation'))
+                                                    <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-1">
+                                        <div class="form-group text-start">
+                                            <button class="btn btn-warning">Change Password</button>
                                         </div>
                                     </div>
                                 </div>
