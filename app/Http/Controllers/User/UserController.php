@@ -1671,4 +1671,24 @@ class UserController extends Controller{
         Session::flash('success',$notification->description);
         return redirect('my-applications');
     }
+    //user password change by admin
+    public function user_password_change_by_admin(Request $request){
+        $request->validate([
+            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'min:6',
+        ]);
+        $getUser = User::where('id',$request->change_password_user_id)->first();
+        if(!$getUser){
+            Session::flash('error','User Data Not Found! Server Error!');
+            return redirect('user-list');
+        }
+        $getUser->password = Hash::make($request->password);
+        $getUser->save();
+        Session::flash('success','Password Changed Successfully!');
+        Session::put('saved_user_id',$getUser->id);
+        if(!empty(Session::get('current_url'))){
+            return redirect(Session::get('current_url'));
+        }
+        return redirect('user-list');
+    }
 }

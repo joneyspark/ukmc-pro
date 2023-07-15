@@ -113,4 +113,5 @@ Route::controller(UserController::class)->group(function () {
     Route::post('application_assign_to_manager_by_admin','application_assign_to_manager_by_admin');
     Route::post('application_assign_to_officer_by_manager','application_assign_to_officer_by_manager');
     Route::post('application_transfer_to_other_officer_by_officer','application_transfer_to_other_officer_by_officer');
+    Route::post('user-password-change-by-admin','user_password_change_by_admin');
 });

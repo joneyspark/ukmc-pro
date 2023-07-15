@@ -1,5 +1,46 @@
 @extends('adminpanel')
 @section('admin')
+<div class="modal fade inputForm-modal" id="inputFormModal5" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header" id="inputFormModalLabel">
+            <h5 class="modal-title"><b>Chnage Password</b></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <form method="post" action="{{ URL::to('user-password-change-by-admin') }}" class="mt-0">
+            @csrf
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col">
+                        <div class="form-group mb-4"><label for="password">Password</label>
+                            <input type="hidden" name="change_password_user_id" id="change_password_user_id" value="" />
+                            <input name="password" type="password" class="form-control">
+                            @if ($errors->has('password'))
+                                <span class="text-danger">{{ $errors->first('password') }}</span>
+                            @endif
+                            <!---->
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group mb-4"><label for="password">Confirm Password</label>
+                            <input name="password_confirmation" type="password" class="form-control">
+                            @if ($errors->has('password_confirmation'))
+                                <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
+                            @endif
+                            <!---->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
+                <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Confirm</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
 <div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -263,6 +304,11 @@
                                             <a onclick="getRoleData({{ $row->id }})" data-id="{{ $row->role }}" data-bs-toggle="modal" data-bs-target="#inputFormModal"  class="get-roll-data{{ $row->id }} badge badge-pill bg-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                             </a>
+                                            <a onclick="change_password({{ $row->id }})" data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#inputFormModal5"  class="get-roll-data{{ $row->id }} badge badge-pill bg-secondary">
+                                                <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
+                                                    <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"/>
+                                                </svg>
+                                            </a>
                                             @endif
 
                                             @if($row->role=='manager')
@@ -345,6 +391,9 @@
     function getAdmissionOfficerList(id){
         $('#from_admission_officer_id').val(id);
     }
+    function change_password(id){
+        $('#change_password_user_id').val(id);
+    }
 </script>
 @if($errors->has('assign_to_interviewer_user_id'))
     <script>
@@ -357,6 +406,13 @@
     <script>
         $(document).ready(function() {
             $('#inputFormModal2').modal('show');
+        });
+    </script>
+@endif
+@if($errors->has('password_confirmation') || $errors->has('password_confirmation'))
+    <script>
+        $(document).ready(function() {
+            $('#inputFormModal5').modal('show');
         });
     </script>
 @endif
