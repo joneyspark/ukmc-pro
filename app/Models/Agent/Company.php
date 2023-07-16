@@ -18,5 +18,14 @@ class Company extends Model
     public function applications(){
         return $this->hasMany(Application::class);
     }
+    public function company_director(){
+        return $this->hasOne(CompanyDirector::class);
+    }
+    public function company_reference(){
+        return $this->hasMany(CompanyDocument::class);
+    }
+    public function company_document(){
+        return $this->hasMany(CompanyDocument::class);
+    }
 
 }

@@ -656,4 +656,10 @@ class AgentController extends Controller{
         Session::flash('success','Employee Data Upadted Successfully!');
         return redirect('get-employee-by-agent');
     }
+    public function agent_application(){
+        $data['page_title'] = 'Agent Application | Form';
+        //$data['company_data'] = Company::where('id',$id)->first();
+        $data['countries'] = Service::countries();
+        return view('agent/application/agent_application',$data);
+    }
 }

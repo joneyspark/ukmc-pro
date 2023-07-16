@@ -25,4 +25,6 @@ Route::controller(AgentController::class)->group(function () {
     Route::post('create-employee-by-agent-post','create_employee_by_agent_post');
     Route::get('edit-employee-by-agent/{id?}/edit','edit_employee_by_agent');
     Route::post('edit_employee_by_agent_post','edit_employee_by_agent_post');
+
+    Route::get('agent-application', 'agent_application');
 });
