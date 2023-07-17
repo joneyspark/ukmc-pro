@@ -291,22 +291,6 @@
                 var to_date = $('#to_date').val();
                 window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date;
             }
-            //search application data
-            function interviewerApplicationData(){
-                var campus = $('#campus').val();
-                var agent = $('#agent').val();
-                var officer = $('#officer').val();
-                var status = $('#status').val();
-                var intake = $('#intake').val();
-                window.location = "{{ URL::to('interviewer-applications?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake;
-            }
-            //search agent application data
-            function getAgentApplicationData(){
-                var campus = $('#campus').val();
-                var status = $('#status').val();
-                var intake = $('#intake').val();
-                window.location = "{{ URL::to('agent-applications?campus=') }}" + campus + "&status=" + status + "&intake=" + intake;
-            }
             function getAcademicData(){
                 var level_data = $('#level_of_education').val();
                 if(level_data===null){

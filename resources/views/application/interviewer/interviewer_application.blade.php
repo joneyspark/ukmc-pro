@@ -137,64 +137,88 @@
         <h5 class="pt-3">Filter</h5>
         <div class="widget-content widget-content-area">
             <form method="get" action="">
-                 <div class="row">
-                     <div class="row mb-2">
+                <div class="row">
+                    <div class="row mb-2">
+                       <div class="col-2">
+                           <select id="campus" name="campus" class="form-control" onchange="interviewerApplicationData()">
+                               <option value="">--Campus--</option>
+                               @if(count($campuses) > 0)
+                               @foreach ($campuses as $campus1)
+                               <option {{ (!empty($get_campus) && $get_campus==$campus1->id)?'selected':'' }} value="{{ $campus1->id }}">{{ $campus1->campus_name }}</option>
+                               @endforeach
+                               @endif
+                           </select>
+                        </div>
+                        <div class="col-3">
+                           <select id="agent" name="agent" class="form-control" onchange="interviewerApplicationData()">
+                               <option value="">Select Agent</option>
+                               @if(count($agents) > 0)
+                               @foreach ($agents as $agent)
+                               <option {{ (!empty($get_agent) && $get_agent==$agent->id)?'selected':'' }} value="{{ $agent->id }}">{{ $agent->company_name }}</option>
+                               @endforeach
+                               @endif
+                           </select>
+                        </div>
+                        <div class="col-2">
+                           <select id="officer" name="officer" class="form-control" onchange="interviewerApplicationData()">
+                               <option value="">--Officer--</option>
+                               @if(count($officers) > 0)
+                               @foreach ($officers as $officer)
+                               <option {{ (!empty($get_officer) && $get_officer==$officer->id)?'selected':'' }} value="{{ $officer->id }}">{{ $officer->name }}</option>
+                               @endforeach
+                               @endif
+                           </select>
+                        </div>
+                        
+                        <div class="col-2">
+                           <select id="status" name="status" class="form-control" onchange="interviewerApplicationData()">
+                               <option value="">Select Status</option>
+                               @if(count($statuses) > 0)
+                               @foreach ($statuses as $status)
+                               <option {{ (!empty($get_status) && $get_status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
+                               @endforeach
+                               @endif
+                           </select>
+                        </div>
+                        <div class="col-3">
+                           <select id="interview_status" name="interview_status" class="form-control" onchange="interviewerApplicationData()">
+                               <option value="">Interview Status</option>
+                               @if(count($interview_statuses) > 0)
+                               @foreach ($interview_statuses as $istatus)
+                               <option {{ (!empty($get_interview_status) && $get_interview_status==$istatus->id)?'selected':'' }} value="{{ $istatus->id }}">{{ $istatus->title }}</option>
+                               @endforeach
+                               @endif
+                           </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-2">
+                           <select id="intake" name="intake" class="form-control" onchange="interviewerApplicationData()">
+                               <option value="">Select Intake</option>
+                               @if(count($intakes) > 0)
+                               @foreach ($intakes as $intake)
+                               <option {{ (!empty($get_intake) && $get_intake==$intake)?'selected':'' }} value="{{ $intake }}">{{ date('F y',strtotime($intake)) }}</option>
+                               @endforeach
+                               @endif
+                           </select>
+                        </div>
+                        <div class="col-2">
+                            <input value="{{ (!empty($get_from_date))?$get_from_date:'' }}" name="from_date" id="from_date" type="date" class="form-control" placeholder="From Date" onchange="interviewerApplicationData()">
+                        </div>
+                        <div class="col-2">
+                            <input value="{{ (!empty($get_to_date))?$get_to_date:'' }}" name="to_date" id="to_date" type="date" class="form-control" placeholder="To Date" onchange="interviewerApplicationData()">
+                        </div>
                         <div class="col-4">
-                            <select id="campus" name="campus" class="form-control" onchange="interviewerApplicationData()">
-                                <option value="">Select Campus</option>
-                                @if(count($campuses) > 0)
-                                @foreach ($campuses as $campus1)
-                                <option {{ (!empty($get_campus) && $get_campus==$campus1->id)?'selected':'' }} value="{{ $campus1->id }}">{{ $campus1->campus_name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div>
-                         <div class="col-4">
-                            <select id="agent" name="agent" class="form-control" onchange="interviewerApplicationData()">
-                                <option value="">Select Agent</option>
-                                @if(count($agents) > 0)
-                                @foreach ($agents as $agent)
-                                <option {{ (!empty($get_agent) && $get_agent==$agent->id)?'selected':'' }} value="{{ $agent->id }}">{{ $agent->company_name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div>
-                         <div class="col-4">
-                            <select id="status" name="status" class="form-control" onchange="interviewerApplicationData()">
-                                <option value="">Select Status</option>
-                                @if(count($statuses) > 0)
-                                @foreach ($statuses as $status)
-                                <option {{ (!empty($get_status) && $get_status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div>
-                     </div>
-                     <div class="row">
-
-                         <div class="col-3">
-                            <select id="intake" name="intake" class="form-control" onchange="interviewerApplicationData()">
-                                <option value="">Select Intake</option>
-                                @if(count($intakes) > 0)
-                                @foreach ($intakes as $intake)
-                                <option {{ (!empty($get_intake) && $get_intake==$intake)?'selected':'' }} value="{{ $intake }}">{{ date('F y',strtotime($intake)) }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div>
-                         <div class="col-6">
-                             <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter Name,Email,Phone">
-                         </div>
-                         <div class="col-1">
-                            <input type="submit" value="Filter" name="time" class="btn btn-warning">
-                         </div>
-                         <div class="col-1">
-                            <a href="{{ URL::to('reset-interviewer-application-search') }}" class="btn btn-danger">Reset</a>
-                         </div>
-                     </div>
-
-
-                 </div>
+                            <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter ID,Name,Email,Phone">
+                        </div>
+                        <div class="col-1">
+                           <input type="submit" value="Filter" name="time" class="btn btn-warning">
+                        </div>
+                        <div class="col-1">
+                           <a href="{{ URL::to('reset-interviewer-application-search') }}" class="btn btn-danger">Reset</a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
 
@@ -221,7 +245,6 @@
                                     <th>Follow Up</th>
                                     <th>Interview Status</th>
                                     <th>Intake</th>
-
                                     <th>Status</th>
                                     <th class="text-center">Action</th>
                                 </tr>
@@ -229,7 +252,7 @@
                             <tbody>
                                 @forelse ($application_list as $row)
                                 <tr>
-                                    <td>{{ (!empty($row->id)?'UKMC-'.$row->id:'') }}</td>
+                                    <td>{{ (!empty($row->id)?$row->id:'') }}</td>
                                     <td>
                                         <div class="media">
                                             <div class="avatar me-2">
@@ -374,16 +397,24 @@
         margin-left: 14px;
         font-size: 15px !important;
     }
+    .form-control{
+        padding: 0.45rem 1rem !important;
+    }
 </style>
 <script src="{{ asset('web/js/jquery.js') }}"></script>
 
 <script>
-    function getMyApplicationData(){
+    //search application data
+    function interviewerApplicationData(){
         var campus = $('#campus').val();
         var agent = $('#agent').val();
+        var officer = $('#officer').val();
         var status = $('#status').val();
         var intake = $('#intake').val();
-        window.location = "{{ URL::to('my-applications?campus=') }}" + campus + "&agent=" + agent + "&status=" + status + "&intake=" + intake;
+        var interview_status = $('#interview_status').val();
+        var from_date = $('#from_date').val();
+        var to_date = $('#to_date').val();
+        window.location = "{{ URL::to('interviewer-applications?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date;
     }
 </script>
 

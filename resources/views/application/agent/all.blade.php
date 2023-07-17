@@ -27,29 +27,41 @@
         <h5 class="pt-3">Filter</h5>
         <div class="widget-content widget-content-area">
             <form method="get" action="">
-                 <div class="row">
-                     <div class="row mb-2">
-                        <div class="col-4">
-                            <select id="campus" name="campus" class="form-control" onchange="getAgentApplicationData()">
-                                <option value="">Select Campus</option>
-                                @if(count($campuses) > 0)
-                                @foreach ($campuses as $campus1)
-                                <option {{ (!empty($get_campus) && $get_campus==$campus1->id)?'selected':'' }} value="{{ $campus1->id }}">{{ $campus1->campus_name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div>
-                         <div class="col-4">
-                            <select id="status" name="status" class="form-control" onchange="getAgentApplicationData()">
-                                <option value="">Select Status</option>
-                                @if(count($statuses) > 0)
-                                @foreach ($statuses as $status)
-                                <option {{ (!empty($get_status) && $get_status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div>
-                         <div class="col-3">
+                <div class="row">
+                    <div class="row mb-2">
+                       <div class="col-3">
+                           <select id="campus" name="campus" class="form-control" onchange="getAgentApplicationData()">
+                               <option value="">--Campus--</option>
+                               @if(count($campuses) > 0)
+                               @foreach ($campuses as $campus1)
+                               <option {{ (!empty($get_campus) && $get_campus==$campus1->id)?'selected':'' }} value="{{ $campus1->id }}">{{ $campus1->campus_name }}</option>
+                               @endforeach
+                               @endif
+                           </select>
+                        </div>
+                        
+                        
+                        <div class="col-3">
+                           <select id="status" name="status" class="form-control" onchange="getAgentApplicationData()">
+                               <option value="">Select Status</option>
+                               @if(count($statuses) > 0)
+                               @foreach ($statuses as $status)
+                               <option {{ (!empty($get_status) && $get_status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
+                               @endforeach
+                               @endif
+                           </select>
+                        </div>
+                        <div class="col-3">
+                           <select id="interview_status" name="interview_status" class="form-control" onchange="getAgentApplicationData()">
+                               <option value="">Interview Status</option>
+                               @if(count($interview_statuses) > 0)
+                               @foreach ($interview_statuses as $istatus)
+                               <option {{ (!empty($get_interview_status) && $get_interview_status==$istatus->id)?'selected':'' }} value="{{ $istatus->id }}">{{ $istatus->title }}</option>
+                               @endforeach
+                               @endif
+                           </select>
+                        </div>
+                        <div class="col-3">
                             <select id="intake" name="intake" class="form-control" onchange="getAgentApplicationData()">
                                 <option value="">Select Intake</option>
                                 @if(count($intakes) > 0)
@@ -59,22 +71,25 @@
                                 @endif
                             </select>
                          </div>
-                     </div>
-                     <div class="row">
-
-                         <div class="col-5">
-                             <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter Name,Email,Phone">
-                         </div>
-                         <div class="col-1">
-                            <input type="submit" value="Filter" name="time" class="btn btn-warning">
-                         </div>
-                         <div class="col-1">
-                            <a href="{{ URL::to('reset-agent-application-search') }}" class="btn btn-danger">Reset</a>
-                         </div>
-                     </div>
-
-
-                 </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <input value="{{ (!empty($get_from_date))?$get_from_date:'' }}" name="from_date" id="from_date" type="date" class="form-control" placeholder="From Date" onchange="getAgentApplicationData()">
+                        </div>
+                        <div class="col-2">
+                            <input value="{{ (!empty($get_to_date))?$get_to_date:'' }}" name="to_date" id="to_date" type="date" class="form-control" placeholder="To Date" onchange="getAgentApplicationData()">
+                        </div>
+                        <div class="col-5">
+                            <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter ID,Name,Email,Phone">
+                        </div>
+                        <div class="col-1">
+                           <input type="submit" value="Filter" name="time" class="btn btn-warning">
+                        </div>
+                        <div class="col-1">
+                           <a href="{{ URL::to('reset-agent-application-search') }}" class="btn btn-danger">Reset</a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
         <h5 class="pt-3">All Application Here</h5>
@@ -191,5 +206,22 @@
 
     </div>
 </div>
-
+<style>
+    .form-control{
+        padding: 0.45rem 1rem !important;
+    }
+</style>
+<script src="{{ asset('web/js/jquery.js') }}"></script>
+<script>
+    //search agent application data
+    function getAgentApplicationData(){
+        var campus = $('#campus').val();
+        var status = $('#status').val();
+        var intake = $('#intake').val();
+        var interview_status = $('#interview_status').val();
+        var from_date = $('#from_date').val();
+        var to_date = $('#to_date').val();
+        window.location = "{{ URL::to('agent-applications?campus=') }}" + campus + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date;
+    }
+</script>
 @stop

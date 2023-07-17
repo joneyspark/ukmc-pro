@@ -50,18 +50,13 @@
     <p>Dear {{ (!empty($details['application_info']->name))?$details['application_info']->name:'' }},</p>
 
     <p>Thank you for your application to study at UKMC. We have scheduled your interview on the following date and time:</p>
-
+    <p>Upon arrival, please inform the reception desk that you have an admissions interview at UKMC.</p>
     <p>
       <strong>Interview Date:</strong> {{ (!empty($details['meeting_date']))?date('F d Y',strtotime($details['meeting_date'])):'' }}<br>
       <strong>Interview Time:</strong> {{ (!empty($details['meeting_date']))?date('H:i:s',strtotime($details['meeting_date'])):'' }}
     </p>
 
     <p>Please arrive 15 minutes before your interview and bring your original ID/Passport with you. Kindly note that without the original ID/Passport, we will be unable to conduct your interview.</p>
-
-    <p>Upon arrival, please inform the reception desk that you have an admissions interview at UKMC.</p>
-
-    <p>Should you have any questions or require further information, please do not hesitate to contact our Admissions Team via email at <a href="mailto:{{ (!empty($details['create_user']->email))?$details['create_user']->email:'' }}">{{ (!empty($details['create_user']->email))?$details['create_user']->email:'' }}</a> or by phone at <a href="tel:{{ (!empty($details['create_user']->phone))?$details['create_user']->phone:'' }}">{{ (!empty($details['create_user']->phone))?$details['create_user']->phone:'' }}</a>.</p>
-
     <p>We look forward to meeting you for the interview.</p>
 
     <p>Thank you.</p>

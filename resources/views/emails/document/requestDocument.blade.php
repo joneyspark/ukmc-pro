@@ -51,14 +51,11 @@
 
     <p>{{ (!empty($details['message']))?$details['message']:'' }}</p>
 	<p>
-		<strong>Application Id:</strong>{{ (!empty($details['application_info']->id))?'ukmc-'.$details['application_info']->id:'' }} <br>
+		<strong>Application Id:</strong>{{ (!empty($details['application_info']->id))?$details['application_info']->id:'' }} <br>
     <strong>Course Title:</strong> {{ (!empty($details['application_info']->course->course_name))?$details['application_info']->course->course_name:'' }}<br>
     <strong>Intake:</strong> {{ (!empty($details['application_info']->intake))?date('F Y',strtotime($details['application_info']->intake)):'' }}
 	</p>
 	<p>Note: If you sent your document directly by mail, please mention your Application ID, Email, and Phone.</p>
-	
-
-    <p>Should you have any questions or require further information, please do not hesitate to contact our Admissions Team via email at <a href="mailto:{{ (!empty($details['company']->email))?$details['company']->email:'' }}">{{ (!empty($details['company']->email))?$details['company']->email:'' }}</a> or by phone at <a href="tel:{{ (!empty($details['company']->phone))?$details['company']->phone:'' }}">{{ (!empty($details['company']->phone))?$details['company']->phone:'' }}</a>.</p>
 
     <p>Thank you.</p>
 
