@@ -7,12 +7,18 @@ use App\Http\Requests\Agent\AgentCreateRequest;
 use App\Http\Requests\Agent\AgentEditRequest;
 use App\Http\Requests\Agent\CreateEmpAgentByAdminRequest;
 use App\Http\Requests\Agent\EditEmpAgentRequest;
+use App\Mail\agent\agentRequest;
 use App\Models\Agent\Agent;
 use App\Models\Agent\Company;
+use App\Models\Agent\CompanyDirector;
+use App\Models\Agent\CompanyDocument;
+use App\Models\Agent\CompanyReference;
+use App\Models\Setting\CompanySetting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Traits\Service;
+use Illuminate\Support\Facades\Mail;
 Use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -661,5 +667,225 @@ class AgentController extends Controller{
         //$data['company_data'] = Company::where('id',$id)->first();
         $data['countries'] = Service::countries();
         return view('agent/application/agent_application',$data);
+    }
+    //agent application data post
+    public function agent_application_data_post(Request $request){
+        $request->validate([
+            'company_name'=>'required',
+            'company_registration_number'=>'required',
+            'company_establish_date'=>'required',
+            'company_trade_license_number'=>'required',
+            'company_phone'=>'required',
+            'country'=>'required',
+            'state'=>'required',
+            'city'=>'required',
+            'zip_code'=>'required',
+            'address'=>'required',
+            'director_name'=>'required',
+            'director_phone'=>'required',
+            'director_email'=>'required',
+            'passport_number'=>'required',
+            'nationality'=>'required',
+            'director_address'=>'required',
+            'director_city'=>'required',
+            'key_contact_name'=>'required',
+            'key_contact_number'=>'required',
+            'reference_company_name'=>'required',
+            'referee_name'=>'required',
+            'referee_job_title'=>'required',
+            'referee_address'=>'required',
+            'referee_phone'=>'required',
+            'referee_contact_email'=>'required',
+            'reference_company_name2'=>'required',
+            'referee_name2'=>'required',
+            'referee_job_title2'=>'required',
+            'referee_address2'=>'required',
+            'referee_phone2'=>'required',
+            'referee_contact_email2'=>'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'min:6',
+        ]);
+        $company = new Company();
+        $company->company_name = $request->input('company_name');
+        $company->company_registration_number = $request->input('company_registration_number');
+        $company->company_establish_date = $request->input('company_establish_date');
+        $company->company_trade_license_number = $request->input('company_trade_license_number');
+        $company->company_email = $request->input('company_email');
+        $company->company_phone = $request->input('company_phone');
+        $company->country = $request->input('country');
+        $company->state = $request->input('state');
+        $company->city = $request->input('city');
+        $company->zip_code = $request->input('zip_code');
+        $company->address = $request->input('address');
+        $company->status = 0;
+        $company->save();
+        //save director Information
+        $companyDirector = new CompanyDirector();
+        $companyDirector->director_name = $request->director_name;
+        $companyDirector->company_id = $company->id;
+        $companyDirector->email = $request->director_email;
+        $companyDirector->phone = $request->director_phone;
+        $companyDirector->passport_number = $request->passport_number;
+        $companyDirector->nationality = $request->nationality;
+        $companyDirector->address = $request->director_address;
+        $companyDirector->city = $request->director_city;
+        $companyDirector->key_contact_name = $request->key_contact_name;
+        $companyDirector->key_contact_number = $request->key_contact_number;
+        $companyDirector->save();
+        //reference 1 save
+        $reference1 = new CompanyReference();
+        $reference1->company_id = $company->id;
+        $reference1->company_name = $request->reference_company_name;
+        $reference1->referee_name = $request->referee_name;
+        $reference1->referee_job_title = $request->referee_job_title;
+        $reference1->address = $request->referee_address;
+        $reference1->phone = $request->referee_phone;
+        $reference1->contact_email_address = $request->referee_contact_email;
+        $reference1->save();
+        //reference 2 save
+        $reference2 = new CompanyReference();
+        $reference2->company_id = $company->id;
+        $reference2->company_name = $request->reference_company_name2;
+        $reference2->referee_name = $request->referee_name2;
+        $reference2->referee_job_title = $request->referee_job_title2;
+        $reference2->address = $request->referee_address2;
+        $reference2->phone = $request->referee_phone2;
+        $reference2->contact_email_address = $request->referee_contact_email2;
+        $reference2->save();
+        //Company Certification doc file upload
+        $company_certification = $request->company_certificate;
+        if ($request->hasFile('company_certificate')) {
+
+            $ext = $company_certification->getClientOriginalExtension();
+            $doc_file_name = $company_certification->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $upload_path1 = 'backend/images/company/company_certificate/';
+            Service::createDirectory($upload_path1);
+            $request->file('company_certificate')->move(public_path('backend/images/company/company_certificate/'), $doc_file_name);
+            $company_certificate = new CompanyDocument();
+            $company_certificate->company_id = $company->id;
+            $company_certificate->title = $request->company_certification_of_incorporation;
+            $company_certificate->document = $upload_path1.$doc_file_name;
+            $company_certificate->save();
+        }
+        //Director ID and passport file upload
+        $directorIdPassport = $request->director_id_passport;
+        if ($request->hasFile('director_id_passport')) {
+
+            $ext = $directorIdPassport->getClientOriginalExtension();
+            $doc_file_name = $directorIdPassport->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $upload_path1 = 'backend/images/company/director_id_passport/';
+            Service::createDirectory($upload_path1);
+            $request->file('director_id_passport')->move(public_path('backend/images/company/director_id_passport/'), $doc_file_name);
+            $directorIdPassportDoc = new CompanyDocument();
+            $directorIdPassportDoc->company_id = $company->id;
+            $directorIdPassportDoc->title = $request->director_id_or_passport;
+            $directorIdPassportDoc->document = $upload_path1.$doc_file_name;
+            $directorIdPassportDoc->save();
+        }
+        //Agent Bank Account Details
+        $bankAccountDoc = $request->bank_account_details_photo;
+        if ($request->hasFile('bank_account_details_photo')) {
+
+            $ext = $bankAccountDoc->getClientOriginalExtension();
+            $doc_file_name = $bankAccountDoc->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $upload_path1 = 'backend/images/company/bank_account_details_photo/';
+            Service::createDirectory($upload_path1);
+            $request->file('bank_account_details_photo')->move(public_path('backend/images/company/bank_account_details_photo/'), $doc_file_name);
+            $bankAccount = new CompanyDocument();
+            $bankAccount->company_id = $company->id;
+            $bankAccount->title = $request->bank_account_details;
+            $bankAccount->document = $upload_path1.$doc_file_name;
+            $bankAccount->save();
+        }
+        //Signed Agreement Details
+        $signedAgreementDoc = $request->signed_agent_agreement_photo;
+        if ($request->hasFile('signed_agent_agreement_photo')) {
+
+            $ext = $signedAgreementDoc->getClientOriginalExtension();
+            $doc_file_name = $signedAgreementDoc->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $upload_path1 = 'backend/images/company/signed_agent_agreement_photo/';
+            Service::createDirectory($upload_path1);
+            $request->file('signed_agent_agreement_photo')->move(public_path('backend/images/company/signed_agent_agreement_photo/'), $doc_file_name);
+            $signedAgreementDocFile = new CompanyDocument();
+            $signedAgreementDocFile->company_id = $company->id;
+            $signedAgreementDocFile->title = $request->signed_agent_agreement;
+            $signedAgreementDocFile->document = $upload_path1.$doc_file_name;
+            $signedAgreementDocFile->save();
+        }
+        //agent login info create
+        //create user now
+        if($company->id){
+            $first_name = "";
+            $last_name = "";
+            $user = new User();
+            $user->name = $request->name;
+            if($user->name){
+                $array = explode(" ",$user->name);
+                foreach($array as $key=>$row){
+                    if($key==0){
+                        $first_name = $row;
+                    }
+                    if(!empty($row) && $key != 0){
+                        $last_name .= $row.' ';
+                    }
+                }
+            }
+            $user->first_name = $first_name;
+            $user->last_name = $last_name;
+            $user->role = 'agent';
+            $user->email = $request->email;
+            $user->phone = $request->company_phone;
+            //slug create
+            $url_modify = Service::slug_create($request->name);
+            $checkSlug = User::where('slug', 'LIKE', '%' . $url_modify . '%')->count();
+            if ($checkSlug > 0) {
+                $new_number = $checkSlug + 1;
+                $new_slug = $url_modify . '-' . $new_number;
+                $user->slug = $new_slug;
+            } else {
+                $user->slug = $url_modify;
+            }
+
+            $user->password = Hash::make($request->password);
+            $user->company_id = $company->id;
+            $user->is_admin = 1;
+            $user->active = 0;
+            $user->save();
+            //create agent information
+            $agent = new Agent();
+            $agent->user_id = $user->id;
+            $agent->agent_name = $request->name;
+            $agent->agent_phone = $request->company_phone;
+            $agent->agent_email = $request->company_email;
+            $agent->alternative_person_contact = $request->key_contact_number;
+            $agent->nid_or_passport = $request->passport_number;
+            $agent->nationality = $request->nationality;
+            $agent->agent_country = $request->country;
+            $agent->agent_state = $request->state;
+            $agent->agent_city = $request->city;
+            $agent->agent_zip_code = $request->zip_code;
+            $agent->agent_address = $request->address;
+            $agent->save();
+        }
+        //make mail system with cc
+        $details = [
+            'company_info'=> Company::where('id',$company->id)->first(),
+            'company'=>CompanySetting::where('id',1)->first(),
+        ];
+        $ccRecipients = ['Zahid@ukmcglobal.com','recruitmentrelations@ukmcglobal.com'];
+        Mail::to('hr@ukmcglobal.com')->send(new agentRequest($ccRecipients,$details));
+        Session::flash('success','Agent Request Sent Successfully!');
+        return redirect('agent-request-confimation');
+
+    }
+    public function agent_request_confimation(){
+        $data['page_title'] = 'Agent Request | Confirmation';
+        return view('agent/application/thankyou',$data);
     }
 }

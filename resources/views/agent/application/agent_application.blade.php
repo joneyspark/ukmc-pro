@@ -30,7 +30,7 @@
                     </header>
                 </div>
             </div>
-            <form method="post" action="{{ URL::to('create-agent-post-data') }}" enctype="multipart/form-data">
+            <form method="post" action="{{ URL::to('agent-application-data-post') }}" enctype="multipart/form-data">
                 @csrf
                 <div id="card_1" class="col-lg-12 layout-spacing layout-top-spacing">
                     <div class="statbox widget box box-shadow">
@@ -59,7 +59,7 @@
                                         <!---->
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <div class="row mb-4">
                                 <div class="col">
@@ -215,7 +215,7 @@
                                         <!---->
                                     </div>
                                 </div>
-                                
+
                                 <div class="col">
                                     <div class="form-group mb-4"><label
                                             for="exampleFormControlInput1">Nationality*</label>
@@ -260,7 +260,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">Key Contact Number</label>
-                                            <input name="key_contact_number" value="{{ old('key_contact_number') }}" type="email" class="form-control">
+                                            <input name="key_contact_number" value="{{ old('key_contact_number') }}" type="text" class="form-control">
                                             @if ($errors->has('key_contact_number'))
                                                 <span class="text-danger">{{ $errors->first('key_contact_number') }}</span>
                                             @endif
@@ -308,9 +308,9 @@
                                         <!---->
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            
+
                             <div class="row mb-4">
                                 <div class="col col-md-7">
                                     <div class="form-group mb-4"><label for="exampleFormControlTextarea1">Address in
@@ -343,7 +343,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -384,9 +384,9 @@
                                         <!---->
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            
+
                             <div class="row mb-4">
                                 <div class="col col-md-7">
                                     <div class="form-group mb-4"><label for="exampleFormControlTextarea1">Address in
@@ -419,7 +419,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -445,17 +445,17 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row mb-4">
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">Bank account details </label>
-                                            <input type="hidden" name="bank_account_details " value="Bank Account Details"/>
+                                            <input type="hidden" name="bank_account_details" value="Bank Account Details"/>
                                             <input name="bank_account_details_photo" value="" type="file" class="form-control"/>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">Signed Agent Agreement  </label>
-                                            <input type="hidden" name="signed_agent_agreement  " value="Signed Agent Agreement "/>
+                                            <input type="hidden" name="signed_agent_agreement" value="Signed Agent Agreement "/>
                                             <input name="signed_agent_agreement_photo" value="" type="file" class="form-control"/>
                                     </div>
                                 </div>

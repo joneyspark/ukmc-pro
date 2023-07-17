@@ -22,7 +22,7 @@ class Company extends Model
         return $this->hasOne(CompanyDirector::class);
     }
     public function company_reference(){
-        return $this->hasMany(CompanyDocument::class);
+        return $this->hasMany(CompanyReference::class);
     }
     public function company_document(){
         return $this->hasMany(CompanyDocument::class);

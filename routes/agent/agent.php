@@ -27,4 +27,6 @@ Route::controller(AgentController::class)->group(function () {
     Route::post('edit_employee_by_agent_post','edit_employee_by_agent_post');
 
     Route::get('agent-application', 'agent_application');
+    Route::post('agent-application-data-post', 'agent_application_data_post');
+    Route::get('agent-request-confimation', 'agent_request_confimation');
 });
