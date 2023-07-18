@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Application Status Updated</title>
+  <title>Application (Reference) --- Interview Result</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -58,8 +58,8 @@
 </head>
 <body>
   <div class="container">
-    <h2>Application Status Updated</h2>
-    <p>Dear {{ (!empty($details['application_data']->name))?$details['application_data']->name:'' }},</p>
+    <h2>Application (Reference) --- Interview Result</h2>
+    <p>Dear, {{ (!empty($details['application_data']->name))?$details['application_data']->name:'' }},</p>
 
     <p>
       <strong>Application Id:</strong> {{ (!empty($details['application_data']->id))?$details['application_data']->id:'' }}<br>
@@ -67,7 +67,7 @@
       <strong>Intake:</strong> {{ (!empty($details['application_data']->intake))?date('F Y',strtotime($details['application_data']->intake)):'' }}
     </p><br>
 
-    <p>The status of your application, which was previously <span class="spn-from">{{ (!empty($details['current_status']->title))?$details['current_status']->title:'' }}</span> has been updated to <span class="spn-to">{{ (!empty($details['update_status']->title))?$details['update_status']->title:'' }}</span></p>
+    <p>The Interview status of your application, which was previously <span class="spn-from">{{ (!empty($details['current_status']->title))?$details['current_status']->title:'' }}</span> has been updated to <span class="spn-to">{{ (!empty($details['update_status']->title))?$details['update_status']->title:'' }}</span></p>
 
 
 

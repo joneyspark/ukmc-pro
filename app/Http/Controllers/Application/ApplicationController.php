@@ -11,6 +11,9 @@ use App\Http\Requests\Application\ApplicationStep2Request;
 use App\Http\Requests\Application\ApplicationStep3Request;
 use App\Http\Requests\Application\Step1Request;
 use App\Mail\Application\applicationStatusUpdateMail;
+use App\Mail\Interview\interviewResitMail;
+use App\Mail\Interview\interviewStatusMail;
+use App\Mail\Interview\interviewSuccessMail;
 use App\Models\Agent\Company;
 use App\Models\Application\Application;
 use App\Models\Application\Application_Step_2;
@@ -746,7 +749,7 @@ class ApplicationController extends Controller{
                     ->orWhere('phone', 'like', '%' . $search . '%');
             });
         })
-        
+
         ->when($request->get('from_date') && $request->get('to_date'), function ($query) use ($request) {
             $fromDate = date('Y-m-d 00:00:00', strtotime($request->from_date));
             $toDate = date('Y-m-d 23:59:59', strtotime($request->to_date));
@@ -1557,7 +1560,7 @@ class ApplicationController extends Controller{
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['interview_statuses'] = InterviewStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
-        
+
 
         $data['application_list'] = Application::query()
         ->when($search, function ($query, $search) {
@@ -1872,6 +1875,32 @@ class ApplicationController extends Controller{
         $notification->application_id = $application->id;
         $notification->slug = 'application/'.$application->id.'/processing';
         $notification->save();
+        //make mail system
+        $companyInfo = CompanySetting::where('id',1)->first();
+        if($update_status->id==12){
+            $details = [
+                'application_data'=>$application,
+                'current_status'=>$update_status->title,
+                'company'=>$companyInfo,
+            ];
+            Mail::to($application->email)->send(new interviewResitMail($details));
+        }
+        elseif($update_status->id==14){
+            $details = [
+                'application_data'=>$application,
+                'current_status'=>$update_status->title,
+                'company'=>$companyInfo,
+            ];
+            Mail::to($application->email)->send(new interviewSuccessMail($details));
+        }else{
+            $details = [
+                'application_data'=>$application,
+                'current_status'=>$current_status,
+                'update_status'=>$update_status,
+                'company'=>$companyInfo,
+            ];
+            Mail::to($application->email)->send(new interviewStatusMail($details));
+        }
         //make instant notification for super admin
         event(new AdminMsgEvent($notification->description,url('application/'.$application->id.'/processing')));
         $data['result'] = array(

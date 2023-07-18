@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Application Status Updated</title>
+  <title>Application (Reference) --- Interview Result</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -58,19 +58,17 @@
 </head>
 <body>
   <div class="container">
-    <h2>Application Status Updated</h2>
-    <p>Dear {{ (!empty($details['application_data']->name))?$details['application_data']->name:'' }},</p>
+    <h2>Application (Reference) --- Interview Result</h2>
+    <p>Dear, {{ (!empty($details['application_data']->name))?$details['application_data']->name:'' }},</p>
 
     <p>
       <strong>Application Id:</strong> {{ (!empty($details['application_data']->id))?$details['application_data']->id:'' }}<br>
 	    <strong>Course Title:</strong> {{ (!empty($details['application_data']->course->course_name))?$details['application_data']->course->course_name:'' }}<br>
       <strong>Intake:</strong> {{ (!empty($details['application_data']->intake))?date('F Y',strtotime($details['application_data']->intake)):'' }}
     </p><br>
-
-    <p>The status of your application, which was previously <span class="spn-from">{{ (!empty($details['current_status']->title))?$details['current_status']->title:'' }}</span> has been updated to <span class="spn-to">{{ (!empty($details['update_status']->title))?$details['update_status']->title:'' }}</span></p>
-
-
-
+    <p>Thank You attending your Interview at UKMC</p>
+    <p>Unfortunately, you have not been successfull in your Interview. However, we are offering you a <span class="spn-from">Resit</span> this time.</p>
+    <p>In order to book your Interview, please contact our Admission Team.</p>
     <p>Thank you.</p>
 
     <p><b>Best regards,</b><br>
