@@ -8,6 +8,7 @@ use App\Events\AddNewLead;
 use App\Events\AdminMsgEvent;
 use App\Events\AgentEvent;
 use App\Mail\Application\meetingNoteConfirm;
+use App\Mail\Interview\interviewCancelMail;
 use App\Models\Notification\Notification;
 use App\Models\User;
 use Carbon\Carbon;
@@ -376,6 +377,14 @@ class ApplicationOtherController extends Controller
         $notification->application_id = $meeting->application_id;
         $notification->slug = 'application/'.$meeting->application_id.'/processing';
         $notification->save();
+        //make mail for cancel meeting
+        $application_data = Application::where('id',$meeting->application_id)->first();
+        $details = [
+            'application_data'=>$application_data,
+            'company'=>CompanySetting::where('id',1)->first(),
+            'meeting_info'=>$meeting,
+        ];
+        Mail::to($application_data->email)->send(new interviewCancelMail($details));
         //make instant notification for super admin
         event(new AdminMsgEvent($notification->description,url('application/'.$meeting->application_id.'/processing')));
         $data['result'] = array(
