@@ -30,7 +30,7 @@
                     </header>
                 </div>
             </div>
-            <h5 class="p-3">Company List</h5>
+            <h5 class="p-3">Pending Company List</h5>
             <div class="widget-content widget-content-area">
                 <form method="get" action="">
                     <div class="row">
@@ -42,14 +42,7 @@
                             <input type="submit" value="Filter" name="name-list" class="btn btn-warning">
                         </div>
                         <div class="col-1">
-                            <a class="btn btn-danger" href="{{ URL::to('reset-company-list') }}">Reset</a>
-                        </div>
-                        <div class="col-4">
-                            <a style="float: right;" class="btn btn-secondary" href="{{ URL::to('create-agent') }}">+ Add Agent</a>
-                            <a href="{{ URL::to('pending-agents') }}" style="float: right;" class="btn btn-info position-relative mb-2 me-4">
-                                <span class="btn-text-inner">Pending</span>
-                                <span class="badge badge-danger counter">{{ ($pending_agent_count > 0)?$pending_agent_count:'0' }}</span>
-                            </a>
+                            <a class="btn btn-danger" href="{{ URL::to('reset-pending-company-list') }}">Reset</a>
                         </div>
                     </div>
                 </form>
@@ -66,7 +59,6 @@
                                         <th class="text-center">Phone</th>
                                         <th class="text-center">Total Employee</th>
                                         <th class="text-center">Agreement Expire</th>
-                                        <th class="text-center">Status</th>
                                         <th class="text-center" scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -102,28 +94,8 @@
                                             {{ date('Y-m-d',strtotime($company->agreement_expire_date)) }}
                                         </td>
                                         <td class="text-center">
-                                            <div
-                                                class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
-                                                <div class="input-checkbox">
-                                                    <span class="switch-chk-label label-left">On</span>
-                                                    <input {{ ($company->status==1)?'checked':'' }} data-action="{{ URL::to('company-status-chnage') }}" data-id="{{ $company->id }}" class="company-status-chnage switch-input" type="checkbox"
-                                                        role="switch" id="form-custom-switch-inner-text">
-                                                    <span class="switch-chk-label label-right">Off</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
                                             <div class="action-btns">
-                                                <a href="{{ URL::to('get-employees-by-company/'.$company->id.'/list') }}" class="badge badge-pill bg-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                        class="feather feather-eye text-white">
-                                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                                        <circle cx="12" cy="12" r="3"></circle>
-                                                    </svg>
-                                                </a>
-                                                <a href="{{ URL::to('company/'.$company->id.'/edit') }}" class="badge badge-pill bg-warning">
+                                                <a href="{{ URL::to('edit-pending-agent/'.$company->id) }}" class="badge badge-pill bg-warning">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"

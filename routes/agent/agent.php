@@ -29,4 +29,8 @@ Route::controller(AgentController::class)->group(function () {
     Route::get('agent-application', 'agent_application');
     Route::post('agent-application-data-post', 'agent_application_data_post');
     Route::get('agent-request-confimation', 'agent_request_confimation');
+    Route::get('pending-agents', 'pending_agents');
+    Route::get('reset-pending-company-list','reset_pending_company_list');
+    Route::get('edit-pending-agent/{id?}','edit_pending_agent');
+    Route::post('request-agent-application-data-post','request_agent_application_data_post');
 });

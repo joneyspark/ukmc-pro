@@ -7,6 +7,7 @@ use App\Http\Requests\Agent\AgentCreateRequest;
 use App\Http\Requests\Agent\AgentEditRequest;
 use App\Http\Requests\Agent\CreateEmpAgentByAdminRequest;
 use App\Http\Requests\Agent\EditEmpAgentRequest;
+use App\Mail\agent\agentConfirmationMail;
 use App\Mail\agent\agentRequest;
 use App\Models\Agent\Agent;
 use App\Models\Agent\Company;
@@ -50,6 +51,40 @@ class AgentController extends Controller{
         })
         ->withCount('users')
         ->orderBy('id','desc')
+        ->where('status','!=',3)
+        ->paginate(10)
+        ->appends([
+            'company_name' => $company_name,
+        ]);
+        $data['get_company_name'] = Session::get('company_name');
+        $data['pending_agent_count'] = Company::where('status',3)->count();
+        Session::put('current_url',URL::full());
+        Session::forget('company_id');
+        $data['page_title'] = 'Agents | List';
+        $data['agent_menu'] = true;
+        return view('agent/all',$data);
+    }
+    public function pending_agents(Request $request){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
+        //check as super admin
+        if(Auth::user()->role != 'admin'){
+            Session::flash('error','Login as Super Admin Then Create Campus!');
+            return redirect('login');
+        }
+        $data['company_id'] = Session::get('company_id');
+        $company_name = $request->get('company_name');
+        Session::put('company_name',$company_name);
+
+        $data['companies'] = Company::query()
+        ->when($company_name, function ($query, $company_name) {
+            return $query->where('company_name', 'like', '%' . $company_name . '%');
+        })
+        ->withCount('users')
+        ->orderBy('id','desc')
+        ->where('status',3)
         ->paginate(10)
         ->appends([
             'company_name' => $company_name,
@@ -58,8 +93,22 @@ class AgentController extends Controller{
         Session::put('current_url',URL::full());
         Session::forget('company_id');
         $data['page_title'] = 'Agents | List';
-        $data['agent'] = true;
-        return view('agent/all',$data);
+        $data['agent_menu'] = true;
+        return view('agent/pending',$data);
+    }
+    public function reset_pending_company_list(){
+        Session::forget('current_url');
+        Session::forget('company_name');
+        Session::forget('company_id');
+        return redirect('pending-agents');
+    }
+    //edit pending agent function
+    public function edit_pending_agent($id=NULL){
+        $data['page_title'] = 'Agents | Edit Agent Data';
+        $data['agent_menu'] = true;
+        $data['company_data'] = Company::where('id',$id)->first();
+        $data['countries'] = Service::countries();
+        return view('agent/edit_pending_agent',$data);
     }
     public function reset_company_list(){
         Session::forget('current_url');
@@ -78,6 +127,82 @@ class AgentController extends Controller{
         $data['company_data'] = Company::where('id',$id)->first();
         $data['countries'] = Service::countries();
         return view('agent/edit',$data);
+    }
+    public function request_agent_application_data_post(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'min:6',
+        ]);
+        $getCompany = Company::where('id',$request->company_id)->first();
+        if(!$getCompany){
+            Session::flash('error','Internal Server Error! Company Data Not Found');
+            return redirect('pending-agents');
+        }
+        $first_name = "";
+        $last_name = "";
+        $user = new User();
+        $user->name = $request->name;
+        if($user->name){
+            $array = explode(" ",$user->name);
+            foreach($array as $key=>$row){
+                if($key==0){
+                    $first_name = $row;
+                }
+                if(!empty($row) && $key != 0){
+                    $last_name .= $row.' ';
+                }
+            }
+        }
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+        $user->role = 'agent';
+        $user->email = $request->email;
+        $user->phone = $getCompany->company_phone;
+        //slug create
+        $url_modify = Service::slug_create($request->name);
+        $checkSlug = User::where('slug', 'LIKE', '%' . $url_modify . '%')->count();
+        if ($checkSlug > 0) {
+            $new_number = $checkSlug + 1;
+            $new_slug = $url_modify . '-' . $new_number;
+            $user->slug = $new_slug;
+        } else {
+            $user->slug = $url_modify;
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->company_id = $getCompany->id;
+        $user->is_admin = 1;
+        $user->active = 1;
+        $user->save();
+        //create agent information
+        $agent = new Agent();
+        $agent->user_id = $user->id;
+        $agent->agent_name = $getCompany->company_name;
+        $agent->agent_phone = $getCompany->company_phone;
+        $agent->agent_email = $getCompany->company_email;
+        $agent->alternative_person_contact = $getCompany->company_director->key_contact_number;
+        $agent->nid_or_passport = $getCompany->company_director->passport_number;
+        $agent->nationality = $getCompany->company_director->nationality;
+        $agent->agent_country = $getCompany->country;
+        $agent->agent_state = $getCompany->state;
+        $agent->agent_city = $getCompany->city;
+        $agent->agent_zip_code = $getCompany->zip_code;
+        $agent->agent_address = $getCompany->address;
+        $agent->save();
+        //email create
+        $details = [
+            'agent_name'=>$user->name,
+            'agent_email'=>$user->email,
+            'agent_password'=>$request->password,
+            'company'=>CompanySetting::where('id',1)->first(),
+        ];
+        //update company
+        $update = Company::where('id',$getCompany->id)->update(['status'=>1]);
+        Mail::to($user->email)->send(new agentConfirmationMail($details));
+        Session::flash('success','Successfully Added A New Agent Company');
+        return redirect('agents');
     }
     public function create_agent(){
         if(!Auth::check()){
@@ -702,10 +827,6 @@ class AgentController extends Controller{
             'referee_address2'=>'required',
             'referee_phone2'=>'required',
             'referee_contact_email2'=>'required',
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
-            'password_confirmation' => 'min:6',
         ]);
         $company = new Company();
         $company->company_name = $request->input('company_name');
@@ -719,7 +840,7 @@ class AgentController extends Controller{
         $company->city = $request->input('city');
         $company->zip_code = $request->input('zip_code');
         $company->address = $request->input('address');
-        $company->status = 0;
+        $company->status = 3;
         $company->save();
         //save director Information
         $companyDirector = new CompanyDirector();
@@ -818,68 +939,15 @@ class AgentController extends Controller{
             $signedAgreementDocFile->document = $upload_path1.$doc_file_name;
             $signedAgreementDocFile->save();
         }
-        //agent login info create
-        //create user now
-        if($company->id){
-            $first_name = "";
-            $last_name = "";
-            $user = new User();
-            $user->name = $request->name;
-            if($user->name){
-                $array = explode(" ",$user->name);
-                foreach($array as $key=>$row){
-                    if($key==0){
-                        $first_name = $row;
-                    }
-                    if(!empty($row) && $key != 0){
-                        $last_name .= $row.' ';
-                    }
-                }
-            }
-            $user->first_name = $first_name;
-            $user->last_name = $last_name;
-            $user->role = 'agent';
-            $user->email = $request->email;
-            $user->phone = $request->company_phone;
-            //slug create
-            $url_modify = Service::slug_create($request->name);
-            $checkSlug = User::where('slug', 'LIKE', '%' . $url_modify . '%')->count();
-            if ($checkSlug > 0) {
-                $new_number = $checkSlug + 1;
-                $new_slug = $url_modify . '-' . $new_number;
-                $user->slug = $new_slug;
-            } else {
-                $user->slug = $url_modify;
-            }
-
-            $user->password = Hash::make($request->password);
-            $user->company_id = $company->id;
-            $user->is_admin = 1;
-            $user->active = 0;
-            $user->save();
-            //create agent information
-            $agent = new Agent();
-            $agent->user_id = $user->id;
-            $agent->agent_name = $request->name;
-            $agent->agent_phone = $request->company_phone;
-            $agent->agent_email = $request->company_email;
-            $agent->alternative_person_contact = $request->key_contact_number;
-            $agent->nid_or_passport = $request->passport_number;
-            $agent->nationality = $request->nationality;
-            $agent->agent_country = $request->country;
-            $agent->agent_state = $request->state;
-            $agent->agent_city = $request->city;
-            $agent->agent_zip_code = $request->zip_code;
-            $agent->agent_address = $request->address;
-            $agent->save();
-        }
         //make mail system with cc
         $details = [
             'company_info'=> Company::where('id',$company->id)->first(),
             'company'=>CompanySetting::where('id',1)->first(),
         ];
-        $ccRecipients = ['Zahid@ukmcglobal.com','recruitmentrelations@ukmcglobal.com'];
-        Mail::to('hr@ukmcglobal.com')->send(new agentRequest($ccRecipients,$details));
+        //$ccRecipients = ['Zahid@ukmcglobal.com','recruitmentrelations@ukmcglobal.com'];
+        $ccRecipients = ['tanvir.nawaz66@outlook.com','Link.mamun@fmail.com'];
+        Mail::to('aiub.tanvir@gmail.com')->send(new agentRequest($ccRecipients,$details));
+        //Mail::to('hr@ukmcglobal.com')->send(new agentRequest($ccRecipients,$details));
         Session::flash('success','Agent Request Sent Successfully!');
         return redirect('agent-request-confimation');
 

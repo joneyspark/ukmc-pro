@@ -460,59 +460,14 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="card_1" class="col-lg-12 layout-spacing layout-top-spacing">
-                    <div class="statbox widget box box-shadow">
-                        <div class="widget-content widget-content-area">
                             <div class="row mb-4">
-                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                    <h4>Agent Login Information</h4><br>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group mb-4"><label for="personName">Person Name*</label>
-                                        <input name="name" value="{{ old('name') }}" id="personName" type="text" class="form-control">
-                                        @if ($errors->has('name'))
-                                            <span class="text-danger">{{ $errors->first('name') }}</span>
-                                        @endif
-                                        <!---->
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group mb-4"><label for="email">Email*</label>
-                                        <input type="email" name="email" value="{{ old('email') }}" class="form-control">
-                                        @if ($errors->has('email'))
-                                            <span class="text-danger">{{ $errors->first('email') }}</span>
-                                        @endif
-                                        <!---->
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group mb-4"><label for="password">Password*</label>
-                                        <input name="password" type="password" class="form-control">
-                                        @if ($errors->has('password'))
-                                            <span class="text-danger">{{ $errors->first('password') }}</span>
-                                        @endif
-                                        <!---->
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group mb-4"><label for="password">Confirm Password*</label>
-                                        <input name="password_confirmation" type="password" class="form-control">
-                                        @if ($errors->has('password_confirmation'))
-                                            <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>
-                                        @endif
-                                        <!---->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col text-right">
-                                    <div class="row">
-                                        <div class="col"><a href="/agents" class=""><button type="submit"
-                                                    class="btn btn-warning mr-2">Cancel</button></a><button
-                                                class="btn btn-primary ms-2"><span>Submit</span></button></div>
+                                <div class="row">
+                                    <div class="col text-right">
+                                        <div class="row">
+                                            <div class="col"><a href="/agents" class=""><button type="submit"
+                                                        class="btn btn-warning mr-2">Cancel</button></a><button
+                                                    class="btn btn-primary ms-2"><span>Submit</span></button></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
