@@ -43,7 +43,7 @@
             </a>
             <ul class="{{ (!empty($application) && $application==true)?'collapse show':'collapse' }} submenu list-unstyled" id="datatables1" data-bs-parent="#accordionExample">
                 <li class="{{ (!empty($application_add) && $application_add==true)?'active':'' }}">
-                    <a href="{{ URL::to('application-create') }}"> Add Application</a>
+                    <a href="{{ URL::to('application-create') }}"> New Application</a>
                 </li>
                 @if(Auth::check() && Auth::user()->role=='student')
                 <li class="{{ (!empty($student_portal) && $student_portal==true)?'active':'' }}">
@@ -61,6 +61,9 @@
                 </li>
                 @endif
                 @if(Auth::check() && Auth::user()->role=='agent')
+                <li class="{{ (!empty($incomplete_application_all) && $incomplete_application_all==true)?'active':'' }}">
+                    <a href="{{ URL::to('incomplete-applications') }}">Incomplete Applications </a>
+                </li>
                 <li class="{{ (!empty($application_all) && $application_all==true)?'active':'' }}">
                     <a href="{{ URL::to('agent-applications') }}"> Agent Applications </a>
                 </li>
@@ -71,9 +74,6 @@
                 </li>
                 @endif
                 @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
-                <li class="{{ (!empty($application_pending) && $application_pending==true)?'active':'' }}">
-                    <a href="{{ URL::to('pending-applications') }}"> Pending Application </a>
-                </li>
                 <li class="{{ (!empty($application_all) && $application_all==true)?'active':'' }}">
                     <a href="{{ URL::to('all-application') }}"> All Application </a>
                 </li>

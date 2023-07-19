@@ -1,39 +1,5 @@
 @extends('adminpanel')
 @section('admin')
-<div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-
-        <div class="modal-header" id="inputFormModalLabel">
-            <h5 class="modal-title"><b>Notes</b></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-        </div>
-        <div class="mt-0">
-            <form action="{{ URL::to('make_application_note_by_agent') }}" enctype="multipart/form-data" method="post">
-                @csrf
-                <div class="modal-body">
-                    
-                    <div class="form-group">
-                        <div class="col">
-                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Note:</label>
-                                <input type="hidden" name="note_application_id" id="note_application_id" />
-                                <textarea name="application_note" id="application_note" class="form-control" rows="2"></textarea>
-                                @if ($errors->has('application_note'))
-                                    <span class="text-danger">{{ $errors->first('application_note') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                    <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" >Submit</button>
-                </div>
-            </form>
-        </div>
-      </div>
-    </div>
-</div>
 <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <div class="secondary-nav">
@@ -49,7 +15,7 @@
                             <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="#">Application</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">All</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Incomplete Applications</li>
                                 </ol>
                             </nav>
 
@@ -120,7 +86,7 @@
                            <input type="submit" value="Filter" name="time" class="btn btn-warning">
                         </div>
                         <div class="col-1">
-                           <a href="{{ URL::to('reset-agent-application-search') }}" class="btn btn-danger">Reset</a>
+                           <a href="{{ URL::to('reset-incomplete-applications') }}" class="btn btn-danger">Reset</a>
                         </div>
                     </div>
                 </div>
@@ -140,7 +106,6 @@
                                     <th>Campus</th>
                                     <th>Create date</th>
                                     <th>Intake</th>
-                                    <th>Make Note</th>
                                     <th>Application Status</th>
                                     <th>Interview Status</th>
                                     <th>Status</th>
@@ -167,11 +132,6 @@
                                     <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>
                                     <td>
                                         {{ date('F Y',strtotime($row->intake)) }}
-                                    </td>
-                                    <td>
-                                        <a data-bs-toggle="modal" data-bs-target="#inputFormModal" href="javascript:void(0);" class="action-btn btn-edit bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="Write Note" onclick="writeNote({{ $row->id }})">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                                        </a>
                                     </td>
                                     <td>
                                         @if(!in_array(2,explode(",",$row->steps)))
@@ -261,20 +221,7 @@
         var interview_status = $('#interview_status').val();
         var from_date = $('#from_date').val();
         var to_date = $('#to_date').val();
-        window.location = "{{ URL::to('agent-applications?campus=') }}" + campus + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date;
-    }
-    function writeNote(id){
-        if(id===null){
-            return false;
-        }
-        $('#note_application_id').val(id);
+        window.location = "{{ URL::to('incomplete-applications?campus=') }}" + campus + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date;
     }
 </script>
-@if($errors->has('application_note'))
-<script>
-    $(document).ready(function() {
-        $('#inputFormModal').modal('show');
-    });
-</script>
-@endif
 @stop
