@@ -306,14 +306,14 @@ class ApplicationOtherController extends Controller
             }
         }
         //make meeting confirm mail
-        $details = [
-            'application_info'=>$application_info,
-            'company'=>CompanySetting::where('id',1)->first(),
-            'meeting_date'=>$note->meeting_date_time,
-            'meeting_time'=>$note->meeting_date_time,
-            'create_user'=>User::where('id',Auth::user()->id)->first(),
-        ];
-        Mail::to($application_info->email)->send(new meetingNoteConfirm($details));
+        // $details = [
+        //     'application_info'=>$application_info,
+        //     'company'=>CompanySetting::where('id',1)->first(),
+        //     'meeting_date'=>$note->meeting_date_time,
+        //     'meeting_time'=>$note->meeting_date_time,
+        //     'create_user'=>User::where('id',Auth::user()->id)->first(),
+        // ];
+        //Mail::to($application_info->email)->send(new meetingNoteConfirm($details));
         //make instant notification for super admin
         event(new AdminMsgEvent($notification->description,url('application/'.$request->application_id.'/processing')));
         $data['result'] = array(
