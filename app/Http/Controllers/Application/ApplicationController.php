@@ -11,6 +11,7 @@ use App\Http\Requests\Application\ApplicationStep2Request;
 use App\Http\Requests\Application\ApplicationStep3Request;
 use App\Http\Requests\Application\Step1Request;
 use App\Mail\Application\applicationStatusUpdateMail;
+use App\Mail\Application\meetingNoteConfirm;
 use App\Mail\Interview\interviewResitMail;
 use App\Mail\Interview\interviewStatusMail;
 use App\Mail\Interview\interviewSuccessMail;
@@ -1340,13 +1341,26 @@ class ApplicationController extends Controller{
         $notification->slug = 'application/'.$application->id.'/processing';
         $notification->save();
         //make mail
-        $details = [
-            'application_data'=>$application,
-            'current_status'=>$current_status,
-            'update_status'=>$update_status,
+        if($update_status->id==14){
+            $note = Meeting::where('application_id',$application->id)->orderBy('created_at','desc')->first();
+            $details = [
+            'application_info'=>$application,
             'company'=>CompanySetting::where('id',1)->first(),
+            'meeting_date'=>$note->meeting_date_time,
+            'meeting_time'=>$note->meeting_date_time,
+            'create_user'=>User::where('id',$note->user_id)->first(),
         ];
-        Mail::to($application->email)->send(new applicationStatusUpdateMail($details));
+        Mail::to($application->email)->send(new meetingNoteConfirm($details));
+        }else{
+            $details = [
+                'application_data'=>$application,
+                'current_status'=>$current_status,
+                'update_status'=>$update_status,
+                'company'=>CompanySetting::where('id',1)->first(),
+            ];
+            Mail::to($application->email)->send(new applicationStatusUpdateMail($details));
+        }
+
         //make instant notification for super admin
         event(new AdminMsgEvent($notification->description,url('application/'.$application->id.'/processing')));
         $data['result'] = array(
