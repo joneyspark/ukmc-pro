@@ -315,7 +315,7 @@ class ApplicationOtherController extends Controller
         // ];
         //Mail::to($application_info->email)->send(new meetingNoteConfirm($details));
         //make instant notification for super admin
-        event(new AdminMsgEvent($notification->description,url('application/'.$request->application_id.'/processing')));
+        //event(new AdminMsgEvent($notification->description,url('application/'.$request->application_id.'/processing')));
         $data['result'] = array(
             'key'=>200,
             'val'=>$select,
