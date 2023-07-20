@@ -85,6 +85,56 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
+                                <form method="post" enctype="multipart/form-data" class="" action="{{ URL::to('meeting-document-upload') }}">
+                                    @csrf
+                                    <div class="row col-12">
+                                        <div class="col-4">
+                                            <input type="hidden" name="meeting_id" id="meeting_id" value="{{ $meeting_data->id }}" />
+                                            <div class="form-group"><label for="exampleFormControlInput1">Title</label></div>
+                                            <input name="title" id="title" type="text" class="form-control">
+                                            @if ($errors->has('title'))
+                                                <span class="text-danger">{{ $errors->first('title') }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group"><label for="exampleFormControlInput1">Document</label></div>
+                                            <input name="document" id="document" type="file" class="form-control">
+                                            @if ($errors->has('document'))
+                                                <span class="text-danger">{{ $errors->first('document') }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="form-group"><label for="exampleFormControlInput1"></label></div>
+                                            <button type="submit" class="mt-2 btn btn-primary"> Submit </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            @if (count($documents) > 0)
+                            <div class="row mb-4">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Document</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    @foreach ($documents as $doc)
+                                    <tr>
+                                        <td>{{ $doc->title }}</td>
+                                        <td><a target="_blank" href="{{ asset($doc->document) }}">Download Here</a></td>
+                                        <td class="text-center">
+                                            <a href="javascript:void(0)" onclick="if(confirm('Are you sure to Delete this Document?')) location.href='{{ URL::to('meeting-document-delete/'.$doc->id) }}'; return false;" style="color:#b30b39 !important;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+
+                                </table>
+                            </div>
+                            @endif
+
+                            <div class="row mb-4">
                                 <div class="col-12">
                                     <form method="post" enctype="multipart/form-data" class="" action="{{ URL::to('meeting-video-post') }}">
                                         @csrf

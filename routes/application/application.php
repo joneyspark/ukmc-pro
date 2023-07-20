@@ -66,6 +66,8 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('make_application_note_by_agent', 'make_application_note_by_agent');
     Route::get('incomplete-applications', 'incomplete_applications');
     Route::get('reset-incomplete-applications', 'reset_incomplete_applications');
+    Route::post('meeting-document-upload', 'meeting_document_upload');
+    Route::get('meeting-document-delete/{id?}', 'meeting_document_delete');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

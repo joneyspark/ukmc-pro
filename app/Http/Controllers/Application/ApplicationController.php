@@ -40,6 +40,7 @@ use App\Models\Application\Experience;
 use App\Models\Application\Followup;
 use App\Models\Application\InterviewStatus;
 use App\Models\Application\Meeting;
+use App\Models\Application\MeetingDocument;
 use App\Models\Application\Note;
 use App\Models\Application\Qualification;
 use App\Models\Application\Status;
@@ -1377,6 +1378,7 @@ class ApplicationController extends Controller{
         $data['application'] = true;
         $data['application_all'] = true;
         $data['meeting_data'] = Meeting::where('id',$id)->first();
+        $data['documents'] = MeetingDocument::where('meeting_id',$data['meeting_data']->id)->get();
         return view('application/meeting_details',$data);
     }
     //meeting video post
@@ -2065,6 +2067,44 @@ class ApplicationController extends Controller{
         Session::put('get_from_date','');
         Session::put('get_to_date','');
         return redirect('incomplete-applications');
+    }
+    //meeting document upload
+    public function meeting_document_upload(Request $request){
+        $request->validate([
+            'title'=>'required',
+            'document'=>'required',
+        ]);
+        $meeting = new MeetingDocument();
+        $meeting->meeting_id = $request->meeting_id;
+        $meeting->title = $request->title;
+        //meeting doc file upload
+        $meeting_doc = $request->document;
+        if ($request->hasFile('document')) {
+
+            $ext = $meeting_doc->getClientOriginalExtension();
+            $doc_file_name = $meeting_doc->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $upload_path1 = 'backend/images/meeting/meeting_doc/';
+            Service::createDirectory($upload_path1);
+            $request->file('document')->move(public_path('backend/images/meeting/meeting_doc/'), $doc_file_name);
+            $meeting->document = url($upload_path1.$doc_file_name);
+        }
+        $meeting->save();
+        Session::flash('success','Meeting Note Saved Successfully!');
+        return redirect('meeting/'.$meeting->meeting_id.'/details');
+    }
+    public function meeting_document_delete($id=NULL){
+        $meeting = MeetingDocument::where('id',$id)->first();
+        if(!$meeting){
+            Session::flash('error','Meeting Document Not Found!');
+            return redirect('all-application');
+        }
+        if (File::exists(public_path($meeting->document))) {
+            File::delete(public_path($meeting->document));
+        }
+        $delete = MeetingDocument::where('id',$meeting->id)->delete();
+        Session::flash('success','Meeting Document Deleted Successfully!');
+        return redirect('meeting/'.$meeting->meeting_id.'/details');
     }
 
 }
