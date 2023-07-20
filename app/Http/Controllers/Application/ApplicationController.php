@@ -11,6 +11,7 @@ use App\Http\Requests\Application\ApplicationStep2Request;
 use App\Http\Requests\Application\ApplicationStep3Request;
 use App\Http\Requests\Application\Step1Request;
 use App\Mail\Application\applicationStatusUpdateMail;
+use App\Mail\Application\englishAssesmentMail;
 use App\Mail\Application\meetingNoteConfirm;
 use App\Mail\Interview\interviewResitMail;
 use App\Mail\Interview\interviewStatusMail;
@@ -1347,13 +1348,23 @@ class ApplicationController extends Controller{
         if($update_status->id==14){
             $note = Meeting::where('application_id',$application->id)->orderBy('created_at','desc')->first();
             $details = [
-            'application_info'=>$application,
-            'company'=>CompanySetting::where('id',1)->first(),
-            'meeting_date'=>$note->meeting_date_time,
-            'meeting_time'=>$note->meeting_date_time,
-            'create_user'=>User::where('id',$note->user_id)->first(),
-        ];
-        Mail::to($application->email)->send(new meetingNoteConfirm($details));
+                'application_info'=>$application,
+                'company'=>CompanySetting::where('id',1)->first(),
+                'meeting_date'=>$note->meeting_date_time,
+                'meeting_time'=>$note->meeting_date_time,
+                'create_user'=>User::where('id',$note->user_id)->first(),
+            ];
+            Mail::to($application->email)->send(new meetingNoteConfirm($details));
+        }elseif($update_status->id==7){
+            $follow = Followup::where('application_id',$application->id)->orderBy('created_at','desc')->first();
+            $details = [
+                'application_data'=>$application,
+                'company'=>CompanySetting::where('id',1)->first(),
+                'meeting_date'=>(!empty($follow->follow_up_date_time))?$follow->follow_up_date_time:'',
+                'meeting_time'=>(!empty($follow->follow_up_date_time))?$follow->follow_up_date_time:'',
+                'create_user'=>User::where('id',$follow->user_id)->first(),
+            ];
+            Mail::to($application->email)->send(new englishAssesmentMail($details));
         }else{
             $details = [
                 'application_data'=>$application,
