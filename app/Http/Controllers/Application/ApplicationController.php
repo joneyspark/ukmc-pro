@@ -510,6 +510,10 @@ class ApplicationController extends Controller{
         $doc = $request->doc;
         if ($request->hasFile('doc')) {
             $ext = $doc->getClientOriginalExtension();
+            if(!$ext){
+                Session::flash('error','Invalid Document! Please Upload PDF, JPG, Docs etc!');
+                return redirect('application-create/'.$application->id.'/step-2');
+            }
             $doc_file_name = $doc->getClientOriginalName();
             $doc_file_name = Service::slug_create($doc_file_name).rand(11, 999).'.'.$ext;
             $upload_path1 = 'backend/images/application/doc/'.$application->id.'/';
