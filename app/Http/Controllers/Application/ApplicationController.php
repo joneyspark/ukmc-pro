@@ -855,6 +855,7 @@ class ApplicationController extends Controller{
         $get_agent = $request->agent;
         $get_officer = $request->officer;
         $get_status = $request->status;
+        $get_interviewer = $request->interviewer;
         $get_intake = $request->intake;
         $search = $request->q;
         $get_interview_status = $request->interview_status;
@@ -865,6 +866,7 @@ class ApplicationController extends Controller{
         Session::put('get_agent',$get_agent);
         Session::put('get_officer',$get_officer);
         Session::put('get_status',$get_status);
+        Session::put('get_interviewer',$get_interviewer);
         Session::put('get_intake',$get_intake);
         Session::put('search',$search);
         Session::put('get_interview_status',$get_interview_status);
@@ -905,6 +907,9 @@ class ApplicationController extends Controller{
         ->when($get_officer, function ($query, $get_officer) {
             return $query->where('admission_officer_id',$get_officer);
         })
+        ->when($get_interviewer, function ($query, $get_interviewer) {
+            return $query->where('interviewer_id',$get_interviewer);
+        })
         ->when($get_status, function ($query, $get_status) {
             return $query->where('status',$get_status);
         })
@@ -919,6 +924,7 @@ class ApplicationController extends Controller{
             'campus' => $get_campus,
             'agent' => $get_agent,
             'officer' => $get_officer,
+            'interviewer' => $get_interviewer,
             'status' => $get_status,
             'intake' => $get_intake,
             'interview_status' => $get_interview_status,
@@ -932,6 +938,7 @@ class ApplicationController extends Controller{
         $data['get_campus'] = Session::get('get_campus');
         $data['get_agent'] = Session::get('get_agent');
         $data['get_officer'] = Session::get('get_officer');
+        $data['get_interviewer'] = Session::get('get_interviewer');
         $data['get_status'] = Session::get('get_status');
         $data['get_intake'] = Session::get('get_intake');
         $data['search'] = Session::get('search');

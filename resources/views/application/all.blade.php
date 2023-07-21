@@ -278,7 +278,7 @@
                                 @endif
                             </select>
                          </div>
-                         <div class="col-3">
+                         <div class="col-2">
                             <select id="agent" name="agent" class="form-control" onchange="getApplicationData()">
                                 <option value="">Select Agent</option>
                                 @if(count($agents) > 0)
@@ -298,7 +298,7 @@
                                 @endif
                             </select>
                          </div>
-                         
+
                          <div class="col-2">
                             <select id="status" name="status" class="form-control" onchange="getApplicationData()">
                                 <option value="">Select Status</option>
@@ -309,7 +309,17 @@
                                 @endif
                             </select>
                          </div>
-                         <div class="col-3">
+                         <div class="col-2">
+                            <select id="interviewer" name="interviewer" class="form-control" onchange="getApplicationData()">
+                                <option value="">--Interviewers--</option>
+                                @if(count($interviewer_list) > 0)
+                                @foreach ($interviewer_list as $itlist)
+                                <option {{ (!empty($get_interviewer) && $get_interviewer==$itlist->id)?'selected':'' }} value="{{ $itlist->id }}">{{ $itlist->name }}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                         </div>
+                         <div class="col-2">
                             <select id="interview_status" name="interview_status" class="form-control" onchange="getApplicationData()">
                                 <option value="">Interview Status</option>
                                 @if(count($interview_statuses) > 0)
@@ -511,14 +521,6 @@
                                             <a href="{{ URL::to('application-create/'.$row->id.'/step-3') }}" class="badge badge-pill bg-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             </a>
-                                            @elseif(!in_array(4,explode(",",$row->steps)))
-                                            <a href="{{ URL::to('application-create/'.$row->id.'/step-4') }}" class="badge badge-pill bg-warning">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                            </a>
-                                            @elseif(!in_array(5,explode(",",$row->steps)))
-                                            <a href="{{ URL::to('application-create/'.$row->id.'/step-5') }}" class="badge badge-pill bg-warning">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                            </a>
                                             @else
 
                                             @endif
@@ -600,6 +602,7 @@
     }
     .form-control{
         padding: 0.45rem 1rem !important;
+        font-size: 13px !important;
     }
 </style>
 <script src="{{ asset('web/js/jquery.js') }}"></script>

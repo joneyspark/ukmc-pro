@@ -284,12 +284,13 @@
                 var campus = $('#campus').val();
                 var agent = $('#agent').val();
                 var officer = $('#officer').val();
+                var interviewer = $('#interviewer').val();
                 var status = $('#status').val();
                 var intake = $('#intake').val();
                 var interview_status = $('#interview_status').val();
                 var from_date = $('#from_date').val();
                 var to_date = $('#to_date').val();
-                window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date;
+                window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&interviewer=" + interviewer + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date;
             }
             function getAcademicData(){
                 var level_data = $('#level_of_education').val();
