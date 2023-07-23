@@ -155,7 +155,7 @@ class HomeController extends Controller{
         return view('home/notification',$data);
     }
     //all my notification
-    public function show_all_activity(){
+    public function show_all_activity(Request $request){
         if(!Auth::check()){
             Session::flash('error','Login First Then See Notification List!');
             return redirect('login');
@@ -163,8 +163,66 @@ class HomeController extends Controller{
         $data['page_title'] = 'Archive Campus | List';
         $data['page_title'] = 'Dashboard';
         $data['dashboard'] = true;
-        $data['all_data'] = Notification::orderBy('id','desc')->paginate(15);
+        //start filtering
+        
+        $get_role = $request->role;
+        $get_user_id = $request->user_id;
+        $get_from_date = $request->from_date;
+        $get_to_date = $request->to_date;
+
+        Session::put('get_role',$get_role);
+        Session::put('get_user_id',$get_user_id);
+        Session::put('get_from_date',$get_from_date);
+        Session::put('get_to_date',$get_to_date);
+        
+        $data['all_data'] = Notification::query()
+        ->when($request->get('from_date') && $request->get('to_date'), function ($query) use ($request) {
+            $fromDate = date('Y-m-d 00:00:00', strtotime($request->from_date));
+            $toDate = date('Y-m-d 23:59:59', strtotime($request->to_date));
+            return $query->whereBetween('created_at', [$fromDate, $toDate]);
+        })
+        ->when($get_user_id, function ($query, $get_user_id) {
+            return $query->where('create_by',$get_user_id);
+        })
+        ->orderBy('created_at','desc')
+        ->paginate(15)
+        ->appends([
+            'role'=>$get_role,
+            'user_id' => $get_user_id,
+            'from_date' => $get_from_date,
+            'to_date' => $get_to_date,
+        ]);
+        $data['get_role'] = Session::get('get_role');
+        $data['get_user_id'] = Session::get('get_user_id');
+        $data['get_from_date'] = Session::get('get_from_date');
+        $data['get_to_date'] = Session::get('get_to_date');
+        $data['user_role'] = Service::get_roles();
+        if($get_role){
+            $data['user_list'] = User::where('role',$get_role)->get();
+        }else{
+            $data['user_list'] = User::where('role','!=','agent')->where('role','!=','student')->get();
+        }
         return view('dashboard/all_activity',$data);
+    }
+    public function get_user_by_role($role=NULL){
+        $users = User::where('role',$role)->get();
+        $select = '';
+        $select .= '<option value="">Select Role</option>';
+        foreach($users as $user){
+            $select .= '<option value="'.$user->id.'">'.$user->name.'</option>';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select
+        );
+        return response()->json($data,200);
+    }
+    public function reset_user_activity_list(){
+        Session::put('get_role','');
+        Session::put('get_user_id','');
+        Session::put('get_from_date','');
+        Session::put('get_to_date','');
+        return redirect('show-all-activity');
     }
     
 }

@@ -27,8 +27,42 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 layout-top-spacing">
 
             <div class="usr-tasks ">
+                <h5 class="p-3">All Activity List</h5>
                 <div class="widget-content widget-content-area">
-                    <h5 class="p-3">All Activity List</h5>
+                    <form method="get" action="">
+                            <div class="row mb-4">
+                                <div class="col-2">
+                                <select id="role" name="role" class="form-control" onchange="getUserByRole()">
+                                    <option value="">Select Role</option>
+                                    @foreach ($user_role as $row)
+                                    <option {{ (!empty($get_role) && $get_role==$row['key'])?'selected':'' }} value="{{ $row['key'] }}">{{ $row['val'] }}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                                <div class="col-3">
+                                <select id="user_data" name="user_id" class="form-control">
+                                    <option value="">Select User</option>
+                                    @foreach ($user_list as $list)
+                                        <option {{ (!empty($get_user_id) && $get_user_id==$list->id)?'selected':'' }} value="{{ $list->id }}">{{ $list->name.'-'.$list->role }}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                                <div class="col-2">
+                                <input value="{{ (!empty($get_from_date))?$get_from_date:'' }}" name="from_date" id="from_date" type="date" class="form-control" placeholder="From Date">
+                                </div>
+                                <div class="col-2">
+                                <input value="{{ (!empty($get_to_date))?$get_to_date:'' }}" name="to_date" id="to_date" type="date" class="form-control" placeholder="To Date">
+                                </div>
+                                <div class="col-1">
+                                <input type="submit" value="Filter" name="time" class="btn btn-warning">
+                                </div>
+                                <div class="col">
+                                <a href="{{ URL::to('reset-user-activity-list') }}" class="btn btn-danger">Reset</a>
+                                </div>
+                            </div>
+                    </form>
+                </div>
+                <div class="widget-content widget-content-area">
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
@@ -45,7 +79,7 @@
                                         <p>{{ $row->id }}</p>
                                     </td>
                                     <td>
-                                        <p>{!! $row->description !!}</p>
+                                        <p>{!! $row->description !!}<p class="t-time">{{ App\Models\Notification\Notification::timeLeft($row->create_date) }}</p></p>
                                     </td>
                                     <td class="text-center">
                                         <p>{{ date('Y-m-d',strtotime($row->created_at)) }}</p>
@@ -66,5 +100,23 @@
         </div>
     </div>
 </div>
+<style>
+    .form-control{
+        padding: 0.45rem 1rem !important;
+        font-size: 13px !important;
+    }
+</style>
+<script src="{{ asset('web/js/jquery.js') }}"></script>
+<script>
+    function getUserByRole(){
+        var get_role = $('#role').val();
+        $.get('{{ URL::to('get-user-by-role') }}/'+get_role,function(data,status){
+            if(data['result']['key']===200){
+                console.log(data['result']['val']);
+                $('#user_data').html(data['result']['val']);
+            }
+        });
+    }
 
+</script>
 @stop
