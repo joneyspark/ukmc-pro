@@ -916,7 +916,7 @@ class ApplicationController extends Controller{
         ->when($get_intake, function ($query, $get_intake) {
             return $query->where('intake',$get_intake);
         })
-        ->where('application_status_id','!=',0)
+        //->where('application_status_id','!=',0)
         ->orderBy('created_at','desc')
         ->paginate(15)
         ->appends([
