@@ -916,7 +916,7 @@ class ApplicationController extends Controller{
         ->when($get_intake, function ($query, $get_intake) {
             return $query->where('intake',$get_intake);
         })
-        //->where('application_status_id','!=',0)
+        ->where('application_status_id','!=',3)
         ->orderBy('created_at','desc')
         ->paginate(15)
         ->appends([
@@ -1161,6 +1161,7 @@ class ApplicationController extends Controller{
     //request doc file message
     public function request_document_message(Request $request){
         $validator = Validator::make($request->all(), [
+            'subject' => 'required',
             'message' => 'required',
         ]);
         if ($validator->fails()){
@@ -1178,6 +1179,7 @@ class ApplicationController extends Controller{
         }
         $doc = new RequestDocument();
         $doc->application_id = $application->id;
+        $doc->subject = $request->subject;
         $doc->message = $request->message;
         $doc->request_by = Auth::user()->id;
         $doc->request_to = ($application->create_by > 0)?$application->create_by:0;
@@ -1203,6 +1205,7 @@ class ApplicationController extends Controller{
 
         $details = [
             'create_by'=>Auth::user(),
+            'subject'=>$request->subject,
             'message'=>$request->message,
             'application_info'=>$application,
             'company'=>CompanySetting::where('id',1)->first(),
@@ -1634,7 +1637,7 @@ class ApplicationController extends Controller{
         ->when($get_intake, function ($query, $get_intake) {
             return $query->where('intake',$get_intake);
         })
-        ->where('application_status_id','!=',0)
+        ->where('application_status_id',1)
         ->where('admission_officer_id',Auth::user()->id)
         ->orderBy('created_at','desc')
         ->paginate(15)
@@ -1711,7 +1714,7 @@ class ApplicationController extends Controller{
         ->when($get_intake, function ($query, $get_intake) {
             return $query->where('intake',$get_intake);
         })
-        ->where('application_status_id','!=',0)
+        ->where('application_status_id',1)
         ->where('manager_id',Auth::user()->id)
         ->orderBy('created_at','desc')
         ->paginate(15)
@@ -1799,6 +1802,7 @@ class ApplicationController extends Controller{
         ->when($get_intake, function ($query, $get_intake) {
             return $query->where('intake',$get_intake);
         })
+        ->where('application_status_id',1)
         ->where('interviewer_id',Auth::user()->id)
         ->orderBy('created_at','desc')
         ->paginate(15)
@@ -2127,6 +2131,19 @@ class ApplicationController extends Controller{
         $delete = MeetingDocument::where('id',$meeting->id)->delete();
         Session::flash('success','Meeting Document Deleted Successfully!');
         return redirect('meeting/'.$meeting->meeting_id.'/details');
+    }
+    //delete application
+    public function delete_application($id=NULL){
+        $application = Application::where('id',$id)->first();
+        if(!$application){
+            Session::flash('error','Application Data Not Found!');
+            return redirect('all-application');
+        }
+        //delete application
+        $application->application_status_id = 3;
+        $application->save();
+        Session::flash('warning','Application Data Deleted Successfully!');
+        return redirect('all-application');
     }
 
 }

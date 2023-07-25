@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Request Document</title>
+  <title>{{ (!empty($details['subject']))?$details['subject']:'' }}</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -46,8 +46,7 @@
 </head>
 <body>
   <div class="container">
-    <h2>Request Document</h2>
-    <p>Hello,</p>
+    <h2>{{ (!empty($details['subject']))?$details['subject']:'' }}</h2>
 
     <p>{{ (!empty($details['message']))?$details['message']:'' }}</p>
 	<p>

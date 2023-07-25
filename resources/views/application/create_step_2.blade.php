@@ -38,6 +38,12 @@
                     <div class="form-group">
                         <input type="hidden" name="set_application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
                         <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Subject:</label>
+                                <input type="text" name="subject" class="form-control" rows="2">
+                                @if ($errors->has('subject'))
+                                    <span class="text-danger">{{ $errors->first('subject') }}</span>
+                                @endif
+                            </div>
                             <div class="form-group mb-4"><label for="exampleFormControlInput1">Request Document Note:</label>
                                 <textarea name="message" class="form-control" rows="2"></textarea>
                                 @if ($errors->has('message'))
@@ -203,12 +209,13 @@
                         </div>
                     </form>
                     @if(Auth::user())
-                        
+
                         <div class="row">
                             <h5>Requested Document</h5>
                             <table class="table table-responsive">
                                 <tr>
-                                    <td>Title</td>
+                                    <td>Subject</td>
+                                    <td>Note</td>
                                     <td>Request By</td>
                                     <td>Status</td>
                                     @if(Auth::user()->role=='agent' || Auth::user()->role=='student')
@@ -217,6 +224,7 @@
                                 </tr>
                                 @foreach($requested_documents as $drow)
                                 <tr>
+                                    <td>{{ (!empty($drow->subject))?$drow->subject:'NIL' }}</td>
                                     <td>{{ (!empty($drow->message))?$drow->message:'' }}</td>
                                     <td>{{ (!empty($drow->document_by->name))?$drow->document_by->name:'' }}</td>
                                     <td>
@@ -235,7 +243,7 @@
                                 @endforeach
                             </table>
                         </div>
-                        
+
                     @endif
                     <!-- request document see by admin -->
 
@@ -499,7 +507,7 @@
         });
     </script>
     @endif
-    @if($errors->has('message'))
+    @if($errors->has('subject') || $errors->has('message'))
     <script>
         $(document).ready(function() {
             $('#inputFormModal').modal('show');
