@@ -1,5 +1,100 @@
 @extends('adminpanel')
 @section('admin')
+<!-- Modal -->
+<div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header" id="inputFormModalLabel">
+            <h5 class="modal-title"><b>Request Documents</b></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <form method="post" action="{{ URL::to('request-document-message') }}" class="mt-0">
+            @csrf
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="hidden" name="set_application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
+                    <div class="col">
+                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Subject:</label>
+                            <input type="text" name="subject" class="form-control" rows="2">
+                            @if ($errors->has('subject'))
+                                <span class="text-danger">{{ $errors->first('subject') }}</span>
+                            @endif
+                        </div>
+                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Request Document Note:</label>
+                            <textarea name="message" class="form-control" rows="2"></textarea>
+                            @if ($errors->has('message'))
+                                <span class="text-danger">{{ $errors->first('message') }}</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
+                <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect">Submit</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" action="{{ URL::to('step-4-post') }}" enctype="multipart/form-data">
+                @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Upload Documents</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><svg> ... </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
+                <div class="col form-group mb-4">
+                    <label for="verticalFormStepform-name">Browse Document:</label>
+                    <input name="doc" type="file" class="form-control-file" id="exampleFormControlFile1">
+                    @if ($errors->has('doc'))
+                        <span class="text-danger">{{ $errors->first('doc') }}</span>
+                    @endif
+                </div>
+                <div class="col form-group mb-4">
+                    <label for="verticalFormStepform-name">Document Type:</label>
+                    @if($application_data->is_academic==1)
+                    <select name="document_type" id="inputState" class="form-select">
+                        <option value="">Choose...</option>
+                        <option value="Passport">Passport</option>
+                        <option value="Proof of Address">Proof of Address</option>
+                        <option value="Residency">Residency</option>
+                        <option value="SOP">SOP</option>
+                        <option value="Qualification transcript">Qualification transcript</option>
+                        <option value="Additional Documents">Additional Documents</option>
+                        </select>
+                    @endif
+                    @if($application_data->is_academic==2)
+                    <select name="document_type" id="inputState" class="form-select">
+                        <option value="">Choose...</option>
+                        <option value="Passport">Passport</option>
+                        <option value="SOP">SOP</option>
+                        <option value="Residency">Residency</option>
+                        <option value="Proof of Address">Proof of Address</option>
+                        <option value="CV">CV</option>
+                        <option value="Essay">Essay</option>
+                        <option value="Additional Documents">Additional Documents</option>
+                        </select>
+                    @endif
+                    @if ($errors->has('document_type'))
+                        <span class="text-danger">{{ $errors->first('document_type') }}</span>
+                    @endif
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
 <div class="container">
     <div class="row secondary-nav">
         <div class="breadcrumbs-container" data-page-heading="Analytics">
@@ -21,101 +116,6 @@
                     </div>
                 </div>
             </header>
-        </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-
-            <div class="modal-header" id="inputFormModalLabel">
-                <h5 class="modal-title"><b>Request Documents</b></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-            </div>
-            <form method="post" action="{{ URL::to('request-document-message') }}" class="mt-0">
-                @csrf
-                <div class="modal-body">
-                    <div class="form-group">
-                        <input type="hidden" name="set_application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
-                        <div class="col">
-                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Subject:</label>
-                                <input type="text" name="subject" class="form-control" rows="2">
-                                @if ($errors->has('subject'))
-                                    <span class="text-danger">{{ $errors->first('subject') }}</span>
-                                @endif
-                            </div>
-                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Request Document Note:</label>
-                                <textarea name="message" class="form-control" rows="2"></textarea>
-                                @if ($errors->has('message'))
-                                    <span class="text-danger">{{ $errors->first('message') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                    <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect">Submit</button>
-                </div>
-            </form>
-          </div>
-        </div>
-    </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form method="post" action="{{ URL::to('step-4-post') }}" enctype="multipart/form-data">
-                    @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Upload Documents</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><svg> ... </svg>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
-                    <div class="col form-group mb-4">
-                        <label for="verticalFormStepform-name">Browse Document:</label>
-                        <input name="doc" type="file" class="form-control-file" id="exampleFormControlFile1">
-                        @if ($errors->has('doc'))
-                            <span class="text-danger">{{ $errors->first('doc') }}</span>
-                        @endif
-                    </div>
-                    <div class="col form-group mb-4">
-                        <label for="verticalFormStepform-name">Document Type:</label>
-                        @if($application_data->is_academic==1)
-                        <select name="document_type" id="inputState" class="form-select">
-                            <option value="">Choose...</option>
-                            <option value="Passport">Passport</option>
-                            <option value="Proof of Address">Proof of Address</option>
-                            <option value="Residency">Residency</option>
-                            <option value="SOP">SOP</option>
-                            <option value="Qualification transcript">Qualification transcript</option>
-                            <option value="Additional Documents">Additional Documents</option>
-                            </select>
-                        @endif
-                        @if($application_data->is_academic==2)
-                        <select name="document_type" id="inputState" class="form-select">
-                            <option value="">Choose...</option>
-                            <option value="Passport">Passport</option>
-                            <option value="SOP">SOP</option>
-                            <option value="Residency">Residency</option>
-                            <option value="Proof of Address">Proof of Address</option>
-                            <option value="CV">CV</option>
-                            <option value="Essay">Essay</option>
-                            <option value="Additional Documents">Additional Documents</option>
-                            </select>
-                        @endif
-                        @if ($errors->has('document_type'))
-                            <span class="text-danger">{{ $errors->first('document_type') }}</span>
-                        @endif
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                </div>
-            </form>
-            </div>
         </div>
     </div>
     {{-- <h5 class="p-3">New Applicant</h5> --}}
@@ -150,7 +150,7 @@
                     <form class="row g-3">
                         <h5 class="text-center">Documents Upload</h5>
                         <hr>
-                        <div class="col-12">
+                        <div class="col-9">
                             <div class="col form-group mb-4">
                                 <input type="hidden" id="get_application_id" name="get_application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
                                 <label for="verticalFormStepform-name">Level Of Education:</label>
@@ -212,10 +212,10 @@
 
                         <div class="row">
                             <h5>Requested Document</h5>
-                            <table class="table table-responsive">
+                            <table class="table table-bordered">
                                 <tr>
-                                    <td>Subject</td>
-                                    <td>Note</td>
+                                    <td class="col-3">Subject</td>
+                                    <td class="col-4">Note</td>
                                     <td>Request By</td>
                                     <td>Status</td>
                                     @if(Auth::user()->role=='agent' || Auth::user()->role=='student')
@@ -226,7 +226,9 @@
                                 <tr>
                                     <td>{{ (!empty($drow->subject))?$drow->subject:'NIL' }}</td>
                                     <td>{{ (!empty($drow->message))?$drow->message:'' }}</td>
-                                    <td>{{ (!empty($drow->document_by->name))?$drow->document_by->name:'' }}</td>
+                                    <td>
+                                        {{ (!empty($drow->document_by->name))?$drow->document_by->name:'' }}
+                                    </td>
                                     <td>
                                         @if($drow->status==0)
                                         <span class="badge badge-warning">Pending</span>
@@ -297,7 +299,7 @@
                             <button type="submit" class="btn btn-secondary btn-nxt">Submit</button>
                         </form><hr>
                         <h5>Qualification List</h5>
-                        <table class="table table-responsive">
+                        <table class="table table-bordered">
                             <tr>
                                 <td>Name of Qualifications</td>
                                 <td>Name of Institution</td>
@@ -364,7 +366,7 @@
                             <button type="submit" class="btn btn-secondary btn-nxt">Submit</button>
                         </form><hr>
                         <h5>Experience List</h5>
-                        <table class="table table-responsive">
+                        <table class="table table-bordered">
                             <tr>
                                 <td>Job Title</td>
                                 <td>Employer Name</td>
@@ -498,6 +500,12 @@
     </div>
 
 </div>
+<style>
+    .table td{
+        white-space: break-spaces !important;
+        padding: 3px 2px 2px 12px !important;
+    }
+</style>
 @if($errors->any())
 <script src="{{ asset('web/js/jquery.js') }}"></script>
     @if($errors->has('document_type') || $errors->has('doc'))
