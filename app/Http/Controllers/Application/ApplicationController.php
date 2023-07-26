@@ -2145,5 +2145,19 @@ class ApplicationController extends Controller{
         Session::flash('warning','Application Data Deleted Successfully!');
         return redirect('all-application');
     }
+    //delete document
+    public function delete_application_document($id=NULL){
+        $doc = ApplicationDocument::where('id',$id)->first();
+        if(!$doc){
+            Session::flash('error','Application Document Data Not Found! Internal Server Error!');
+            return redirect('all-application');
+        }
+        if (File::exists(public_path($doc->doc))) {
+            File::delete(public_path($doc->doc));
+        }
+        $delete = ApplicationDocument::where('id',$doc->id)->delete();
+        Session::flash('warning','Application Document Data Deleted Successfully!');
+        return redirect('application/'.$doc->application_id.'/processing');
+    }
 
 }
