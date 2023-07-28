@@ -54,7 +54,7 @@
     <strong>Course Title:</strong> {{ (!empty($details['application_info']->course->course_name))?$details['application_info']->course->course_name:'' }}<br>
     <strong>Intake:</strong> {{ (!empty($details['application_info']->intake))?date('F Y',strtotime($details['application_info']->intake)):'' }}
 	</p>
-	<p>Note: If you sent your document directly by mail, please mention your Application ID, Email, and Phone.</p>
+	<p>Note: If you are sending your documents by email directly, please mention your Application ID in the subject.</p>
 
     <p>Thank you.</p>
 
