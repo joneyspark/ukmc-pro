@@ -98,7 +98,7 @@
                 @endif
             </ul>
         </li>
-        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='interviewer')
+        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='interviewer')
         <li class="menu {{ (!empty($campus) && $campus==true)?'active':'' }}">
             <a href="#datatables2" data-bs-toggle="collapse" aria-expanded="{{ (!empty($campus) && $campus==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">
