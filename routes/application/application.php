@@ -70,6 +70,9 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('meeting-document-delete/{id?}', 'meeting_document_delete');
     Route::get('delete-application/{id?}','delete_application');
     Route::get('delete-application-document/{id?}','delete_application_document');
+    Route::post('sop-data-post','sop_data_post');
+    Route::get('sop-plagiarism-check/{id?}','sop_plagiarism_check');
+    Route::get('sop-plagiarism-check-from-processing/{id?}','sop_plagiarism_check_from_processing');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

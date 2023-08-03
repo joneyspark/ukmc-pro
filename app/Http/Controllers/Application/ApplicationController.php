@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\requestDocumentMail;
+use App\Models\Application\ApplicationSop;
 use App\Models\Application\ApplicationStatus;
 use App\Models\Application\Experience;
 use App\Models\Application\Followup;
@@ -2158,6 +2159,81 @@ class ApplicationController extends Controller{
         $delete = ApplicationDocument::where('id',$doc->id)->delete();
         Session::flash('warning','Application Document Data Deleted Successfully!');
         return redirect('application/'.$doc->application_id.'/processing');
+    }
+    //sop data post 
+    public function sop_data_post(Request $request){
+        $request->validate([
+            'sop_data'=>'required'
+        ]);
+        if($request->sop_id){
+            $sop = ApplicationSop::where('id',$request->sop_id)->first();
+        }else{
+            $sop = new ApplicationSop();
+        }
+        $sop->sop_data = $request->sop_data;
+        $sop->application_id = $request->sop_application_id;
+        $sop->save();
+        Session::flash('success','SOP Data Saved Successfully!');
+        return redirect('application-create/'.$request->sop_application_id.'/step-2');
+    }
+    public function sop_plagiarism_check($id=NULL){
+        $sop = ApplicationSop::where('id',$id)->first();
+        if(!$sop){
+            Session::flash('error','SOP Data Not Found! Internal Server Error!');
+            return redirect('all-application');
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://www.prepostseo.com/apis/checkPlag');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "key=b119cad90af540995ff287118c2d42e7&data=".$sop->sop_data);
+        $headers = array();
+        $headers[] = 'Content-Type: application/x-www-form-urlencoded';
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        }
+        curl_close($ch);
+        $result_data = json_decode($result);
+        $sop->total_queries = $result_data->totalQueries;
+        $sop->plag_percent = $result_data->plagPercent;
+        $sop->paraphrase_percent = $result_data->paraphrasePercent;
+        $sop->unique_percent = $result_data->uniquePercent;
+        $sop->total_plag_data = json_encode($result);
+        $sop->save();
+        Session::flash('success','Plagiarism Result Successfully Generated!');
+        return redirect('application-create/'.$sop->application_id.'/step-2');
+    }
+    //for processing
+    public function sop_plagiarism_check_from_processing($id=NULL){
+        $sop = ApplicationSop::where('id',$id)->first();
+        if(!$sop){
+            Session::flash('error','SOP Data Not Found! Internal Server Error!');
+            return redirect('all-application');
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://www.prepostseo.com/apis/checkPlag');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "key=b119cad90af540995ff287118c2d42e7&data=".$sop->sop_data);
+        $headers = array();
+        $headers[] = 'Content-Type: application/x-www-form-urlencoded';
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        }
+        curl_close($ch);
+        $result_data = json_decode($result);
+        $sop->total_queries = $result_data->totalQueries;
+        $sop->plag_percent = $result_data->plagPercent;
+        $sop->paraphrase_percent = $result_data->paraphrasePercent;
+        $sop->unique_percent = $result_data->uniquePercent;
+        $sop->total_plag_data = json_encode($result);
+        $sop->save();
+        Session::flash('success','Plagiarism Result Successfully Generated!');
+        return redirect('application/'.$sop->application_id.'/processing');
     }
 
 }

@@ -382,6 +382,45 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="col col-md-12 mb-4">
+                            <div class="row">
+                                <h5>Application SOP</h5>
+                                <form method="post" action="#" class="form">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col form-group mb-4">
+                                            <textarea name="sop_data" class="form-control" rows="12">{{ (!empty($application_info->sop->sop_data))?$application_info->sop->sop_data:'' }}</textarea>
+                                        </div>
+                                    </div>
+                                    @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                                        @if(!empty($application_info->sop->id))
+                                            <a href="{{ URL::to('sop-plagiarism-check-from-processing/'.$application_info->sop->id) }}" class="btn btn-danger btn-nxt">SOP Plagiarism Check</a>
+                                        @else
+                                            <a href="{{ URL::to('application-create/'.$application_info->id.'/step-2') }}" class="btn btn-primary btn-nxt">Write SOP First Then Check</a>
+                                        @endif
+                                    @endif
+                                </form>
+                                @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                                <hr>
+                                <h5>SOP Plagiarism Result</h5>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>Total Queries</td>
+                                        <td>Plag Percent</td>
+                                        <td>Paraphrase Percent</td>
+                                        <td>Unique Percent</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ (!empty($application_info->sop->total_queries))?$application_info->sop->total_queries:'0' }}</td>
+                                        <td>{{ (!empty($application_info->sop->plag_percent))?$application_info->sop->plag_percent.'%':'0%' }}</td>
+                                        <td>{{ (!empty($application_info->sop->paraphrase_percent))?$application_info->sop->paraphrase_percent.'%':'0%' }}</td>
+                                        <td>{{ (!empty($application_info->sop->unique_percent))?$application_info->sop->unique_percent.'%':'0% Unique' }}</td>
+                                    </tr>
+                                    
+                                </table>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

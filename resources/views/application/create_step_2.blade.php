@@ -386,6 +386,48 @@
                         </table>
                     </div><hr>
                     @endif
+                    <div class="row">
+                        <h5>SOP Create</h5>
+                        <form method="post" action="{{ URL::to('sop-data-post') }}" class="form">
+                            @csrf
+                            <div class="row">
+                                <input type="hidden" id="sop_application_id" name="sop_application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
+                                <input type="hidden" id="sop_id" name="sop_id" value="{{ (!empty($application_data->sop->id))?$application_data->sop->id:'' }}" />
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">SOP: (Upto 500 words). Yearning for an exceptional SOP that captures my true essence. </label>
+                                    <textarea name="sop_data" class="form-control" rows="8">{{ (!empty($application_data->sop->sop_data))?$application_data->sop->sop_data:'' }}</textarea>
+                                    @if ($errors->has('sop_data'))
+                                        <span class="text-danger">{{ $errors->first('sop_data') }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-secondary btn-nxt">Submit</button>
+                            @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                                @if(!empty($application_data->sop->id))
+                                    <a href="{{ URL::to('sop-plagiarism-check/'.$application_data->sop->id) }}" class="btn btn-danger btn-nxt">SOP Plagiarism Check</a>
+                                @endif
+                            @endif
+                        </form>
+                        @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                        <hr>
+                        <h5>SOP Plagiarism Result</h5>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>Total Queries</td>
+                                <td>Plag Percent</td>
+                                <td>Paraphrase Percent</td>
+                                <td>Unique Percent</td>
+                            </tr>
+                            <tr>
+                                <td>{{ (!empty($application_data->sop->total_queries))?$application_data->sop->total_queries:'0' }}</td>
+                                <td>{{ (!empty($application_data->sop->plag_percent))?$application_data->sop->plag_percent.'%':'0%' }}</td>
+                                <td>{{ (!empty($application_data->sop->paraphrase_percent))?$application_data->sop->paraphrase_percent.'%':'0%' }}</td>
+                                <td>{{ (!empty($application_data->sop->unique_percent))?$application_data->sop->unique_percent.'%':'0% Unique' }}</td>
+                            </tr>
+                            
+                        </table>
+                        @endif
+                    </div>
                     <div class="row"><hr>
                         <form method="post" action="{{ URL::to('step-2-post') }}" class="form">
                             @csrf
