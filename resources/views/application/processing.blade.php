@@ -276,7 +276,7 @@
                             </div><br>
                             @endif
 
-                            @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+                            
                             <div class="card no-outer-spacing no-border-custom">
                                 <div class="card-header">
                                     <section class="mb-0 mt-0">
@@ -284,6 +284,7 @@
                                     </section>
                                 </div>
                                 <div id="" class="" aria-labelledby="headingTwo2" data-parent="#withoutSpacing">
+                                    @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer' || Auth::user()->role=='adminManager')
                                     <div id="meetingnote-data">
                                         @if(count($application_info->meetings) > 0)
                                             @foreach ($application_info->meetings as $note)
@@ -294,13 +295,15 @@
                                                     </div>
                                                     <div class="media-body">
                                                         <h6 class="tx-inverse">{{ (!empty($note->user->name))?$note->user->name:'' }}
-                                                            @if (Auth::user()->id==$note->user_id)
-                                                            <a onclick="deleteMeetingNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
-                                                            @endif
-                                                            @if($note->is_meeting_done==1)
-                                                            <a onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Complete" aria-label="Complete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>
-                                                            @else
-                                                            <a onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>
+                                                            @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+                                                                @if (Auth::user()->id==$note->user_id)
+                                                                <a onclick="deleteMeetingNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
+                                                                @endif
+                                                                @if($note->is_meeting_done==1)
+                                                                <a onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#1f6b08; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Complete" aria-label="Complete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></a>
+                                                                @else
+                                                                <a onclick="isMeetingComplete({{ $note->id }})" style="float:right; color:#ada310; margin-right:5px;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Pending" aria-label="Pending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></a>
+                                                                @endif
                                                             @endif
                                                             <a href="{{ URL::to('meeting/'.$note->id.'/details') }}" style="float:right; margin-right:5px;" class="badge badge-pill bg-info">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -314,6 +317,8 @@
                                             @endforeach
                                         @endif
                                     </div>
+                                    @endif
+                                    @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
                                     <div class="card-body custom-card-body">
                                         <form enctype="multipart/form-data" id="meeting-form" method="post">
                                             <div class="col col-md-12 p-0">
@@ -335,10 +340,9 @@
                                         </form>
 
                                     </div>
+                                    @endif
                                 </div>
                             </div>
-                            @endif
-
                         </div>
                         <div class="col col-md-12 mb-4">
                             <h5 class="pb-2">Application Document <a href="{{ URL::to('application-create/'.$application_info->id.'/step-2') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Document <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>
