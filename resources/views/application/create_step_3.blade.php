@@ -258,10 +258,10 @@
                             <div id="MainContent_dv_Declaration_Text" class="row mb-4 px-5">
                                 <div class="col">
                                     <p id="MainContent_Declaration_Text" class="text-white">
-                                        I hereby, confirm that the information provided on this application form is accurate. I accept that the UKMC/Partner University reserves the right to cancel my application if any of the information that I have submitted is subsequently found to be false or inaccurate and that by signing this declaration, I am bound by the terms and conditions as outlined by the UKMC/Partner University.
+                                        I hereby, confirm that the information provided on this application form is accurate. I accept that the UKMC/Partner University reserves the right to cancel my application if any of the information that I have submitted is subsequently found to be false or inaccurate and that by signing this declaration, I am bound by the terms and conditions as outlined by the UKMC/Partner University. I give consent to the UKMC/Partner University to process the information on, and submitted with, this form for administrative purposes and for consideration of my application, but only insofar as it is permitted to do so within the constraints imposed by the Data Protection Act 1998.
                                     </p>
                                     <p id="MainContent_Declaration_Text" class="text-white">
-                                        I hereby, confirm that the information provided on this application form is accurate. I accept that the UKMC/Partner University reserves the right to cancel my application if any of the information that I have submitted is subsequently found to be false or inaccurate and that by signing this declaration, I am bound by the terms and conditions as outlined by the UKMC/Partner University.
+                                        In particular, I understand that the UKMC/Partner University may continue to process this information even if I am refused admission or if it should decline an offer of admission. I also give consent to the University/UKMC to contact the Home Office to seek information regarding my immigration status if required, whether to make an assessment of my application or at any time in the future. 
                                     </p>
                                 </div>
                             </div>
