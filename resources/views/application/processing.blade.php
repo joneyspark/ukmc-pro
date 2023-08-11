@@ -392,7 +392,7 @@
                                             <textarea name="sop_data" class="form-control" rows="12">{{ (!empty($application_info->sop->sop_data))?$application_info->sop->sop_data:'' }}</textarea>
                                         </div>
                                     </div>
-                                    @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                                    @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
                                         @if(!empty($application_info->sop->id))
                                             <a href="{{ URL::to('sop-plagiarism-check-from-processing/'.$application_info->sop->id) }}" class="btn btn-danger btn-nxt">SOP Plagiarism Check</a>
                                         @else
@@ -400,7 +400,7 @@
                                         @endif
                                     @endif
                                 </form>
-                                @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                                @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
                                 <hr>
                                 <h5>SOP Plagiarism Result</h5>
                                 <table class="table table-bordered">

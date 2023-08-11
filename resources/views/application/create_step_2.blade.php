@@ -402,13 +402,13 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-secondary btn-nxt">Submit</button>
-                            @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                            @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
                                 @if(!empty($application_data->sop->id))
                                     <a href="{{ URL::to('sop-plagiarism-check/'.$application_data->sop->id) }}" class="btn btn-danger btn-nxt">SOP Plagiarism Check</a>
                                 @endif
                             @endif
                         </form>
-                        @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
+                        @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
                         <hr>
                         <h5>SOP Plagiarism Result</h5>
                         <table class="table table-bordered">
