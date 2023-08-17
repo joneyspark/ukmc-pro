@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Session;
 Use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Login\LoginRequest;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 trait Service
 {
@@ -955,5 +956,18 @@ trait Service
             'Asylum leave to remain'
         );
         return $results;
+    }
+    public static function get_random_str_number(){
+        $length = 10; // Desired length of the random string
+        $randomString = Str::random($length);
+
+        for ($i = 0; $i < $length; $i++) {
+            if (mt_rand(0, 1)) {
+                // Insert a random number at the current position
+                $randomString[$i] = mt_rand(0, 9);
+            }
+        }
+
+        return $randomString;
     }
 }

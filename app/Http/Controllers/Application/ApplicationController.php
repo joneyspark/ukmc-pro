@@ -50,6 +50,7 @@ use App\Models\Setting\CompanySetting;
 use App\Models\University\University;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class ApplicationController extends Controller{
     use Service;
@@ -516,7 +517,7 @@ class ApplicationController extends Controller{
                 return redirect('application-create/'.$application->id.'/step-2');
             }
             $doc_file_name = $doc->getClientOriginalName();
-            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 999).'.'.$ext;
+            $doc_file_name = 'UKMC-'.Service::get_random_str_number().'-'.Service::slug_create($doc_file_name).'.'.$ext;
             $upload_path1 = 'backend/images/application/doc/'.$application->id.'/';
             Service::createDirectory($upload_path1);
             $request->file('doc')->move(public_path('backend/images/application/doc/'.$application->id.'/'), $doc_file_name);
@@ -1436,7 +1437,7 @@ class ApplicationController extends Controller{
             }
             $ext = $meeting_doc->getClientOriginalExtension();
             $doc_file_name = $meeting_doc->getClientOriginalName();
-            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $doc_file_name = 'UKMC-'.Service::get_random_str_number().'-'.Service::slug_create($doc_file_name).'.'.$ext;
             $upload_path1 = 'backend/images/meeting/meeting_doc/';
             Service::createDirectory($upload_path1);
             $request->file('meeting_doc')->move(public_path('backend/images/meeting/meeting_doc/'), $doc_file_name);
@@ -2160,7 +2161,7 @@ class ApplicationController extends Controller{
         Session::flash('warning','Application Document Data Deleted Successfully!');
         return redirect('application/'.$doc->application_id.'/processing');
     }
-    //sop data post 
+    //sop data post
     public function sop_data_post(Request $request){
         $request->validate([
             'sop_data'=>'required'

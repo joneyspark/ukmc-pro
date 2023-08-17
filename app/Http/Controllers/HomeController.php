@@ -232,5 +232,9 @@ class HomeController extends Controller{
         Session::put('get_to_date','');
         return redirect('show-all-activity');
     }
+    public function random_check(){
+        $dd = Service::get_random_str_number();
+        return $dd;
+    }
 
 }

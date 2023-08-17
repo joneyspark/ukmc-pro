@@ -24,6 +24,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('show-all-activity', 'show_all_activity');
     Route::get('get-user-by-role/{role?}', 'get_user_by_role');
     Route::get('reset-user-activity-list', 'reset_user_activity_list');
+    Route::get('random-check', 'random_check');
 });
 Route::controller(TaskController::class)->group(function () {
     Route::get('task-create', 'create');
