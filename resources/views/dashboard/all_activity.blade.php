@@ -31,7 +31,7 @@
                 <div class="widget-content widget-content-area">
                     <form method="get" action="">
                             <div class="row mb-4">
-                                <div class="col-2">
+                                <div class="col-3">
                                 <select id="role" name="role" class="form-control" onchange="getUserByRole()">
                                     <option value="">Select Role</option>
                                     @foreach ($user_role as $row)
@@ -39,7 +39,7 @@
                                     @endforeach
                                 </select>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-4">
                                 <select id="user_data" name="user_id" class="form-control">
                                     <option value="">Select User</option>
                                     @foreach ($user_list as $list)
@@ -53,13 +53,20 @@
                                 <div class="col-2">
                                 <input value="{{ (!empty($get_to_date))?$get_to_date:'' }}" name="to_date" id="to_date" type="date" class="form-control" placeholder="To Date">
                                 </div>
+
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-5">
+                                    <input value="{{ (!empty($get_application_id))?$get_application_id:'' }}" name="application_id" id="application_id" type="text" class="form-control" placeholder="Application ID">
+                                </div>
                                 <div class="col-1">
-                                <input type="submit" value="Filter" name="time" class="btn btn-warning">
+                                    <input type="submit" value="Filter" name="time" class="btn btn-warning">
                                 </div>
                                 <div class="col">
-                                <a href="{{ URL::to('reset-user-activity-list') }}" class="btn btn-danger">Reset</a>
+                                    <a href="{{ URL::to('reset-user-activity-list') }}" class="btn btn-danger">Reset</a>
                                 </div>
                             </div>
+
                     </form>
                 </div>
                 <div class="widget-content widget-content-area">

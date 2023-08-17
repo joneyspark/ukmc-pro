@@ -161,20 +161,23 @@ class HomeController extends Controller{
             return redirect('login');
         }
         $data['page_title'] = 'Archive Campus | List';
-        $data['page_title'] = 'Dashboard';
-        $data['dashboard'] = true;
+        $data['page_title'] = 'Show All Activity';
+        $data['settings'] = true;
+        $data['show_activities'] = true;
         //start filtering
-        
+
         $get_role = $request->role;
         $get_user_id = $request->user_id;
         $get_from_date = $request->from_date;
         $get_to_date = $request->to_date;
+        $get_application_id = $request->application_id;
 
         Session::put('get_role',$get_role);
         Session::put('get_user_id',$get_user_id);
         Session::put('get_from_date',$get_from_date);
         Session::put('get_to_date',$get_to_date);
-        
+        Session::put('get_application_id',$get_application_id);
+
         $data['all_data'] = Notification::query()
         ->when($request->get('from_date') && $request->get('to_date'), function ($query) use ($request) {
             $fromDate = date('Y-m-d 00:00:00', strtotime($request->from_date));
@@ -184,6 +187,9 @@ class HomeController extends Controller{
         ->when($get_user_id, function ($query, $get_user_id) {
             return $query->where('create_by',$get_user_id);
         })
+        ->when($get_application_id, function ($query, $get_application_id) {
+            return $query->where('application_id',$get_application_id);
+        })
         ->orderBy('created_at','desc')
         ->paginate(15)
         ->appends([
@@ -191,12 +197,14 @@ class HomeController extends Controller{
             'user_id' => $get_user_id,
             'from_date' => $get_from_date,
             'to_date' => $get_to_date,
+            'application_id' => $get_application_id,
         ]);
         $data['get_role'] = Session::get('get_role');
         $data['get_user_id'] = Session::get('get_user_id');
         $data['get_from_date'] = Session::get('get_from_date');
         $data['get_to_date'] = Session::get('get_to_date');
-        $data['user_role'] = Service::get_roles();
+        $data['get_application_id'] = Session::get('get_application_id');
+        $data['user_role'] = Service::get_admin_roles();
         if($get_role){
             $data['user_list'] = User::where('role',$get_role)->get();
         }else{
@@ -224,5 +232,5 @@ class HomeController extends Controller{
         Session::put('get_to_date','');
         return redirect('show-all-activity');
     }
-    
+
 }

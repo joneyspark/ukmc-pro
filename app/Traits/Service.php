@@ -720,6 +720,29 @@ trait Service
         ];
         return $roles;
     }
+    public static function get_admin_roles(){
+        $roles = [
+            array(
+                'key'=>'admin',
+                'val'=>'Super Admin',
+            ),
+            array(
+                'key'=>'manager',
+                'val'=>'Manager',
+            ),
+            array(
+                'key'=>'interviewer',
+                'val'=>'Interviewer',
+            ),
+            array(
+                'key'=>'adminManager',
+                'val'=>'Admission Manager',
+            ),
+
+        ];
+        return $roles;
+    }
+
     //priority list
     public static function priority(){
         $list = array(

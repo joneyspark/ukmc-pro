@@ -286,6 +286,9 @@
                 <li class="{{ (!empty($company_settings) && $company_settings==true)?'active':'' }}">
                     <a href="{{ URL::to('company-settings') }}"> Software Settings </a>
                 </li>
+                <li class="{{ (!empty($show_activities) && $show_activities==true)?'active':'' }}">
+                    <a href="{{ URL::to('show-all-activity') }}"> Show All Activity </a>
+                </li>
             </ul>
         </li>
         @endif
