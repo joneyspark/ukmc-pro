@@ -316,7 +316,7 @@ class ApplicationOtherController extends Controller
     }
     //delete meeting data
     public function meeting_note_remove($id=NULL){
-        $meeting = Meeting::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        $meeting = Meeting::where('id',$id)->first();
         if(!$meeting){
             $data['result'] = array(
                 'key'=>101,
