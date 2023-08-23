@@ -509,6 +509,12 @@ class ApplicationController extends Controller{
         $document = new ApplicationDocument();
         $document->application_id = $application->id;
         $document->document_type = $request->document_type;
+        $is_view = $request->is_view;
+        if($is_view){
+            $document->is_view = $is_view;
+        }else{
+            $document->is_view = 1;
+        }
         $doc = $request->doc;
         if ($request->hasFile('doc')) {
             $ext = $doc->getClientOriginalExtension();

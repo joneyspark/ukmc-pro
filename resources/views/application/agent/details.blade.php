@@ -216,7 +216,14 @@
                                                     <td class="LCAHidden">UKMC-{{ (!empty($row->application_id))?$row->application_id:'' }}</td>
                                                     <td>{{ (!empty($row->document_type))?$row->document_type:'' }}</td>
                                                     <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>
-                                                    <td><a download href="{{ asset($row->doc) }}">Download</a></td>
+                                                    <td>
+                                                        @if($row->is_view==1)
+                                                        <a download href="{{ asset($row->doc) }}">Download</a>
+                                                        @else
+                                                        <a href="#">Only Admin View</a>
+                                                        @endif
+                                                        
+                                                    </td>
                                                 </tr>
                                                 @empty
                                                 <tr>No Data Found</tr>

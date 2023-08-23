@@ -86,6 +86,23 @@
                         <span class="text-danger">{{ $errors->first('document_type') }}</span>
                     @endif
                 </div>
+                @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager' || Auth::user()->role=='interviewer')
+                <div class="col form-group mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="is_view" value="1" id="flexRadioDefault1" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            View By All
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="is_view" value="2" id="flexRadioDefault2">
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            View By UKMC
+                        </label>
+                    </div>
+                </div>
+                @endif
+                
             </div>
             <div class="modal-footer">
                 <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
@@ -196,7 +213,24 @@
                                                 <span class="table-inner-text">{{ date('F d Y',strtotime($doc->created_at)) }}</span>
                                             </td>
                                             <td>
-                                                <a target="_blank" href="{{ asset($doc->doc) }}"><span class="badge badge-light-success">Preview</span></a>
+                                                @php
+                                                    $allowedRoles = ['agent', 'student'];
+                                                    $isAdmin = in_array(Auth::user()->role, ['admin', 'manager', 'adminManager', 'interviewer']);
+                                                @endphp
+
+                                                @if(in_array(Auth::user()->role, $allowedRoles) && $doc->is_view == 1)
+                                                    <a target="_blank" href="{{ asset($doc->doc) }}">
+                                                        <span class="badge badge-light-success">Preview</span>
+                                                    </a>
+                                                @elseif($isAdmin)
+                                                    <a target="_blank" href="{{ asset($doc->doc) }}">
+                                                        <span class="badge badge-light-success">Preview</span>
+                                                    </a>
+                                                @else
+                                                    <a href="#">
+                                                        <span class="badge badge-light-warning">Only Admin View</span>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @empty
