@@ -1476,9 +1476,32 @@ class ApplicationController extends Controller{
         }
         $application->is_academic = $request->level_of_education;
         $application->save();
+        //save activity
+        $description = '';
+        if($application->is_academic==1){
+            $description = 'Applicaton Status Change From <span class="badge-success">Non Academic</span> To <span class="badge-warning">Academic</span> By '.Auth::user()->name;
+        }else{
+            $description = 'Applicaton Status Change From <span class="badge-success">Academic</span> To <span class="badge-warning">Non Academic</span> By '.Auth::user()->name;
+        }
+        $notification = new Notification();
+        $notification->title = 'Application Status Change';
+        $notification->description = $description;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = url(Auth::user()->photo);
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->manager_id = 1;
+        $notification->application_id = $application->id;
+        $notification->slug = 'application/'.$application->id.'/processing';
+        $notification->save();
+        //make instant notification for super admin
+        event(new AdminMsgEvent($notification->description,url('application/'.$application->id.'/processing')));
         $data['result'] = array(
             'key'=>200,
-            'val'=>'Success!'
+            'val'=>$notification->description,
+            'url'=>$notification->slug
         );
         return response()->json($data,200);
     }
