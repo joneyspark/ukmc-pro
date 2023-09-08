@@ -800,6 +800,7 @@ class AgentController extends Controller{
             'company_registration_number'=>'required',
             'company_establish_date'=>'required',
             'company_trade_license_number'=>'required',
+            'company_email'=>'required',
             'company_phone'=>'required',
             'country'=>'required',
             'state'=>'required',
@@ -944,10 +945,10 @@ class AgentController extends Controller{
             'company_info'=> Company::where('id',$company->id)->first(),
             'company'=>CompanySetting::where('id',1)->first(),
         ];
-        $ccRecipients = ['Zahid@ukmcglobal.com','recruitmentrelations@ukmcglobal.com'];
-        //$ccRecipients = ['tanvir.nawaz66@outlook.com','Link.mamun@fmail.com'];
-        //Mail::to('aiub.tanvir@gmail.com')->send(new agentRequest($ccRecipients,$details));
-        Mail::to('hr@ukmcglobal.com')->send(new agentRequest($ccRecipients,$details));
+        //$ccRecipients = ['Zahid@ukmcglobal.com','recruitmentrelations@ukmcglobal.com'];
+        $ccRecipients = ['tanvir.nawaz66@outlook.com','Link.mamun@fmail.com'];
+        Mail::to('aiub.tanvir@gmail.com')->send(new agentRequest($ccRecipients,$details));
+        //Mail::to('hr@ukmcglobal.com')->send(new agentRequest($ccRecipients,$details));
         Session::flash('success','Agent Request Sent Successfully!');
         return redirect('agent-request-confimation');
 
