@@ -9,6 +9,7 @@ use App\Http\Requests\Agent\CreateEmpAgentByAdminRequest;
 use App\Http\Requests\Agent\EditEmpAgentRequest;
 use App\Mail\agent\agentConfirmationMail;
 use App\Mail\agent\agentRequest;
+use App\Mail\agent\newAgentRequest;
 use App\Models\Agent\Agent;
 use App\Models\Agent\Company;
 use App\Models\Agent\CompanyDirector;
@@ -945,10 +946,12 @@ class AgentController extends Controller{
             'company_info'=> Company::where('id',$company->id)->first(),
             'company'=>CompanySetting::where('id',1)->first(),
         ];
-        //$ccRecipients = ['Zahid@ukmcglobal.com','recruitmentrelations@ukmcglobal.com'];
-        $ccRecipients = ['tanvir.nawaz66@outlook.com','Link.mamun@fmail.com'];
-        Mail::to('aiub.tanvir@gmail.com')->send(new agentRequest($ccRecipients,$details));
-        //Mail::to('hr@ukmcglobal.com')->send(new agentRequest($ccRecipients,$details));
+        //Mail::to('aiub.tanvir@gmail.com')->send(new newAgentRequest($details));
+        $ccRecipients = ['Zahid@ukmcglobal.com','recruitmentrelations@ukmcglobal.com'];
+        //$ccRecipients = '';
+        //$ccRecipients = ['tanvir.nawaz66@outlook.com','Link.mamun@fmail.com'];
+        //Mail::to('aiub.tanvir@gmail.com')->send(new agentRequest($ccRecipients,$details));
+        Mail::to('hr@ukmcglobal.com')->send(new agentRequest($ccRecipients,$details));
         Session::flash('success','Agent Request Sent Successfully!');
         return redirect('agent-request-confimation');
 
