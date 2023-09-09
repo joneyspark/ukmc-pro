@@ -195,7 +195,7 @@
             </a>
         </li>
         @endif
-        @if(Auth::check() && Auth::user()->role=='admin')
+        @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager')
         <li class="menu {{ (!empty($agent_menu) && $agent_menu==true)?'active':'' }}">
             <a href="{{ URL::to('agents') }}" data-bs-toggle="" aria-expanded="false" class="dropdown-toggle">
                 <div class="">

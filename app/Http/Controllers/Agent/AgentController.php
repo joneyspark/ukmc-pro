@@ -38,10 +38,10 @@ class AgentController extends Controller{
             return redirect('login');
         }
         //check as super admin
-        if(Auth::user()->role != 'admin'){
-            Session::flash('error','Login as Super Admin Then Create Campus!');
-            return redirect('login');
-        }
+        // if(Auth::user()->role != 'admin'){
+        //     Session::flash('error','Login as Super Admin Then Create Campus!');
+        //     return redirect('login');
+        // }
         $data['company_id'] = Session::get('company_id');
         $company_name = $request->get('company_name');
         Session::put('company_name',$company_name);
@@ -71,10 +71,10 @@ class AgentController extends Controller{
             return redirect('login');
         }
         //check as super admin
-        if(Auth::user()->role != 'admin'){
-            Session::flash('error','Login as Super Admin Then Create Campus!');
-            return redirect('login');
-        }
+        // if(Auth::user()->role != 'admin'){
+        //     Session::flash('error','Login as Super Admin Then Create Campus!');
+        //     return redirect('login');
+        // }
         $data['company_id'] = Session::get('company_id');
         $company_name = $request->get('company_name');
         Session::put('company_name',$company_name);
@@ -211,10 +211,10 @@ class AgentController extends Controller{
             return redirect('login');
         }
         //check as super admin
-        if(Auth::user()->role != 'admin'){
-            Session::flash('error','Login as Super Admin Then Create Campus!');
-            return redirect('login');
-        }
+        // if(Auth::user()->role != 'admin'){
+        //     Session::flash('error','Login as Super Admin Then Create Campus!');
+        //     return redirect('login');
+        // }
         $data['page_title'] = 'Agents | Create Agent';
         $data['agent'] = true;
         $data['countries'] = Service::countries();
@@ -232,10 +232,10 @@ class AgentController extends Controller{
             return redirect('login');
         }
         //check as super admin
-        if(Auth::user()->role != 'admin'){
-            Session::flash('error','Login as Super Admin Then Create Campus!');
-            return redirect('login');
-        }
+        // if(Auth::user()->role != 'admin'){
+        //     Session::flash('error','Login as Super Admin Then Create Campus!');
+        //     return redirect('login');
+        // }
         $company = new Company();
         $company->company_name = $request->input('company_name');
         $company->company_registration_number = $request->input('company_registration_number');
@@ -948,7 +948,7 @@ class AgentController extends Controller{
         ];
         //Mail::to('aiub.tanvir@gmail.com')->send(new newAgentRequest($details));
         $ccRecipients = ['Zahid@ukmcglobal.com','recruitmentrelations@ukmcglobal.com'];
-        
+
         //$ccRecipients = ['tanvir.nawaz66@outlook.com','Link.mamun@fmail.com'];
         //Mail::to('aiub.tanvir@gmail.com')->send(new agentRequest($ccRecipients,$details));
         Mail::to('hr@ukmcglobal.com')->send(new agentRequest($ccRecipients,$details));
