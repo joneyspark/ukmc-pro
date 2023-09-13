@@ -823,12 +823,12 @@ class AgentController extends Controller{
             'referee_address'=>'required',
             'referee_phone'=>'required',
             'referee_contact_email'=>'required',
-            'reference_company_name2'=>'required',
-            'referee_name2'=>'required',
-            'referee_job_title2'=>'required',
-            'referee_address2'=>'required',
-            'referee_phone2'=>'required',
-            'referee_contact_email2'=>'required',
+            // 'reference_company_name2'=>'required',
+            // 'referee_name2'=>'required',
+            // 'referee_job_title2'=>'required',
+            // 'referee_address2'=>'required',
+            // 'referee_phone2'=>'required',
+            // 'referee_contact_email2'=>'required',
         ]);
         $company = new Company();
         $company->company_name = $request->input('company_name');

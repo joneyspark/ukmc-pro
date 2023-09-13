@@ -926,7 +926,7 @@ class ApplicationController extends Controller{
         })
         ->where('application_status_id','!=',3)
         ->orderBy('created_at','desc')
-        ->paginate(15)
+        ->paginate(50)
         ->appends([
             'q' => $search,
             'campus' => $get_campus,
@@ -1074,7 +1074,7 @@ class ApplicationController extends Controller{
         ->where('application_status_id','!=',0)
         ->where('status',5)
         ->orderBy('id','desc')
-        ->paginate(15)
+        ->paginate(50)
         ->appends([
             'q' => $search,
             'campus' => $get_campus,
@@ -1671,7 +1671,7 @@ class ApplicationController extends Controller{
         ->where('application_status_id',1)
         ->where('admission_officer_id',Auth::user()->id)
         ->orderBy('created_at','desc')
-        ->paginate(15)
+        ->paginate(50)
         ->appends([
             'q' => $search,
             'campus' => $get_campus,
@@ -1748,7 +1748,7 @@ class ApplicationController extends Controller{
         ->where('application_status_id',1)
         ->where('manager_id',Auth::user()->id)
         ->orderBy('created_at','desc')
-        ->paginate(15)
+        ->paginate(50)
         ->appends([
             'q' => $search,
             'campus' => $get_campus,
@@ -1836,7 +1836,7 @@ class ApplicationController extends Controller{
         ->where('application_status_id',1)
         ->where('interviewer_id',Auth::user()->id)
         ->orderBy('created_at','desc')
-        ->paginate(15)
+        ->paginate(50)
         ->appends([
             'q' => $search,
             'campus' => $get_campus,
@@ -2087,7 +2087,7 @@ class ApplicationController extends Controller{
         ->where('company_id',Auth::user()->company_id)
         ->where('application_status_id',0)
         ->orderBy('created_at','desc')
-        ->paginate(15)
+        ->paginate(50)
         ->appends([
             'q' => $search,
             'campus' => $get_campus,

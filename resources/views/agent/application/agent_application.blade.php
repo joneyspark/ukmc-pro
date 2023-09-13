@@ -358,30 +358,19 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">Company
-                                            Name*</label>
+                                            Name</label>
                                             <input name="reference_company_name2" value="{{ old('reference_company_name2') }}" type="text" class="form-control">
-                                            @if ($errors->has('reference_company_name2'))
-                                                <span class="text-danger">{{ $errors->first('reference_company_name2') }}</span>
-                                            @endif
                                         <!---->
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Referee Name*</label>
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Referee Name</label>
                                             <input name="referee_name2" value="{{ old('referee_name2') }}" type="text" class="form-control">
-                                            @if ($errors->has('referee_name2'))
-                                                <span class="text-danger">{{ $errors->first('referee_name2') }}</span>
-                                            @endif
-                                        <!---->
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Referee Job Title*</label>
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Referee Job Title</label>
                                             <input name="referee_job_title2" value="{{ old('referee_job_title2') }}" type="text" class="form-control">
-                                            @if ($errors->has('referee_job_title2'))
-                                                <span class="text-danger">{{ $errors->first('referee_job_title2') }}</span>
-                                            @endif
-                                        <!---->
                                     </div>
                                 </div>
 
@@ -390,32 +379,20 @@
                             <div class="row mb-4">
                                 <div class="col col-md-7">
                                     <div class="form-group mb-4"><label for="exampleFormControlTextarea1">Address in
-                                            Details*</label>
+                                            Details</label>
                                         <textarea name="referee_address2" id="exampleFormControlTextarea1" class="form-control" rows="2" spellcheck="false">{{ old('referee_address2') }}</textarea>
-                                        @if ($errors->has('referee_address2'))
-                                            <span class="text-danger">{{ $errors->first('referee_address2') }}</span>
-                                        @endif
-                                        <!---->
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col">
-                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Referee Phone*</label>
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Referee Phone</label>
                                             <input name="referee_phone2" value="{{ old('referee_phone2') }}" type="text" class="form-control">
-                                            @if ($errors->has('referee_phone2'))
-                                                <span class="text-danger">{{ $errors->first('referee_phone2') }}</span>
-                                            @endif
-                                        <!---->
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Referee Contact Email*</label>
+                                    <div class="form-group mb-4"><label for="exampleFormControlInput1">Referee Contact Email</label>
                                             <input name="referee_contact_email2" value="{{ old('referee_contact_email2') }}" type="text" class="form-control">
-                                            @if ($errors->has('referee_contact_email2'))
-                                                <span class="text-danger">{{ $errors->first('referee_contact_email2') }}</span>
-                                            @endif
-                                        <!---->
                                     </div>
                                 </div>
                             </div>
