@@ -513,11 +513,7 @@
                                 @else
                                 <div class="button-action mt-3">
                                     <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                                    @if($document_count > 1)
                                     <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
-                                    @else
-                                    <button disabled class="btn btn-secondary btn-nxt">Next</button>
-                                    @endif
                                 </div>
                                 @endif
                             @endif
@@ -527,22 +523,14 @@
                                 @else
                                 <div class="button-action mt-3">
                                     <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                                    @if($document_count > 1)
                                     <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
-                                    @else
-                                    <button disabled class="btn btn-secondary btn-nxt">Next</button>
-                                    @endif
                                 </div>
                                 @endif
                             @endif
                             @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
                             <div class="button-action mt-3">
                                 <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                                @if($document_count > 1)
                                 <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
-                                @else
-                                <button disabled class="btn btn-secondary btn-nxt">Next</button>
-                                @endif
                                 <a data-bs-toggle="modal" data-bs-target="#inputFormModal" class="btn btn-warning btn-nxt">Request For Document</a>
                             </div>
                             @endif
@@ -550,22 +538,14 @@
                             @if(Auth::user()->role=='student')
                             <div class="button-action mt-3">
                                 <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                                @if($document_count > 1)
                                 <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
-                                @else
-                                <button disabled class="btn btn-secondary btn-nxt">Next</button>
-                                @endif
                             </div>
                             @endif
                             @endif
                             @if(!Auth::check())
                             <div class="button-action mt-3">
                                 <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
-                                @if($document_count > 1)
                                 <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
-                                @else
-                                <button disabled class="btn btn-secondary btn-nxt">Next</button>
-                                @endif
                             </div>
                             @endif
                         </form><hr>
