@@ -200,8 +200,8 @@
     <script src="{{ asset('backend/src/plugins/src/highlight/highlight.pack.js') }}"></script>
     <script src="{{ asset('backend/src/assets/js/scrollspyNav.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/src/apex/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('backend/src/assets/js/dashboard/dash_1.js') }}"></script>
-    <script src="{{ asset('backend/src/assets/js/dashboard/dash_2.js') }}"></script>
+    {{-- <script src="{{ asset('backend/src/assets/js/dashboard/dash_1.js') }}"></script> --}}
+    {{-- <script src="{{ asset('backend/src/assets/js/dashboard/dash_2.js') }}"></script> --}}
 
     <script src="{{ asset('backend/src/plugins/src/tagify/tagify.min.js') }}"></script>
     <script src="{{ asset('backend/src/plugins/src/tagify/custom-tagify.js') }}"></script>

@@ -36,10 +36,62 @@ class HomeController extends Controller{
             Session::flash('error','Login First! Then See Dashboard!');
             return redirect('login');
         }
-        $currentDate = Carbon::now();
+        $dataAgent = array();
+        $direct = array();
 
-        // Calculate the date 30 days ago
-        $startDate = $currentDate->subDays(30)->format('Y-m-d');
+        $currentMonth = Carbon::now();
+        $currentMonthFormat = Carbon::now()->format('F');
+        $previousMonths = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $previousMonth = Carbon::now()->subMonths($i)->format('M');
+            $previousMonths[] = $previousMonth;
+        }
+        for ($i = 1; $i <= 12; $i++) {
+            $startDate = $currentMonth->copy()->subMonths($i)->startOfMonth();
+            $endDate = $currentMonth->copy()->subMonths($i)->endOfMonth();
+
+            $count = Application::where('application_type',1)->whereBetween('created_at', [$startDate, $endDate])->count();
+            $count1 = Application::where('application_type',3)->whereBetween('created_at', [$startDate, $endDate])->count();
+
+            $dataAgent[] = $count;
+            $direct[] = $count1;
+        }
+        $month_array = array_reverse($previousMonths);
+        $month_string = '';
+        foreach($month_array as $key=>$row){
+            if(end($month_array)==$row){
+                $month_string .= "'".$row."'";
+            }else{
+                $month_string .= "'".$row."'".',';
+            }
+        }
+        //loop
+        $agent_atring = '';
+        foreach($dataAgent as $row){
+            if($row==0){
+                $row = $row + 1;
+            }
+            if(end($dataAgent)==$row){
+                $agent_atring .= $row;
+            }else{
+                $agent_atring .= $row.',';
+            }
+        }
+        $direct_atring = '';
+        foreach($direct as $row){
+            if($row==0){
+                $row = $row + 1;
+            }
+            if(end($direct)==$row){
+                $direct_atring .= $row;
+            }else{
+                $direct_atring .= $row.',';
+            }
+        }
+        $data['month_string'] = $month_string;
+        $data['agent_atring'] = $agent_atring;
+        $data['direct_atring'] = $direct_atring;
+
         $data['page_title'] = 'Dashboard';
         $data['dashboard'] = true;
         $data['applications_list'] = Application::where('application_status_id',1)->orderBy('created_at','desc')->take(5)->get();
@@ -47,8 +99,10 @@ class HomeController extends Controller{
         $data['application_count'] = Application::where('application_status_id',1)->where('created_at', '>=', $startDate)->count();
         $data['application_enrolled_count'] = Application::where('application_status_id',1)->where('created_at', '>=', $startDate)->where('status',11)->count();
         $data['total_application'] = Application::where('application_status_id',1)->count();
+        $data['total_interviewed_passed'] = Application::where('application_status_id',1)->where('status',4)->count();
         $data['total_enrolled'] = Application::where('application_status_id',1)->where('status',11)->count();
         $data['total_ongoing'] = Application::where('application_status_id',1)->where('status',2)->count();
+        $data['processing_data'] = $data['total_enrolled'].','.$data['total_ongoing'].','.$data['total_interviewed_passed'];
         return view('dashboard/index',$data);
     }
 
