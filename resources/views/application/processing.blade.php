@@ -421,6 +421,33 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="col col-md-12 mb-4">
+                            <div class="row">
+                                <h5>Application Activities</h5>
+                                @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>Title</td>
+                                        <td>Description</td>
+                                        <td>Date</td>
+                                    </tr>
+                                    @foreach ($activities as $row)
+                                    <tr>
+                                        <td>
+                                            {{ $row->title }}
+                                        </td>
+                                        <td>
+                                            <img src="{{ asset($row->creator_image) }}" class="img-fluid me-2" alt="avatar" style="height: 40px; width: 40px; border-radius: 50%;" />
+                                            <p>{{ $row->creator_name }}</p>
+                                            {!! $row->description !!}
+                                        </td>
+                                        <td>{{ App\Models\Application\Application::timeLeft(strtotime($row->created_at)) }}</td>
+                                    </tr>
+                                    @endforeach
+                                </table>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -853,6 +853,7 @@ class ApplicationController extends Controller{
         $data['application_info'] = Application::where('id',$id)->first();
         $data['application_status_list'] = ApplicationStatus::where('status',0)->get();
         $data['interview_status_list'] = InterviewStatus::where('status',0)->get();
+        $data['activities'] = Notification::where('application_id',$id)->orderBy('id','desc')->get();
         return view('application/processing',$data);
     }
     public function all(Request $request){
