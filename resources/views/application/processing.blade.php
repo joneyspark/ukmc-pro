@@ -425,13 +425,14 @@
                             <div class="row">
                                 <h5>Application Activities</h5>
                                 @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+                                <div class="row table-responsive">
                                 <table class="table table-bordered">
                                     <tr>
                                         <td>Title</td>
                                         <td>Description</td>
                                         <td>Date</td>
                                     </tr>
-                                    @foreach ($activities as $row)
+                                    @forelse ($activities as $row)
                                     <tr>
                                         <td>
                                             {{ $row->title }}
@@ -443,8 +444,11 @@
                                         </td>
                                         <td>{{ App\Models\Application\Application::timeLeft(strtotime($row->created_at)) }}</td>
                                     </tr>
-                                    @endforeach
+                                    @empty
+                                       <tr><td>No Data Found!</td></tr> 
+                                    @endforelse
                                 </table>
+                                </div>
                                 @endif
                             </div>
                         </div>
