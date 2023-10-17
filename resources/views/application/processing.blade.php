@@ -430,7 +430,7 @@
                                     <tr>
                                         <td>Title</td>
                                         <td>Description</td>
-                                        <td>Date</td>
+                                        
                                     </tr>
                                     @forelse ($activities as $row)
                                     <tr>
@@ -441,8 +441,8 @@
                                             <img src="{{ asset($row->creator_image) }}" class="img-fluid me-2" alt="avatar" style="height: 40px; width: 40px; border-radius: 50%;" />
                                             <p>{{ $row->creator_name }}</p>
                                             {!! $row->description !!}
+                                            <p>{{ App\Models\Application\Application::timeLeft(strtotime($row->created_at)) }}</p>
                                         </td>
-                                        <td>{{ App\Models\Application\Application::timeLeft(strtotime($row->created_at)) }}</td>
                                     </tr>
                                     @empty
                                        <tr><td>No Data Found!</td></tr> 
