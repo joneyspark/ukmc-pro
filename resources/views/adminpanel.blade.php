@@ -290,7 +290,10 @@
                 var interview_status = $('#interview_status').val();
                 var from_date = $('#from_date').val();
                 var to_date = $('#to_date').val();
-                window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&interviewer=" + interviewer + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date;
+                var level_of_education = $('#level_of_education').val();
+                var course_id = $('#course_id').val();
+                var gender = $('#gender').val();
+                window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&interviewer=" + interviewer + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date + "&level_of_education=" + level_of_education + "&course_id=" + course_id + "&gender=" + gender;
             }
             function getAcademicData(){
                 var level_data = $('#level_of_education').val();

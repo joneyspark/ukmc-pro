@@ -870,6 +870,9 @@ class ApplicationController extends Controller{
         $get_interview_status = $request->interview_status;
         $get_from_date = $request->from_date;
         $get_to_date = $request->to_date;
+        $get_level_of_education = $request->level_of_education;
+        $get_course_id = $request->course_id;
+        $get_gender = $request->gender;
         //Session set data
         Session::put('get_campus',$get_campus);
         Session::put('get_agent',$get_agent);
@@ -881,6 +884,9 @@ class ApplicationController extends Controller{
         Session::put('get_interview_status',$get_interview_status);
         Session::put('get_from_date',$get_from_date);
         Session::put('get_to_date',$get_to_date);
+        Session::put('get_level_of_education',$get_level_of_education);
+        Session::put('get_course_id',$get_course_id);
+        Session::put('get_gender',$get_gender);
 
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = Company::where('status',1)->get();
@@ -889,6 +895,8 @@ class ApplicationController extends Controller{
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['interview_statuses'] = InterviewStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
+        $data['courses'] = Course::where('status',1)->get();
+        $data['gender'] = Service::gender();
 
         $data['application_list'] = Application::query()
         ->when($search, function ($query, $search) {
@@ -925,6 +933,15 @@ class ApplicationController extends Controller{
         ->when($get_intake, function ($query, $get_intake) {
             return $query->where('intake',$get_intake);
         })
+        ->when($get_level_of_education, function ($query, $get_level_of_education) {
+            return $query->where('is_academic',$get_level_of_education);
+        })
+        ->when($get_course_id, function ($query, $get_course_id) {
+            return $query->where('course_id',$get_course_id);
+        })
+        ->when($get_gender, function ($query, $get_gender) {
+            return $query->where('gender',$get_gender);
+        })
         ->where('application_status_id','!=',3)
         ->orderBy('created_at','desc')
         ->paginate(50)
@@ -939,6 +956,9 @@ class ApplicationController extends Controller{
             'interview_status' => $get_interview_status,
             'from_date' => $get_from_date,
             'to_date' => $get_to_date,
+            'is_academic' => $get_level_of_education,
+            'course_id' => $get_course_id,
+            'gender' => $get_gender,
         ]);
 
         $data['my_teams'] = User::where('role','adminManager')->where('active',1)->get();
@@ -954,6 +974,9 @@ class ApplicationController extends Controller{
         $data['get_interview_status'] = Session::get('get_interview_status');
         $data['get_from_date'] = Session::get('get_from_date');
         $data['get_to_date'] = Session::get('get_to_date');
+        $data['get_level_of_education'] = Session::get('get_level_of_education');
+        $data['get_course_id'] = Session::get('get_course_id');
+        $data['get_gender'] = Session::get('get_gender');
         //$data['application_list'] = Application::where('application_status_id','!=',0)->orderBy('id','desc')->paginate(15);
         return view('application/all',$data);
     }

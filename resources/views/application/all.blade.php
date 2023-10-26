@@ -263,7 +263,7 @@
                 </header>
             </div>
         </div>
-        <h5 class="pt-3">Filter</h5>
+        <h5 class="pt-3">Filter :- <span style="color: #f84538; font-size: 14px;">{{ $application_list->total() }} Application found, Showing {{ $application_list->firstItem() }} - {{ $application_list->lastItem() }} of {{ $application_list->total() }} results</span></h5>
         <div class="widget-content widget-content-area">
             <form method="get" action="">
                  <div class="row">
@@ -330,7 +330,7 @@
                             </select>
                          </div>
                      </div>
-                     <div class="row">
+                     <div class="row mb-2">
                         <div class="col-2">
                             <select id="intake" name="intake" class="form-control" onchange="getApplicationData()">
                                 <option value="">Select Intake</option>
@@ -347,17 +347,46 @@
                          <div class="col-2">
                              <input value="{{ (!empty($get_to_date))?$get_to_date:'' }}" name="to_date" id="to_date" type="date" class="form-control" placeholder="To Date" onchange="getApplicationData()">
                          </div>
-                         <div class="col-4">
-                             <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter ID,Name,Email,Phone">
+                         <div class="col-3">
+                            <select id="level_of_education" name="level_of_education" class="form-control" onchange="getApplicationData()">
+                                <option value="">Level Of Education</option>
+                                <option {{ (!empty($get_level_of_education) && $get_level_of_education==1)?'selected':'' }} value="1">Academic Route</option>
+                                <option {{ (!empty($get_level_of_education) && $get_level_of_education==2)?'selected':'' }} value="2">Non-Academic Route</option>
+                            </select>
                          </div>
-                         <div class="col-1">
-                            <input type="submit" value="Filter" name="time" class="btn btn-warning">
+                         <div class="col">
+                            <select id="course_id" name="course_id" class="form-control" onchange="getApplicationData()">
+                                <option value="">Course</option>
+                                @if(count($courses) > 0)
+                                @foreach ($courses as $course)
+                                <option {{ (!empty($get_course_id) && $get_course_id==$course->id)?'selected':'' }} value="{{ $course->id }}">{{ $course->course_name }}</option>
+                                @endforeach
+                                @endif
+                            </select>
                          </div>
-                         <div class="col-1">
-                            <a href="{{ URL::to('reset-application-search') }}" class="btn btn-danger">Reset</a>
+                         <div class="col">
+                            <select id="gender" name="gender" class="form-control" onchange="getApplicationData()">
+                                <option value="">Gender</option>
+                                @if(count($gender) > 0)
+                                @foreach ($gender as $row)
+                                <option {{ (!empty($get_gender) && $get_gender==$row['id'])?'selected':'' }} value="{{ $row['id'] }}">{{ $row['val'] }}</option>
+                                @endforeach
+                                @endif
+                            </select>
                          </div>
-                     </div>
 
+                     </div>
+                     <div class="row">
+                        <div class="col-4">
+                            <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter ID,Name,Email,Phone">
+                        </div>
+                        <div class="col-1">
+                           <input type="submit" value="Filter" name="time" class="btn btn-warning">
+                        </div>
+                        <div class="col-1">
+                           <a href="{{ URL::to('reset-application-search') }}" class="btn btn-danger">Reset</a>
+                        </div>
+                     </div>
 
                  </div>
             </form>
@@ -388,7 +417,9 @@
                                     </th>
                                     <th>Application ID</th>
                                     <th>Name</th>
+                                    <th>Level Of Education</th>
                                     <th>Campus</th>
+                                    <th>Course</th>
                                     <th>Create date</th>
                                     <th>Follow Up</th>
                                     <th>Intake</th>
@@ -423,7 +454,16 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <td>
+                                        @if($row->is_academic==1)
+                                        <span>Academic</span>
+                                        @else
+                                        <span>Non-Academic</span>
+                                        @endif
+                                    </td>
+
                                     <td>{{ (!empty($row->campus->campus_name)?$row->campus->campus_name:'') }}</td>
+                                    <td>{{ (!empty($row->course->course_name)?$row->course->course_name:'') }}</td>
                                     <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>
                                     <td>
                                         @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->id==$row->admission_officer_id)
