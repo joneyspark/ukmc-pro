@@ -873,6 +873,10 @@ class ApplicationController extends Controller{
         $get_level_of_education = $request->level_of_education;
         $get_course_id = $request->course_id;
         $get_gender = $request->gender;
+        $get_ethnic_origin = $request->ethnic_origin;
+        $get_nationality = $request->nationality;
+        $get_other_nationality = $request->other_nationality;
+        $get_disability = $request->disability;
         //Session set data
         Session::put('get_campus',$get_campus);
         Session::put('get_agent',$get_agent);
@@ -887,6 +891,10 @@ class ApplicationController extends Controller{
         Session::put('get_level_of_education',$get_level_of_education);
         Session::put('get_course_id',$get_course_id);
         Session::put('get_gender',$get_gender);
+        Session::put('get_ethnic_origin',$get_ethnic_origin);
+        Session::put('get_nationality',$get_nationality);
+        Session::put('get_other_nationality',$get_other_nationality);
+        Session::put('get_disability',$get_disability);
 
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = Company::where('status',1)->get();
@@ -895,8 +903,10 @@ class ApplicationController extends Controller{
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['interview_statuses'] = InterviewStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
-        $data['courses'] = Course::where('status',1)->get();
+        $data['courses_list'] = Course::where('status',1)->get();
         $data['gender'] = Service::gender();
+        $data['ethnic_origins'] = Service::ethnic_origin();
+        $data['nationalities'] = Service::nationalities();
 
         $data['application_list'] = Application::query()
         ->when($search, function ($query, $search) {
@@ -942,6 +952,20 @@ class ApplicationController extends Controller{
         ->when($get_gender, function ($query, $get_gender) {
             return $query->where('gender',$get_gender);
         })
+        ->when($get_ethnic_origin, function ($query, $get_ethnic_origin) {
+            return $query->where('ethnic_origin',$get_ethnic_origin);
+        })
+        ->when($get_nationality, function ($query, $get_nationality) {
+            return $query->where('nationality',$get_nationality);
+        })
+        ->when($get_other_nationality, function ($query, $get_other_nationality) {
+            return $query->where('other_nationality',$get_other_nationality);
+        })
+        ->when($get_disability, function ($query) use ($get_disability) {
+            $query->whereHas('step2Data', function ($query) use ($get_disability) {
+                $query->where('disabilities', $get_disability);
+            });
+        })
         ->where('application_status_id','!=',3)
         ->orderBy('created_at','desc')
         ->paginate(50)
@@ -959,6 +983,9 @@ class ApplicationController extends Controller{
             'is_academic' => $get_level_of_education,
             'course_id' => $get_course_id,
             'gender' => $get_gender,
+            'nationality' => $get_nationality,
+            'other_nationality' => $get_other_nationality,
+            'disability' => $get_disability,
         ]);
 
         $data['my_teams'] = User::where('role','adminManager')->where('active',1)->get();
@@ -977,6 +1004,10 @@ class ApplicationController extends Controller{
         $data['get_level_of_education'] = Session::get('get_level_of_education');
         $data['get_course_id'] = Session::get('get_course_id');
         $data['get_gender'] = Session::get('get_gender');
+        $data['get_ethnic_origin'] = Session::get('get_ethnic_origin');
+        $data['get_nationality'] = Session::get('get_nationality');
+        $data['get_other_nationality'] = Session::get('get_other_nationality');
+        $data['get_disability'] = Session::get('get_disability');
         //$data['application_list'] = Application::where('application_status_id','!=',0)->orderBy('id','desc')->paginate(15);
         return view('application/all',$data);
     }

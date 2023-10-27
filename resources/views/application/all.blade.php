@@ -357,9 +357,9 @@
                          <div class="col">
                             <select id="course_id" name="course_id" class="form-control" onchange="getApplicationData()">
                                 <option value="">Course</option>
-                                @if(count($courses) > 0)
-                                @foreach ($courses as $course)
-                                <option {{ (!empty($get_course_id) && $get_course_id==$course->id)?'selected':'' }} value="{{ $course->id }}">{{ $course->course_name }}</option>
+                                @if(count($courses_list) > 0)
+                                @foreach ($courses_list as $courseRow)
+                                <option {{ (!empty($get_course_id) && $get_course_id==$courseRow->id)?'selected':'' }} value="{{ $courseRow->id }}">{{ $courseRow->course_name }}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -377,13 +377,49 @@
 
                      </div>
                      <div class="row">
-                        <div class="col-4">
+                        <div class="col-2">
+                            <select id="ethnic_origin" name="ethnic_origin" class="form-control" onchange="getApplicationData()">
+                                <option value="">Ethnic Origin</option>
+                                @if(count($ethnic_origins) > 0)
+                                @foreach ($ethnic_origins as $origin)
+                                <option {{ (!empty($get_ethnic_origin) && $get_ethnic_origin==$origin)?'selected':'' }} value="{{ $origin }}">{{ $origin }}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                         </div>
+                        <div class="col">
+                            <select name="nationality" id="nationality" class="form-control" onchange="getApplicationData()">
+                                <option value="">Choose...</option>
+                                <option {{ (!empty($get_nationality) && $get_nationality=='UK National')?'selected':'' }} value="UK National">UK National</option>
+                                <option {{ (!empty($get_nationality) && $get_nationality=='Other')?'selected':'' }} value="Other">Other Nationality</option>
+                            </select>
+                         </div>
+                         <div class="col">
+                            <select name="other_nationality" id="other_nationality" class="form-control" onchange="getApplicationData()">
+                                <option value="">Choose...</option>
+                                @if(!empty($get_nationality) && $get_nationality=='Other')
+                                    @if(count($nationalities) > 0)
+                                        @foreach ($nationalities as $nrow)
+                                        <option {{ (!empty($get_other_nationality) && $get_other_nationality==$nrow)?'selected':'' }} value="{{ $nrow }}">{{ $nrow }}</option>
+                                        @endforeach
+                                    @endif
+                                @endif
+                            </select>
+                         </div>
+                         <div class="col-2">
+                            <select name="disability" id="disability" class="form-control" onchange="getApplicationData()">
+                                <option value="">Disability</option>
+                                <option {{ (!empty($get_disability) && $get_disability=='yes')?'selected':'' }} value="yes">Yes</option>
+                                <option {{ (!empty($get_disability) && $get_disability=='no')?'selected':'' }} value="no">No</option>
+                            </select>
+                         </div>
+                        <div class="col-3">
                             <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter ID,Name,Email,Phone">
                         </div>
-                        <div class="col-1">
+                        <div class="col">
                            <input type="submit" value="Filter" name="time" class="btn btn-warning">
                         </div>
-                        <div class="col-1">
+                        <div class="col">
                            <a href="{{ URL::to('reset-application-search') }}" class="btn btn-danger">Reset</a>
                         </div>
                      </div>
@@ -418,6 +454,11 @@
                                     <th>Application ID</th>
                                     <th>Name</th>
                                     <th>Level Of Education</th>
+                                    <th>Nationality</th>
+                                    @if(!empty($get_other_nationality) && $get_other_nationality=='Other')
+                                    <th>Other Nationality</th>
+                                    @endif
+                                    <th>Disability</th>
                                     <th>Campus</th>
                                     <th>Course</th>
                                     <th>Create date</th>
@@ -450,10 +491,12 @@
                                             <div class="media-body align-self-center">
                                                 <h6 class="mb-0">{{ (!empty($row->name))?$row->name:'' }}</h6>
                                                 <span>{{ (!empty($row->email))?$row->email:'' }}</span><br>
-                                                <span>{{ (!empty($row->phone))?$row->phone:'' }}</span>
+                                                <span>{{ (!empty($row->phone))?$row->phone:'' }}</span><br>
+                                                <span>{{ (!empty($row->gender))?$row->gender :'' }} </span>
                                             </div>
                                         </div>
                                     </td>
+                                    
                                     <td>
                                         @if($row->is_academic==1)
                                         <span>Academic</span>
@@ -461,7 +504,11 @@
                                         <span>Non-Academic</span>
                                         @endif
                                     </td>
-
+                                    <td>{{ (!empty($row->nationality))?$row->nationality :'' }}</td>
+                                    @if(!empty($get_other_nationality) && $get_other_nationality=='Other')
+                                        <td>{{ (!empty($row->other_nationality))?$row->other_nationality :'' }}</td>
+                                    @endif
+                                    <td>{{ (!empty($row->step2Data->disabilities))?$row->step2Data->disabilities :'' }}</td>
                                     <td>{{ (!empty($row->campus->campus_name)?$row->campus->campus_name:'') }}</td>
                                     <td>{{ (!empty($row->course->course_name)?$row->course->course_name:'') }}</td>
                                     <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>
