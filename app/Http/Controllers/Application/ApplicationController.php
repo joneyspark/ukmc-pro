@@ -467,10 +467,10 @@ class ApplicationController extends Controller{
         return view('application/create_step_2',$data);
     }
     public function step_2_post(Request $request){
-        if($request->get_application_id != Session::get('set_application_id')){
-            Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
-            return redirect('application-create/'.Session::get('set_application_id'));
-        }
+        // if($request->get_application_id != Session::get('set_application_id')){
+        //     Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
+        //     return redirect('application-create/'.Session::get('set_application_id'));
+        // }
         $application = Application::where('id',$request->get_application_id)->first();
         if(!$application){
             Session::flash('error','Internal Server Error!');
@@ -558,10 +558,10 @@ class ApplicationController extends Controller{
         return view('application/create_step_3',$data);
     }
     public function step_3_post(Request $request){
-        if($request->application_id != Session::get('set_application_id')){
-            Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
-            return redirect('application-create/'.Session::get('set_application_id'));
-        }
+        // if($request->application_id != Session::get('set_application_id')){
+        //     Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');
+        //     return redirect('application-create/'.Session::get('set_application_id'));
+        // }
         $role = '';
         if(Auth::check()){
             $role = Auth::user()->role;
