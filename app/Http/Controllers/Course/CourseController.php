@@ -303,4 +303,19 @@ class CourseController extends Controller{
         $data['course_data'] = Course::where('slug',$slug)->first();
         return view('course/details',$data);
     }
+    public function course_intake(){
+        $data['page_title'] = 'Course | Intake';
+        $data['course'] = true;
+        return view('course/intake',$data);
+    }
+    public function course_subject(){
+        $data['page_title'] = 'Course | Subject';
+        $data['course'] = true;
+        return view('course/subject',$data);
+    }
+    public function subject_schedule(){
+        $data['page_title'] = 'Subject | Schedule';
+        $data['course'] = true;
+        return view('course/subject/schedule',$data);
+    }
 }
