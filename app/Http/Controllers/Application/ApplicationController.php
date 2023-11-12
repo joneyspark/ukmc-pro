@@ -1127,7 +1127,7 @@ class ApplicationController extends Controller{
             return $query->where('intake',$get_intake);
         })
         ->where('application_status_id','!=',0)
-        ->where('status',5)
+        ->where('status',11)
         ->orderBy('id','desc')
         ->paginate(50)
         ->appends([

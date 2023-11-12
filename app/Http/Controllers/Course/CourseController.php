@@ -318,4 +318,9 @@ class CourseController extends Controller{
         $data['course'] = true;
         return view('course/subject/schedule',$data);
     }
+    public function attendance(){
+        $data['page_title'] = 'Subject | Attendance';
+        $data['course'] = true;
+        return view('course/subject/attendence',$data);
+    }
 }
