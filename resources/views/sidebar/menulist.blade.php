@@ -161,6 +161,9 @@
                 <li class="{{ (!empty($course_levels) && $course_levels==true)?'active':'' }}">
                     <a href="{{ URL::to('course-levels') }}"> Course Levels </a>
                 </li>
+                <li class="{{ (!empty($course_attendance) && $course_attendance==true)?'active':'' }}">
+                    <a href="{{ URL::to('attendance-report') }}"> Attendance Report </a>
+                </li>
                 @endif
             </ul>
         </li>

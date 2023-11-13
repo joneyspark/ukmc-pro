@@ -323,4 +323,10 @@ class CourseController extends Controller{
         $data['course'] = true;
         return view('course/subject/attendence',$data);
     }
+    public function attendance_report(){
+        $data['page_title'] = 'Attendance | Report';
+        $data['course'] = true;
+        $data['course_attendance'] = true;
+        return view('course/subject/report',$data);
+    }
 }

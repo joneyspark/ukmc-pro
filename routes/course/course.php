@@ -21,6 +21,7 @@ Route::controller(CourseController::class)->group(function () {
     Route::get('course/subject','course_subject');
     Route::get('subject/class-schedule','subject_schedule');
     Route::get('subject/attendance','attendance');
+    Route::get('attendance-report','attendance_report');
 });
 Route::controller(CourseCategoryController::class)->group(function () {
     Route::get('course-categories/{id?}', 'course_categories');
