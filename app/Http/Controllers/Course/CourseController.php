@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Course;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Course\CourseCreateRequest;
 use App\Http\Requests\Course\CourseEditRequest;
+use App\Models\Agent\Company;
+use App\Models\Application\Application;
+use App\Models\Application\ApplicationStatus;
 use App\Models\Campus\Campus;
 use App\Models\Course\Course;
 use App\Models\Course\CourseAdditional;
@@ -18,6 +21,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\File;
 use App\Models\Course\CourseCategories;
 use App\Models\Course\CourseLevel;
+use App\Models\User;
 use  Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
@@ -323,10 +327,29 @@ class CourseController extends Controller{
         $data['course'] = true;
         return view('course/subject/attendence',$data);
     }
-    public function attendance_report(){
+    public function attendance_report(Request $request){
         $data['page_title'] = 'Attendance | Report';
         $data['course'] = true;
         $data['course_attendance'] = true;
         return view('course/subject/report',$data);
+    }
+    public function unique_intake_info()
+    {
+        $date_array = array();
+        $return_date_array = array();
+        $intakes = Application::select('intake')->pluck('intake')->filter()->unique()->values();
+        //$intakes = Lead::select('intake_info')->distinct()->whereNotNull('intake_info')->get();
+        if($intakes){
+            foreach($intakes as $val){
+                $date_array[] = strtotime($val);
+            }
+        }
+        sort($date_array);
+        foreach($date_array as $date){
+            $return_date_array[] = date('Y-m',$date);
+        }
+        //return $intakes;
+        $return_unique_date = array_unique($return_date_array);
+        return $return_unique_date;
     }
 }

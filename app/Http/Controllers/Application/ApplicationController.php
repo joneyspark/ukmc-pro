@@ -1513,6 +1513,10 @@ class ApplicationController extends Controller{
     }
     //student portal
     public function student_portal(){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Then See Your Portal!');
+            return redirect('student-login');
+        }
         $data['page_title'] = 'My Application';
         $data['application'] = true;
         $data['student_portal'] = true;
