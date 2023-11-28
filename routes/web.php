@@ -10,6 +10,7 @@ use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Login\LoginController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Agent\AgentTaskController;
+use App\Http\Controllers\Blog\BlogController;
 
 
 Route::controller(HomeController::class)->group(function () {
@@ -118,4 +119,10 @@ Route::controller(UserController::class)->group(function () {
     Route::post('application_transfer_to_other_officer_by_officer','application_transfer_to_other_officer_by_officer');
     Route::post('user-password-change-by-admin','user_password_change_by_admin');
     Route::post('my-password-change','my_password_change');
+});
+
+Route::controller(BlogController::class)->group(function () {
+    Route::get('blog-categories/{id?}', 'all_blog_categories');
+    Route::post('store-blog-category-data','create_blog_category');
+    Route::post('blog-category_status_change','category_status_change');
 });
