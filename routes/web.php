@@ -122,6 +122,13 @@ Route::controller(UserController::class)->group(function () {
 });
 
 Route::controller(BlogController::class)->group(function () {
+    Route::post('blog-upload-image', 'upload_image');
+    Route::post('blog-status-change', 'blog_status_change');
+    Route::get('image/upload','upload_image_page');
+    Route::get('list-blog', 'list_blog');
+    Route::get('/create-blog/new','create_blog');
+    Route::get('create-blog/{id?}', 'create_blog');
+    Route::post('create-blog-data-post', 'create_blog_data_post');
     Route::get('blog-categories/{id?}', 'all_blog_categories');
     Route::post('store-blog-category-data','create_blog_category');
     Route::post('blog-category_status_change','category_status_change');
