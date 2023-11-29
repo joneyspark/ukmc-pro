@@ -44,11 +44,11 @@
                             <tbody>
                                 @forelse ($blog_list as $list)
                                 <tr>
-                                    <td>{{ (!empty($list->title))?$list->title:'' }}</td>
+                                    <td>{{ App\Models\Blog\Blog::stringSubstrLimit($list->title,25) }}</td>
                                     <td>
                                         {!! App\Models\Blog\Blog::stringSubstrLimit($list->long_description,90) !!}
                                     </td>
-                                    <td>{{ (!empty($list->category->title))?$list->title:'' }}</td>
+                                    <td>{{ (!empty($list->category->title))?$list->category->title:'' }}</td>
                                     <td>{{ date('F d Y',strtotime($list->publish_time)) }}</td>
                                     <td>{{ (!empty($list->blog_status))?$list->blog_status:'' }}</td>
                                     <td>

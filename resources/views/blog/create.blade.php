@@ -55,7 +55,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="title" class="form-label">Blog Author*</label>
-                                    <input type="text" value="{{ (!empty($blog_data->author_name))?$blog_data->author_name:'Dr Mohammad Shafiq' }}" name="author_name" class="form-control" id="author_name" aria-describedby="fname">
+                                    <input type="text" value="{{ (!empty($blog_data->author_name))?$blog_data->author_name:'Author' }}" name="author_name" class="form-control" id="author_name" aria-describedby="fname">
                                     @if($errors->has('author_name'))
                                         <span class="text-danger">{{ $errors->first('author_name') }}</span>
                                     @endif
