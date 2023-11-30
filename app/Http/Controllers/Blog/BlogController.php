@@ -12,10 +12,15 @@ use App\Traits\Service;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller{
     use Service;
     public function all_blog_categories($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First Then Create Blog');
+            return redirect('login');
+        }
         $data['blog'] = true;
         $data['blog_categories_menu'] = true;
         $data['page_title'] = 'Blog | Categories';
@@ -27,6 +32,10 @@ class BlogController extends Controller{
 
     }
     public function create_blog_category(Request $request){
+        if(!Auth::check()){
+            Session::flash('error','Login First Then Create Blog');
+            return redirect('login');
+        }
         $request->validate([
             'title'=>'required',
         ]);
@@ -65,6 +74,10 @@ class BlogController extends Controller{
         return response()->json($data,200);
     }
     public function create_blog($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First Then Create Blog');
+            return redirect('login');
+        }
         $data['blog'] = true;
         $data['add_blog'] = true;
         if($id){
@@ -75,6 +88,10 @@ class BlogController extends Controller{
         return view('blog/create',$data);
     }
     public function create_blog_data_post(Request $request){
+        if(!Auth::check()){
+            Session::flash('error','Login First Then Create Blog');
+            return redirect('login');
+        }
         $request->validate([
             'blog_category_id'=>'required',
             'author_name'=>'required',
@@ -149,7 +166,10 @@ class BlogController extends Controller{
         return redirect('create-blog/'.$blog->id);
     }
     public function list_blog(){
-
+        if(!Auth::check()){
+            Session::flash('error','Login First Then Create Blog');
+            return redirect('login');
+        }
         $data['blog'] = true;
         $data['blog_list_menu'] = true;
         $data['page_title'] = "Blog / All Blog";
