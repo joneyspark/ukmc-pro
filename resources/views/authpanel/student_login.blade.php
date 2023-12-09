@@ -1,5 +1,10 @@
 @extends('authpanel')
 @section('auth')
+<style>
+    body{
+        background-color: white!important;
+    }
+</style>
 <div class="container">
     <div class="row text-center">
         <div class="text-center">
