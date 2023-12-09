@@ -1948,7 +1948,7 @@ class ApplicationController extends Controller{
             $getApp = Application::where('id',$row)->where('interviewer_id',0)->first();
             if($getApp){
                 $getApp->interviewer_id = $request->assign_to_interviewer_id;
-                $getApp->interview_status = 1;
+                //$getApp->interview_status = 0;
                 $getApp->save();
             }
         }
