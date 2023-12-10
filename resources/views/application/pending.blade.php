@@ -61,6 +61,8 @@
                                 <tr>
                                     <th>Application ID</th>
                                     <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
                                     <th>Campus</th>
                                     <th>Create date</th>
                                     <th>Intake</th>
@@ -80,10 +82,14 @@
                                             </div>
                                             <div class="media-body align-self-center">
                                                 <h6 class="mb-0">{{ (!empty($row->name))?$row->name:'' }}</h6>
-                                                <span>{{ (!empty($row->email))?$row->email:'' }}</span><br>
-                                                <span>{{ (!empty($row->phone))?$row->phone:'' }}</span>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <span>{{ (!empty($row->email))?$row->email:'' }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ (!empty($row->phone))?$row->phone:'' }}</span>
                                     </td>
                                     <td>{{ (!empty($row->campus->campus_name)?$row->campus->campus_name:'') }}</td>
                                     <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>

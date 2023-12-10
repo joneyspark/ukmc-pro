@@ -152,7 +152,7 @@
     </div>
 </div>
 <div class="layout-px-spacing">
-    
+
     <div class="middle-content container-xxl p-0">
         <div class="secondary-nav">
             <div class="breadcrumbs-container" data-page-heading="Analytics">
@@ -211,7 +211,7 @@
                                @endif
                            </select>
                         </div>
-                        
+
                         <div class="col-2">
                            <select id="status" name="status" class="form-control" onchange="getMyApplicationData()">
                                <option value="">Select Status</option>
@@ -270,7 +270,7 @@
             @if(Auth::user()->role=='adminManager')
             <a data-bs-toggle="modal" data-bs-target="#assignToModal4" class="assignToDisplay assignToBtn dropdown-item" href="#">Transfer Application To Other Admission Officer</a>
             @endif
-           
+
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-8">
                     <div class="table-responsive">
@@ -280,6 +280,8 @@
                                     <th class="checkbox-area" scope="col"></th>
                                     <th>Application ID</th>
                                     <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
                                     <th>Campus</th>
                                     <th>Create date</th>
                                     <th>Follow Up</th>
@@ -306,10 +308,13 @@
                                             </div>
                                             <div class="media-body align-self-center">
                                                 <h6 class="mb-0">{{ (!empty($row->name))?$row->name:'' }}</h6>
-                                                <span>{{ (!empty($row->email))?$row->email:'' }}</span><br>
-                                                <span>{{ (!empty($row->phone))?$row->phone:'' }}</span>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <span>{{ (!empty($row->email))?$row->email:'' }}</span>
+                                    <td>
+                                        <span>{{ (!empty($row->phone))?$row->phone:'' }}</span>
                                     </td>
                                     <td>{{ (!empty($row->campus->campus_name)?$row->campus->campus_name:'') }}</td>
                                     <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>

@@ -453,6 +453,8 @@
                                     </th>
                                     <th>Application ID</th>
                                     <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
                                     <th>Level Of Education</th>
                                     <th>Nationality</th>
                                     @if(!empty($get_other_nationality) && $get_other_nationality=='Other')
@@ -490,13 +492,17 @@
                                             </div>
                                             <div class="media-body align-self-center">
                                                 <h6 class="mb-0">{{ (!empty($row->name))?$row->name:'' }}</h6>
-                                                <span>{{ (!empty($row->email))?$row->email:'' }}</span><br>
-                                                <span>{{ (!empty($row->phone))?$row->phone:'' }}</span><br>
                                                 <span>{{ (!empty($row->gender))?$row->gender :'' }} </span>
                                             </div>
                                         </div>
                                     </td>
-                                    
+                                    <td>
+                                        <span>{{ (!empty($row->email))?$row->email:'' }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ (!empty($row->phone))?$row->phone:'' }}</span>
+                                    </td>
+
                                     <td>
                                         @if($row->is_academic==1)
                                         <span>Academic</span>

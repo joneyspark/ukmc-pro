@@ -63,7 +63,7 @@
                                         </tr>
                                         <tr>
                                             <td>Date of Birth</td>
-                                            <td>{{ (!empty($application_info->date_of_birth))?$application_info->date_of_birth:'' }}</td>
+                                            <td>{{ (!empty($application_info->date_of_birth))?date('d/m/Y',strtotime($application_info->date_of_birth)):'' }}</td>
                                         </tr>
                                         <tr>
                                             <td>NI Number</td>
@@ -430,7 +430,7 @@
                                     <tr>
                                         <td>Title</td>
                                         <td>Description</td>
-                                        
+
                                     </tr>
                                     @forelse ($activities as $row)
                                     <tr>
@@ -445,7 +445,7 @@
                                         </td>
                                     </tr>
                                     @empty
-                                       <tr><td>No Data Found!</td></tr> 
+                                       <tr><td>No Data Found!</td></tr>
                                     @endforelse
                                 </table>
                                 </div>

@@ -55,7 +55,7 @@
                             </div>
                             <div class="row mb-4 px-5">
                                 <div class="col">Date Of Birth : </div>
-                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->date_of_birth))?$app_data->date_of_birth:'' }}</span></div>
+                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->date_of_birth))?date('d/m/Y',strtotime($app_data->date_of_birth)):'' }}</span></div>
                             </div>
                             <div class="row mb-4 px-5">
                                 <div class="col">Email : </div>
@@ -120,7 +120,7 @@
                                 <div class="col">Course Fee International : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->international_course_fee))?$app_data->course->international_course_fee:'' }}</span></div>
                             </div>
-                            
+
                             <div class="row mb-4 px-5">
                                 <div class="col">Course Intake :</div>
                                 <div class="col">
@@ -236,7 +236,7 @@
                                         I hereby, confirm that the information provided on this application form is accurate. I accept that the UKMC/Partner University reserves the right to cancel my application if any of the information that I have submitted is subsequently found to be false or inaccurate and that by signing this declaration, I am bound by the terms and conditions as outlined by the UKMC/Partner University. I give consent to the UKMC/Partner University to process the information on, and submitted with, this form for administrative purposes and for consideration of my application, but only insofar as it is permitted to do so within the constraints imposed by the Data Protection Act 1998.
                                     </p>
                                     <p id="MainContent_Declaration_Text" class="text-white">
-                                        In particular, I understand that the UKMC/Partner University may continue to process this information even if I am refused admission or if it should decline an offer of admission. I also give consent to the University/UKMC to contact the Home Office to seek information regarding my immigration status if required, whether to make an assessment of my application or at any time in the future. 
+                                        In particular, I understand that the UKMC/Partner University may continue to process this information even if I am refused admission or if it should decline an offer of admission. I also give consent to the University/UKMC to contact the Home Office to seek information regarding my immigration status if required, whether to make an assessment of my application or at any time in the future.
                                     </p>
                                 </div>
                             </div>
@@ -286,7 +286,7 @@
                 </div>
                 <div class="row">
                     <form method="post" action="{{ URL::to('step-3-post') }}">
-                        
+
                         <div class="button-action mt-3 ms-3">
                             <a onclick="window.print()" class="btn btn-warning">Print</a>
                         </div>
