@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\File;
 use App\Models\Course\CourseCategories;
+use App\Models\course\CourseIntake;
 use App\Models\Course\CourseLevel;
 use App\Models\User;
 use  Illuminate\Support\Collection;
@@ -307,10 +308,33 @@ class CourseController extends Controller{
         $data['course_data'] = Course::where('slug',$slug)->first();
         return view('course/details',$data);
     }
-    public function course_intake(){
+    public function course_intake($id=NULL,$intake_id=NULL){
         $data['page_title'] = 'Course | Intake';
         $data['course'] = true;
+        if($intake_id){
+            $data['intake_data'] = CourseIntake::where('id',$id)->first();
+        }
+        $data['course_id'] = $id;
+        $data['intakes'] = CourseIntake::where('course_id',$id)->orderBy('id','desc')->paginate(15);
         return view('course/intake',$data);
+    }
+    public function course_intake_post(Request $request){
+        $request->validate([
+            'title'=>'required',
+            'intake_date'=>'required',
+        ]);
+        if($request->intake_id){
+            $intake = CourseIntake::where('id',$request->intake_id)->first();
+        }else{
+            $intake = new CourseIntake();
+        }
+        $intake->title = $request->title;
+        $intake->course_id = $request->course_id;
+        $intake->intake_date = $request->intake_date;
+        $intake->description = $request->description;
+        $intake->save();
+        Session::flash('success','Intake Data Updated');
+        return redirect('course/intake/'.$intake->course_id);
     }
     public function course_subject(){
         $data['page_title'] = 'Course | Subject';
