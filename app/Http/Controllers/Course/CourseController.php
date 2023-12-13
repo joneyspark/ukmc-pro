@@ -308,7 +308,7 @@ class CourseController extends Controller{
         $data['course_data'] = Course::where('slug',$slug)->first();
         return view('course/details',$data);
     }
-    public function course_intake($id=NULL,$intake_id=NULL){
+    public function course_intake($id=NULL,$edit=NULL,$intake_id=NULL){
         $data['page_title'] = 'Course | Intake';
         $data['course'] = true;
         if($intake_id){
