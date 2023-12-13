@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\Course\CourseCategories;
 use App\Models\course\CourseIntake;
 use App\Models\Course\CourseLevel;
+use App\Models\Course\CourseSubject;
 use App\Models\User;
 use  Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
@@ -336,10 +337,61 @@ class CourseController extends Controller{
         Session::flash('success','Intake Data Updated');
         return redirect('course/intake/'.$intake->course_id);
     }
-    public function course_subject(){
+    public function course_subject($id=NULL,$edit=NULL,$subject_id=NULL){
         $data['page_title'] = 'Course | Subject';
+        $data['intake_id'] = $id;
+        $data['subject_id'] = $subject_id;
+        if($subject_id){
+            $data['subject_data'] = CourseSubject::where('id',$subject_id)->first();
+        }
+        $data['subjects'] = CourseSubject::where('course_intake_id',$id)->orderBy('id','desc')->paginate(15);
         $data['course'] = true;
         return view('course/subject',$data);
+    }
+    public function course_subject_data_post(Request $request){
+        $request->validate([
+            'title'=>'required',
+            'duration'=>'required',
+        ]);
+        $get_intake = CourseIntake::where('id',$request->intake_id)->first();
+        if($request->subject_id){
+            $subject = CourseSubject::where('id',$request->subject_id)->first();
+        }else{
+            $subject = new CourseSubject();
+        }
+        $subject->course_id = $get_intake->course_id;
+        $subject->course_intake_id = $get_intake->id;
+        $subject->title = $request->title;
+        $subject->description = $request->description;
+        $subject->duration = $request->duration;
+        $subject->save();
+        Session::flash('success','Subject Data Updated');
+        return redirect('course/subject/'.$get_intake->id);
+    }
+    public function subject_intake_status_change(Request $request){
+        $subjectData = CourseSubject::where('id',$request->subject_id)->first();
+        if(!$subjectData){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Course Subject Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($subjectData->status==1){
+            $subjectData->status = 0;
+            $subjectData->save();
+            $msg = 'Subject Activated';
+        }else{
+            $subjectData->status = 1;
+            $subjectData->save();
+            $msg = 'Subject Deactivated';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
     }
     public function subject_schedule(){
         $data['page_title'] = 'Subject | Schedule';

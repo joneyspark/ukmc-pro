@@ -20,7 +20,9 @@ Route::controller(CourseController::class)->group(function () {
     Route::get('course/intake/{id?}/{edit?}/{intake_id?}','course_intake');
     Route::post('course/intake/data-post','course_intake_post');
     Route::post('course/change-intake-status','change_intake_status');
-    Route::get('course/subject','course_subject');
+    Route::get('course/subject/{id?}/{edit?}/{subject_id?}','course_subject');
+    Route::post('course/subject/data-post','course_subject_data_post');
+    Route::post('course/subject-intake-status','subject_intake_status_change');
     Route::get('subject/class-schedule','subject_schedule');
     Route::get('subject/attendance','attendance');
     Route::get('attendance-report','attendance_report');
