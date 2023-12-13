@@ -19,6 +19,7 @@ Route::controller(CourseController::class)->group(function () {
     Route::post('course-edit-post', 'edit_post');
     Route::get('course/intake/{id?}/{edit?}/{intake_id?}','course_intake');
     Route::post('course/intake/data-post','course_intake_post');
+    Route::post('course/change-intake-status','change_intake_status');
     Route::get('course/subject','course_subject');
     Route::get('subject/class-schedule','subject_schedule');
     Route::get('subject/attendance','attendance');

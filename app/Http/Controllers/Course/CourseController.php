@@ -376,4 +376,30 @@ class CourseController extends Controller{
         $return_unique_date = array_unique($return_date_array);
         return $return_unique_date;
     }
+    //intake status chnage
+    public function change_intake_status(Request $request){
+        $intakeData = CourseIntake::where('id',$request->intake_id)->first();
+        if(!$intakeData){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Intake Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($intakeData->status==1){
+            $intakeData->status = 0;
+            $intakeData->save();
+            $msg = 'Intake Activated';
+        }else{
+            $intakeData->status = 1;
+            $intakeData->save();
+            $msg = 'Intake Deactivated';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
+    }
 }

@@ -44,9 +44,7 @@
                          @endif
                      </div>
                      <div class="col-4">
-                         <textarea name="description" class="form-control">
-                            {{ (!empty($intake_data->description))?$intake_data->description:old('description') }}
-                         </textarea>
+                        <input type="text" name="description" value="{{ (!empty($intake_data->description))?$intake_data->description:old('description') }}" class="form-control" placeholder="Course Short Description">
                      </div>
                      <div class="col">
                         <input type="submit" class="btn btn-primary">
@@ -79,7 +77,7 @@
                                     <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
                                         <div class="input-checkbox">
                                             <span class="switch-chk-label label-left">On</span>
-                                            <input data-action="" data-id="" class="level-status-change switch-input" type="checkbox"
+                                            <input {{ ($row->status==0)?'checked':'' }} data-action="{{ URL::to('course/change-intake-status') }}" data-id="{{ $row->id }}" class="intake-status-change switch-input" type="checkbox"
                                                     role="switch" id="form-custom-switch-inner-text">
                                             <span class="switch-chk-label label-right">Off</span>
                                         </div>
@@ -113,5 +111,52 @@
 
     </div>
 </div>
+<script src="{{ asset('web/js/jquery.js') }}"></script>
+<script>
+    $(function(){
+       $('.intake-status-change').change(function(){
+           var status = $(this).prop('checked') == true ? 0 : 1;
+           var intake_id = $(this).data('id');
+           var url = $(this).data('action');
+               $.post(url,
+               {
+                   intake_id: intake_id,
+                   status: status
+               },
+               function(data, status){
+                   console.log(data);
+                   if(data['result']['key']===101){
+                       iziToast.show({
+                           title: 'Info',
+                           message: data['result']['val'],
+                           position: 'topRight',
+                           timeout: 8000,
+                           color: 'red',
+                           balloon: true,
+                           close: true,
+                           progressBarColor: 'yellow',
+                       });
+                       setTimeout(function () {
+                           location.reload(true);
+                       }, 2000);
+                   }
+                   if(data['result']['key']===200){
+                       iziToast.show({
+                           title: 'Info',
+                           message: data['result']['val'],
+                           position: 'topRight',
+                           timeout: 8000,
+                           color: 'green',
+                           balloon: true,
+                           close: true,
+                           progressBarColor: 'yellow',
+                       });
 
+                   }
+                   //alert("Data: " + data + "\nStatus: " + status);
+               });
+
+       });
+   });
+   </script>
 @stop
