@@ -26,6 +26,8 @@ Route::controller(CourseController::class)->group(function () {
     Route::get('subject/class-schedule','subject_schedule');
     Route::get('subject/attendance','attendance');
     Route::get('attendance-report','attendance_report');
+    Route::get('get-intake-list/{id?}','get_intake_list');
+    Route::post('transfer-subject-from-another-intake','transfer_subject_from_another_intake');
 });
 Route::controller(CourseCategoryController::class)->group(function () {
     Route::get('course-categories/{id?}', 'course_categories');

@@ -454,4 +454,52 @@ class CourseController extends Controller{
         );
         return response()->json($data,200);
     }
+    //get intake list
+    public function get_intake_list($intake_id=NULL){
+        $get_intake_info = CourseIntake::where('id',$intake_id)->first();
+        if(!$get_intake_info){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>$intake_id
+            );
+            return response()->json($data,200);
+        }
+        $select = '';
+        $list = CourseIntake::where('id','!=',$intake_id)->where('course_id',$get_intake_info->course_id)->orderBy('id','desc')->get();
+        $select .= '<option value="" selected>Choose...</option>';
+        foreach($list as $row){
+            $select .= '<option value="'.$row->id.'" selected>'.$row->title.'</option>';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select
+        );
+        return response()->json($data,200);
+    }
+    public function transfer_subject_from_another_intake(Request $request){
+        $request->validate([
+            'another_intake'=>'required',
+        ]);
+        $current_intake = CourseIntake::where('id',$request->current_intake)->first();
+        if(!$current_intake){
+            Session::flash('error','Current Course Intake Not Found');
+            return redirect('all-course');
+        }
+        $course_subjects = CourseSubject::where('course_intake_id',$request->another_intake)->where('status',0)->get();
+        if(!$course_subjects){
+            Session::flash('error','Course Subject Not Found Of This Intake!');
+            return redirect('course/subject/'.$current_intake->id);
+        }
+        foreach($course_subjects as $row){
+            $subject = new CourseSubject();
+            $subject->course_id = $current_intake->course_id;
+            $subject->course_intake_id = $current_intake->id;
+            $subject->title = $row->title;
+            $subject->description = $row->description;
+            $subject->duration = $row->duration;
+            $subject->save();
+        }
+        Session::flash('error','Successfully Transfered Subject To Current Intake');
+        return redirect('course/subject/'.$current_intake->id);
+    }
 }

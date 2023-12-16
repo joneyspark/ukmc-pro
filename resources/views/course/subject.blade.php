@@ -1,5 +1,40 @@
 @extends('adminpanel')
 @section('admin')
+<div class="modal fade inputForm-modal" id="assignToModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header" id="inputFormModalLabel">
+            <h5 class="modal-title"><b>Copy Subject From Another Intake</b></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <div class="mt-0">
+            <form action="{{ URL::to('transfer-subject-from-another-intake') }}" id="" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Select Another Intake:</label>
+                                <input type="hidden" name="current_intake" id="current_intake" />
+                                <select name="another_intake" id="another_intake" class="form-select">
+                                    <option value="" selected>Choose...</option>
+                                </select>
+                                @if ($errors->has('another_intake'))
+                                    <span class="text-danger">{{ $errors->first('another_intake') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
+                    <button id="btn-note-submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" >Submit</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+</div>
 <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <div class="secondary-nav">
@@ -31,7 +66,7 @@
                  <div class="row mb-3">
                      <div class="col-3">
                          <input type="hidden" name="subject_id" value="{{ (!empty($subject_id))?$subject_id:'' }}" />
-                         <input type="hidden" name="intake_id" value="{{ (!empty($intake_id))?$intake_id:'' }}" />
+                         <input type="hidden" id="intake_id" name="intake_id" value="{{ (!empty($intake_id))?$intake_id:'' }}" />
                          <input type="text" name="title" value="{{ (!empty($subject_data->title))?$subject_data->title:'' }}" class="form-control" placeholder="Subject Title">
                          @if($errors->has('title'))
                             <span class="text-danger">{{ $errors->first('title') }}</span>
@@ -51,6 +86,9 @@
                      </div>
                  </div>
             </form>
+            <div class="col-md-12">
+                <a onclick="get_another_intake_data()" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#assignToModal" href="#">Copy From Previous Intake</a>
+            </div>
         </div>
         <div class="row layout-top-spacing">
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
@@ -155,4 +193,26 @@
        });
    });
    </script>
+   <script>
+        function get_another_intake_data(){
+            var intake_id = $('#intake_id').val();
+            $('#current_intake').val(intake_id);
+				$.get("{{ URL::to('get-intake-list') }}/"+intake_id,function(data,status){
+					if(data['result']['key']===101){
+						alert(data['result']['val']);
+					}
+					if(data['result']['key']===200){
+						console.log(data['result']['val']);
+						$('#another_intake').html(data['result']['val']);
+					}
+				});
+        }
+   </script>
+   @if($errors->has('assign_to_admission_manager_id') || $errors->has('assign_to_manager_id'))
+   <script>
+       $(document).ready(function() {
+           $('#assignToModal1').modal('show');
+       });
+   </script>
+   @endif
 @stop
