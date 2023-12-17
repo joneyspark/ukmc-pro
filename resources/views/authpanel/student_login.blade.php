@@ -14,7 +14,7 @@
     </div>
     <div class="row px-md-5">
         <div class="col-md-6 px-md-5 pb-md-5">
-            <img src="{{ asset('img/login.svg') }}" class="img-fluid p-md-5" alt="...">
+            <img src="{{ asset('img/student_login.svg') }}" class="img-fluid p-md-5" alt="...">
         </div>
         <div class="col-md-6 px-md-5 pb-md-5 d-md-flex align-items-center justify-content-center">
             <div class="row">
