@@ -313,8 +313,9 @@ class CourseController extends Controller{
         $data['page_title'] = 'Course | Intake';
         $data['course'] = true;
         if($intake_id){
-            $data['intake_data'] = CourseIntake::where('id',$id)->first();
+            $data['intake_data'] = CourseIntake::where('id',$intake_id)->first();
         }
+        $data['intakes_data'] = Service::get_intake_with_next_year();
         $data['course_id'] = $id;
         $data['intakes'] = CourseIntake::where('course_id',$id)->orderBy('id','desc')->paginate(15);
         return view('course/intake',$data);

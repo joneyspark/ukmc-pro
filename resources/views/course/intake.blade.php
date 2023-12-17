@@ -38,7 +38,12 @@
                          @endif
                      </div>
                      <div class="col-3">
-                         <input type="date" value="{{ (!empty($intake_data->intake_date))?$intake_data->intake_date:old('intake_date') }}" name="intake_date" class="form-control">
+                         <select name="intake_date" class="form-control">
+                            <option value="">--Select--</option>
+                            @foreach ($intakes_data as $row)
+                            <option {{ (!empty($intake_data->intake_date) && $intake_data->intake_date==$row['val'])?'selected':'' }} value="{{ $row['val'] }}">{{ $row['string'] }}</option>
+                            @endforeach
+                         </select>
                          @if($errors->has('intake_date'))
                             <span class="text-danger">{{ $errors->first('intake_date') }}</span>
                          @endif
@@ -71,7 +76,7 @@
                             <tr class="">
                                 <td>{{ $row->id }}</td>
                                 <td>{{ (!empty($row->title))?$row->title:'' }}</td>
-                                <td>{{ (!empty($row->intake_date))?date('F Y',strtotime($row->intake_date)):'' }}</td>
+                                <td>{{ (!empty($row->intake_date))?$row->intake_date:'' }}</td>
                                 <td>{{ (!empty($row->description))?$row->description:'' }}</td>
                                 <td>
                                     <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
