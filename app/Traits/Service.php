@@ -121,10 +121,10 @@ trait Service
         }
     }
 
-    public static function randomString($length = 50)
+    public static function randomString($length = 20)
     {
         $str = '';
-        $characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '10000'));
+        $characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '100'));
         $max = count($characters) - 1;
         for ($i = 0; $i < $length; $i++) {
             $rand = mt_rand(0, $max);

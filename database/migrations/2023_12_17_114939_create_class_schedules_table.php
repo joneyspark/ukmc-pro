@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('schedule_date')->nullable();
             $table->string('time_from')->nullable();
             $table->string('time_to')->nullable();
+            $table->text('slug')->nullable();
             $table->tinyInteger('status')->default(0)->nullable();
             $table->tinyInteger('is_done')->default(0)->nullable();
             $table->timestamps();

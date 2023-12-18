@@ -9,6 +9,7 @@ use App\Models\Agent\Company;
 use App\Models\Application\Application;
 use App\Models\Application\ApplicationStatus;
 use App\Models\Campus\Campus;
+use App\Models\Course\ClassSchedule;
 use App\Models\Course\Course;
 use App\Models\Course\CourseAdditional;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use MeiliSearch\Client;
+use Illuminate\Support\Str;
 
 class CourseController extends Controller{
     use Service;
@@ -394,10 +396,82 @@ class CourseController extends Controller{
         );
         return response()->json($data,200);
     }
-    public function subject_schedule(){
+    public function subject_schedule($id=NULL,$edit=NULL,$schedule_id=NULL){
         $data['page_title'] = 'Subject | Schedule';
         $data['course'] = true;
+        if($id){
+            $data['course_subject'] = CourseSubject::where('id',$id)->first();
+            $data['course_intake'] = CourseIntake::where('id',$data['course_subject']->course_intake_id)->first();
+        }
+        if(!empty($schedule_id)){
+            $data['schedule_data'] = ClassSchedule::where('id',$schedule_id)->first();
+        }
+        $data['main_subject_id'] = $id;
+        $data['schedule_list'] = ClassSchedule::where('subject_id',$id)->orderBy('id','desc')->paginate(15);
         return view('course/subject/schedule',$data);
+    }
+    //subject schedule data store
+    public function subject_schedule_data_post(Request $request){
+        $request->validate([
+            'title'=>'required',
+            'schedule_date'=>'required',
+            'time_from'=>'required',
+            'time_to'=>'required',
+        ]);
+        if($request->schedule_id){
+            $schedule = ClassSchedule::where('id',$request->schedule_id)->first();
+        }else{
+            $schedule = new ClassSchedule();
+        }
+        $schedule->course_id = $request->course_id;
+        $schedule->intake_id = $request->intake_id;
+        $schedule->subject_id = $request->subject_id;
+        $schedule->intake_date = $request->intake_date;
+        $schedule->title = $request->title;
+        $schedule->schedule_date = $request->schedule_date;
+        $schedule->time_from = $request->time_from;
+        $schedule->time_to = $request->time_to;
+        if(!$request->schedule_id){
+            $slug = Str::slug($request->title,'-');
+            $schedule->slug = $slug.Service::randomString();
+        }
+        $schedule->save();
+        Session::flash('success','Class Schedule Data Updated');
+        return redirect('subject/class-schedule/'.$schedule->subject_id);
+    }
+    public function schedule_status_change(Request $request){
+        $scheduleData = ClassSchedule::where('id',$request->schedule_id)->first();
+        if(!$scheduleData){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Subject Schedule Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($scheduleData->is_done==1){
+            $scheduleData->is_done = 0;
+            $scheduleData->save();
+            $msg = 'Schedule Revert Again';
+        }else{
+            $scheduleData->is_done = 1;
+            $scheduleData->save();
+            $msg = 'Schedule Complete';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
+    }
+    //schedule details
+    public function schedule_details($id=NULL){
+        $data['page_title'] = 'Subject | Schedule Details';
+        $data['course'] = true;
+        $data['app_data'] = Application::where('id',1)->first();
+        $data['details'] = ClassSchedule::with(['course','subject'])->where('id',$id)->first();
+        //dd($data['details']);
+        return view('course/subject/schedule_details',$data);
     }
     public function attendance(){
         $data['page_title'] = 'Subject | Attendance';
