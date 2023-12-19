@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Class Schedule Details</title>
+  <title>Class | Schedule Details</title>
+  <link rel="icon" type="image/x-icon" href="https://mymac.ukmcglobal.com/backend/src/assets/img/favicon.ico">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -48,7 +49,7 @@
   <div class="container">
     <h2>Class Schedule Details</h2>
     <div class="col-md-12">
-        {!! QrCode::size(120)->style('round')->backgroundColor(251,255,255)->generate('RemoteStack') !!}
+        {!! QrCode::size(120)->style('round')->backgroundColor(251,255,255)->generate(URL::to('subject/class/student/attendence/'.$details->slug.'/confirm')) !!}
     </div>
 	<p>
 		<strong>Course Name:</strong>  {{ (!empty($details->course->course_name))?$details->course->course_name:'' }} <br><br>
@@ -74,7 +75,7 @@
     <p>
         Email: <a href="mailto:admissions@ukmcglobal.com">admissions@ukmcglobal.com</a><br>
         Tel:&nbsp;&nbsp;&nbsp; <a href="tel:+4401614780015">+4401614780015</a><br>
-        Web:&nbsp; <a target="_blank" href="http://www.ukmcglobal.com">www.ukmcglobal.com</a>
+        Web:&nbsp; <a target="_blank" href="https://www.ukmcglobal.com">www.ukmcglobal.com</a>
     </p>
   </div>
 </body>

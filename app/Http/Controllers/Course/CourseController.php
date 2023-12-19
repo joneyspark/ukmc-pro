@@ -473,6 +473,23 @@ class CourseController extends Controller{
         //dd($data['details']);
         return view('course/subject/schedule_details',$data);
     }
+    public function attendence_details($id=NULL){
+        $data['page_title'] = 'Subject | Attendence Conformation Page';
+        $data['course'] = true;
+        $data['details'] = ClassSchedule::with(['course','subject'])->where('slug',$id)->first();
+        //dd($data['details']);
+        return view('course/subject/attendence_details',$data);
+    }
+    public function attendence_confirmation(Request $request){
+        $request->validate([
+            'application_id'=>'required',
+        ]);
+        $get_app_data = Application::where('id',$request->application_id)->first();
+        if(!$get_app_data){
+            Session::flash('error','Application Data Not Found');
+            return redirect()->back();
+        }
+    }
     public function attendance(){
         $data['page_title'] = 'Subject | Attendance';
         $data['course'] = true;
