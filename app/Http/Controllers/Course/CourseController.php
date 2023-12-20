@@ -9,6 +9,7 @@ use App\Models\Agent\Company;
 use App\Models\Application\Application;
 use App\Models\Application\ApplicationStatus;
 use App\Models\Campus\Campus;
+use App\Models\Course\AttendenceConfirmation;
 use App\Models\Course\ClassSchedule;
 use App\Models\Course\Course;
 use App\Models\Course\CourseAdditional;
@@ -484,11 +485,42 @@ class CourseController extends Controller{
         $request->validate([
             'application_id'=>'required',
         ]);
+        if(Session::get('check_attend')=='12345678'){
+            Session::flash('warning','You Already Attented Of this Of This Class Schedule! If you have some attending issue then call to administrator!');
+            return redirect()->back();
+        }
         $get_app_data = Application::where('id',$request->application_id)->first();
         if(!$get_app_data){
             Session::flash('error','Application Data Not Found');
             return redirect()->back();
         }
+        $checkSchedule = ClassSchedule::where('id',$request->class_schedule_id)->first();
+        if(!$checkSchedule){
+            Session::flash('error','Schedule Data Not Found! Server Error!');
+            return redirect()->back();
+        }
+        if($get_app_data->intake != $checkSchedule->intake_date){
+            Session::flash('error','You Don,t Have Any Permission To Make Attendence Of this Course Schedule');
+            return redirect()->back();
+        }
+        $checkAttendence = AttendenceConfirmation::where('class_schedule_id',$request->class_schedule_id)->where('application_id',$request->application_id)->first();
+        if($checkAttendence){
+            Session::flash('error','You Already Attented Of this Of This Class Schedule! If you want to change then call to administrator!');
+            return redirect()->back();
+        }
+        $attendence = new AttendenceConfirmation();
+        $attendence->class_schedule_id = $checkSchedule->id;
+        $attendence->application_id = $get_app_data->id;
+        $attendence->course_id = $checkSchedule->course_id;
+        $attendence->intake_id = $checkSchedule->intake_id;
+        $attendence->subject_id = $checkSchedule->subject_id;
+        $attendence->intake_date = $checkSchedule->intake_date;
+        $attendence->application_status = 1;
+        $attendence->status = 0;
+        $attendence->save();
+        Session::put('check_attend','12345678');
+        Session::flash('success','Attendence Complete!');
+        return redirect()->back();
     }
     public function attendance(){
         $data['page_title'] = 'Subject | Attendance';

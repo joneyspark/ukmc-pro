@@ -19,8 +19,8 @@ return new class extends Migration
             $table->integer('intake_id')->nullable();
             $table->integer('subject_id')->nullable();
             $table->string('intake_date')->nullable();
-            $table->tinyInteger('application_status')->nullable();
-            $table->tinyInteger('status')->nullable();
+            $table->tinyInteger('application_status')->default(0)->nullable();
+            $table->tinyInteger('status')->default(0)->nullable();
             $table->timestamps();
         });
     }
