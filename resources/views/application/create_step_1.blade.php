@@ -79,12 +79,22 @@
                             @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager')
                             <div class="form-group mb-4">
                                 <label for="verticalFormStepform-name">Agent/Company/Referral:</label>
+                                @if(!empty($app_data->company_id) && $app_data->company_id != 42)
                                 <select name="company_id" id="company_id" class="form-select">
                                     <option value="" selected>Choose...</option>
                                     @foreach ($a_company_data as $crow)
-                                    <option {{ (!empty($app_data->company_id) && $app_data->company_id==$crow->id)?'selected':'' }} value="{{ $crow->id }}">{{ $crow->company_name }}</option>
+                                    <option {{ (!empty($app_data->company_id) && $app_data->company_id == $crow->id) ? 'selected' : '' }} value="{{ $crow->id }}">{{ $crow->company_name }}</option>
                                     @endforeach
                                 </select>
+                                @else
+                                <select name="company_id" id="company_id" class="form-select">
+                                    <option value="" selected>Choose...</option>
+                                    @foreach ($a_company_data as $crow)
+                                    <option {{ ($crow->id==43) ? 'selected' : '' }} value="{{ $crow->id }}">{{ $crow->company_name }}</option>
+                                    @endforeach
+                                </select>
+                                @endif
+                                
                             </div>
                             @endif
                         @endif
