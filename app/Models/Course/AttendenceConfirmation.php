@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 class AttendenceConfirmation extends Model
 {
     use HasFactory;
-
     public function application(){
         return $this->belongsTo(Application::class,'application_id');
     }

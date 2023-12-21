@@ -9,3 +9,4 @@ class CourseAdditional extends Model
 {
     use HasFactory;
 }
+

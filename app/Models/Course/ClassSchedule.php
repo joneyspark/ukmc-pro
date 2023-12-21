@@ -5,11 +5,9 @@ namespace App\Models\Course;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ClassSchedule extends Model
-{
+class ClassSchedule extends Model{
     use HasFactory;
     public $table = "class_schedules";
-
     public function course(){
         return $this->belongsTo(Course::class,'course_id');
     }
