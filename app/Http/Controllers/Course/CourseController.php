@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\File;
 use App\Models\Course\CourseCategories;
-use App\Models\course\CourseIntake;
+use App\Models\Course\CourseIntake;
 use App\Models\Course\CourseLevel;
 use App\Models\Course\CourseSubject;
 use App\Models\User;
