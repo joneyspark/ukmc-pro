@@ -33,6 +33,12 @@ Route::controller(CourseController::class)->group(function () {
     Route::get('attendance-report','attendance_report');
     Route::get('get-intake-list/{id?}','get_intake_list');
     Route::post('transfer-subject-from-another-intake','transfer_subject_from_another_intake');
+    Route::post('class/schedule/present-call','present_call');
+    Route::post('class/schedule/absent-call','absent_call');
+    Route::post('class/schedule/leave-call','leave_call');
+    Route::get('class/schedule/get-notes/{id?}','get_notes');
+    Route::get('class/schedule/note-delete/{id?}','main_note_delete');
+    Route::post('class/schedule/application-note-post','application_note_post');
 });
 Route::controller(CourseCategoryController::class)->group(function () {
     Route::get('course-categories/{id?}', 'course_categories');

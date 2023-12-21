@@ -10,6 +10,7 @@ use App\Models\Application\Application;
 use App\Models\Application\ApplicationStatus;
 use App\Models\Campus\Campus;
 use App\Models\Course\AttendenceConfirmation;
+use App\Models\Course\AttendNote;
 use App\Models\Course\ClassSchedule;
 use App\Models\Course\Course;
 use App\Models\Course\CourseAdditional;
@@ -513,7 +514,7 @@ class CourseController extends Controller{
             return redirect()->back();
         }
         $data['schedule_id'] = $id;
-        $data['applicants'] = Application::with(['applicant_attendence'])->where('course_id',$getSchedule->course_id)->where('intake',$getSchedule->intake_date)->where('application_status_id',11)->paginate(50);
+        $data['applicants'] = Application::with(['applicant_attendence'])->where('course_id',$getSchedule->course_id)->where('intake',$getSchedule->intake_date)->where('status',11)->paginate(50);
         //dd($data['applicants']);
         return view('course/subject/attendence',$data);
     }
@@ -531,7 +532,7 @@ class CourseController extends Controller{
             );
             return response()->json($data,200);
         }
-        $checkSchedule = ClassSchedule::where('id',$request->class_schedule_id)->first();
+        $checkSchedule = ClassSchedule::where('id',$request->schedule_id)->first();
         if(!$checkSchedule){
             $data['result'] = array(
                 'key'=>101,
@@ -540,26 +541,249 @@ class CourseController extends Controller{
             return response()->json($data,200);
         }
         if($get_app_data->intake != $checkSchedule->intake_date){
-            Session::flash('error','You Don,t Have Any Permission To Make Attendence Of this Course Schedule');
-            return redirect()->back();
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'This Student Not Enrolled In This Intake!'
+            );
+            return response()->json($data,200);
         }
-        $checkAttendence = AttendenceConfirmation::where('class_schedule_id',$request->class_schedule_id)->where('application_id',$request->application_id)->first();
-        if($checkAttendence){
-            Session::flash('error','You Already Attented Of this Of This Class Schedule! If you want to change then call to administrator!');
-            return redirect()->back();
+        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->where('application_id',$request->application_id)->first();
+        if($attendence){
+            $attendence->application_status = 1;
+            $attendence->save();
+        }else{
+            $attendence = new AttendenceConfirmation();
+            $attendence->class_schedule_id = $checkSchedule->id;
+            $attendence->application_id = $get_app_data->id;
+            $attendence->course_id = $checkSchedule->course_id;
+            $attendence->intake_id = $checkSchedule->intake_id;
+            $attendence->subject_id = $checkSchedule->subject_id;
+            $attendence->intake_date = $checkSchedule->intake_date;
+            $attendence->application_status = 1;
+            $attendence->status = 0;
+            $attendence->save();
         }
-        $attendence = new AttendenceConfirmation();
-        $attendence->class_schedule_id = $checkSchedule->id;
-        $attendence->application_id = $get_app_data->id;
-        $attendence->course_id = $checkSchedule->course_id;
-        $attendence->intake_id = $checkSchedule->intake_id;
-        $attendence->subject_id = $checkSchedule->subject_id;
-        $attendence->intake_date = $checkSchedule->intake_date;
-        $attendence->application_status = 1;
-        $attendence->status = 0;
-        $attendence->save();
-        Session::flash('success','Attendence Complete!');
-        return redirect()->back();
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>'Attndence Complete!'
+        );
+        return response()->json($data,200);
+    }
+    public function absent_call(Request $request){
+        $request->validate([
+            'application_id'=>'required',
+            'schedule_id'=>'required',
+        ]);
+
+        $get_app_data = Application::where('id',$request->application_id)->first();
+        if(!$get_app_data){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Application Data Not Found! Server Error'
+            );
+            return response()->json($data,200);
+        }
+        $checkSchedule = ClassSchedule::where('id',$request->schedule_id)->first();
+        if(!$checkSchedule){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Schedule Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        if($get_app_data->intake != $checkSchedule->intake_date){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'This Student Not Enrolled In This Intake!'
+            );
+            return response()->json($data,200);
+        }
+        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->where('application_id',$request->application_id)->first();
+        if($attendence){
+            $attendence->application_status = 2;
+            $attendence->save();
+        }else{
+            $attendence = new AttendenceConfirmation();
+            $attendence->class_schedule_id = $checkSchedule->id;
+            $attendence->application_id = $get_app_data->id;
+            $attendence->course_id = $checkSchedule->course_id;
+            $attendence->intake_id = $checkSchedule->intake_id;
+            $attendence->subject_id = $checkSchedule->subject_id;
+            $attendence->intake_date = $checkSchedule->intake_date;
+            $attendence->application_status = 2;
+            $attendence->status = 0;
+            $attendence->save();
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>'Absent!'
+        );
+        return response()->json($data,200);
+    }
+    public function leave_call(Request $request){
+        $request->validate([
+            'application_id'=>'required',
+            'schedule_id'=>'required',
+        ]);
+
+        $get_app_data = Application::where('id',$request->application_id)->first();
+        if(!$get_app_data){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Application Data Not Found! Server Error'
+            );
+            return response()->json($data,200);
+        }
+        $checkSchedule = ClassSchedule::where('id',$request->schedule_id)->first();
+        if(!$checkSchedule){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Schedule Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        if($get_app_data->intake != $checkSchedule->intake_date){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'This Student Not Enrolled In This Intake!'
+            );
+            return response()->json($data,200);
+        }
+        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->where('application_id',$request->application_id)->first();
+        if($attendence){
+            $attendence->application_status = 3;
+            $attendence->save();
+        }else{
+            $attendence = new AttendenceConfirmation();
+            $attendence->class_schedule_id = $checkSchedule->id;
+            $attendence->application_id = $get_app_data->id;
+            $attendence->course_id = $checkSchedule->course_id;
+            $attendence->intake_id = $checkSchedule->intake_id;
+            $attendence->subject_id = $checkSchedule->subject_id;
+            $attendence->intake_date = $checkSchedule->intake_date;
+            $attendence->application_status = 3;
+            $attendence->status = 0;
+            $attendence->save();
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>'Leave of Absence!'
+        );
+        return response()->json($data,200);
+    }
+    public function get_notes($id=NULL){
+        $select = '';
+        $notes = AttendNote::where('schedule_id',$id)->orderBy('id','asc')->get();
+        if($notes){
+            foreach($notes as $note){
+                $select .= '<p class="modal-text">';
+                    $select .= '<div class="custom-media-margin media custom-media-img">';
+                        $select .= '<div class="mr-2">';
+                            $select .= '<img alt="avatar" src="'.url($note->user->photo).'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
+                            $select .= '</div>';
+                            $select .= '<div class="media-body">';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->role=='interviewer' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager'){
+                                $select .= '<a onclick="deleteMainNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            $select .= '</h6>';
+                            $select .= '<p class="mg-b-0">'.$note->note.'</p>';
+                            $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small>';
+                        $select .= '</div>';
+                    $select .= '</div>';
+                $select .= '</p><hr>';
+            }
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select,
+            'schedule_id'=>$id
+        );
+        return response()->json($data,200);
+    }
+    public function application_note_post(Request $request){
+        $note = new AttendNote();
+        $note->schedule_id = $request->schedule_id;
+        $note->application_id = $request->application_id;
+        $note->note = $request->application_note;
+        $note->user_id = Auth::user()->id;
+        $note->status = 0;
+        $note->save();
+        //make notification
+        
+        $select = '';
+        $notes = AttendNote::where('schedule_id',$request->schedule_id)->orderBy('id','asc')->get();
+        if($notes){
+            foreach($notes as $note){
+                $select .= '<p class="modal-text">';
+                    $select .= '<div class="custom-media-margin media custom-media-img">';
+                        $select .= '<div class="mr-2">';
+                            $select .= '<img alt="avatar" src="'.url($note->user->photo).'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
+                            $select .= '</div>';
+                            $select .= '<div class="media-body">';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->role=='interviewer' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager'){
+                                $select .= '<a onclick="deleteMainNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            $select .= '</h6>';
+                            $select .= '<p class="mg-b-0">'.$note->note.'</p>';
+                            $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small>';
+                        $select .= '</div>';
+                    $select .= '</div>';
+                $select .= '</p><hr>';
+            }
+        }
+        //make instant notification for super admin
+        //event(new AdminMsgEvent($notification->description,url('application/'.$request->application_id.'/processing')));
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select,
+            'application_id'=>$note->application_id
+        );
+        return response()->json($data,200);
+    }
+    public function main_note_delete($id=NULL){
+        $main_note = AttendNote::where('id',$id)->first();
+        if(!$main_note){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Note Data Not Found'
+            );
+            return response()->json($data,200);
+        }
+        $delete = AttendNote::where('id',$main_note->id)->delete();
+
+        //make notification
+        
+        $select = '';
+        $notes = AttendNote::where('schedule_id',$main_note->schedule_id)->orderBy('id','asc')->get();
+        if($notes){
+            foreach($notes as $note){
+                $select .= '<p class="modal-text">';
+                    $select .= '<div class="custom-media-margin media custom-media-img">';
+                        $select .= '<div class="mr-2">';
+                            $select .= '<img alt="avatar" src="'.url($note->user->photo).'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
+                        $select .= '</div>';
+                        $select .= '<div class="media-body">';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->role=='interviewer' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager'){
+                                $select .= '<a onclick="deleteMainNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            $select .= '</h6>';
+                            $select .= '<p class="mg-b-0">'.$note->note.'</p>';
+                            $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small>';
+                        $select .= '</div>';
+                    $select .= '</div>';
+                $select .= '</p><hr>';
+            }
+        }
+        //make instant notification for super admin
+        //event(new AdminMsgEvent($notification->description,url('application/'.$main_note->application_id.'/processing')));
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select,
+        );
+        return response()->json($data,200);
     }
     public function attendance_report(Request $request){
         $data['page_title'] = 'Attendance | Report';
