@@ -7,11 +7,11 @@ use App\Models\Campus\Campus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Laravel\Scout\Searchable;
+//use Laravel\Scout\Searchable;
 
 class Course extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory;
     protected $table = 'courses';
 
 
@@ -36,41 +36,41 @@ class Course extends Model
     /*
      * Searchable attributes for laravel/scout
      */
-    public static function searchableAttributes()
-    {
-        return ['course_name'];
-    }
+    // public static function searchableAttributes()
+    // {
+    //     return ['course_name'];
+    // }
 
     /*
      * filterable attributes
      */
-    public static function searchFilterableAttributes()
-    {
-        return ['campus_id','course_level_id'];
-    }
+    // public static function searchFilterableAttributes()
+    // {
+    //     return ['campus_id','course_level_id'];
+    // }
 
     /*
      * Sortable attributes
      */
-    public static function searchSortableAttributes()
-    {
-        return ['id'];
-    }
+    // public static function searchSortableAttributes()
+    // {
+    //     return ['id'];
+    // }
 
-    public function toSearchableArray()
-    {
-        $array = $this->toArray();
-        $dateInMs = Carbon::createFromDate($array['created_at'])->getTimestampMs();
-        $dateInMsUpdated = Carbon::createFromDate($array['updated_at'])->getTimestampMs();
-        $array['created_at'] = $dateInMs;
-        $array['updated_at'] = $dateInMsUpdated;
+    // public function toSearchableArray()
+    // {
+    //     $array = $this->toArray();
+    //     $dateInMs = Carbon::createFromDate($array['created_at'])->getTimestampMs();
+    //     $dateInMsUpdated = Carbon::createFromDate($array['updated_at'])->getTimestampMs();
+    //     $array['created_at'] = $dateInMs;
+    //     $array['updated_at'] = $dateInMsUpdated;
 
-        return $array;
-    }
-    public function searchableAs(): string
-    {
-        return 'courses';
-    }
+    //     return $array;
+    // }
+    // public function searchableAs(): string
+    // {
+    //     return 'courses';
+    // }
     public function campus(){
         return $this->belongsTo(Campus::class);
     }
@@ -86,6 +86,6 @@ class Course extends Model
     public function applications(){
         return $this->hasMany(Application::class);
     }
-    
-    
+
+
 }

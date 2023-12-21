@@ -29,7 +29,7 @@ Route::controller(CourseController::class)->group(function () {
     Route::get('subject/schedule-details/{id?}','schedule_details');
     Route::get('subject/class/student/attendence/{id?}/confirm','attendence_details');
     Route::post('class/schedule/attendence-confirmation','attendence_confirmation');
-    Route::get('subject/attendance','attendance');
+    Route::get('subject/attendance/{id?}','attendance');
     Route::get('attendance-report','attendance_report');
     Route::get('get-intake-list/{id?}','get_intake_list');
     Route::post('transfer-subject-from-another-intake','transfer_subject_from_another_intake');

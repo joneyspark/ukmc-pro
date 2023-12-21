@@ -128,40 +128,22 @@ class CourseController extends Controller{
         $data['course'] = true;
         $data['course_all'] = true;
         Session::forget('course_id');
-        $query = $request->course_name;
+        $course_name = $request->course_name;
         $campus_id = $request->campus_id;
         Session::put('get_campus_id', $campus_id);
-        Session::put('get_course_name', $query);
-        $client = new Client('http://localhost:7700');
-        $indexName = 'courses';
-        $index = $client->index($indexName);
-        $currentSettings = $index->getSettings();
-        $sortableAttributes = $currentSettings['sortableAttributes'];
+        Session::put('get_course_name', $course_name);
 
-        if (!in_array('id', $sortableAttributes)) {
-            $sortableAttributes[] = 'id';
-            $settings['sortableAttributes'] = $sortableAttributes;
-
-            $index->updateSettings($settings);
-        }
-        $newSettings = [
-            'filterableAttributes' => array_merge($currentSettings['filterableAttributes'], ['campus_id'])
-        ];
-
-        $index->updateSettings($newSettings);
-        $courseSearch = Course::search($query, function ($ms, $q, $options) use ($request, $query, $campus_id) {
-            $filter = [];
-            if ($campus_id) {
-                $filter[] = 'campus_id = ' . $campus_id;
-            }
-            $options['filter'] = $filter;
-            $options['sort'] = ['id:desc'];
-            return $ms->search($q, $options);
-        });
-        $data['courses'] = $courseSearch
-        ->paginate(5)
+        $data['courses'] = Course::query()
+        ->when($course_name, function ($query, $course_name) {
+            return $query->where('course_name', 'like', '%' . $course_name . '%');
+        })
+        ->when($campus_id, function ($query, $campus_id) {
+            return $query->where('campus_id',$campus_id);
+        })
+        ->orderBy('id','desc')
+        ->paginate(15)
         ->appends([
-            'course_name' => $query,
+            'course_name' => $course_name,
             'campus_id' => $campus_id,
         ]);
         $data['get_campus_id'] = Session::get('get_campus_id');
@@ -522,10 +504,62 @@ class CourseController extends Controller{
         Session::flash('success','Attendence Complete!');
         return redirect()->back();
     }
-    public function attendance(){
+    public function attendance($id=NULL){
         $data['page_title'] = 'Subject | Attendance';
         $data['course'] = true;
+        $getSchedule = ClassSchedule::where('id',$id)->first();
+        if(!$getSchedule){
+            Session::flash('error','Schedule Data Not Found!');
+            return redirect()->back();
+        }
+        $data['schedule_id'] = $id;
+        $data['applicants'] = Application::with(['applicant_attendence'])->where('course_id',$getSchedule->course_id)->where('intake',$getSchedule->intake_date)->where('application_status_id',11)->paginate(50);
+        //dd($data['applicants']);
         return view('course/subject/attendence',$data);
+    }
+    public function present_call(Request $request){
+        $request->validate([
+            'application_id'=>'required',
+            'schedule_id'=>'required',
+        ]);
+
+        $get_app_data = Application::where('id',$request->application_id)->first();
+        if(!$get_app_data){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Application Data Not Found! Server Error'
+            );
+            return response()->json($data,200);
+        }
+        $checkSchedule = ClassSchedule::where('id',$request->class_schedule_id)->first();
+        if(!$checkSchedule){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Schedule Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        if($get_app_data->intake != $checkSchedule->intake_date){
+            Session::flash('error','You Don,t Have Any Permission To Make Attendence Of this Course Schedule');
+            return redirect()->back();
+        }
+        $checkAttendence = AttendenceConfirmation::where('class_schedule_id',$request->class_schedule_id)->where('application_id',$request->application_id)->first();
+        if($checkAttendence){
+            Session::flash('error','You Already Attented Of this Of This Class Schedule! If you want to change then call to administrator!');
+            return redirect()->back();
+        }
+        $attendence = new AttendenceConfirmation();
+        $attendence->class_schedule_id = $checkSchedule->id;
+        $attendence->application_id = $get_app_data->id;
+        $attendence->course_id = $checkSchedule->course_id;
+        $attendence->intake_id = $checkSchedule->intake_id;
+        $attendence->subject_id = $checkSchedule->subject_id;
+        $attendence->intake_date = $checkSchedule->intake_date;
+        $attendence->application_status = 1;
+        $attendence->status = 0;
+        $attendence->save();
+        Session::flash('success','Attendence Complete!');
+        return redirect()->back();
     }
     public function attendance_report(Request $request){
         $data['page_title'] = 'Attendance | Report';

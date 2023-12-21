@@ -4,17 +4,18 @@ namespace App\Models\Application;
 
 use App\Models\Agent\Company;
 use App\Models\Campus\Campus;
+use App\Models\Course\AttendenceConfirmation;
 use App\Models\Course\Course;
 use App\Models\University\University;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Laravel\Scout\Searchable;
+//use Laravel\Scout\Searchable;
 
 class Application extends Model
 {
-    use HasFactory,Searchable;
+    use HasFactory;
     protected $table = 'applications';
 
     protected $fillable = [
@@ -69,9 +70,12 @@ class Application extends Model
         'update_by',
     ];
 
-    public function searchableAs(): string
-    {
-        return 'applications';
+    // public function searchableAs(): string
+    // {
+    //     return 'applications';
+    // }
+    public function applicant_attendence(){
+        return $this->hasOne(AttendenceConfirmation::class,'application_id');
     }
     public function step2Data(){
         return $this->hasOne(Application_Step_2::class);
