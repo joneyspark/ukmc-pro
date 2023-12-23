@@ -784,6 +784,57 @@ class CourseController extends Controller{
         );
         return response()->json($data,200);
     }
+    public function quick_attendence(Request $request){
+        $data['page_title'] = 'Quick | Attendance';
+        $data['course'] = true;
+        $data['quick_attendance'] = true;
+        $course_id = $request->course_id;
+        $intake_id = $request->intake_id;
+        $subject_id = $request->subject_id;
+        Session::put('course_id',$course_id);
+        Session::put('intake_id',$intake_id);
+        Session::put('subject_id',$subject_id);
+
+        $data['course_list'] = Course::where('status',1)->get();
+        if($course_id){
+            $data['intake_list'] = CourseIntake::where('course_id',$course_id)->orderBy('id','desc')->where('status',0)->get();
+        }else{
+            $data['intake_list'] = CourseIntake::orderBy('id','desc')->where('status',0)->get();
+        }
+        if($intake_id){
+            $data['subject_list'] = CourseSubject::where('course_intake_id',$intake_id)->where('status',0)->orderBy('id','desc')->get();
+        }else{
+            $data['subject_list'] = CourseSubject::where('status',0)->orderBy('id','desc')->get();
+        }
+        $data['schedule_list'] = ClassSchedule::query()
+        ->with(['course','subject','intake'])
+        ->when($course_id, function ($query, $course_id) {
+            return $query->where('course_id',$course_id);
+        })
+        ->when($intake_id, function ($query, $intake_id) {
+            return $query->where('intake_id',$intake_id);
+        })
+        ->when($subject_id, function ($query, $subject_id) {
+            return $query->where('subject_id',$subject_id);
+        })
+        ->orderBy('id','desc')
+        ->paginate(15)
+        ->appends([
+            'course_id' => $course_id,
+            'intake_id' => $intake_id,
+            'subject_id' => $subject_id,
+        ]);
+        $data['get_course_id'] = Session::get('course_id');
+        $data['get_intake_id'] = Session::get('intake_id');
+        $data['get_subject_id'] = Session::get('subject_id');
+        return view('course/subject/quick_attendence',$data);
+    }
+    public function reset_schedule_list(){
+        Session::forget('course_id');
+        Session::forget('intake_id');
+        Session::forget('subject_id');
+        return redirect('class/schedule/quick-attendence');
+    }
     public function attendance_report(Request $request){
         $data['page_title'] = 'Attendance | Report';
         $data['course'] = true;

@@ -2,6 +2,7 @@
 
 namespace App\Models\Course;
 
+use App\Models\course\CourseIntake;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,5 +14,8 @@ class ClassSchedule extends Model{
     }
     public function subject(){
         return $this->belongsTo(CourseSubject::class,'subject_id');
+    }
+    public function intake(){
+        return $this->belongsTo(CourseIntake::class,'intake_id');
     }
 }

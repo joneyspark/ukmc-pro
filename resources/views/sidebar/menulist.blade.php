@@ -46,7 +46,7 @@
                 <li class="{{ (!empty($application_add) && $application_add==true)?'active':'' }}">
                     <a href="{{ URL::to('application-create') }}"> New Application</a>
                 </li>
-                
+
                 @if(Auth::check() && Auth::user()->role=='student')
                 <li class="{{ (!empty($student_portal) && $student_portal==true)?'active':'' }}">
                     <a href="{{ URL::to('student-portal') }}"> My Application</a>
@@ -166,6 +166,9 @@
                 </li>
                 <li class="{{ (!empty($course_attendance) && $course_attendance==true)?'active':'' }}">
                     <a href="{{ URL::to('attendance-report') }}"> Attendance Report </a>
+                </li>
+                <li class="{{ (!empty($quick_attendance) && $quick_attendance==true)?'active':'' }}">
+                    <a href="{{ URL::to('class/schedule/quick-attendence') }}">Quick Attendance</a>
                 </li>
                 @endif
             </ul>
