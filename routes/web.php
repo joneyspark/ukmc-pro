@@ -125,6 +125,7 @@ Route::controller(BlogController::class)->group(function () {
     Route::post('blog-upload-image', 'upload_image');
     Route::post('blog-status-change', 'blog_status_change');
     Route::get('image/upload','upload_image_page');
+    Route::get('create-blog/image/upload','upload_image_page');
     Route::get('list-blog', 'list_blog');
     Route::get('/create-blog/new','create_blog');
     Route::get('create-blog/{id?}', 'create_blog');
