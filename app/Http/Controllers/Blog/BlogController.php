@@ -139,7 +139,7 @@ class BlogController extends Controller{
             $filename = $image1->getClientOriginalName();
             $filename = Service::slug_create($filename).rand(11, 99).'.'.$ext;
             $image_resize = Image::make($image1->getRealPath());
-            $image_resize->resize(1220, 380);
+            $image_resize->resize(1200, 400);
             $upload_path = 'backend/images/blog/';
             Service::createDirectory($upload_path);
             $image_resize->save(public_path('backend/images/blog/'.$filename));
@@ -208,14 +208,12 @@ class BlogController extends Controller{
         $image1 = $request->upload;
         if ($request->hasFile('upload')) {
             $ext = $image1->getClientOriginalExtension();
-            $filename = $image1->getClientOriginalName();
-            $filename = Service::slug_create($filename).rand(11, 99).'.'.$ext;
-            $image_resize = Image::make($image1->getRealPath());
-            $image_resize->resize(1044, 325);
-            $upload_path = 'backend/images/blog/upload/';
-            Service::createDirectory($upload_path);
-            $image_resize->save(public_path('backend/images/blog/upload/'.$filename));
-            $blog->url = $upload_path.$filename;
+            $doc_file_name = $image1->getClientOriginalName();
+            $doc_file_name = 'UKMC-'.Service::get_random_str_number().'-'.Service::slug_create($doc_file_name).'.'.$ext;
+            $upload_path1 = 'backend/images/blog/upload/';
+            Service::createDirectory($upload_path1);
+            $request->file('upload')->move(public_path('backend/images/blog/upload/'), $doc_file_name);
+            $blog->url = $upload_path1.$doc_file_name;
             $blog->save();
             return redirect('image/upload?CKEditor=post_content&CKEditorFuncNum=1&langCode=en');
         }else{
