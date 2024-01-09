@@ -132,8 +132,8 @@ class BlogController extends Controller{
         //upload image
         $image1 = $request->image;
         if($request->hasFile('image')) {
-            if (File::exists(public_path($blog->image))) {
-                File::delete(public_path($blog->image));
+            if (File::exists(asset($blog->image))) {
+                File::delete(asset($blog->image));
             }
             $ext = $image1->getClientOriginalExtension();
             $filename = $image1->getClientOriginalName();
@@ -148,8 +148,8 @@ class BlogController extends Controller{
         //upload author image
         $image2 = $request->author_image;
         if($request->hasFile('author_image')) {
-            if (File::exists(public_path($blog->author_image))) {
-                File::delete(public_path($blog->author_image));
+            if (File::exists(asset($blog->author_image))) {
+                File::delete(asset($blog->author_image));
             }
             $ext = $image2->getClientOriginalExtension();
             $filename = $image2->getClientOriginalName();
