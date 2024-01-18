@@ -302,6 +302,7 @@ function task_status_change(){
 function application_status_change(){
     var status = $('.application-status-change').val();
     var application_id = $('.application-status-change').data('id');
+    $('#status-confirmed').attr('disabled', true);
     var url = $('.application-status-change').data('action');
         $.post(url,
         {
@@ -321,6 +322,7 @@ function application_status_change(){
                     close: true,
                     progressBarColor: 'yellow',
                 });
+                $('#status-confirmed').attr('disabled', false);
             }
             if(data['result']['key']===200){
                 iziToast.show({
@@ -333,6 +335,7 @@ function application_status_change(){
                     close: true,
                     progressBarColor: 'yellow',
                 });
+                $('#status-confirmed').attr('disabled', false);
 
             }
             //alert("Data: " + data + "\nStatus: " + status);
@@ -602,6 +605,7 @@ $(function(){
 function interview_status_change(){
     var status = $('.interview-status-change').val();
     var application_id = $('.interview-status-change').data('id');
+    $('#interview-status-confirmed').attr('disabled', true);
     var url = $('.interview-status-change').data('action');
         $.post(url,
         {
@@ -621,6 +625,7 @@ function interview_status_change(){
                     close: true,
                     progressBarColor: 'yellow',
                 });
+                $('#interview-status-confirmed').attr('disabled', false);
             }
             if(data['result']['key']===200){
                 iziToast.show({
@@ -633,6 +638,7 @@ function interview_status_change(){
                     close: true,
                     progressBarColor: 'yellow',
                 });
+                $('#interview-status-confirmed').attr('disabled', false);
 
             }
             //alert("Data: " + data + "\nStatus: " + status);
