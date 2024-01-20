@@ -98,6 +98,11 @@
                     <a href="{{ URL::to('all-interview-status') }}"> Interview Status </a>
                 </li>
                 @endif
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer' || Auth::user()->role=='adminManager')
+                <li class="{{ (!empty($application_intake) && $application_intake==true)?'active':'' }}">
+                    <a href="{{ URL::to('application-intake-list') }}"> Application Intakes</a>
+                </li>
+                @endif
             </ul>
         </li>
         @endif

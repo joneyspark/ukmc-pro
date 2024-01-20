@@ -100,4 +100,7 @@ Route::controller(ApplicationOtherController::class)->group(function () {
     Route::get('all-interview-status/{id?}', 'all_interview_status');
     Route::post('interview-status-store', 'interview_status_store');
     Route::post('interview-main-status-change', 'interview_main_status_change');
+    Route::post('application-intake-store', 'application_intake_store');
+    Route::post('application-intake-status-change', 'application_intake_status_change');
+    Route::get('application-intake-list/{id?}','application_intake_list');
 });

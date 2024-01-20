@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\requestDocumentMail;
+use App\Models\Application\ApplicationIntake;
 use App\Models\Application\ApplicationSop;
 use App\Models\Application\ApplicationStatus;
 use App\Models\Application\Experience;
@@ -60,7 +61,8 @@ class ApplicationController extends Controller{
         $data['application_add'] = true;
         $data['a_company_data'] = Company::where('status',1)->get();
         $data['a_campuses_data'] = Campus::where('active',1)->get();
-        $data['intakes'] = Service::get_intake_with_next_year();
+        //$data['intakes'] = Service::get_intake_with_next_year();
+        $data['intakes'] = ApplicationIntake::where('status',0)->orderBy('id','desc')->get();
         $data['residential_status'] = Service::residential_status();
         $data['programs'] = Service::program();
         $data['course_levels1'] = CourseLevel::where('status',0)->get();
@@ -348,7 +350,8 @@ class ApplicationController extends Controller{
         $data['application_add'] = true;
         $data['a_company_data'] = Company::where('status',1)->get();
         $data['a_campuses_data'] = Campus::where('active',1)->get();
-        $data['intakes'] = Service::get_intake_with_next_year();
+        //$data['intakes'] = Service::get_intake_with_next_year();
+        $data['intakes'] = ApplicationIntake::where('status',0)->orderBy('id','desc')->get();
         $data['residential_status'] = Service::residential_status();
         $data['programs'] = Service::program();
         $data['course_levels1'] = CourseLevel::where('status',0)->get();

@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\requestDocumentMail;
 use App\Models\Application\Application;
+use App\Models\Application\ApplicationIntake;
 use App\Models\Application\ApplicationStatus;
 use App\Models\Application\Followup;
 use App\Models\Application\InterviewStatus;
@@ -777,6 +778,64 @@ class ApplicationOtherController extends Controller
         }else{
             $update = InterviewStatus::where('id',$application_status->id)->update(['status'=>$request->status]);
             $msg = 'Interview Status Deactivated';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
+    }
+    //interview status
+    public function application_intake_list($id=NULL){
+        if(!Auth::check()){
+            Session::flash('error','Login First! Then Create Application Intakes!');
+            return redirect('login');
+        }
+        $data['return_application_intake_id'] = Session::get('return_application_intake_id');
+        $data['page_title'] = 'Application | Application Intake';
+        $data['application'] = true;
+        $data['application_intake'] = true;
+        $data['get_application_intake'] = ApplicationIntake::orderBy('id','desc')->paginate(20);
+        if($id){
+            $data['application_intake_data'] = ApplicationIntake::where('id',$id)->first();
+        }
+        Session::forget('return_application_intake_id');
+        return view('application/application_intakes',$data);
+    }
+    //interview status store
+    public function application_intake_store(Request $request){
+        $request->validate([
+            'title' => 'required',
+        ]);
+        $ApplicationIntakeId = $request->application_intake_id;
+        if($ApplicationIntakeId){
+            $ApplicationIntake = ApplicationIntake::where('id',$ApplicationIntakeId)->first();
+        }else{
+            $ApplicationIntake = new ApplicationIntake();
+        }
+        $ApplicationIntake->title = $request->title;
+        $ApplicationIntake->value = date('Y-m',strtotime($request->title));
+        $ApplicationIntake->save();
+        Session::put('return_application_intake_id',$ApplicationIntake->id);
+        Session::flash('success',(!empty($ApplicationIntakeId))?'Intake Data Upadted!':'Intake Data Saved!');
+        return redirect('application-intake-list');
+    }
+    public function application_intake_status_change(Request $request){
+        $application_intake_status = ApplicationIntake::where('id',$request->application_intake_status_id)->first();
+        if(!$application_intake_status){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Application Intake Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($application_intake_status->status==1){
+            $update = ApplicationIntake::where('id',$application_intake_status->id)->update(['status'=>$request->status]);
+            $msg = 'Applicatoin Intake Activated';
+        }else{
+            $update = ApplicationIntake::where('id',$application_intake_status->id)->update(['status'=>$request->status]);
+            $msg = 'Applicatoin Intake Deactivated';
         }
         $data['result'] = array(
             'key'=>200,

@@ -94,7 +94,7 @@
                                     @endforeach
                                 </select>
                                 @endif
-                                
+
                             </div>
                             @endif
                         @endif
@@ -559,7 +559,7 @@
                                 <select name="intake" id="inputState" class="form-select">
                                     <option value="">Choose...</option>
                                     @foreach ($intakes as $irow)
-                                    <option {{ (old('intake')==$irow['val'])?'selected':'' }} {{ (!empty($app_data->intake) && $app_data->intake==$irow['val'])?'selected':'' }} value="{{ $irow['val'] }}">{{ $irow['string'] }}</option>
+                                    <option {{ (old('intake')==$irow->value)?'selected':'' }} {{ (!empty($app_data->intake) && $app_data->intake==$irow->value)?'selected':'' }} value="{{ $irow->value }}">{{ date('F Y',strtotime($irow->title)) }}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('intake'))
@@ -620,7 +620,7 @@
         $('#current_postal_code').val("");
         $('#current_country').val("");
       }
-      
+
     });
   });
 </script>
