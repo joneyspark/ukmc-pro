@@ -24,37 +24,38 @@
                 </header>
             </div>
         </div>
-        <h5 class="p-3">Class Schedule List</h5>
+        <h5 class="p-3">Subject Schedule List</h5>
         <div class="widget-content widget-content-area">
-            <form method="post" action="{{ URL::to('subject-schedule-data-post') }}" enctype="multipart/form-data">
+            <form method="post" action="{{ URL::to('course/subject/subject-schedule-data-post') }}" enctype="multipart/form-data">
                 @csrf
                  <div class="row mb-4">
-                     <div class="col-6">
-                         <input type="hidden" name="course_id" value="{{ (!empty($course_subject->course_id))?$course_subject->course_id:'' }}" />
-                         <input type="hidden" name="intake_id" value="{{ (!empty($course_subject->course_intake_id))?$course_subject->course_intake_id:'' }}" />
-                         <input type="hidden" name="subject_id" value="{{ (!empty($course_subject->id))?$course_subject->id:'' }}" />
-                         <input type="hidden" name="intake_date" value="{{ (!empty($course_intake->intake_date))?$course_intake->intake_date:'' }}" />
-                         <input type="hidden" name="schedule_id" value="{{ (!empty($schedule_data->id))?$schedule_data->id:'' }}" />
-                         <input type="text" name="title" value="{{ (!empty($schedule_data->title))?$schedule_data->title:'' }}" class="form-control" placeholder="Schedule Title">
-                     </div>
-                     <div class="col-1">
-                         <label>Schedule Date:</label>
+                     <div class="col-4">
+                        <input type="text" name="title" value="{{ (!empty($subject_schedule_data->title))?$subject_schedule_data->title:'' }}" class="form-control" placeholder="Schedule Title">
                      </div>
                      <div class="col-4">
-                         <input type="date" name="schedule_date" value="{{ (!empty($schedule_data->schedule_date))?$schedule_data->schedule_date:'' }}" class="form-control" placeholder="Schedule Date">
+                         <input type="hidden" name="course_id" value="{{ (!empty($course_subject->course_id))?$course_subject->course_id:'' }}" />
+                         <input type="hidden" name="subject_id" value="{{ (!empty($course_subject->id))?$course_subject->id:'' }}" />
+                         <input type="hidden" name="subject_schedule_id" value="{{ (!empty($subject_schedule_data->id))?$subject_schedule_data->id:'' }}" />
+                         <select name="schedule_date" class="form-control">
+                            <option value="">--Select Days--</option>
+                            @foreach ($days_list as $list)
+                            <option {{ (!empty($subject_schedule_data->schedule_date) && $subject_schedule_data->schedule_date==$list)?'selected':'' }} value="{{ $list }}">{{ $list }}</option>
+                            @endforeach
+                         </select>
                      </div>
                  </div>
                  <div class="row mb-4">
-                    <div style="display: flex;" class="col-5">
-                        Time From: <input type="time" name="time_from" value="{{ (!empty($schedule_data->time_from))?$schedule_data->time_from:'' }}" class="form-control" placeholder="Schedule Title">
+                    <div style="display: flex;" class="col-3">
+                        Time From: <input type="time" name="time_from" value="{{ (!empty($subject_schedule_data->time_from))?$subject_schedule_data->time_from:'' }}" class="form-control" placeholder="Schedule Title">
                     </div>
-                    <div style="display: flex;" class="col-5">
-                        Time To: <input type="time" name="time_to" value="{{ (!empty($schedule_data->time_to))?$schedule_data->time_to:'' }}" class="form-control" placeholder="Schedule Title">
+                    <div style="display: flex;" class="col-3">
+                        Time To: <input type="time" name="time_to" value="{{ (!empty($subject_schedule_data->time_to))?$subject_schedule_data->time_to:'' }}" class="form-control" placeholder="Schedule Title">
                     </div>
                     <div class="col">
                         <input type="submit" class="btn btn-primary">
                      </div>
                  </div>
+
             </form>
         </div>
         <div class="row layout-top-spacing">
@@ -67,32 +68,21 @@
                                 <th>Schedule Title</th>
                                 <th>Schedule Date</th>
                                 <th>Class Schedule Time</th>
-                                <th>Is Done</th>
                                 <th class="no-content">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($schedule_list as $row)
+                            @forelse ($subject_schedule_list as $row)
                             <tr class="">
                                 <td>{{ (!empty($row->id))?$row->id:'' }}</td>
                                 <td>{{ (!empty($row->title))?$row->title:'' }}</td>
                                 <td>{{ (!empty($row->schedule_date))?date('F d Y',strtotime($row->schedule_date)):'' }}</td>
                                 <th>{{ (!empty($row->time_from))?$row->time_from:'' }} - {{ (!empty($row->time_to))?$row->time_to:'' }}</th>
                                 <td>
-                                    <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
-                                        <div class="input-checkbox">
-                                            <span class="switch-chk-label label-left">On</span>
-                                            <input {{ ($row->is_done==1)?'checked':'' }} data-action="{{ URL::to('schedule-status-change') }}" data-id="{{ $row->id }}" class="schedule-status-change switch-input" type="checkbox"
-                                                    role="switch" id="form-custom-switch-inner-text">
-                                            <span class="switch-chk-label label-right">Off</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <a target="_blank" href="{{ URL::to('subject/schedule-details/'.$row->id) }}" class="badge badge-pill bg-primary">
+                                    <!--<a target="_blank" href="" class="badge badge-pill bg-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye text-white"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                    </a>
-                                    <a href="{{ URL::to('subject/class-schedule/'.$main_subject_id.'/'.'edit/'.$row->id) }}" class="badge badge-pill bg-warning">
+                                    </a>-->
+                                    <a href="{{ URL::to('subject/schedule/'.$main_subject_id.'/'.'edit/'.$row->id) }}" class="badge badge-pill bg-warning">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                     </a>
                                     <a href="{{ URL::to('subject/attendance/'.$row->id) }}" class="badge badge-pill bg-danger">
@@ -110,7 +100,9 @@
                     </table>
                 </div>
             </div>
+
         </div>
+
     </div>
 </div>
 <script src="{{ asset('web/js/jquery.js') }}"></script>

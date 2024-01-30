@@ -970,4 +970,16 @@ trait Service
 
         return $randomString;
     }
+    public static function days_list(){
+        $results = array(
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday',
+        );
+        return $results;
+    }
 }

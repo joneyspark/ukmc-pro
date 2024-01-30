@@ -26,6 +26,7 @@ use App\Models\Course\CourseCategories;
 use App\Models\Course\CourseIntake;
 use App\Models\Course\CourseLevel;
 use App\Models\Course\CourseSubject;
+use App\Models\Course\SubjectSchedule;
 use App\Models\User;
 use  Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
@@ -326,12 +327,12 @@ class CourseController extends Controller{
     }
     public function course_subject($id=NULL,$edit=NULL,$subject_id=NULL){
         $data['page_title'] = 'Course | Subject';
-        $data['intake_id'] = $id;
+        $data['course_id'] = $id;
         $data['subject_id'] = $subject_id;
         if($subject_id){
             $data['subject_data'] = CourseSubject::where('id',$subject_id)->first();
         }
-        $data['subjects'] = CourseSubject::where('course_intake_id',$id)->orderBy('id','desc')->paginate(15);
+        $data['subjects'] = CourseSubject::where('course_id',$id)->orderBy('id','desc')->paginate(15);
         $data['course'] = true;
         return view('course/subject',$data);
     }
@@ -340,20 +341,19 @@ class CourseController extends Controller{
             'title'=>'required',
             'duration'=>'required',
         ]);
-        $get_intake = CourseIntake::where('id',$request->intake_id)->first();
+        //$get_intake = CourseIntake::where('id',$request->intake_id)->first();
         if($request->subject_id){
             $subject = CourseSubject::where('id',$request->subject_id)->first();
         }else{
             $subject = new CourseSubject();
         }
-        $subject->course_id = $get_intake->course_id;
-        $subject->course_intake_id = $get_intake->id;
+        $subject->course_id = $request->course_id;
         $subject->title = $request->title;
         $subject->description = $request->description;
         $subject->duration = $request->duration;
         $subject->save();
         Session::flash('success','Subject Data Updated');
-        return redirect('course/subject/'.$get_intake->id);
+        return redirect('course/subject/'.$subject->course_id);
     }
     public function subject_intake_status_change(Request $request){
         $subjectData = CourseSubject::where('id',$request->subject_id)->first();
@@ -394,34 +394,46 @@ class CourseController extends Controller{
         $data['schedule_list'] = ClassSchedule::where('subject_id',$id)->orderBy('id','desc')->paginate(15);
         return view('course/subject/schedule',$data);
     }
+    //couese subject schedule
+    public function course_subject_schedule($id=NULL,$edit=NULL,$schedule_id=NULL){
+        $data['page_title'] = 'Subject | Schedule Create';
+        $data['course'] = true;
+        if($id){
+            $data['course_subject'] = CourseSubject::where('id',$id)->first();
+        }
+        if(!empty($schedule_id)){
+            $data['subject_schedule_data'] = SubjectSchedule::where('id',$schedule_id)->first();
+        }
+        $data['main_subject_id'] = $id;
+        $data['days_list'] = Service::days_list();
+        $data['subject_schedule_list'] = SubjectSchedule::where('subject_id',$id)->orderBy('id','desc')->paginate(15);
+        return view('course/subject/SubjectSchedule',$data);
+    }
     //subject schedule data store
     public function subject_schedule_data_post(Request $request){
         $request->validate([
             'title'=>'required',
-            'schedule_date'=>'required',
             'time_from'=>'required',
             'time_to'=>'required',
         ]);
-        if($request->schedule_id){
-            $schedule = ClassSchedule::where('id',$request->schedule_id)->first();
+        if($request->subject_schedule_id){
+            $schedule = SubjectSchedule::where('id',$request->subject_schedule_id)->first();
         }else{
-            $schedule = new ClassSchedule();
+            $schedule = new SubjectSchedule();
         }
         $schedule->course_id = $request->course_id;
-        $schedule->intake_id = $request->intake_id;
         $schedule->subject_id = $request->subject_id;
-        $schedule->intake_date = $request->intake_date;
         $schedule->title = $request->title;
         $schedule->schedule_date = $request->schedule_date;
         $schedule->time_from = $request->time_from;
         $schedule->time_to = $request->time_to;
-        if(!$request->schedule_id){
+        if(!$request->subject_schedule_id){
             $slug = Str::slug($request->title,'-');
             $schedule->slug = $slug.Service::randomString();
         }
         $schedule->save();
-        Session::flash('success','Class Schedule Data Updated');
-        return redirect('subject/class-schedule/'.$schedule->subject_id);
+        Session::flash('success','Subject Schedule Data Updated');
+        return redirect('subject/schedule/'.$schedule->subject_id);
     }
     public function schedule_status_change(Request $request){
         $scheduleData = ClassSchedule::where('id',$request->schedule_id)->first();

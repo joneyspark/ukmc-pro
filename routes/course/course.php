@@ -24,7 +24,6 @@ Route::controller(CourseController::class)->group(function () {
     Route::post('course/subject/data-post','course_subject_data_post');
     Route::post('course/subject-intake-status','subject_intake_status_change');
     Route::get('subject/class-schedule/{id?}/{edit?}/{schedule_id?}','subject_schedule');
-    Route::post('subject-schedule-data-post','subject_schedule_data_post');
     Route::post('schedule-status-change','schedule_status_change');
     Route::get('subject/schedule-details/{id?}','schedule_details');
     Route::get('subject/class/student/attendence/{id?}/confirm','attendence_details');
@@ -41,6 +40,8 @@ Route::controller(CourseController::class)->group(function () {
     Route::get('class/schedule/quick-attendence','quick_attendence');
     Route::get('reset-schedule-list','reset_schedule_list');
     Route::post('class/schedule/schedule-note-post','application_note_post');
+    Route::get('subject/schedule/{id?}/{edit?}/{schedule_id?}', 'course_subject_schedule');
+    Route::post('course/subject/subject-schedule-data-post','subject_schedule_data_post');
 });
 Route::controller(CourseCategoryController::class)->group(function () {
     Route::get('course-categories/{id?}', 'course_categories');
