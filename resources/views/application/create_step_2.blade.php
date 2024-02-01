@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 @endif
-                
+
             </div>
             <div class="modal-footer">
                 <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
@@ -458,7 +458,7 @@
                                 <td>{{ (!empty($application_data->sop->paraphrase_percent))?$application_data->sop->paraphrase_percent.'%':'0%' }}</td>
                                 <td>{{ (!empty($application_data->sop->unique_percent))?$application_data->sop->unique_percent.'%':'0% Unique' }}</td>
                             </tr>
-                            
+
                         </table>
                         @endif
                     </div>
@@ -526,6 +526,12 @@
                                     <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
                                 </div>
                                 @endif
+                            @endif
+                            @if(Auth::user()->role=='subAgent')
+                            <div class="button-action mt-3">
+                                <a href="{{ URL::to('application-create/'.$application_id) }}" class="btn btn-secondary btn-prev me-3">Prev</a>
+                                <button type="submit" class="btn btn-secondary btn-nxt">Next</button>
+                            </div>
                             @endif
                             @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager')
                             <div class="button-action mt-3">

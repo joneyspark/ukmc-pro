@@ -40,6 +40,9 @@ class LoginController extends Controller
                     if(Auth::user()->role=='agent'){
                         return redirect('agent-applications');
                     }
+                    if(Auth::user()->role=='subAgent'){
+                        return redirect('sub-agent-applications');
+                    }
                     return redirect('/');
                 }else{
                     Auth::logout();

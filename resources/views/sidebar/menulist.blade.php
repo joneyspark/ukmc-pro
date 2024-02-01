@@ -31,7 +31,7 @@
         </li>
         @endif
 
-        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='interviewer' || Auth::user()->role=='manager' || Auth::user()->role=='student' || Auth::user()->role=='agent')
+        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='interviewer' || Auth::user()->role=='manager' || Auth::user()->role=='student' || Auth::user()->role=='agent' || Auth::user()->role=='subAgent')
         <li class="menu {{ (!empty($application) && $application==true)?'active':'' }}">
             <a href="#datatables1" data-bs-toggle="collapse" aria-expanded="{{ (!empty($application) && $application==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">
@@ -60,6 +60,11 @@
                 @if(Auth::check() && Auth::user()->role=='manager')
                 <li class="{{ (!empty($my_assigned_application_list) && $my_assigned_application_list==true)?'active':'' }}">
                     <a href="{{ URL::to('my-assigned-applications') }}"> My Application</a>
+                </li>
+                @endif
+                @if(Auth::check() && Auth::user()->role=='subAgent')
+                <li class="{{ (!empty($sub_agent_application) && $sub_agent_application==true)?'active':'' }}">
+                    <a href="{{ URL::to('sub-agent-applications') }}">My Applications</a>
                 </li>
                 @endif
                 @if(Auth::check() && Auth::user()->role=='agent')
@@ -141,7 +146,7 @@
             </ul>
         </li>
         @endif
-        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+        @if(Auth::check() && Auth::user()->role=='agent' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer' || Auth::user()->role=='subAgent')
         <li class="menu {{ (!empty($course) && $course==true)?'active':'' }}">
             <a href="#datatables3" data-bs-toggle="collapse" aria-expanded="{{ (!empty($course) && $course==true)?'true':'false' }}" class="dropdown-toggle">
                 <div class="">

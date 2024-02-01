@@ -95,7 +95,6 @@
                                @endif
                            </select>
                         </div>
-
                         <div class="col-3">
                             <select id="intake" name="intake" class="form-control" onchange="getAgentApplicationData()">
                                 <option value="">Select Intake</option>
@@ -109,29 +108,19 @@
                     </div>
                     <div class="row">
                         <div class="col-2">
-                            <select id="sub_agent_id" name="sub_agent_id" class="form-control" onchange="getAgentApplicationData()">
-                                <option value="">Sub Agents</option>
-                                @if(count($sub_agents) > 0)
-                                @foreach ($sub_agents as $sub_agent)
-                                <option {{ (!empty($get_sub_agent_id) && $get_sub_agent_id==$sub_agent->id)?'selected':'' }} value="{{ $sub_agent->id }}">{{ $sub_agent->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div>
-                        <div class="col-2">
                             <input value="{{ (!empty($get_from_date))?$get_from_date:'' }}" name="from_date" id="from_date" type="date" class="form-control" placeholder="From Date" onchange="getAgentApplicationData()">
                         </div>
                         <div class="col-2">
                             <input value="{{ (!empty($get_to_date))?$get_to_date:'' }}" name="to_date" id="to_date" type="date" class="form-control" placeholder="To Date" onchange="getAgentApplicationData()">
                         </div>
-                        <div class="col-4">
+                        <div class="col-5">
                             <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter ID,Name,Email,Phone">
                         </div>
                         <div class="col-1">
                            <input type="submit" value="Filter" name="time" class="btn btn-warning">
                         </div>
                         <div class="col-1">
-                           <a href="{{ URL::to('reset-agent-application-search') }}" class="btn btn-danger">Reset</a>
+                           <a href="{{ URL::to('reset-sub-agent-application-search') }}" class="btn btn-danger">Reset</a>
                         </div>
                     </div>
                 </div>
@@ -272,8 +261,7 @@
         var interview_status = $('#interview_status').val();
         var from_date = $('#from_date').val();
         var to_date = $('#to_date').val();
-        var sub_agent_id = $('#sub_agent_id').val();
-        window.location = "{{ URL::to('agent-applications?campus=') }}" + campus + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date "&sub_agent_id=" + sub_agent_id;
+        window.location = "{{ URL::to('sub-agent-applications?campus=') }}" + campus + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date;
     }
     function writeNote(id){
         if(id===null){

@@ -46,7 +46,7 @@
                                     <div class="form-group mb-4"><label for="exampleFormControlInput1">Agent
                                             Name*</label>
                                             <input type="hidden" name="company_id" value="{{ $company_data->id }}" />
-                                            <input type="hidden" name="user_role" value="agent" />
+                                            <input type="hidden" name="user_role" value="subAgent" />
                                             <input name="agent_name" value="{{ old('agent_name') }}" type="text" class="form-control">
                                             @if ($errors->has('agent_name'))
                                                 <span class="text-danger">{{ $errors->first('agent_name') }}</span>

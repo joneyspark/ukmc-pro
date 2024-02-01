@@ -67,6 +67,7 @@
                         @endif
                         @if(Auth::check())
                             @if(Auth::user()->role=='student')
+                            <input type="hidden" name="company_id" value="46" />
                             <div class="col-7 form-group mb-4">
                                 <label for="verticalFormStepform-name">Reference (Optional):</label>
                                 <input name="reference" value="{{ (!empty($app_data->reference))?$app_data->reference:'' }}" type="text" class="form-control" id="verticalFormStepform-name" placeholder="">
@@ -99,7 +100,7 @@
                             @endif
                         @endif
                         @if(Auth::check())
-                            @if(Auth::user()->role=='agent')
+                            @if(Auth::user()->role=='agent' || Auth::user()->role=='subAgent')
                                 <input type="hidden" name="company_id" value="{{ Auth::user()->company_id }}" />
                             @endif
                         @endif

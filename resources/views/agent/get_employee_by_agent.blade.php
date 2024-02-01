@@ -34,7 +34,8 @@
             <h5 class="p-3">Employee List</h5>
             <div class="row">
                 <div class="col-12">
-                    <a style="float: right;" class="btn btn-secondary" href="{{ URL::to('create-employee-by-agent/'.$company_data->id.'/new') }}">+ Add Employee</a>
+                    <a style="float: right;" class="btn btn-secondary" href="{{ URL::to('create-employee-by-agent/'.$company_data->id.'/new') }}">+ Add Employee</a>&nbsp;
+                    <a style="float: right;" class="btn btn-warning" href="{{ URL::to('create-sub-agent-by-agent/'.$company_data->id.'/new') }}">+ Add Sub Agent</a>&nbsp;
                 </div>
             </div>
             <div class="row layout-top-spacing">
@@ -83,6 +84,8 @@
                                         <td>
                                             @if($agent->is_admin==1)
                                             <span class="text-success">Admin</span>
+                                            @elseif($agent->is_admin==0 && $agent->role=='subAgent')
+                                            <span class="text-danger">Sub Agent</span>
                                             @else
                                             <span class="text-success">Employee</span>
                                             @endif

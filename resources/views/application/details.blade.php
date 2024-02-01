@@ -33,7 +33,7 @@
                         <div class="container bg-dark py-5 px-5 rounded">
                             @if($app_data->company_id > 0)
                             <div id="MainContent_DV_FundedBy" class="row mb-4 px-5">
-                                <div class="col">Agent</div>
+                                <div class="col">Agent/Company/Direct :</div>
                                 <div class="col"><span id="MainContent_lbl_FundedBy">{{ (!empty($app_data->company->company_name))?$app_data->company->company_name:'' }}</span></div>
                             </div>
                             @endif

@@ -21,6 +21,7 @@ Route::controller(AgentController::class)->group(function () {
     Route::get('edit-agent-by-super-admin/{id?}/edit','edit_agent_by_super_admin');
     Route::post('edit-agent-by-super-admin-post','edit_agent_by_super_admin_post');
     Route::get('get-employee-by-agent','get_employee_by_agent');
+    Route::get('create-sub-agent-by-agent/{id?}/new','create_sub_agent_by_agent');
     Route::get('create-employee-by-agent/{id?}/new','create_employee_by_agent');
     Route::post('create-employee-by-agent-post','create_employee_by_agent_post');
     Route::get('edit-employee-by-agent/{id?}/edit','edit_employee_by_agent');

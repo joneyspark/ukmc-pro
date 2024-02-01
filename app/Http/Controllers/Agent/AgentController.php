@@ -664,6 +664,20 @@ class AgentController extends Controller{
         $data['agent'] = true;
         return view('agent/create_employee_by_agent',$data);
     }
+    //create employee by agent
+    public function create_sub_agent_by_agent(){
+        if(!Auth::check() && Auth::user()->is_admin != 1){
+            Session::flash('error','Login First! Create Campus!');
+            return redirect('login');
+        }
+        $data['page_title'] = 'Agents | Create New Sub Agent';
+        $data['agent_user'] = true;
+        $data['agent_user_list'] = true;
+        $data['company_data'] = Company::where('id',Auth::user()->company_id)->first();
+        $data['countries'] = Service::countries();
+        $data['agent'] = true;
+        return view('agent/create_sub_agent_by_agent',$data);
+    }
     //post agent employee data
     public function create_employee_by_agent_post(CreateEmpAgentByAdminRequest $request){
         $first_name = "";
@@ -683,7 +697,7 @@ class AgentController extends Controller{
         }
         $user->first_name = $first_name;
         $user->last_name = $last_name;
-        $user->role = 'agent';
+        $user->role = $request->user_role;
         $user->email = $request->email;
         $user->phone = $request->agent_phone;
         //slug create
@@ -732,6 +746,7 @@ class AgentController extends Controller{
         Session::flash('success','New Agent Employee Created Successfully!');
         return redirect('get-employee-by-agent');
     }
+
     //edit part
     public function edit_employee_by_agent($id=NULL){
         if(!Auth::check()){
