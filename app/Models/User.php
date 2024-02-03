@@ -93,4 +93,7 @@ class User extends Authenticatable
     public function interviewer_applications(){
         return $this->hasMany(Application::class,'interviewer_id','id');
     }
+    public function agent_applications(){
+        return $this->hasMany(Application::class,'create_by','id');
+    }
 }

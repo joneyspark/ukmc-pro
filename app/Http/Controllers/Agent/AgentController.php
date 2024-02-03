@@ -15,6 +15,7 @@ use App\Models\Agent\Company;
 use App\Models\Agent\CompanyDirector;
 use App\Models\Agent\CompanyDocument;
 use App\Models\Agent\CompanyReference;
+use App\Models\Application\Application;
 use App\Models\Setting\CompanySetting;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -643,7 +644,7 @@ class AgentController extends Controller{
         $data['page_title'] = 'Agent | Employee List';
         $data['agent_user'] = true;
         $data['agent_user_list'] = true;
-        $data['agent_data'] = User::where('company_id',Auth::user()->company_id)->orderBy('id','desc')->paginate(10);
+        $data['agent_data'] = User::withCount(['agent_applications'])->where('company_id',Auth::user()->company_id)->orderBy('id','desc')->paginate(10);
         $data['company_data'] = Company::where('id',Auth::user()->company_id)->first();
         $data['countries'] = Service::countries();
         $data['agent'] = true;
@@ -974,5 +975,36 @@ class AgentController extends Controller{
     public function agent_request_confimation(){
         $data['page_title'] = 'Agent Request | Confirmation';
         return view('agent/application/thankyou',$data);
+    }
+    //tranfer application
+    public function get_sub_agent_for_transfer_application($id=NULL){
+        $select = '';
+        $users = User::where('id','!=',$id)->where('role','subAgent')->where('company_id',Auth::user()->company_id)->get();
+        foreach($users as $user){
+            $select .= '<option value="'.$user->id.'">'.$user->name.'</option>';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select
+        );
+        return response()->json($data);
+    }
+    public function transfer_application_to_other_sub_agent(Request $request){
+        $get_from_id = $request->from_sub_agent_id;
+        $assign_to_id = $request->assign_to_user_id;
+        if(!$assign_to_id){
+            Session::flash('error','Assign To Sub Agent Not Found!');
+            return redirect('get-employee-by-agent');
+        }
+        $getApplications = Application::where('create_by',$get_from_id)->get();
+        if(!$getApplications){
+            Session::flash('error','This Sub Don,t have any application right now!');
+            return redirect('get-employee-by-agent');
+        }
+        foreach($getApplications as $row){
+            $update = Application::where('id',$row->id)->update(['create_by'=>$request->assign_to_user_id]);
+        }
+        Session::flash('success','Successfully Transfer All Applcation To This User!');
+        return redirect('get-employee-by-agent');
     }
 }

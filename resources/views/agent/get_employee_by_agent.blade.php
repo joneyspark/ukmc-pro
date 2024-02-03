@@ -1,5 +1,40 @@
 @extends('adminpanel')
 @section('admin')
+    <div class="modal fade inputForm-modal" id="assignToModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header" id="inputFormModalLabel">
+                <h5 class="modal-title"><b>Assign Application To Other Subagent</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <div class="mt-0">
+                <form action="{{ URL::to('transfer-application-to-other-sub-agent') }}" id="" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col">
+                                <div class="form-group mb-4"><label for="exampleFormControlInput1">Assign To User:</label>
+                                    <input type="hidden" value="" name="from_sub_agent_id" id="from_sub_agent_id" />
+                                    <select name="assign_to_user_id" id="assign_to_user_id" class="form-select">
+
+                                    </select>
+                                    {{-- @if ($errors->has('assign_to_user_id'))
+                                        <span class="text-danger">{{ $errors->first('assign_to_user_id') }}</span>
+                                    @endif --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
+                        <button id="btn-note-submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" >Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
     <div class="layout-px-spacing">
         <div class="middle-content container-xxl p-0">
             <div class="secondary-nav">
@@ -79,7 +114,7 @@
                                             {{ $agent->phone }}
                                         </td>
                                         <td>
-                                            Total: 1
+                                            Total: {{ $agent->agent_applications_count }}
                                         </td>
                                         <td>
                                             @if($agent->is_admin==1)
@@ -113,6 +148,14 @@
                                                         </path>
                                                     </svg>
                                                 </a>
+                                                @if($agent->role=='subAgent')
+                                                <a onclick="getSubAgent({{ $agent->id }})" href="javascript://" data-bs-toggle="modal" data-bs-target="#assignToModal" class="badge badge-pill bg-danger">
+                                                    <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-diff" viewBox="0 0 16 16">
+                                                        <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4zm-2.5 6.5A.5.5 0 0 1 6 10h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z"></path>
+                                                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"></path>
+                                                    </svg>
+                                                </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -133,5 +176,17 @@
             </div>
         </div>
     </div>
-
+    <script src="{{ asset('web/js/jquery.js') }}"></script>
+    <script>
+        function getSubAgent(getId){
+            //var getId = $('#assign_to_manager_id').val();
+            $('#from_sub_agent_id').val(getId);
+            $.get('{{ URL::to('get-sub-agent-for-transfer-application') }}/'+getId,function(data,status){
+                if(data['result']['key']===200){
+                    console.log(data['result']['val']);
+                    $('#assign_to_user_id').html(data['result']['val']);
+                }
+            });
+        }
+    </script>
 @stop

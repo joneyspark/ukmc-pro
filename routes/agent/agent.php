@@ -34,4 +34,6 @@ Route::controller(AgentController::class)->group(function () {
     Route::get('reset-pending-company-list','reset_pending_company_list');
     Route::get('edit-pending-agent/{id?}','edit_pending_agent');
     Route::post('request-agent-application-data-post','request_agent_application_data_post');
+    Route::get('get-sub-agent-for-transfer-application/{id?}','get_sub_agent_for_transfer_application');
+    Route::post('transfer-application-to-other-sub-agent','transfer_application_to_other_sub_agent');
 });
