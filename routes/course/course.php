@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Course\CourseCategoryController;
-
+use App\Http\Controllers\Course\GroupController;
 
 Route::controller(CourseController::class)->group(function () {
     Route::get('course-create', 'create');
@@ -42,6 +42,7 @@ Route::controller(CourseController::class)->group(function () {
     Route::post('class/schedule/schedule-note-post','application_note_post');
     Route::get('subject/schedule/{id?}/{edit?}/{schedule_id?}', 'course_subject_schedule');
     Route::post('course/subject/subject-schedule-data-post','subject_schedule_data_post');
+
 });
 Route::controller(CourseCategoryController::class)->group(function () {
     Route::get('course-categories/{id?}', 'course_categories');
@@ -52,4 +53,7 @@ Route::controller(CourseCategoryController::class)->group(function () {
     Route::post('course-level-store', 'level_store');
     Route::post('level-status-change', 'level_status_change');
 
+});
+Route::controller(GroupController::class)->group(function () {
+    Route::get('course/group/{id?}/{edit?}/{group_id?}','create_course_group');
 });

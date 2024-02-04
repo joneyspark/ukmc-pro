@@ -86,23 +86,24 @@
                         <span class="text-danger">{{ $errors->first('document_type') }}</span>
                     @endif
                 </div>
-                @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager' || Auth::user()->role=='interviewer')
-                <div class="col form-group mb-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="is_view" value="1" id="flexRadioDefault1" checked>
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            View By All
-                        </label>
+                @if(Auth::check())
+                    @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager' || Auth::user()->role=='interviewer')
+                    <div class="col form-group mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_view" value="1" id="flexRadioDefault1" checked>
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                View By All
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_view" value="2" id="flexRadioDefault2">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                View By UKMC
+                            </label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="is_view" value="2" id="flexRadioDefault2">
-                        <label class="form-check-label" for="flexRadioDefault2">
-                            View By UKMC
-                        </label>
-                    </div>
-                </div>
+                    @endif
                 @endif
-
             </div>
             <div class="modal-footer">
                 <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
@@ -436,30 +437,35 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-secondary btn-nxt">Submit</button>
-                            @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
-                                @if(!empty($application_data->sop->id))
-                                    <a href="{{ URL::to('sop-plagiarism-check/'.$application_data->sop->id) }}" class="btn btn-danger btn-nxt">SOP Plagiarism Check</a>
+                            @if(Auth::check())
+                                @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+                                    @if(!empty($application_data->sop->id))
+                                        <a href="{{ URL::to('sop-plagiarism-check/'.$application_data->sop->id) }}" class="btn btn-danger btn-nxt">SOP Plagiarism Check</a>
+                                    @endif
                                 @endif
                             @endif
-                        </form>
-                        @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
-                        <hr>
-                        <h5>SOP Plagiarism Result</h5>
-                        <table class="table table-bordered">
-                            <tr>
-                                <td>Total Queries</td>
-                                <td>Plag Percent</td>
-                                <td>Paraphrase Percent</td>
-                                <td>Unique Percent</td>
-                            </tr>
-                            <tr>
-                                <td>{{ (!empty($application_data->sop->total_queries))?$application_data->sop->total_queries:'0' }}</td>
-                                <td>{{ (!empty($application_data->sop->plag_percent))?$application_data->sop->plag_percent.'%':'0%' }}</td>
-                                <td>{{ (!empty($application_data->sop->paraphrase_percent))?$application_data->sop->paraphrase_percent.'%':'0%' }}</td>
-                                <td>{{ (!empty($application_data->sop->unique_percent))?$application_data->sop->unique_percent.'%':'0% Unique' }}</td>
-                            </tr>
 
-                        </table>
+                        </form>
+                        @if(Auth::check())
+                            @if(Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+                            <hr>
+                            <h5>SOP Plagiarism Result</h5>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>Total Queries</td>
+                                    <td>Plag Percent</td>
+                                    <td>Paraphrase Percent</td>
+                                    <td>Unique Percent</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ (!empty($application_data->sop->total_queries))?$application_data->sop->total_queries:'0' }}</td>
+                                    <td>{{ (!empty($application_data->sop->plag_percent))?$application_data->sop->plag_percent.'%':'0%' }}</td>
+                                    <td>{{ (!empty($application_data->sop->paraphrase_percent))?$application_data->sop->paraphrase_percent.'%':'0%' }}</td>
+                                    <td>{{ (!empty($application_data->sop->unique_percent))?$application_data->sop->unique_percent.'%':'0% Unique' }}</td>
+                                </tr>
+
+                            </table>
+                            @endif
                         @endif
                     </div>
                     <div class="row"><hr>

@@ -7,6 +7,7 @@ use App\Http\Requests\Course\CourseCreateRequest;
 use App\Http\Requests\Course\CourseEditRequest;
 use App\Models\Agent\Company;
 use App\Models\Application\Application;
+use App\Models\Application\ApplicationIntake;
 use App\Models\Application\ApplicationStatus;
 use App\Models\Campus\Campus;
 use App\Models\Course\AttendenceConfirmation;
@@ -302,6 +303,7 @@ class CourseController extends Controller{
         if($intake_id){
             $data['intake_data'] = CourseIntake::where('id',$intake_id)->first();
         }
+        $data['intake_list'] = ApplicationIntake::where('status',0)->orderBy('id','desc')->get();
         $data['intakes_data'] = Service::get_intake_with_next_year();
         $data['course_id'] = $id;
         $data['intakes'] = CourseIntake::where('course_id',$id)->orderBy('id','desc')->paginate(15);
