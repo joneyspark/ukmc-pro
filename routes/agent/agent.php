@@ -36,4 +36,6 @@ Route::controller(AgentController::class)->group(function () {
     Route::post('request-agent-application-data-post','request_agent_application_data_post');
     Route::get('get-sub-agent-for-transfer-application/{id?}','get_sub_agent_for_transfer_application');
     Route::post('transfer-application-to-other-sub-agent','transfer_application_to_other_sub_agent');
+    Route::get('get-sub-agent-applications/{id?}','get_sub_agent_applications');
+    Route::post('application-assign-to-other-sub-agent','application_assign_to_other_sub_agent');
 });
