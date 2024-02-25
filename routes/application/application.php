@@ -75,6 +75,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('sop-data-post','sop_data_post');
     Route::get('sop-plagiarism-check/{id?}','sop_plagiarism_check');
     Route::get('sop-plagiarism-check-from-processing/{id?}','sop_plagiarism_check_from_processing');
+    Route::get('reset-enrolled-application-search','reset_enrolled_application_search');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

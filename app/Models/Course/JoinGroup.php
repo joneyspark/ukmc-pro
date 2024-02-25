@@ -5,10 +5,10 @@ namespace App\Models\Course;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CourseGroup extends Model
+class JoinGroup extends Model
 {
     use HasFactory;
-    public function total_application(){
-        return $this->hasMany(JoinGroup::class,'group_id');
+    public function group(){
+        return $this->belongsTo(CourseGroup::class,'group_id');
     }
 }

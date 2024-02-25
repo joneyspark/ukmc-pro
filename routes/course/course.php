@@ -55,5 +55,9 @@ Route::controller(CourseCategoryController::class)->group(function () {
 
 });
 Route::controller(GroupController::class)->group(function () {
-    Route::get('course/group/{id?}/{edit?}/{group_id?}','create_course_group');
+    Route::get('create-course-group/{id?}/{edit?}/{group_id?}','create_course_group');
+    Route::get('course-intake-group-list/{id?}','course_intake_group_list');
+    Route::post('course/group-data-post','group_data_post');
+    Route::post('course/group-status-change','group_status_change');
+    Route::post('join-to-group','join_group');
 });

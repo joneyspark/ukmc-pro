@@ -47,6 +47,7 @@ use App\Models\Application\MeetingDocument;
 use App\Models\Application\Note;
 use App\Models\Application\Qualification;
 use App\Models\Application\Status;
+use App\Models\Course\CourseGroup;
 use App\Models\Setting\CompanySetting;
 use App\Models\University\University;
 use Illuminate\Support\Facades\File;
@@ -1125,6 +1126,16 @@ class ApplicationController extends Controller{
         Session::put('get_to_date','');
         return redirect('all-application');
     }
+    public function reset_enrolled_application_search(){
+        Session::put('get_campus','');
+        Session::put('get_agent','');
+        Session::put('get_officer','');
+        Session::put('get_status','');
+        Session::put('get_intake','');
+        Session::put('search','');
+        Session::put('get_interview_status','');
+        return redirect('enrolled-students');
+    }
     public function reset_my_assigned_application_search(){
         Session::put('get_campus','');
         Session::put('get_agent','');
@@ -1208,12 +1219,19 @@ class ApplicationController extends Controller{
         Session::put('get_status',$get_status);
         Session::put('get_intake',$get_intake);
         Session::put('search',$search);
-
+        //01753298639
+        $data['courses'] = Course::where('status',1)->orderBy('id','desc')->get();
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = Company::where('status',1)->get();
         $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
         $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
+        $data['intake_list'] = ApplicationIntake::where('status',0)->orderBy('id','desc')->get();
+        if(!empty($get_intake)){
+            $data['course_groups'] = CourseGroup::withCount(['total_application'])->where('intake',$get_intake)->get();
+        }else{
+            $data['course_groups'] = [];
+        }
 
         $data['application_list'] = Application::query()
         ->when($search, function ($query, $search) {
