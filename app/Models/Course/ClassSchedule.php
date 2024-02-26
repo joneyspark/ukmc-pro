@@ -18,4 +18,7 @@ class ClassSchedule extends Model{
     public function intake(){
         return $this->belongsTo(CourseIntake::class,'intake_id');
     }
+    public function subject_schedule(){
+        return $this->belongsTo(SubjectSchedule::class,'subject_schedule_id');
+    }
 }

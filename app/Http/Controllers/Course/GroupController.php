@@ -41,6 +41,7 @@ use Carbon\Carbon;
 
 class GroupController extends Controller
 {
+    use Service;
     public function create_course_group($id=NULL,$edit=NULL,$group_id=NULL){
         $data['page_title'] = 'Course | Group';
         $data['intake_id'] = $id;
@@ -149,7 +150,7 @@ class GroupController extends Controller
         //dd($data['list']);
         return view('group/group_list',$data);
     }
-    //get intake data 
+    //get intake data
     public function get_intake_data($id=NULL){
         $intakes = CourseIntake::where('course_id',$id)->get();
         $select = '';
@@ -189,7 +190,7 @@ class GroupController extends Controller
         );
         return response()->json($data,200);
     }
-    //attendence group details 
+    //attendence group details
     public function attendence_group_details($id=NULL){
         $data['group_data'] = CourseGroup::where('id',$id)->first();
         if(!$data['group_data']){
@@ -200,7 +201,38 @@ class GroupController extends Controller
         $data['course_data'] = Course::with(['course_subjects'])->where('id',$data['get_intake_info']->course_id)->first();
         $data['current_date'] = Carbon::now()->format('l');
         $data['today_schedules'] = SubjectSchedule::with(['course','subject'])->where('course_id',$data['course_data']->id)->where('schedule_date',$data['current_date'])->get();
+        $data['class_schedule_list'] = ClassSchedule::with(['subject_schedule'])->where('group_id',$data['group_data']->id)->orderBy('id','desc')->paginate(15);
+        
         //dd($data['today_schedules']);
         return view('group/details',$data);
+    }
+    //make class schedules
+    public function make_class_schedules(Request $request){
+        $group_data = CourseGroup::where('id',$request->group_id)->first();
+        if(!$group_data){
+            Session::flash('error','Group Data Not Found! Server Error!');
+            return redirect()->back();
+        }
+        $subject_schedule_data = SubjectSchedule::where('id',$request->subject_schedule_id)->first();
+        if(!$subject_schedule_data){
+            Session::flash('error','Subject Schedule Data Not Found! Server Error!');
+            return redirect()->back();
+        }
+        $schedule = new ClassSchedule();
+        $schedule->course_id = $subject_schedule_data->course_id;
+        $schedule->subject_id = $subject_schedule_data->subject_id;
+        $schedule->subject_schedule_id = $subject_schedule_data->id;
+        $schedule->title = $subject_schedule_data->title;
+        $schedule->schedule_date = date('Y-m-d',time());
+        $schedule->time_from = $subject_schedule_data->time_from;
+        $schedule->time_to = $subject_schedule_data->time_to;
+        $slug = Str::slug($subject_schedule_data->title,'-');
+        $schedule->slug = $slug.Service::randomString();
+        $schedule->intake_id = $group_data->course_intake_id;
+        $schedule->intake_date = $group_data->intake;
+        $schedule->group_id = $group_data->id;
+        $schedule->save();
+        Session::flash('success','Successfully Make Class Schedule For Attendence!');
+        return redirect()->back();
     }
 }

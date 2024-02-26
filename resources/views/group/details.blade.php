@@ -28,7 +28,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <h5>Today is <span class="btn btn-primary">{{ $current_date }}</span></h5>
-
+                    <span>Create Class Schedule Based On The Subject Schedule</span>
+                    <input type="hidden" id="group_id" name="group_id" value="{{ (!empty($group_data->id))?$group_data->id:'' }}" />
                     <table class="table table-bordered table-responsive">
                         <tr>
                             <th>Course</th>
@@ -46,7 +47,7 @@
                                 <td>{{ (!empty($trow->schedule_date))?$trow->schedule_date:'' }}</td>
                                 <td>{{ (!empty($trow->time_from))?$trow->time_from:'' }} - {{ (!empty($trow->time_to))?$trow->time_to:'' }}</td>
                                 <td>
-                                    <a href="{{ URL::to('make-class-schedule-for-attendence/'.$trow->id) }}" class="badge badge-pill bg-secondary">
+                                    <a href="javascript://" onclick="mainFunc({{ $trow->id }})" class="badge badge-pill bg-secondary">
                                         <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down-right" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M8.636 12.5a.5.5 0 0 1-.5.5H1.5A1.5 1.5 0 0 1 0 11.5v-10A1.5 1.5 0 0 1 1.5 0h10A1.5 1.5 0 0 1 13 1.5v6.636a.5.5 0 0 1-1 0V1.5a.5.5 0 0 0-.5-.5h-10a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h6.636a.5.5 0 0 1 .5.5z"/>
                                             <path fill-rule="evenodd" d="M16 15.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1 0-1h3.793L6.146 6.854a.5.5 0 1 1 .708-.708L15 14.293V10.5a.5.5 0 0 1 1 0v5z"/>
@@ -55,14 +56,14 @@
                                 </td>
                             </tr>
                         @empty
-                            
+
                         @endforelse
 
                     </table>
                 </div>
             </div>
         </div>
-        <h5 class="pt-3">All Group Here</h5>
+        <h5 class="pt-3">Attendence Schedule Here</h5>
         <div class="row layout-top-spacing">
 
             <div class="col-xl-7 col-lg-7 col-sm-7 layout-spacing">
@@ -71,30 +72,47 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Group ID</th>
                                     <th>Title</th>
-                                    <th>No Of Student</th>
+                                    <th>Schedule Create Date</th>
+                                    <th>Schedule Day</th>
+                                    <th>Schedule Time</th>
                                     <th>Is Complete</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
-                            
+
                         </table>
-                        
+
                     </div>
                 </div>
             </div>
             <div class="col-xl-5 col-lg-5 col-sm-5 layout-spacing">
                 <div class="widget-content widget-content-area br-8">
-                    
+                    @forelse($course_data->course_subjects as $key => $subject)
                     <nav class="breadcrumb-style-three  mb-3" aria-label="breadcrumb">
-                        <span class="">Hello this is subject</span>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item"><a href="#">Library</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Data</li>
+                        <span class="">{{ (!empty($subject->title))?$subject->title:'' }}</span>
+                        @php
+                            $sehedule_list = App\Models\Course\SubjectSchedule::where('subject_id',$subject->id)->orderBy('id','desc')->get();
+                        @endphp
+                        @foreach($sehedule_list as $key => $srow)
+                        <ol class="breadcrumb mt-2">
+                            <li class="breadcrumb-item">{{ (!empty($srow->title))?$srow->title:'' }}</li>
+                            <li class="breadcrumb-item">{{ (!empty($srow->schedule_date))?$srow->schedule_date:'' }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ (!empty($srow->time_from))?$srow->time_from:'' }} - {{ (!empty($srow->time_to))?$srow->time_to:'' }}</a></li>
+                            <li class="breadcrumb-item">
+                                <a class="badge badge-pill bg-secondary" href="#">
+                                    <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8.636 12.5a.5.5 0 0 1-.5.5H1.5A1.5 1.5 0 0 1 0 11.5v-10A1.5 1.5 0 0 1 1.5 0h10A1.5 1.5 0 0 1 13 1.5v6.636a.5.5 0 0 1-1 0V1.5a.5.5 0 0 0-.5-.5h-10a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h6.636a.5.5 0 0 1 .5.5z"/>
+                                        <path fill-rule="evenodd" d="M16 15.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1 0-1h3.793L6.146 6.854a.5.5 0 1 1 .708-.708L15 14.293V10.5a.5.5 0 0 1 1 0v5z"/>
+                                    </svg>
+                                </a>
+                            </li>
                         </ol>
+                        @endforeach
                     </nav>
+                    @empty
+
+                    @endforelse
                 </div>
             </div>
 
@@ -160,5 +178,16 @@
 
        });
    });
+   </script>
+   <script>
+    function mainFunc(x){
+        if(confirm('Are You Sure To Create New Class Schedule For Attendence?')){
+            var subject_schedule_id = x;
+            var group_id = $('#group_id').val();
+            console.log(x);
+            console.log($('#group_id').val());
+            window.location = "{{ URL::to('make-class-schedules?subject_schedule_id=') }}" + subject_schedule_id + "&group_id=" + group_id;
+        }
+    }
    </script>
 @stop

@@ -64,4 +64,5 @@ Route::controller(GroupController::class)->group(function () {
     Route::get('get-intake-data/{id?}','get_intake_data');
     Route::post('group-data-status-change','group_data_status_change');
     Route::get('attendence-group-details/{id?}','attendence_group_details');
+    Route::get('make-class-schedules','make_class_schedules');
 });
