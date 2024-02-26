@@ -60,4 +60,8 @@ Route::controller(GroupController::class)->group(function () {
     Route::post('course/group-data-post','group_data_post');
     Route::post('course/group-status-change','group_status_change');
     Route::post('join-to-group','join_group');
+    Route::get('attendence-groups','attendence_groups');
+    Route::get('get-intake-data/{id?}','get_intake_data');
+    Route::post('group-data-status-change','group_data_status_change');
+    Route::get('attendence-group-details/{id?}','attendence_group_details');
 });

@@ -37,6 +37,7 @@ use MeiliSearch\Client;
 use Illuminate\Support\Str;
 use App\Models\Course\CourseGroup;
 use App\Models\Course\JoinGroup;
+use Carbon\Carbon;
 
 class GroupController extends Controller
 {
@@ -116,5 +117,90 @@ class GroupController extends Controller
         }
         Session::flash('success',count($arrayIds) . 'Applicaton Assigned On This Group!');
         return redirect()->back();
+    }
+    //attendence group
+    public function attendence_groups(Request $request){
+        $data['page_title'] = 'Attendence | Group List';
+        $data['attend'] = true;
+        $data['attendence_groups'] = true;
+        $get_course_id = $request->course_id;
+        $get_intake_id = $request->intake_id;
+        Session::put('get_course_id',$get_course_id);
+        Session::put('get_intake_id',$get_intake_id);
+        if($get_course_id){
+            $data['intake_list'] = CourseIntake::where('course_id',$get_course_id)->get();
+        }else{
+            $data['intake_list'] = [];
+        }
+        $data['list'] = CourseGroup::query()
+        ->withCount(['total_application'])
+        ->when($get_intake_id, function ($query, $get_intake_id) {
+            return $query->where('course_intake_id',$get_intake_id);
+        })
+        ->orderBy('id','desc')
+        ->paginate(15)
+        ->appends([
+            'intake_id' => $get_intake_id,
+            'course_id' => $get_course_id,
+        ]);
+        $data['course_list'] = Course::where('status',1)->get();
+        $data['get_course_id'] = Session::get('get_course_id');
+        $data['get_intake_id'] = Session::get('get_intake_id');
+        //dd($data['list']);
+        return view('group/group_list',$data);
+    }
+    //get intake data 
+    public function get_intake_data($id=NULL){
+        $intakes = CourseIntake::where('course_id',$id)->get();
+        $select = '';
+        $select .= '<option value="">Select Intake</option>';
+        foreach($intakes as $row){
+            $select .= '<option value="'.$row->id.'">'.$row->title.'</option>';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select
+        );
+        return response()->json($data,200);
+    }
+    //group is complete status change
+    public function group_data_status_change(Request $request){
+        $groupData = CourseGroup::where('id',$request->group_id)->first();
+        if(!$groupData){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Group Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($groupData->status==1){
+            $groupData->status = 0;
+            $groupData->save();
+            $msg = 'Group Roll Back';
+        }else{
+            $groupData->status = 1;
+            $groupData->save();
+            $msg = 'Group Attendence Task Complete';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
+    }
+    //attendence group details 
+    public function attendence_group_details($id=NULL){
+        $data['group_data'] = CourseGroup::where('id',$id)->first();
+        if(!$data['group_data']){
+            Session::flash('error','Group Data Not Found! Server Error');
+            return redirect()->back();
+        }
+        $data['get_intake_info'] = CourseIntake::where('id',$data['group_data']->course_intake_id)->first();
+        $data['course_data'] = Course::with(['course_subjects'])->where('id',$data['get_intake_info']->course_id)->first();
+        $data['current_date'] = Carbon::now()->format('l');
+        $data['today_schedules'] = SubjectSchedule::with(['course','subject'])->where('course_id',$data['course_data']->id)->where('schedule_date',$data['current_date'])->get();
+        //dd($data['today_schedules']);
+        return view('group/details',$data);
     }
 }

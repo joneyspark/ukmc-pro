@@ -86,4 +86,7 @@ class Course extends Model
     public function applications(){
         return $this->hasMany(Application::class);
     }
+    public function course_subjects(){
+        return $this->hasMany(CourseSubject::class,'course_id');
+    }
 }

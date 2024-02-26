@@ -184,6 +184,26 @@
             </ul>
         </li>
         @endif
+        @if(Auth::check() && Auth::user()->role=='adminManager' || Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+        <li class="menu {{ (!empty($attend) && $attend==true)?'active':'' }}">
+            <a href="#datatables10" data-bs-toggle="collapse" aria-expanded="{{ (!empty($attend) && $attend==true)?'true':'false' }}" class="dropdown-toggle">
+                <div class="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book-open"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    <span>Attendence</span>
+                </div>
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+            </a>
+            <ul class="{{ (!empty($attend) && $attend==true)?'collapse show':'collapse' }} submenu list-unstyled" id="datatables10" data-bs-parent="#accordionExample">
+                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+                <li class="{{ (!empty($attendence_groups) && $attendence_groups==true)?'active':'' }}">
+                    <a href="{{ URL::to('attendence-groups') }}"> Attendence Groups</a>
+                </li>
+                @endif
+            </ul>
+        </li>
+        @endif
         @if(Auth::check() && Auth::user()->role=='agent' && Auth::user()->is_admin==1)
         <li class="menu {{ (!empty($agent_user) && $agent_user==true)?'active':'' }}">
             <a href="{{ URL::to('get-employee-by-agent') }}" data-bs-toggle="" aria-expanded="false" class="dropdown-toggle">
