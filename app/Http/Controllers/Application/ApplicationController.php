@@ -14,6 +14,7 @@ use App\Mail\Application\applicationStatusUpdateMail;
 use App\Mail\Application\conditionalOffer;
 use App\Mail\Application\englishAssesmentMail;
 use App\Mail\Application\meetingNoteConfirm;
+use App\Mail\Application\unconditionalOffer;
 use App\Mail\Interview\interviewResitMail;
 use App\Mail\Interview\interviewStatusMail;
 use App\Mail\Interview\interviewSuccessMail;
@@ -43,6 +44,7 @@ use App\Models\Application\ApplicationStatus;
 use App\Models\Application\Experience;
 use App\Models\Application\Followup;
 use App\Models\Application\InterviewStatus;
+use App\Models\Application\InviteUnconditionalOffer;
 use App\Models\Application\Meeting;
 use App\Models\Application\MeetingDocument;
 use App\Models\Application\Note;
@@ -1602,6 +1604,19 @@ class ApplicationController extends Controller{
                 'offer_letter_text'=>$offer_letter_text,
             ];
             Mail::to($application->email)->send(new conditionalOffer($details));
+        }elseif($update_status->id==12){
+            $new = new InviteUnconditionalOffer();
+            $new->application_id = $application->id;
+            $new->link = Service::randomString();
+            $new->save();
+            $details = [
+                'application_data'=>$application,
+                'current_status'=>$current_status,
+                'update_status'=>$update_status,
+                'company'=>CompanySetting::where('id',1)->first(),
+                'link'=>url('unconditional-offer-invite/'.$new->link),
+            ];
+            Mail::to($application->email)->send(new unconditionalOffer($details));
         }else{
             $details = [
                 'application_data'=>$application,
