@@ -374,6 +374,8 @@
                 //alert(status);
                 if(status == 9){
                     $('#offer-box').show();
+                }else{
+                    $('#offer-box').hide();
                 }
             }
         </script>
