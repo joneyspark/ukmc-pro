@@ -76,6 +76,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('sop-plagiarism-check/{id?}','sop_plagiarism_check');
     Route::get('sop-plagiarism-check-from-processing/{id?}','sop_plagiarism_check_from_processing');
     Route::get('reset-enrolled-application-search','reset_enrolled_application_search');
+    Route::post('transfer-application-to-another-sub-agent','transfer_application_to_another_sub_agent');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

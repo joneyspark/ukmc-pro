@@ -113,6 +113,9 @@ class Application extends Model
     public function interviewer(){
         return $this->belongsTo(User::class,'interviewer_id','id');
     }
+    public function sub_agent(){
+        return $this->belongsTo(User::class,'create_by');
+    }
     public function sop(){
         return $this->hasOne(ApplicationSop::class);
     }

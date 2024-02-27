@@ -237,13 +237,22 @@
                                         <div style="margin: 5px;" class="col-10">
                                             <div class="form-group mb-2"><label for="exampleFormControlInput1">Select Status</label>
                                                 @if(count($application_status_list) > 0)
-                                                <select data-id="{{ (!empty($application_info->id))?$application_info->id:'' }}" data-action="{{ URL::to('application-status-change') }}" name="status" class="application-status-change form-control">
+                                                <select data-id="{{ (!empty($application_info->id))?$application_info->id:'' }}" data-action="{{ URL::to('application-status-change') }}" name="status" id="status" class="application-status-change form-control" onchange="offerFuncCalled()">
                                                     <option value="">--Select One--</option>
                                                     @foreach ($application_status_list as $status)
                                                     <option {{ ($application_info->status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
                                                     @endforeach
                                                 </select>
-                                                <button id="status-confirmed" onclick="application_status_change()" id="btn-followup-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light">Confirm</button>
+                                                @if(!empty($application_info->conditional_offer_text))
+                                                <div id="offer-box" class="mt-2">
+                                                    <textarea id="offer_letter_text" name="offer_letter_text" class="form-control">{{ $application_info->conditional_offer_text }}</textarea>
+                                                </div>
+                                                @else
+                                                <div id="offer-box" style="display: none;" class="mt-2">
+                                                    <textarea id="offer_letter_text" name="offer_letter_text" class="form-control"></textarea>
+                                                </div>
+                                                @endif
+                                                <button id="status-confirmed" onclick="application_status_change()" id="btn-followup-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light mt-1">Confirm</button>
                                                 @endif
                                             </div>
                                         </div>

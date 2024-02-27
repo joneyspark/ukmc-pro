@@ -34,6 +34,47 @@
       </div>
     </div>
 </div>
+<div class="modal fade inputForm-modal" id="transModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header" id="inputFormModalLabel">
+            <h5 class="modal-title"><b>Transfer Application To Another Sub Agent</b></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <div class="mt-0">
+            <form action="{{ URL::to('transfer-application-to-another-sub-agent') }}" enctype="multipart/form-data" method="post">
+                @csrf
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Sub Agent List:</label>
+                                <input type="hidden" name="application_id" id="application_id" />
+                                <select name="sub_agent_id" class="form-control">
+                                    <option value="">--Select Sub Agent--</option>
+                                    @forelse ($sub_agents as $agent)
+                                    <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                                    @empty
+                                        
+                                    @endforelse
+                                </select>
+                                @if ($errors->has('sub_agent_id'))
+                                    <span class="text-danger">{{ $errors->first('sub_agent_id') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
+                    <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" >Submit</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+</div>
 <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <div class="secondary-nav">
@@ -149,6 +190,8 @@
                                     <th>Application ID</th>
                                     <th>Name</th>
                                     <th>Campus</th>
+                                    <th>Is SubAgent Application</th>
+                                    <th>SubAgent Name</th>
                                     <th>Create date</th>
                                     <th>Intake</th>
                                     <th>Make Note</th>
@@ -175,6 +218,18 @@
                                         </div>
                                     </td>
                                     <td>{{ (!empty($row->campus->campus_name)?$row->campus->campus_name:'') }}</td>
+                                    <td>
+                                        @if($row->sub_agent->role=="subAgent")
+                                        <span>Yes</span>
+                                        @else
+                                        <span>No</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($row->sub_agent->role=="subAgent")
+                                        <span>{{ $row->sub_agent->name }}</span>
+                                        @endif
+                                    </td>
                                     <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>
                                     <td>
                                         {{ date('F Y',strtotime($row->intake)) }}
@@ -236,6 +291,14 @@
                                                 <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
                                             </svg>
                                         </a>
+                                        @if($row->sub_agent->role != "subAgent")
+                                        <a data-bs-toggle="modal" data-bs-target="#transModal" href="javascript:void(0);" class="badge badge-pill bg-danger" onclick="transferAppication({{ $row->id }})">
+                                            <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-app-indicator" viewBox="0 0 16 16">
+                                                <path d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1z"/>
+                                                <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                            </svg>
+                                        </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @empty
@@ -262,7 +325,8 @@
         padding: 0.45rem 1rem !important;
     }
 </style>
-<script src="{{ asset('web/js/jquery.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{{-- <script src="{{ asset('web/js/jquery.js') }}"></script> --}}
 <script>
     //search agent application data
     function getAgentApplicationData(){
@@ -275,18 +339,21 @@
         var sub_agent_id = $('#sub_agent_id').val();
         window.location = "{{ URL::to('agent-applications?campus=') }}" + campus + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date "&sub_agent_id=" + sub_agent_id;
     }
-    function writeNote(id){
-        if(id===null){
-            return false;
-        }
-        $('#note_application_id').val(id);
-    }
+    
 </script>
 @if($errors->has('application_note'))
 <script>
     $(document).ready(function() {
         $('#inputFormModal').modal('show');
     });
+</script>
+@endif
+
+@if($errors->has('sub_agent_id'))
+<script>
+$(document).ready(function() {
+    $('#transModal').modal('show');
+});
 </script>
 @endif
 @stop

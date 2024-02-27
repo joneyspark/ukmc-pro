@@ -301,13 +301,16 @@ function task_status_change(){
 //application status change
 function application_status_change(){
     var status = $('.application-status-change').val();
+    var offer_letter_text = $('#offer_letter_text').val();
     var application_id = $('.application-status-change').data('id');
     $('#status-confirmed').attr('disabled', true);
     var url = $('.application-status-change').data('action');
-        $.post(url,
+    $.post(url,
         {
             application_id: application_id,
-            status: status
+            status: status,
+            offer_letter_text: offer_letter_text,
+
         },
         function(data, status){
             console.log(data);
@@ -338,11 +341,8 @@ function application_status_change(){
                 $('#status-confirmed').attr('disabled', false);
 
             }
-            //alert("Data: " + data + "\nStatus: " + status);
         });
-        // setTimeout(function () {
-        //     location.reload(true);
-        // }, 3000);
+        
 }
 function getCourse(){
     var campus_id = $('#campus_id').val();

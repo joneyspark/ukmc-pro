@@ -45,6 +45,12 @@
                                 </div>
                             </div>
                             @endif
+                            @if($app_data->sub_agent->role=="subAgent")
+                            <div class="row mb-4 px-5">
+                                <div class="col">Sub Agent Application : </div>
+                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->sub_agent->name))?$app_data->sub_agent->name:'' }}</span></div>
+                            </div>
+                            @endif
                             <div class="row mb-4 px-5">
                                 <div class="col">Name : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->name))?$app_data->name:'' }}</span></div>

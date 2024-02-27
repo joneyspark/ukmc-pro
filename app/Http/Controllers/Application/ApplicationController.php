@@ -11,6 +11,7 @@ use App\Http\Requests\Application\ApplicationStep2Request;
 use App\Http\Requests\Application\ApplicationStep3Request;
 use App\Http\Requests\Application\Step1Request;
 use App\Mail\Application\applicationStatusUpdateMail;
+use App\Mail\Application\conditionalOffer;
 use App\Mail\Application\englishAssesmentMail;
 use App\Mail\Application\meetingNoteConfirm;
 use App\Mail\Interview\interviewResitMail;
@@ -767,6 +768,7 @@ class ApplicationController extends Controller{
         $data['interview_statuses'] = InterviewStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
         $data['agent_applications'] = Application::query()
+        ->with(['sub_agent'])
         ->when($search, function ($query, $search) {
             return $query->where(function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%')
@@ -834,6 +836,22 @@ class ApplicationController extends Controller{
         $data['get_application_id'] = Session::get('get_application_id');
         //$data['agent_applications'] = Application::where('company_id',Auth::user()->company_id)->orderBy('id','desc')->paginate(10);
         return view('application.agent.all',$data);
+    }
+    //transfer application to another sub agent 
+    public function transfer_application_to_another_sub_agent(Request $request){
+        $request->validate([
+            'sub_agent_id'=>'required',
+            'application_id'=>'required',
+        ]);
+        $get_app = Application::where('id',$request->application_id)->first();
+        if(!$get_app){
+            Session::flash('error','Application Data Not Found!');
+            return redirect()->back();
+        }
+        $get_app->create_by = $request->sub_agent_id;
+        $get_app->save();
+        Session::flash('success','Application Successfully Transfered To Another Sub Agent!');
+        return redirect()->back();
     }
     public function sub_agent_applications(Request $request){
         $data['page_title'] = 'Sub Agent | Applications';
@@ -923,15 +941,16 @@ class ApplicationController extends Controller{
         //$data['agent_applications'] = Application::where('company_id',Auth::user()->company_id)->orderBy('id','desc')->paginate(10);
         return view('application.agent.sub_agent_applications',$data);
     }
+    
     public function agent_application_details($id=NULL){
         $data['page_title'] = 'Application | All';
         $data['application'] = true;
         $data['application_all'] = true;
         $data['my_application_list'] = true;
         if(Auth::user()->role=='agent'){
-            $data['app_data'] = Application::where('company_id',Auth::user()->company_id)->where('id',$id)->first();
+            $data['app_data'] = Application::with(['sub_agent'])->where('company_id',Auth::user()->company_id)->where('id',$id)->first();
         }else{
-            $data['app_data'] = Application::where('id',$id)->first();
+            $data['app_data'] = Application::with(['sub_agent'])->where('id',$id)->first();
         }
         return view('application.agent.details',$data);
     }
@@ -939,7 +958,7 @@ class ApplicationController extends Controller{
         $data['page_title'] = 'Application | All';
         $data['application'] = true;
         $data['application_all'] = true;
-        $data['app_data'] = Application::where('id',$id)->first();
+        $data['app_data'] = Application::with(['sub_agent'])->where('id',$id)->first();
         return view('application.details',$data);
     }
     public function pending_applications(){
@@ -1526,6 +1545,7 @@ class ApplicationController extends Controller{
     //application status change
     public function application_status_change(Request $request){
         $application = Application::where('id',$request->application_id)->first();
+        $offer_letter_text = $request->offer_letter_text;
         if(!$application){
             $data['result'] = array(
                 'key'=>101,
@@ -1572,6 +1592,16 @@ class ApplicationController extends Controller{
                 'create_user'=>User::where('id',$follow->user_id)->first(),
             ];
             Mail::to($application->email)->send(new englishAssesmentMail($details));
+        }elseif($update_status->id==9){
+            $updateApp = Application::where('id',$request->application_id)->update(['conditional_offer_text'=>$offer_letter_text]);
+            $details = [
+                'application_data'=>$application,
+                'current_status'=>$current_status,
+                'update_status'=>$update_status,
+                'company'=>CompanySetting::where('id',1)->first(),
+                'offer_letter_text'=>$offer_letter_text,
+            ];
+            Mail::to($application->email)->send(new conditionalOffer($details));
         }else{
             $details = [
                 'application_data'=>$application,

@@ -80,6 +80,37 @@
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                @forelse ($class_schedule_list as $srow)
+                                <tr>
+                                    <td>{{ (!empty($srow->title))?$srow->title:'' }}</td>
+                                    <td>{{ (!empty($srow->schedule_date))?date('F d Y',strtotime($srow->schedule_date)):'' }}</td>
+                                    <td>{{ (!empty($srow->subject_schedule->schedule_date))?$srow->subject_schedule->schedule_date:'' }}</td>
+                                    <td>{{ (!empty($srow->time_from))?$srow->time_from:'' }} - {{ (!empty($srow->time_to))?$srow->time_to:'' }}</td>
+                                    <td>
+                                        <div
+                                            class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
+                                            <div class="input-checkbox">
+                                                <span class="switch-chk-label label-left">Yes</span>
+                                                <input {{ ($srow->is_done==1)?'checked':'' }} data-action="{{ URL::to('group-is-done-status-change') }}" data-id="{{ $srow->id }}" class="group-is-done-status-change switch-input" type="checkbox"
+                                                                            role="switch" id="form-custom-switch-inner-text">
+                                                <span class="switch-chk-label label-right">No</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="{{ URL::to('group-attendence/'.$srow->id) }}" class="badge badge-pill bg-warning">
+                                            <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down-right" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M8.636 12.5a.5.5 0 0 1-.5.5H1.5A1.5 1.5 0 0 1 0 11.5v-10A1.5 1.5 0 0 1 1.5 0h10A1.5 1.5 0 0 1 13 1.5v6.636a.5.5 0 0 1-1 0V1.5a.5.5 0 0 0-.5-.5h-10a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h6.636a.5.5 0 0 1 .5.5z"/>
+                                                <path fill-rule="evenodd" d="M16 15.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1 0-1h3.793L6.146 6.854a.5.5 0 1 1 .708-.708L15 14.293V10.5a.5.5 0 0 1 1 0v5z"/>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @empty
+                                    
+                                @endforelse
+                            </tbody>
 
                         </table>
 
@@ -100,7 +131,7 @@
                             <li class="breadcrumb-item">{{ (!empty($srow->schedule_date))?$srow->schedule_date:'' }}</li>
                             <li class="breadcrumb-item active" aria-current="page">{{ (!empty($srow->time_from))?$srow->time_from:'' }} - {{ (!empty($srow->time_to))?$srow->time_to:'' }}</a></li>
                             <li class="breadcrumb-item">
-                                <a class="badge badge-pill bg-secondary" href="#">
+                                <a class="badge badge-pill bg-secondary" onclick="subFunc({{ $srow->id }})" href="javascript://">
                                     <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down-right" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M8.636 12.5a.5.5 0 0 1-.5.5H1.5A1.5 1.5 0 0 1 0 11.5v-10A1.5 1.5 0 0 1 1.5 0h10A1.5 1.5 0 0 1 13 1.5v6.636a.5.5 0 0 1-1 0V1.5a.5.5 0 0 0-.5-.5h-10a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h6.636a.5.5 0 0 1 .5.5z"/>
                                         <path fill-rule="evenodd" d="M16 15.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1 0-1h3.793L6.146 6.854a.5.5 0 1 1 .708-.708L15 14.293V10.5a.5.5 0 0 1 1 0v5z"/>
@@ -189,5 +220,61 @@
             window.location = "{{ URL::to('make-class-schedules?subject_schedule_id=') }}" + subject_schedule_id + "&group_id=" + group_id;
         }
     }
+    function subFunc(x){
+        if(confirm('Are You Sure To Create New Class Schedule For Attendence?')){
+            var subject_schedule_id = x;
+            var group_id = $('#group_id').val();
+            console.log(x);
+            console.log($('#group_id').val());
+            window.location = "{{ URL::to('make-class-schedules?subject_schedule_id=') }}" + subject_schedule_id + "&group_id=" + group_id;
+        }
+    }
+   </script>
+   <script>
+    $(function(){
+       $('.group-is-done-status-change').change(function(){
+           var status = $(this).prop('checked') == true ? 0 : 1;
+           var class_schedule_id = $(this).data('id');
+           var url = $(this).data('action');
+               $.post(url,
+               {
+                   class_schedule_id: class_schedule_id,
+                   status: status
+               },
+               function(data, status){
+                   console.log(data);
+                   if(data['result']['key']===101){
+                       iziToast.show({
+                           title: 'Info',
+                           message: data['result']['val'],
+                           position: 'topRight',
+                           timeout: 8000,
+                           color: 'red',
+                           balloon: true,
+                           close: true,
+                           progressBarColor: 'yellow',
+                       });
+                       setTimeout(function () {
+                           location.reload(true);
+                       }, 2000);
+                   }
+                   if(data['result']['key']===200){
+                       iziToast.show({
+                           title: 'Info',
+                           message: data['result']['val'],
+                           position: 'topRight',
+                           timeout: 8000,
+                           color: 'green',
+                           balloon: true,
+                           close: true,
+                           progressBarColor: 'yellow',
+                       });
+
+                   }
+                   //alert("Data: " + data + "\nStatus: " + status);
+               });
+
+       });
+   });
    </script>
 @stop

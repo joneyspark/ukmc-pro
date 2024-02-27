@@ -235,4 +235,46 @@ class GroupController extends Controller
         Session::flash('success','Successfully Make Class Schedule For Attendence!');
         return redirect()->back();
     }
+    //group is done status change
+    public function group_is_done_status_change(Request $request){
+        $classSchedule = ClassSchedule::where('id',$request->class_schedule_id)->first();
+        if(!$classSchedule){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Class Schedule Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($classSchedule->is_done==1){
+            $classSchedule->is_done = 0;
+            $classSchedule->save();
+            $msg = 'Class Schedule Roll Back Again';
+        }else{
+            $classSchedule->is_done = 1;
+            $classSchedule->save();
+            $msg = 'Class Schedule Task Complete';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
+    }
+    //group attendence
+    public function group_attendence($id){
+        $data['page_title'] = 'Group | Attendance';
+        $data['course'] = true;
+        $getSchedule = ClassSchedule::where('id',$id)->first();
+        if(!$getSchedule){
+            Session::flash('error','Schedule Data Not Found!');
+            return redirect()->back();
+        }
+        $data['schedule_id'] = $id;
+
+        $data['applicants'] = JoinGroup::where('group_id',$getSchedule->group_id)->paginate(15);
+        //$data['applicants'] = Application::with(['applicant_attendence'])->where('course_id',$getSchedule->course_id)->where('intake',$getSchedule->intake_date)->where('status',11)->paginate(50);
+        //dd($data['applicants']);
+        return view('course/subject/attendence',$data);
+    }
 }

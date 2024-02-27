@@ -357,6 +357,25 @@
                 }
 
             }
+            function writeNote(id){
+                if(id===null){
+                    return false;
+                }
+                $('#note_application_id').val(id);
+            }
+            function transferAppication(id){
+                if(id===null){
+                    return false;
+                }
+                $('#application_id').val(id);
+            }
+            function offerFuncCalled(){
+                var status = $('#status').val();
+                //alert(status);
+                if(status == 9){
+                    $('#offer-box').show();
+                }
+            }
         </script>
         @include('ajax.application')
 
