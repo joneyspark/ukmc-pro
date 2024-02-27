@@ -839,7 +839,7 @@ class ApplicationController extends Controller{
         //$data['agent_applications'] = Application::where('company_id',Auth::user()->company_id)->orderBy('id','desc')->paginate(10);
         return view('application.agent.all',$data);
     }
-    //transfer application to another sub agent 
+    //transfer application to another sub agent
     public function transfer_application_to_another_sub_agent(Request $request){
         $request->validate([
             'sub_agent_id'=>'required',
@@ -943,7 +943,7 @@ class ApplicationController extends Controller{
         //$data['agent_applications'] = Application::where('company_id',Auth::user()->company_id)->orderBy('id','desc')->paginate(10);
         return view('application.agent.sub_agent_applications',$data);
     }
-    
+
     public function agent_application_details($id=NULL){
         $data['page_title'] = 'Application | All';
         $data['application'] = true;
@@ -2498,6 +2498,84 @@ class ApplicationController extends Controller{
         $sop->save();
         Session::flash('success','Plagiarism Result Successfully Generated!');
         return redirect('application/'.$sop->application_id.'/processing');
+    }
+    //unconditional offer invite
+    public function unconditional_offer_invite($id=NULL){
+        $data['getData'] = InviteUnconditionalOffer::where('link',$id)->first();
+        if(!$data['getData']){
+            Session::flash('error','Link Not Working! Server Error!');
+            return redirect('login');
+        }
+        $data['application_data'] = Application::where('id',$data['getData']->application_id)->first();
+        return view('application/invite/unconditional',$data);
+    }
+    //offer accepted
+    public function offer_accepted($id=NULL){
+        $getData = InviteUnconditionalOffer::where('link',$id)->first();
+        if(!$getData){
+            Session::flash('error','Link Not Working! Server Error!');
+            return redirect()->back();
+        }
+        if($getData->status==1){
+            Session::flash('warning','Link Already In Use! Call To Administrator For New Unconditional Offer!');
+            return redirect()->back();
+        }
+        $application = Application::where('id',$getData->application_id)->first();
+        $application->status = 17;
+        $application->save();
+        $update = InviteUnconditionalOffer::where('id',$getData->id)->update(['status'=>1]);
+        Session::flash('success','Successfully Accepted Of This Invitation!');
+        return redirect()->back();
+    }
+    //submit decline offer
+    public function submit_decline_offer(Request $request){
+        $request->validate([
+            'decline_note'=>'required',
+        ]);
+        $getData = InviteUnconditionalOffer::where('link',$request->decline_link)->first();
+        if(!$getData){
+            Session::flash('error','Link Not Working! Server Error!');
+            return redirect()->back();
+        }
+        if($getData->status==1){
+            Session::flash('warning','Link Already In Use! Call To Administrator For New Unconditional Offer!');
+            return redirect()->back();
+        }
+        $getData->reason = $request->decline_note;
+        $getData->status = 1;
+        $getData->accept = 2;
+        $getData->save();
+        //update application
+        $application = Application::where('id',$getData->application_id)->first();
+        $application->status = 8;
+        $application->save();
+        Session::flash('success','Unconditional Offer Declined!');
+        return redirect()->back();
+    }
+    //submit defer offer
+    public function submit_defer_offer(Request $request){
+        $request->validate([
+            'defer_note'=>'required',
+        ]);
+        $getData = InviteUnconditionalOffer::where('link',$request->defer_link)->first();
+        if(!$getData){
+            Session::flash('error','Link Not Working! Server Error!');
+            return redirect()->back();
+        }
+        if($getData->status==1){
+            Session::flash('warning','Link Already In Use! Call To Administrator For New Unconditional Offer!');
+            return redirect()->back();
+        }
+        $getData->reason = $request->defer_note;
+        $getData->status = 1;
+        $getData->accept = 3;
+        $getData->save();
+        //update application
+        $application = Application::where('id',$getData->application_id)->first();
+        $application->status = 5;
+        $application->save();
+        Session::flash('success','Unconditional Offer Deferred!');
+        return redirect()->back();
     }
 
 }

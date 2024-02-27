@@ -61,14 +61,14 @@
     <h2>Application Status Updated</h2><br>
     <p>Dear {{ (!empty($details['application_data']->name))?$details['application_data']->name:'' }},</p><br><br>
     <p>We are delighted to inform that you have been issued an <span class="spn-from">Unconditional offer</span> letter to study at UK Management College in partnership with CCCU.</p><br><br>
-    <p>Please note that this offer is valid subject to receiving a registration invitation email from CCCU. </p><br><br>
-    
+    <p>Please note that this offer is valid subject to receiving a registration invitation email from CCCU. </p><br>
+
     <p>
       <strong>Application Id:</strong> {{ (!empty($details['application_data']->id))?$details['application_data']->id:'' }}<br>
 	    <strong>Course Title:</strong> {{ (!empty($details['application_data']->course->course_name))?$details['application_data']->course->course_name:'' }}<br>
 	    <strong>University Campus:</strong> {{ (!empty($details['application_data']->campus->campus_name))?$details['application_data']->campus->campus_name:'' }}<br>
       <strong>Intake:</strong> {{ (!empty($details['application_data']->intake))?date('F Y',strtotime($details['application_data']->intake)):'' }}
-    </p><br><br>
+    </p><br>
     <p>Next Steps:</p>
     <p>1. <strong>Accept, </strong><strong>Decline </strong>or <strong>Defer</strong> your offer using the link provided below. </p>
     <p><a href="{{ $details['link'] }}" target="_blank">Offer letter link to be attached</a></p>
@@ -77,10 +77,10 @@
     <p>2. Complete your student finance application and send us the evidence.</p>
     <p>3. Confirm your classs group (you will receive an email soon from our registration team to select your timetable).</p>
     <p>4. Complete Registration (you will receive a registration invitation email from CCCU)</p>
-    <p>5. Join induction and complete the enrolment process as you will be sent separate emails to confirm the dates.</p><br><br><br>
+    <p>5. Join induction and complete the enrolment process as you will be sent separate emails to confirm the dates.</p><br><br>
     <p>If you have any queries and would like to discuss with us, please email us</p>
-    <p>at <a href="mailto:admissions@ukmc.ac.uk">admissions@ukmc.ac.uk</a> or call us on 01614780015</p><br><br><br>
-    
+    <p>at <a href="mailto:admissions@ukmc.ac.uk">admissions@ukmc.ac.uk</a> or call us on 01614780015</p><br><br>
+
 
     <p>Thank you.</p>
 

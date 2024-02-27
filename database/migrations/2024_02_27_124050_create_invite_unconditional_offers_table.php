@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('application_id')->nullable();
             $table->text('link')->nullable();
+            $table->text('reason')->nullable();
             $table->tinyInteger('accept')->default(1)->nullable();
             $table->tinyInteger('reject')->default(2)->nullable();
             $table->tinyInteger('deferred')->default(3)->nullable();

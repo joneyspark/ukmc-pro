@@ -243,7 +243,7 @@
                                                     <option {{ ($application_info->status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
                                                     @endforeach
                                                 </select>
-                                                @if(!empty($application_info->conditional_offer_text))
+                                                @if(!empty($application_info->conditional_offer_text) && $application_info->status==9)
                                                 <div id="offer-box" class="mt-2">
                                                     <textarea id="offer_letter_text" name="offer_letter_text" class="form-control">{{ $application_info->conditional_offer_text }}</textarea>
                                                 </div>

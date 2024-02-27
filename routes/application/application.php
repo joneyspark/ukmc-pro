@@ -78,6 +78,9 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('reset-enrolled-application-search','reset_enrolled_application_search');
     Route::post('transfer-application-to-another-sub-agent','transfer_application_to_another_sub_agent');
     Route::get('unconditional-offer-invite/{id?}','unconditional_offer_invite');
+    Route::get('offer-accepted/{id?}','offer_accepted');
+    Route::post('submit-decline-offer','submit_decline_offer');
+    Route::post('submit-defer-offer','submit_defer_offer');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {
