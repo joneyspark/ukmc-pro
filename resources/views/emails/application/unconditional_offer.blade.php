@@ -71,7 +71,7 @@
     </p><br>
     <p>Next Steps:</p>
     <p>1. <strong>Accept, </strong><strong>Decline </strong>or <strong>Defer</strong> your offer using the link provided below. </p>
-    <p><a href="{{ $details['link'] }}" target="_blank">Offer letter link to be attached</a></p>
+    <p><a href="{{ $details['link'] }}" target="_blank">Offer letter Link</a></p>
     <p>Please not that you should accept you offer letter within <strong>3 working days</strong> to secure your place for the intake.</p>
 
     <p>2. Complete your student finance application and send us the evidence.</p>

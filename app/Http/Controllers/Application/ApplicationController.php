@@ -81,7 +81,7 @@ class ApplicationController extends Controller{
         $data['a_list_university'] = University::where('status',0)->get();
         $data['app_data'] = Application::where('id',$id)->first();
         if($data['app_data']){
-            $data['course_list_data'] = Course::where('campus_id',$data['app_data']->campus_id)->get();
+            $data['course_list_data'] = Course::where('campus_id',$data['app_data']->campus_id)->where('status',1)->get();
         }
         //AddNewLead::dispatch('Hello this is test');
         return view('application/new/create_step_1',$data);
@@ -370,7 +370,7 @@ class ApplicationController extends Controller{
         $data['a_list_university'] = University::where('status',0)->get();
         $data['app_data'] = Application::where('id',$id)->first();
         if($data['app_data']){
-            $data['course_list_data'] = Course::where('campus_id',$data['app_data']->campus_id)->get();
+            $data['course_list_data'] = Course::where('campus_id',$data['app_data']->campus_id)->where('status',1)->get();
         }
         //AddNewLead::dispatch('Hello this is test');
         return view('application/create_step_1',$data);
@@ -1447,7 +1447,7 @@ class ApplicationController extends Controller{
             );
             return response()->json($data,200);
         }
-        $courses = Course::where('campus_id',$campus->id)->orderBy('course_name','asc')->get();
+        $courses = Course::where('campus_id',$campus->id)->where('status',1)->orderBy('course_name','asc')->get();
         if($courses){
             $select = '';
             $select .= '<option selected>Choose...</option>';
@@ -2576,6 +2576,40 @@ class ApplicationController extends Controller{
         $application->save();
         Session::flash('success','Unconditional Offer Deferred!');
         return redirect()->back();
+    }
+    //offer request list 
+    public function offer_request_list(Request $request){
+        $data['page_title'] = 'Application | Offer Request';
+        $data['application'] = true;
+        $data['offer_request_list'] = true;
+        $get_status_id = $request->status_id;
+        $get_intake = $request->intake;
+        
+        //Session set data
+        Session::put('get_status_id',$get_status_id);
+        Session::put('get_intake',$get_intake);
+
+        $data['intakes'] = $this->unique_intake_info();
+
+
+        $data['application_list'] = Application::query()
+        ->when($get_status_id, function ($query, $get_status_id) {
+            return $query->where('status',$get_status_id);
+        })
+        ->when($get_intake, function ($query, $get_intake) {
+            return $query->where('intake',$get_intake);
+        })
+        ->where('application_status_id',1)
+        ->where('admission_officer_id',Auth::user()->id)
+        ->orderBy('created_at','desc')
+        ->paginate(50)
+        ->appends([
+            'status' => $get_status_id,
+            'intake' => $get_intake,
+        ]);
+        $data['get_status_id'] = Session::get('get_status_id');
+        $data['get_intake'] = Session::get('get_intake');
+        return view('application/offer/offer_request_list',$data);
     }
 
 }
