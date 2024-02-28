@@ -187,7 +187,9 @@
             <textarea name="defer_note" class="form-textarea" rows="4" placeholder="Enter your defer note here"></textarea>
             <button class="form-button" type="submit">Submit</button>
         </form>
-    </div>
+    </div><br><br>
+    <p>Please do not sign the offer if any of the above details are incorrect.</p>
+    <p>Please send us email on <a href="mailto:admissions@ukmc.ac.uk">admissions@ukmc.ac.uk</a> or call us on 01614780015  to correct your details. Once the details are updated, you will be sent a new offer letter to sign.</p><br><br>
     <p>Thank you.</p>
 
     <p><b>Best regards,</b><br>

@@ -54,6 +54,38 @@
 		padding: 3px;
 		border-radius: 7%;
 	}
+  .offer-container {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .offer-link {
+        text-decoration: none;
+        color: #333;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        width: 106px; /* Set width to the image width */
+        margin: 0 auto; /* Center the block */
+    }
+
+    .offer-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .offer-text {
+        text-align: center;
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .offer-link:hover .offer-image {
+        transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
@@ -71,14 +103,21 @@
     </p><br>
     <p>Next Steps:</p>
     <p>1. <strong>Accept, </strong><strong>Decline </strong>or <strong>Defer</strong> your offer using the link provided below. </p>
-    <p><a href="{{ $details['link'] }}" target="_blank">Offer letter Link</a></p>
+    <div class="offer-container">
+      <p>
+          <a href="{{ $details['link'] }}" target="_blank" class="offer-link">
+              <img src="https://ukmcglobal.com/wp-content/uploads/2020/07/ukmc-logo.webp" alt="UKMC Logo" class="offer-image">
+              <span>Offer letter Link</span>
+          </a>
+      </p>
+    </div>
     <p>Please not that you should accept you offer letter within <strong>3 working days</strong> to secure your place for the intake.</p>
 
     <p>2. Complete your student finance application and send us the evidence.</p>
     <p>3. Confirm your classs group (you will receive an email soon from our registration team to select your timetable).</p>
     <p>4. Complete Registration (you will receive a registration invitation email from CCCU)</p>
     <p>5. Join induction and complete the enrolment process as you will be sent separate emails to confirm the dates.</p><br><br>
-    <p>If you have any queries and would like to discuss with us, please email us</p>
+    <p>If you have any queries and would like to discuss with us, please email us </p>
     <p>at <a href="mailto:admissions@ukmc.ac.uk">admissions@ukmc.ac.uk</a> or call us on 01614780015</p><br><br>
 
 
