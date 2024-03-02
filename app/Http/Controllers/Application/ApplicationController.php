@@ -2611,5 +2611,49 @@ class ApplicationController extends Controller{
         $data['get_intake'] = Session::get('get_intake');
         return view('application/offer/offer_request_list',$data);
     }
+    //document upload from website
+    public function document_upload_from_web(Request $request){
+        // $validator = Validator::make($request->all(), [
+        //     'document_type' => 'required',
+        //     'doc' => 'required',
+        // ]);
+        // if ($validator->fails()) {
+        //     return redirect()->back()->withErrors($validator)->withInput();
+        // }
+        $application = Application::where('id',$request->application_id)->first();
+        if(!$application){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Application Data Not Found!'
+            );
+            return response()->json($data,200);
+        }
+        $document = new ApplicationDocument();
+        $document->application_id = $application->id;
+        $document->document_type = $request->document_type;
+        $doc = $request->doc;
+        if ($request->hasFile('doc')) {
+            $ext = $doc->getClientOriginalExtension();
+            if(!$ext){
+                $data['result'] = array(
+                    'key'=>101,
+                    'val'=>'File Extension Not Found!'
+                );
+                return response()->json($data,200);
+            }
+            $doc_file_name = $doc->getClientOriginalName();
+            $doc_file_name = 'UKMC-'.Service::get_random_str_number().'-'.Service::slug_create($doc_file_name).'.'.$ext;
+            $upload_path1 = 'backend/images/application/doc/'.$application->id.'/';
+            Service::createDirectory($upload_path1);
+            $request->file('doc')->move(public_path('backend/images/application/doc/'.$application->id.'/'), $doc_file_name);
+            $document->doc = $upload_path1.$doc_file_name;
+        }
+        $document->save();
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>'Document Saved Successfully!'
+        );
+        return response()->json($data,200);
+    }
 
 }

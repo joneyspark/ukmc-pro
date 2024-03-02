@@ -81,6 +81,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('offer-accepted/{id?}','offer_accepted');
     Route::post('submit-decline-offer','submit_decline_offer');
     Route::post('submit-defer-offer','submit_defer_offer');
+    Route::post('document-upload-from-web','document_upload_from_web');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

@@ -3,6 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Application\ApplicationController;
+use App\Http\Controllers\Application\ApplicationOtherController;
+
+
+Route::controller(ApplicationController::class)->group(function () {
+    Route::post('document-upload-from-web','document_upload_from_web');
+});
 /*
 |--------------------------------------------------------------------------
 | API Routes
