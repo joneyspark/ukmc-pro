@@ -75,7 +75,7 @@
                     <a href="{{ URL::to('agent-applications') }}"> Agent Applications </a>
                 </li>
                 @endif
-                
+
                 @if(Auth::check() && Auth::user()->role=='interviewer')
                 <li class="{{ (!empty($interviewer_application_list) && $interviewer_application_list==true)?'active':'' }}">
                     <a href="{{ URL::to('interviewer-applications') }}"> My Applications </a>

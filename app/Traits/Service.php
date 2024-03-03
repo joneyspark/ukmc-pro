@@ -1013,4 +1013,22 @@ trait Service
         );
         return $results;
     }
+    public static function get_offer_status(){
+        $arr = [
+            array(
+                'id'=>1,
+                'value'=>'Accept',
+            ),
+            array(
+                'id'=>2,
+                'value'=>'Decline',
+            ),
+            array(
+                'id'=>3,
+                'value'=>'Defer',
+            ),
+
+        ];
+        return $arr;
+    }
 }

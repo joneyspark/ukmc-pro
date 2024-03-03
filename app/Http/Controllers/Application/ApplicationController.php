@@ -2577,39 +2577,40 @@ class ApplicationController extends Controller{
         Session::flash('success','Unconditional Offer Deferred!');
         return redirect()->back();
     }
-    //offer request list 
+    //offer request list
     public function offer_request_list(Request $request){
         $data['page_title'] = 'Application | Offer Request';
         $data['application'] = true;
         $data['offer_request_list'] = true;
         $get_status_id = $request->status_id;
         $get_intake = $request->intake;
-        
         //Session set data
         Session::put('get_status_id',$get_status_id);
         Session::put('get_intake',$get_intake);
-
         $data['intakes'] = $this->unique_intake_info();
-
-
-        $data['application_list'] = Application::query()
+        $data['application_list'] = InviteUnconditionalOffer::query()
         ->when($get_status_id, function ($query, $get_status_id) {
             return $query->where('status',$get_status_id);
         })
         ->when($get_intake, function ($query, $get_intake) {
-            return $query->where('intake',$get_intake);
+            return $query->whereHas('application', function ($subquery) use ($get_intake) {
+                $subquery->where('intake', $get_intake);
+            });
         })
-        ->where('application_status_id',1)
-        ->where('admission_officer_id',Auth::user()->id)
-        ->orderBy('created_at','desc')
         ->paginate(50)
         ->appends([
             'status' => $get_status_id,
             'intake' => $get_intake,
         ]);
+        $data['statuses'] = Service::get_offer_status();
         $data['get_status_id'] = Session::get('get_status_id');
         $data['get_intake'] = Session::get('get_intake');
         return view('application/offer/offer_request_list',$data);
+    }
+    public function get_status(){
+        $array = array(
+            ''
+        );
     }
     //document upload from website
     public function document_upload_from_web(Request $request){
@@ -2655,5 +2656,4 @@ class ApplicationController extends Controller{
         );
         return response()->json($data,200);
     }
-
 }

@@ -82,6 +82,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('submit-decline-offer','submit_decline_offer');
     Route::post('submit-defer-offer','submit_defer_offer');
     Route::post('document-upload-from-web','document_upload_from_web');
+    Route::get('offer-request-list','offer_request_list');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {
