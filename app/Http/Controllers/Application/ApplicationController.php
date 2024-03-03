@@ -2590,7 +2590,7 @@ class ApplicationController extends Controller{
         $data['intakes'] = $this->unique_intake_info();
         $data['application_list'] = InviteUnconditionalOffer::query()
         ->when($get_status_id, function ($query, $get_status_id) {
-            return $query->where('status',$get_status_id);
+            return $query->where('accept',$get_status_id);
         })
         ->when($get_intake, function ($query, $get_intake) {
             return $query->whereHas('application', function ($subquery) use ($get_intake) {
