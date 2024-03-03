@@ -135,6 +135,19 @@ class ApplicationController extends Controller{
                 $application->update_by = 0;
             }
             $application->email = $request->email;
+            $notification = new Notification();
+            $notification->title = 'Basic Info Update';
+            $notification->description = 'Application Basic Info Update By '.Auth::user()->name;
+            $notification->create_date = time();
+            $notification->create_by = Auth::user()->id;
+            $notification->creator_name = Auth::user()->name;
+            $notification->creator_image = Auth::user()->photo;
+            $notification->user_id = 1;
+            $notification->is_admin = 1;
+            $notification->manager_id = 1;
+            $notification->application_id = $application->id;
+            $notification->slug = 'application/'.$application->id.'/details';
+            $notification->save();
         }else{
             $application = new Application();
             $email = $request->email;
@@ -516,6 +529,7 @@ class ApplicationController extends Controller{
         $document = new ApplicationDocument();
         $document->application_id = $application->id;
         $document->document_type = $request->document_type;
+        $document->title = $request->title;
         $is_view = $request->is_view;
         if($is_view){
             $document->is_view = $is_view;

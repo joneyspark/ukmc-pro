@@ -60,7 +60,7 @@
                 <div class="col form-group mb-4">
                     <label for="verticalFormStepform-name">Document Type:</label>
                     @if($application_data->is_academic==1)
-                    <select name="document_type" id="inputState" class="form-select">
+                    <select name="document_type" id="document_type" class="form-select" onchange="getTitle()">
                         <option value="">Choose...</option>
                         <option value="Passport">Passport</option>
                         <option value="Proof of Address">Proof of Address</option>
@@ -68,10 +68,11 @@
                         <option value="SOP">SOP</option>
                         <option value="Qualification transcript">Qualification transcript</option>
                         <option value="Additional Documents">Additional Documents</option>
+                        <option value="Other">Other</option>
                         </select>
                     @endif
                     @if($application_data->is_academic==2)
-                    <select name="document_type" id="inputState" class="form-select">
+                    <select name="document_type" id="document_type" class="form-select" onchange="getTitle()">
                         <option value="">Choose...</option>
                         <option value="Passport">Passport</option>
                         <option value="SOP">SOP</option>
@@ -80,11 +81,15 @@
                         <option value="CV">CV</option>
                         <option value="Essay">Essay</option>
                         <option value="Additional Documents">Additional Documents</option>
+                        <option value="Other">Other</option>
                         </select>
                     @endif
                     @if ($errors->has('document_type'))
                         <span class="text-danger">{{ $errors->first('document_type') }}</span>
                     @endif
+                </div>
+                <div id="show_title" class="col form-group mb-4">
+                    <input name="title" placeholder="Title" type="text" class="form-control" id="exampleFormControlFile1">
                 </div>
                 @if(Auth::check())
                     @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager' || Auth::user()->role=='interviewer')
@@ -201,6 +206,7 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Filename</th>
+                                            <th scope="col">Title</th>
                                             <th scope="col">Uploaded on</th>
                                             <th scope="col">Action</th>
                                         </tr>
@@ -209,6 +215,7 @@
                                         @forelse ($application_documents as $doc)
                                         <tr>
                                             <td>{{ $doc->document_type }}</td>
+                                            <td>{{ (!empty($doc->title))?$doc->title:'' }}</td>
                                             <td>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                                                 <span class="table-inner-text">{{ date('F d Y',strtotime($doc->created_at)) }}</span>
@@ -573,9 +580,12 @@
         white-space: break-spaces !important;
         padding: 3px 2px 2px 12px !important;
     }
+    #show_title{
+        display:none;
+    }
 </style>
-@if($errors->any())
 <script src="{{ asset('web/js/jquery.js') }}"></script>
+@if($errors->any())
     @if($errors->has('document_type') || $errors->has('doc'))
     <script>
         $(document).ready(function() {
@@ -591,4 +601,14 @@
     </script>
     @endif
 @endif
+<script>
+    function getTitle(){
+        var getData = $('#document_type').val();
+        if(getData=="Other"){
+            $('#show_title').show();
+        }else{
+            $('#show_title').hide();
+        }
+    }
+</script>
 @stop
