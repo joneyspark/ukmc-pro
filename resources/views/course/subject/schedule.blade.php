@@ -76,7 +76,7 @@
                             <tr class="">
                                 <td>{{ (!empty($row->id))?$row->id:'' }}</td>
                                 <td>{{ (!empty($row->title))?$row->title:'' }}</td>
-                                <td>{{ (!empty($row->schedule_date))?date('F d Y',strtotime($row->schedule_date)):'' }}</td>
+                                <td>{{ (!empty($row->schedule_date))?$row->schedule_date:'' }}</td>
                                 <th>{{ (!empty($row->time_from))?$row->time_from:'' }} - {{ (!empty($row->time_to))?$row->time_to:'' }}</th>
                                 <td>
                                     <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
