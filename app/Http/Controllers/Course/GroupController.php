@@ -277,4 +277,27 @@ class GroupController extends Controller
         //dd($data['applicants']);
         return view('course/subject/attendence',$data);
     }
+    //get application by group
+    public function get_application_by_group(Request $request, $id=NULL){
+        $data['page_title'] = 'Group | Attendance';
+        $data['attendence'] = true;
+        $get_title = $request->title;
+        Session::put('get_title',$get_title);
+        $data['application_list'] = JoinGroup::query()
+        ->with(['application_data'])
+        ->when($get_title, function ($query, $get_title) {
+            return $query->whereHas('application', function ($subquery) use ($get_title) {
+                $subquery->where('name', 'like', '%' . $get_title . '%')
+                    ->orWhere('email', 'like', '%' . $get_title . '%')
+                    ->orWhere('id', 'like', '%' . $get_title . '%')
+                    ->orWhere('phone', 'like', '%' . $get_title . '%');
+            });
+        })
+        ->where('group_id',$id)
+        ->paginate(50);
+        
+        $data['group_id'] = $id;
+        $data['get_title'] = Session::get('get_title');
+        return view('course/group/application_list',$data);
+    }
 }

@@ -554,14 +554,14 @@ class CourseController extends Controller{
             );
             return response()->json($data,200);
         }
-        if($get_app_data->intake != $checkSchedule->intake_date){
-            $data['result'] = array(
-                'key'=>101,
-                'val'=>'This Student Not Enrolled In This Intake!'
-            );
-            return response()->json($data,200);
-        }
-        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->where('application_id',$request->application_id)->first();
+        // if($get_app_data->intake != $checkSchedule->intake_date){
+        //     $data['result'] = array(
+        //         'key'=>101,
+        //         'val'=>'This Student Not Enrolled In This Intake!'
+        //     );
+        //     return response()->json($data,200);
+        // }
+        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->first();
         if($attendence){
             $attendence->application_status = 1;
             $attendence->save();
@@ -605,14 +605,14 @@ class CourseController extends Controller{
             );
             return response()->json($data,200);
         }
-        if($get_app_data->intake != $checkSchedule->intake_date){
-            $data['result'] = array(
-                'key'=>101,
-                'val'=>'This Student Not Enrolled In This Intake!'
-            );
-            return response()->json($data,200);
-        }
-        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->where('application_id',$request->application_id)->first();
+        // if($get_app_data->intake != $checkSchedule->intake_date){
+        //     $data['result'] = array(
+        //         'key'=>101,
+        //         'val'=>'This Student Not Enrolled In This Intake!'
+        //     );
+        //     return response()->json($data,200);
+        // }
+        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->first();
         if($attendence){
             $attendence->application_status = 2;
             $attendence->save();
@@ -656,14 +656,14 @@ class CourseController extends Controller{
             );
             return response()->json($data,200);
         }
-        if($get_app_data->intake != $checkSchedule->intake_date){
-            $data['result'] = array(
-                'key'=>101,
-                'val'=>'This Student Not Enrolled In This Intake!'
-            );
-            return response()->json($data,200);
-        }
-        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->where('application_id',$request->application_id)->first();
+        // if($get_app_data->intake != $checkSchedule->intake_date){
+        //     $data['result'] = array(
+        //         'key'=>101,
+        //         'val'=>'This Student Not Enrolled In This Intake!'
+        //     );
+        //     return response()->json($data,200);
+        // }
+        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->first();
         if($attendence){
             $attendence->application_status = 3;
             $attendence->save();
