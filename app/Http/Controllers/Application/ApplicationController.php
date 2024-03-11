@@ -51,6 +51,7 @@ use App\Models\Application\Note;
 use App\Models\Application\Qualification;
 use App\Models\Application\Status;
 use App\Models\Course\CourseGroup;
+use App\Models\course\CourseIntake;
 use App\Models\Setting\CompanySetting;
 use App\Models\University\University;
 use Illuminate\Support\Facades\File;
@@ -1241,29 +1242,29 @@ class ApplicationController extends Controller{
         $data['page_title'] = 'Application | Enrolled';
         $data['application'] = true;
         $data['application_enrolled'] = true;
-        $get_campus = $request->campus;
-        $get_agent = $request->agent;
-        $get_officer = $request->officer;
-        $get_status = $request->status;
-        $get_intake = $request->intake;
+        $get_course_id = $request->course_id;
+        $get_intake_id = $request->intake_id;
         $search = $request->q;
+        $courseIntake = '';
         //Session set data
-        Session::put('get_campus',$get_campus);
-        Session::put('get_agent',$get_agent);
-        Session::put('get_officer',$get_officer);
-        Session::put('get_status',$get_status);
-        Session::put('get_intake',$get_intake);
+        if($get_intake_id){
+            $getCourseIntake = CourseIntake::where('id',$get_intake_id)->first();
+            $courseIntake = $getCourseIntake->intake_date;
+            Session::put('get_intake_id',$get_intake_id);
+        }
         Session::put('search',$search);
+        Session::put('get_course_id',$get_course_id);
         //01753298639
         $data['courses'] = Course::where('status',1)->orderBy('id','desc')->get();
-        $data['campuses'] = Campus::where('active',1)->get();
-        $data['agents'] = Company::where('status',1)->get();
-        $data['officers'] = User::where('role','adminManager')->where('active',1)->get();
-        $data['statuses'] = ApplicationStatus::where('status',0)->get();
         $data['intakes'] = $this->unique_intake_info();
+        if($get_course_id){
+            $data['course_intakes'] = CourseIntake::where('course_id',$get_course_id)->where('status',0)->orderBy('id','desc')->get();
+        }else{
+            $data['course_intakes'] = array();
+        }
         $data['intake_list'] = ApplicationIntake::where('status',0)->orderBy('id','desc')->get();
-        if(!empty($get_intake)){
-            $data['course_groups'] = CourseGroup::withCount(['total_application'])->where('intake',$get_intake)->get();
+        if(!empty($get_intake_id)){
+            $data['course_groups'] = CourseGroup::withCount(['total_application'])->where('course_intake_id',$get_intake_id)->get();
         }else{
             $data['course_groups'] = [];
         }
@@ -1276,20 +1277,13 @@ class ApplicationController extends Controller{
                     ->orWhere('phone', 'like', '%' . $search . '%');
             });
         })
-        ->when($get_campus, function ($query, $get_campus) {
-            return $query->where('campus_id',$get_campus);
+        
+        ->when($get_course_id, function ($query, $get_course_id) {
+            return $query->where('course_id',$get_course_id);
         })
-        ->when($get_agent, function ($query, $get_agent) {
-            return $query->where('company_id',$get_agent);
-        })
-        ->when($get_officer, function ($query, $get_officer) {
-            return $query->where('admission_officer_id',$get_officer);
-        })
-        ->when($get_status, function ($query, $get_status) {
-            return $query->where('status',$get_status);
-        })
-        ->when($get_intake, function ($query, $get_intake) {
-            return $query->where('intake',$get_intake);
+        
+        ->when($courseIntake, function ($query, $courseIntake) {
+            return $query->where('intake',$courseIntake);
         })
         ->where('application_status_id','!=',0)
         ->where('status',11)
@@ -1297,18 +1291,12 @@ class ApplicationController extends Controller{
         ->paginate(50)
         ->appends([
             'q' => $search,
-            'campus' => $get_campus,
-            'agent' => $get_campus,
-            'officer' => $get_campus,
-            'status' => $get_campus,
-            'intake' => $get_campus,
+            'course_id' => $get_course_id,
+            'intake_id' => $get_intake_id,
         ]);
-
-        $data['get_campus'] = Session::get('get_campus');
-        $data['get_agent'] = Session::get('get_agent');
-        $data['get_officer'] = Session::get('get_officer');
-        $data['get_status'] = Session::get('get_status');
-        $data['get_intake'] = Session::get('get_intake');
+        $data['statuses'] = ApplicationStatus::where('status',0)->get();
+        $data['get_course_id'] = Session::get('get_course_id');
+        $data['get_intake_id'] = Session::get('get_intake_id');
         $data['search'] = Session::get('search');
         return view('application/enrolled',$data);
     }

@@ -67,7 +67,7 @@
             <form method="get" action="">
                  <div class="row">
                      <div class="row mb-2">
-                        <div class="col-4">
+                        {{-- <div class="col-3">
                             <select id="campus" name="campus" class="form-control">
                                 <option value="">Select Campus</option>
                                 @if(count($campuses) > 0)
@@ -76,65 +76,44 @@
                                 @endforeach
                                 @endif
                             </select>
-                         </div>
-                         <div class="col-4">
-                            <select id="agent" name="agent" class="form-control">
-                                <option value="">Select Agent</option>
-                                @if(count($agents) > 0)
-                                @foreach ($agents as $agent)
-                                <option {{ (!empty($get_agent) && $get_agent==$agent->id)?'selected':'' }} value="{{ $agent->id }}">{{ $agent->company_name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div>
-                         <div class="col-4">
-                            <select id="officer" name="officer" class="form-control">
-                                <option value="">Select Admission Manager</option>
-                                @if(count($officers) > 0)
-                                @foreach ($officers as $officer)
-                                <option {{ (!empty($get_officer) && $get_officer==$officer->id)?'selected':'' }} value="{{ $officer->id }}">{{ $officer->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div>
-                     </div>
-                     <div class="row">
+                         </div> --}}
                         <div class="col-3">
-                            <select id="status" name="status" class="form-control">
-                                <option value="">Select Status</option>
-                                @if(count($statuses) > 0)
-                                @foreach ($statuses as $status)
-                                <option {{ (!empty($get_status) && $get_status==$status->id)?'selected':'' }} value="{{ $status->id }}">{{ $status->title }}</option>
+                            <select id="course_id" name="course_id" class="form-control">
+                                <option value="">Select Course</option>
+                                @if(count($courses) > 0)
+                                @foreach ($courses as $course1)
+                                <option {{ (!empty($get_course_id) && $get_course_id==$course1->id)?'selected':'' }} value="{{ $course1->id }}">{{ $course1->course_name }}</option>
                                 @endforeach
                                 @endif
                             </select>
                          </div>
                          <div class="col-2">
-                            <select id="intake" name="intake" class="form-control">
+                            <select id="intake_id" name="intake_id" class="form-control">
                                 <option value="">Select Intake</option>
-                                @if(count($intake_list) > 0)
-                                @foreach ($intake_list as $intake)
-                                <option {{ (!empty($get_intake) && $get_intake==$intake->value)?'selected':'' }} value="{{ $intake->value }}">{{ date('F y',strtotime($intake->title)) }}</option>
+                                @if(count($course_intakes) > 0)
+                                @foreach ($course_intakes as $intake)
+                                <option {{ (!empty($get_intake_id) && $get_intake_id==$intake->id)?'selected':'' }} value="{{ $intake->id }}">{{ date('F y',strtotime($intake->intake_date)) }}</option>
                                 @endforeach
                                 @endif
                             </select>
                          </div>
                          <div class="col-5">
-                             <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter Name,Email,Phone">
-                         </div>
-                         <div class="col-1">
-                            <input type="submit" value="Filter" name="time" class="btn btn-warning">
-                         </div>
-                         <div class="col-1">
-                            <a href="{{ URL::to('reset-enrolled-application-search') }}" class="btn btn-danger">Reset</a>
-                         </div>
+                            <input value="{{ (!empty($search))?$search:'' }}" name="q" id="q" type="text" class="form-control" placeholder="Enter Name,Email,Phone">
+                        </div>
+                        <div class="col-1">
+                           <input type="submit" value="Filter" name="time" class="btn btn-warning">
+                        </div>
+                        <div class="col-1">
+                           <a href="{{ URL::to('reset-enrolled-application-search') }}" class="btn btn-danger">Reset</a>
+                        </div>
                      </div>
+                     
                  </div>
             </form>
         </div>
         <h5 class="pt-3">All Enrolled Application Here</h5>
         <div class="row layout-top-spacing">
-            @if(Auth::user()->role=='admin')
+            @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager' || Auth::user()->role=='interviewer')
             <a data-bs-toggle="modal" data-bs-target="#assignToGroupModal" class="assignToDisplay1 assignToBtn1 dropdown-item" href="#">Assign To Group</a>
             @endif
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
