@@ -67,4 +67,6 @@ Route::controller(GroupController::class)->group(function () {
     Route::get('make-class-schedules','make_class_schedules');
     Route::post('group-is-done-status-change','group_is_done_status_change');
     Route::get('group-attendence/{id?}','group_attendence');
+    Route::get('get-application-by-group/{id?}','get_application_by_group');
+    Route::post('move-to-another-group','move_to_another_group');
 });

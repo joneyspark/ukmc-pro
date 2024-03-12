@@ -71,8 +71,8 @@
                     <div class="text-center">
                         <img src="https://bheuni.io/front/img/teams/tanvir.png" class="card-img-top rounded-circle" alt="..." style="width: 120px">
                     </div>
-                    <h6 class="text-center pt-3">{{ (!empty($row->name))?$row->name:'' }}</h6>
-                    <p class="text-center">{{ (!empty($row->id))?$row->id:'' }}</p>
+                    <h6 class="text-center pt-3">{{ (!empty($row->application_data->name))?$row->application_data->name:'' }}</h6>
+                    <p class="text-center">{{ (!empty($row->application_data->id))?$row->application_data->id:'' }}</p>
                     <div class="card-body px-0 pb-0 d-flex justify-content-between">
                         @if(!empty($row->applicant_attendence))
                             @if($row->applicant_attendence->application_status==1)

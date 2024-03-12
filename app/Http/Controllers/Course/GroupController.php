@@ -202,7 +202,7 @@ class GroupController extends Controller
         $data['current_date'] = Carbon::now()->format('l');
         $data['today_schedules'] = SubjectSchedule::with(['course','subject'])->where('course_id',$data['course_data']->id)->where('schedule_date',$data['current_date'])->get();
         $data['class_schedule_list'] = ClassSchedule::with(['subject_schedule'])->where('group_id',$data['group_data']->id)->orderBy('id','desc')->paginate(15);
-        
+
         //dd($data['today_schedules']);
         return view('group/details',$data);
     }
@@ -272,7 +272,7 @@ class GroupController extends Controller
         }
         $data['schedule_id'] = $id;
 
-        $data['applicants'] = JoinGroup::where('group_id',$getSchedule->group_id)->paginate(15);
+        $data['applicants'] = JoinGroup::with(['application_data'])->where('group_id',$getSchedule->group_id)->paginate(15);
         //$data['applicants'] = Application::with(['applicant_attendence'])->where('course_id',$getSchedule->course_id)->where('intake',$getSchedule->intake_date)->where('status',11)->paginate(50);
         //dd($data['applicants']);
         return view('course/subject/attendence',$data);
@@ -281,12 +281,18 @@ class GroupController extends Controller
     public function get_application_by_group(Request $request, $id=NULL){
         $data['page_title'] = 'Group | Attendance';
         $data['attendence'] = true;
+        $data['get_group_info'] = CourseGroup::where('id',$id)->first();
+        if(!$data['get_group_info']){
+            Session::flash('error','Group Data Not Found!');
+            return redirect()->back();
+        }
+        $data['get_group_list'] = CourseGroup::withCount(['total_application'])->where('id','!=',$data['get_group_info']->id)->where('course_intake_id',$data['get_group_info']->course_intake_id)->where('status',0)->get();
         $get_title = $request->title;
         Session::put('get_title',$get_title);
         $data['application_list'] = JoinGroup::query()
-        ->with(['application_data'])
+        ->with(['application_data','group'])
         ->when($get_title, function ($query, $get_title) {
-            return $query->whereHas('application', function ($subquery) use ($get_title) {
+            return $query->whereHas('application_data', function ($subquery) use ($get_title) {
                 $subquery->where('name', 'like', '%' . $get_title . '%')
                     ->orWhere('email', 'like', '%' . $get_title . '%')
                     ->orWhere('id', 'like', '%' . $get_title . '%')
@@ -295,9 +301,29 @@ class GroupController extends Controller
         })
         ->where('group_id',$id)
         ->paginate(50);
-        
+
         $data['group_id'] = $id;
         $data['get_title'] = Session::get('get_title');
+        //dd($data['application_list']);
         return view('course/group/application_list',$data);
+    }
+    //move to another group
+    public function move_to_another_group(Request $request){
+        $request->validate([
+            'group_id'=>'required',
+            'assign_application_ids'=>'required',
+        ]);
+        $getGroup = CourseGroup::where('id',$request->group_id)->first();
+        if(!$getGroup){
+            Session::flash('error','Group data Not Found!');
+            return redirect()->back();
+        }
+        $ids = $request->assign_application_ids;
+        $array_ids = explode(",",$ids);
+        foreach($array_ids as $row){
+            $getJoinInfo = JoinGroup::where('application_id',$row)->update(['group_id'=>$getGroup->id]);
+        }
+        Session::flash('success','Successfully Moved To Another Group!');
+        return redirect()->back();
     }
 }

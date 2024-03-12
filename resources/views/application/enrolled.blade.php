@@ -67,16 +67,7 @@
             <form method="get" action="">
                  <div class="row">
                      <div class="row mb-2">
-                        {{-- <div class="col-3">
-                            <select id="campus" name="campus" class="form-control">
-                                <option value="">Select Campus</option>
-                                @if(count($campuses) > 0)
-                                @foreach ($campuses as $campus1)
-                                <option {{ (!empty($get_campus) && $get_campus==$campus1->id)?'selected':'' }} value="{{ $campus1->id }}">{{ $campus1->campus_name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                         </div> --}}
+                        
                         <div class="col-3">
                             <select id="course_id" name="course_id" class="form-control">
                                 <option value="">Select Course</option>
@@ -107,7 +98,7 @@
                            <a href="{{ URL::to('reset-enrolled-application-search') }}" class="btn btn-danger">Reset</a>
                         </div>
                      </div>
-                     
+
                  </div>
             </form>
         </div>
