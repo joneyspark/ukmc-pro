@@ -561,7 +561,7 @@ class CourseController extends Controller{
         //     );
         //     return response()->json($data,200);
         // }
-        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->first();
+        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->where('application_id',$request->application_id)->first();
         if($attendence){
             $attendence->application_status = 1;
             $attendence->save();
@@ -612,7 +612,7 @@ class CourseController extends Controller{
         //     );
         //     return response()->json($data,200);
         // }
-        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->first();
+        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->where('application_id',$request->application_id)->first();
         if($attendence){
             $attendence->application_status = 2;
             $attendence->save();
@@ -663,7 +663,7 @@ class CourseController extends Controller{
         //     );
         //     return response()->json($data,200);
         // }
-        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->first();
+        $attendence = AttendenceConfirmation::where('class_schedule_id',$request->schedule_id)->where('application_id',$request->application_id)->first();
         if($attendence){
             $attendence->application_status = 3;
             $attendence->save();

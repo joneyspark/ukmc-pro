@@ -262,7 +262,7 @@ class GroupController extends Controller
         return response()->json($data,200);
     }
     //group attendence
-    public function group_attendence($id){
+    public function group_attendence($id=NULL){
         $data['page_title'] = 'Group | Attendance';
         $data['course'] = true;
         $getSchedule = ClassSchedule::where('id',$id)->first();
