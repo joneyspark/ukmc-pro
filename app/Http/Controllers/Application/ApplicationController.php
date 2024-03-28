@@ -2658,4 +2658,12 @@ class ApplicationController extends Controller{
         );
         return response()->json($data,200);
     }
+    //transfer course 
+    public function transfer_course_to_other(){
+        $getApp = Application::where('course_id',1)->get();
+        foreach($getApp as $row){
+            $update = Application::where('id',$row->id)->update(['course_id'=>2]);
+        }
+        echo "Transfer Successed";
+    }
 }
