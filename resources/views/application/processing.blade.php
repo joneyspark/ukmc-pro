@@ -106,7 +106,15 @@
                                                         <div style="margin-left: 2px;" class="ml-2">
                                                             <img alt="avatar" src="{{ asset($note->user->photo) }}" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">
                                                         </div>
-                                                        <div class="media-body"><h6 class="tx-inverse">{{ (!empty($note->user->name))?$note->user->name:'' }}<a onclick="deleteMainNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></h6><p class="mg-b-0">{{ (!empty($note->note))?$note->note:'' }}</p><small class="text-left"> Created : {{ date('F d Y H:i:s',strtotime($note->created_at)) }}</small></div>
+                                                        <div class="media-body"><h6 class="tx-inverse">{{ (!empty($note->user->name))?$note->user->name:'' }}<a onclick="deleteMainNote({{ $note->id }})" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></h6><p class="mg-b-0">{{ (!empty($note->note))?$note->note:'' }}</p>
+                                                            <small class="text-left"> Created : {{ date('F d Y H:i:s',strtotime($note->created_at)) }}</small><br>
+                                                            @if($note->is_view==2)
+                                                            <small style="color: green;" class="text-left"> Is View By Agent : Yes</small>
+                                                            @else
+                                                            <small style="color: green;" class="text-left"> Is View By Agent : No</small>
+                                                            @endif
+                                                            
+                                                        </div>
                                                     </div>
                                                 </div><hr>
                                                 @endforeach
@@ -117,10 +125,20 @@
                                                 <form class="form-group" id="note-formid" method="post">
                                                     <div class="col-12 p-0">
                                                         <div class="form-group lead-drawer-form">
+                                                            <label for="exampleFormControlInput1">Note:</label>
                                                             <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="note_application_id" id="note_application_id" />
                                                             <textarea name="application_note" id="application_note" class="form-control" rows="2"></textarea>
                                                             <!---->
-                                                        </div><button id="btn-note-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Save</button>
+                                                        </div>
+                                                        <div class="mt-2 form-group lead-drawer-form">
+                                                            <label for="exampleFormControlInput1">Is View By Agent:</label>
+                                                            <select name="is_view" id="is_view" class="form-control">
+                                                                <option value="1">No</option>
+                                                                <option value="2">Yes</option>
+                                                            </select>
+                                                            <!---->
+                                                        </div>
+                                                        <button id="btn-note-submit" class="mt-2 btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Save</button>
                                                     </div>
                                                     <hr>
                                                 </form>

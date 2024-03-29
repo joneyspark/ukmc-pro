@@ -9,25 +9,24 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div class="mt-0">
-            <form action="{{ URL::to('make_application_note_by_agent') }}" enctype="multipart/form-data" method="post">
-                @csrf
+            <form id="agent-note-formid" method="post">
                 <div class="modal-body">
+                    <div id="agent-note-data">
 
+                    </div>
                     <div class="form-group">
                         <div class="col">
                             <div class="form-group mb-4"><label for="exampleFormControlInput1">Note:</label>
-                                <input type="hidden" name="note_application_id" id="note_application_id" />
+                                <input type="hidden" value="" name="note_application_id" id="note_application_id" />
                                 <textarea name="application_note" id="application_note" class="form-control" rows="2"></textarea>
-                                @if ($errors->has('application_note'))
-                                    <span class="text-danger">{{ $errors->first('application_note') }}</span>
-                                @endif
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
-                    <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" >Submit</button>
+                    <button id="agent-btn-note-submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" >Submit</button>
                 </div>
             </form>
         </div>
@@ -56,7 +55,7 @@
                                     @forelse ($sub_agents as $agent)
                                     <option value="{{ $agent->id }}">{{ $agent->name }}</option>
                                     @empty
-                                        
+
                                     @endforelse
                                 </select>
                                 @if ($errors->has('sub_agent_id'))
@@ -235,7 +234,7 @@
                                         {{ date('F Y',strtotime($row->intake)) }}
                                     </td>
                                     <td>
-                                        <a data-bs-toggle="modal" data-bs-target="#inputFormModal" href="javascript:void(0);" class="action-btn btn-edit bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="Write Note" onclick="writeNote({{ $row->id }})">
+                                        <a data-bs-toggle="modal" data-bs-target="#inputFormModal" href="javascript:void(0);" class="action-btn btn-edit bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="Write Note" onclick="writeNote('{{ $row->id }}')">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                                         </a>
                                     </td>
@@ -339,7 +338,7 @@
         var sub_agent_id = $('#sub_agent_id').val();
         window.location = "{{ URL::to('agent-applications?campus=') }}" + campus + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date "&sub_agent_id=" + sub_agent_id;
     }
-    
+
 </script>
 @if($errors->has('application_note'))
 <script>
@@ -355,5 +354,6 @@ $(document).ready(function() {
     $('#transModal').modal('show');
 });
 </script>
+
 @endif
 @stop

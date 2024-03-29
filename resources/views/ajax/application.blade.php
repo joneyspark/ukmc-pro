@@ -140,10 +140,12 @@
             $('#btn-note-submit').prop('disabled', true);
             var application_id = $('#note_application_id').val();
             var application_note = $('#application_note').val();
+            var is_view = $('#is_view').val();
             $.post('{{ URL::to('application-note-post') }}',
                 {
                     application_id: application_id,
                     application_note: application_note,
+                    is_view: is_view,
                 },
                 function(data, status){
                     console.log(data);
@@ -304,5 +306,18 @@
     }
   });
 });
+
+function get_application_notes_by_agent(id){
+    if(id===null){
+        return false;
+    }
+    $.get('{{ URL::to('get-notes-by-agent') }}/'+id,function(data,status){
+        if(data['result']['key']===200){
+            console.log(data['result']['val']);
+            $('#note-data').html(data['result']['val']);
+            $('#note_application_id').val(data['result']['application_id']);
+        }
+    });
+}
 
 </script>

@@ -362,6 +362,14 @@
                     return false;
                 }
                 $('#note_application_id').val(id);
+                $.get('{{ URL::to('get-notes-by-agent') }}',function(data,status){
+                    if(data['result']['key']===200){
+                        console.log(data['result']['val']);
+                        $('#agent-note-data').html(data['result']['val']);
+                        //$('#notification-badge').html(0);
+                    }
+                });
+
             }
             function transferAppication(id){
                 if(id===null){
@@ -388,6 +396,58 @@
         <script src="{{ asset('web/js/validation.js') }}"></script>
         @include('ajax.university')
         <script src="{{ asset('web/js/iziToast.js') }}"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('#agent-note-formid').validate({
+                    rules: {
+                        application_note: {
+                            required: true
+                        },
+                    },
+                    messages: {
+                        application_note: {
+                            required: "Note Field Is Required!"
+                        },
+                    },
+                    submitHandler: function(form) {
+                    $('#agent-btn-note-submit').prop('disabled', true);
+                    var application_id = $('#note_application_id').val();
+                    var application_note = $('#application_note').val();
+                    $.post('{{ URL::to('agent-application-note-post') }}',
+                        {
+                            application_id: application_id,
+                            application_note: application_note,
+                        },
+                        function(data, status){
+                            console.log(data);
+                            console.log(status);
+                            if(data['result']['key']===200){
+                                iziToast.show({
+                                    title: 'Success:',
+                                    message: 'Successfully Create a New Note!',
+                                    position: 'topRight',
+                                    timeout: 8000,
+                                    color: 'green',
+                                    balloon: true,
+                                    close: true,
+                                    progressBarColor: 'yellow',
+                                });
+                                $('#agent-btn-note-submit').prop('disabled', false);
+                                $('#agent-note-data').html(data['result']['val']);
+                                $('#application_note').val("");
+                                $('#note_application_id').val(data['result']['application_id']);
+                            }
+                        }).fail(function(xhr, status, error) {
+                            // Error callback...
+                            console.log(xhr.responseText);
+                            console.log(status);
+                            console.log(error);
+                        });
+                    }
+                });
+            });
+        </script>
 
 </body>
 

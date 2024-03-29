@@ -152,6 +152,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Is View By Agent</label>
+                                <select name="is_view" id="is_view" class="form-control">
+                                    <option value="1">No</option>
+                                    <option value="2">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
