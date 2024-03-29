@@ -116,4 +116,5 @@ Route::controller(ApplicationOtherController::class)->group(function () {
     Route::get('application-intake-list/{id?}','application_intake_list');
     Route::get('get-notes-by-agent/{id?}','get_notes_by_agent');
     Route::post('agent-application-note-post','agent_application_note_post');
+    Route::get('agent-main-note-delete/{id?}','agent_main_note_delete');
 });

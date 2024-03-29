@@ -313,7 +313,7 @@ function get_application_notes_by_agent(id){
     }
     $.get('{{ URL::to('get-notes-by-agent') }}/'+id,function(data,status){
         if(data['result']['key']===200){
-            console.log(data['result']['val']);
+            console.log(data);
             $('#note-data').html(data['result']['val']);
             $('#note_application_id').val(data['result']['application_id']);
         }

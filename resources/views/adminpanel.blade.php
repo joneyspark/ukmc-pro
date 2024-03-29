@@ -362,14 +362,31 @@
                     return false;
                 }
                 $('#note_application_id').val(id);
-                $.get('{{ URL::to('get-notes-by-agent') }}',function(data,status){
+                $.get('{{ URL::to('get-notes-by-agent') }}/'+id,function(data,status){
                     if(data['result']['key']===200){
-                        console.log(data['result']['val']);
+                        console.log(data);
                         $('#agent-note-data').html(data['result']['val']);
                         //$('#notification-badge').html(0);
                     }
                 });
 
+            }
+            //delete note by agent
+            function deleteAgentMainNote(id){
+                if(id===null){
+                    return false;
+                }
+                if(confirm('Are You Sure To Delete Note Data')){
+                    $.get('{{ URL::to('agent-main-note-delete') }}/'+id,function(data,status){
+                        if(data['result']['key']===101){
+                            alert(data['result']['val']);
+                        }
+                        if(data['result']['key']===200){
+                            console.log(data['result']['val']);
+                            $('#agent-note-data').html(data['result']['val']);
+                        }
+                    });
+                }
             }
             function transferAppication(id){
                 if(id===null){

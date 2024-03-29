@@ -864,7 +864,14 @@ class ApplicationOtherController extends Controller
     public function get_notes_by_agent($id=NULL){
         $user = Auth::user();
         $select = '';
-        $notes = Note::where('application_id',$id)->where('user_id',$user->id)->orWhere('is_view',2)->orderBy('id','asc')->get();
+        // $notes = Note::where('application_id',$id)->where('user_id',Auth::user()->id)->orWhere('is_view',2)->orderBy('id','asc')->get();
+        $notes = Note::where('application_id', $id)
+             ->orWhere(function ($query) use ($id) {
+                 $query->where('application_id', $id)
+                       ->where('is_view', 2);
+             })
+             ->orderBy('id', 'asc')
+             ->get();
         if($notes){
             foreach($notes as $note){
                 $select .= '<p class="modal-text">';
@@ -875,7 +882,7 @@ class ApplicationOtherController extends Controller
                             $select .= '<div class="media-body">';
                             $select .= '<h6 class="tx-inverse">'.$note->user->name;
                             if(Auth::user()->id==$note->user_id || Auth::user()->role=='admin' || Auth::user()->role=='manager'){
-                                $select .= '<a onclick="deleteMainNoteByAgent('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                                $select .= '<a onclick="deleteAgentMainNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
                             }
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->note.'</p>';
@@ -920,7 +927,15 @@ class ApplicationOtherController extends Controller
         $notification->slug = 'application/'.$request->application_id.'/processing';
         $notification->save();
         $select = '';
-        $notes = Note::where('application_id',$request->application_id)->where('user_id',Auth::user()->id)->orWhere('is_view',2)->orderBy('id','asc')->get();
+        //$notes = Note::where('application_id',$request->application_id)->where('user_id',Auth::user()->id)->orWhere('is_view',2)->orderBy('id','asc')->get();
+        $id = $request->application_id;
+        $notes = Note::where('application_id', $id)
+             ->orWhere(function ($query) use ($id) {
+                 $query->where('application_id', $id)
+                       ->where('is_view', 2);
+             })
+             ->orderBy('id', 'asc')
+             ->get();
         if($notes){
             foreach($notes as $note){
                 $select .= '<p class="modal-text">';
@@ -931,7 +946,7 @@ class ApplicationOtherController extends Controller
                             $select .= '<div class="media-body">';
                             $select .= '<h6 class="tx-inverse">'.$note->user->name;
                             if(Auth::user()->id==$note->user_id || Auth::user()->role=='admin' || Auth::user()->role=='manager'){
-                                $select .= '<a onclick="deleteMainNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                                $select .= '<a onclick="deleteAgentMainNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
                             }
                             $select .= '</h6>';
                             $select .= '<p class="mg-b-0">'.$note->note.'</p>';
@@ -952,6 +967,74 @@ class ApplicationOtherController extends Controller
             'key'=>200,
             'val'=>$select,
             'application_id'=>$note->application_id
+        );
+        return response()->json($data,200);
+    }
+    //note delete
+    public function agent_main_note_delete($id=NULL){
+        $main_note = Note::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        if(!$main_note){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Note Data Not Found'
+            );
+            return response()->json($data,200);
+        }
+        $app_id = $main_note->application_id;
+        $delete = Note::where('id',$main_note->id)->delete();
+
+        //make notification
+        $notification = new Notification();
+        $notification->title = 'Note Delete';
+        $notification->description = 'Note Delete of Application By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->application_id = $main_note->application_id;
+        $notification->slug = 'application/'.$main_note->application_id.'/processing';
+        $notification->save();
+        $select = '';
+        //$notes = Note::where('application_id',$main_note->application_id)->orderBy('id','asc')->get();
+        $notes = Note::where('application_id', $app_id)
+             ->orWhere(function ($query) use ($app_id) {
+                 $query->where('application_id', $app_id)
+                       ->where('is_view', 2);
+             })
+             ->orderBy('id', 'asc')
+             ->get();
+        if($notes){
+            foreach($notes as $note){
+                $select .= '<p class="modal-text">';
+                    $select .= '<div class="custom-media-margin media custom-media-img">';
+                        $select .= '<div class="mr-2">';
+                            $select .= '<img alt="avatar" src="'.url($note->user->photo).'" class="img-fluid rounded-circle" style="width: 50px; margin-right: 5px;">';
+                        $select .= '</div>';
+                        $select .= '<div class="media-body">';
+                            $select .= '<h6 class="tx-inverse">'.$note->user->name;
+                            if(Auth::user()->id==$note->user_id || Auth::user()->role=='admin' || Auth::user()->role=='manager'){
+                                $select .= '<a onclick="deleteAgentMainNote('.$note->id.')" style="float:right; color:#b30b39;" href="javascript:void(0);" class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
+                            }
+                            $select .= '</h6>';
+                            $select .= '<p class="mg-b-0">'.$note->note.'</p>';
+                            $select .= '<small class="text-left"> Created : '.date('F d Y H:i:s',strtotime($note->created_at)).'</small><br>';
+                            if($note->is_view==2){
+                                $select .= '<small style="color:green;" class="text-left"> View By Agent : Yes</small>';
+                            }else{
+                                $select .= '<small style="color:green;" class="text-left"> View By Agent : No</small>';
+                            }
+                        $select .= '</div>';
+                    $select .= '</div>';
+                $select .= '</p><hr>';
+            }
+        }
+        //make instant notification for super admin
+        event(new AdminMsgEvent($notification->description,url('application/'.$main_note->application_id.'/processing')));
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$select,
         );
         return response()->json($data,200);
     }
