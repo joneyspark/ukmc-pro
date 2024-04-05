@@ -1119,7 +1119,7 @@ class ApplicationController extends Controller{
             'interview_status' => $get_interview_status,
             'from_date' => $get_from_date,
             'to_date' => $get_to_date,
-            'is_academic' => $get_level_of_education,
+            'level_of_education' => $get_level_of_education,
             'course_id' => $get_course_id,
             'gender' => $get_gender,
             'nationality' => $get_nationality,
@@ -1277,11 +1277,11 @@ class ApplicationController extends Controller{
                     ->orWhere('phone', 'like', '%' . $search . '%');
             });
         })
-        
+
         ->when($get_course_id, function ($query, $get_course_id) {
             return $query->where('course_id',$get_course_id);
         })
-        
+
         ->when($courseIntake, function ($query, $courseIntake) {
             return $query->where('intake',$courseIntake);
         })
@@ -2658,7 +2658,7 @@ class ApplicationController extends Controller{
         );
         return response()->json($data,200);
     }
-    //transfer course 
+    //transfer course
     public function transfer_course_to_other(){
         $getApp = Application::where('course_id',1)->get();
         foreach($getApp as $row){
