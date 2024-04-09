@@ -135,7 +135,23 @@ class ApplicationController extends Controller{
             }else{
                 $application->update_by = 0;
             }
-            $application->email = $request->email;
+            //email change notification
+            if($application->email != $request->email){
+                $notification = new Notification();
+                $notification->title = 'Change Email';
+                $notification->description = 'Email Change From '.$application->email.' To '.$request->email.' by '.Auth::user()->name;
+                $notification->create_date = time();
+                $notification->create_by = Auth::user()->id;
+                $notification->creator_name = Auth::user()->name;
+                $notification->creator_image = Auth::user()->photo;
+                $notification->user_id = 1;
+                $notification->is_admin = 1;
+                $notification->manager_id = 1;
+                $notification->application_id = $application->id;
+                $notification->slug = 'application/'.$application->id.'/details';
+                $notification->save();
+                $application->email = $request->email;
+            }
             $notification = new Notification();
             $notification->title = 'Basic Info Update';
             $notification->description = 'Application Basic Info Update By '.Auth::user()->name;
