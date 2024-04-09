@@ -172,6 +172,7 @@
                     console.log(status);
                     console.log(error);
                 });
+                return false;
             }
         });
     });
@@ -320,4 +321,18 @@ function get_application_notes_by_agent(id){
     });
 }
 
+</script>
+<script>
+    function get_notification_data(id){
+        var getId = id;
+        $.get('{{ URL::to('get-notification-data-for-activity-list') }}/'+getId,function(data,status){
+            if(data['result']['key']===200){
+                console.log(data['result']['val']);
+                $('#change-field-data').html(data['result']['val']);
+            }
+            if(data['result']['key']===101){
+                console.log(data['result']['val']);
+            }
+        });
+    }
 </script>

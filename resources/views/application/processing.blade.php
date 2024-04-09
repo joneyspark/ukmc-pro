@@ -9,10 +9,10 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div class="mt-0">
-            <div id="note-formid" method="post">
+            <div id="change-field-data-form">
                 <div class="modal-body">
                     <div id="change-field-data">
-                        
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -136,7 +136,7 @@
                                                             @else
                                                             <small style="color: green;" class="text-left"> Is View By Agent : No</small>
                                                             @endif
-                                                            
+
                                                         </div>
                                                     </div>
                                                 </div><hr>
@@ -145,7 +145,7 @@
                                         </div>
                                         <div class="card-body custom-card-body">
                                             <div class="row">
-                                                <form class="form-group" id="note-formid" method="post">
+                                                <form class="form-group" method="post" id="note-formid">
                                                     <div class="col-12 p-0">
                                                         <div class="form-group lead-drawer-form">
                                                             <label for="exampleFormControlInput1">Note:</label>
@@ -497,7 +497,7 @@
                                             @if (!empty($row->basic_info))
                                             <p>
                                                 <a onclick="get_notification_data('{{ $row->id }}')" data-bs-toggle="modal" data-bs-target="#inputFormModal" class="btn badge badge-danger btn-sm _effect--ripple waves-effect waves-light" href="javascript://">View Details</a>
-                                            </p> 
+                                            </p>
                                             @endif
                                         </td>
                                     </tr>
@@ -515,21 +515,7 @@
         </div>
     </div>
 </div>
-<script src="{{ asset('web/js/jquery.js') }}"></script>
-<script>
-    function get_notification_data(id){
-        var getId = id;
-        $.get('{{ URL::to('get-notification-data-for-activity-list') }}/'+getId,function(data,status){
-            if(data['result']['key']===200){
-                console.log(data['result']['val']);
-                $('#change-field-data').html(data['result']['val']);
-            }
-            if(data['result']['key']===101){
-                console.log(data['result']['val']);
-            }
-        });
-    }
-</script>
+
 <style>
     .is-action-data{
         display: none;
