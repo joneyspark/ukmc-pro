@@ -135,26 +135,52 @@ class ApplicationController extends Controller{
             }else{
                 $application->update_by = 0;
             }
+            //basic info update changing field list 
+            $basic_array = array();
             //email change notification
-            if($application->email != $request->email){
-                $notification = new Notification();
-                $notification->title = 'Change Email';
-                $notification->description = 'Email Change From '.$application->email.' To '.$request->email.' by '.Auth::user()->name;
-                $notification->create_date = time();
-                $notification->create_by = Auth::user()->id;
-                $notification->creator_name = Auth::user()->name;
-                $notification->creator_image = Auth::user()->photo;
-                $notification->user_id = 1;
-                $notification->is_admin = 1;
-                $notification->manager_id = 1;
-                $notification->application_id = $application->id;
-                $notification->slug = 'application/'.$application->id.'/details';
-                $notification->save();
-                $application->email = $request->email;
+            if($application->company_id != $request->company_id){
+                $previous = Company::where('id',$application->company_id)->first();
+                $current = Company::where('id',$request->company_id)->first();
+                $basic_array[] = 'Agent/Company/Referral Change From '.$previous->company_name.' To '.$current->company_name;
             }
+            if($application->title != $request->title){
+                $basic_array[] = 'Title Change From '.$application->title.' To '.$request->title;
+            }
+            if($application->first_name != $request->first_name){
+                $basic_array[] = 'First Name Change From '.$application->first_name.' To '.$request->first_name;
+            }
+            if($application->last_name != $request->last_name){
+                $basic_array[] = 'Last Name Change From '.$application->last_name.' To '.$request->last_name;
+            }
+            if($application->gender != $request->gender){
+                $basic_array[] = 'Gender Change From '.$application->gender.' To '.$request->gender;
+            }
+            if($application->date_of_birth != $request->date_of_birth){
+                $basic_array[] = 'Date Of Birth Change From '.$application->date_of_birth.' To '.$request->date_of_birth;
+            }
+            
+            if($application->email != $request->email){
+                $basic_array[] = 'Email Change From '.$application->email.' To '.$request->email;
+            }
+            if($application->phone != $request->phone){
+                $basic_array[] = 'Phone Change From '.$application->phone.' To '.$request->phone;
+            }
+            if($application->course_id != $request->course_id){
+                $previous_course = Course::where('id',$application->course_id)->first();
+                $current_course = Course::where('id',$request->course_id)->first();
+                $basic_array[] = 'Course Application Change From '.$previous_course->course_name.' To '.$current_course->course_name;
+            }
+            if($application->intake != $request->intake){
+                $basic_array[] = 'Intake Change From '.$application->intake.' To '.$request->intake;
+            }
+            if($application->delivery_pattern != $request->delivery_pattern){
+                $basic_array[] = 'Delivery Pattern Change From '.$application->delivery_pattern.' To '.$request->delivery_pattern;
+            }
+            $application->email = $request->email;
             $notification = new Notification();
             $notification->title = 'Basic Info Update';
             $notification->description = 'Application Basic Info Update By '.Auth::user()->name;
+            $notification->basic_info = (count($basic_array) > 0 )?json_encode($basic_array):'';
             $notification->create_date = time();
             $notification->create_by = Auth::user()->id;
             $notification->creator_name = Auth::user()->name;
@@ -2681,5 +2707,28 @@ class ApplicationController extends Controller{
             $update = Application::where('id',$row->id)->update(['course_id'=>2]);
         }
         echo "Transfer Successed";
+    }
+    public function get_notification_data_for_activity_list($id=NULL){
+        $get_data = Notification::where('id',$id)->first();
+        $select = '';
+        if($get_data){
+            if(!empty($get_data->basic_info)){
+                $array = json_decode($get_data->basic_info);
+                foreach($array as $key=>$row){
+                    $select .= '<p style="color:green;">'.$key+1 . ':' . $row.'</p>';
+                } 
+            }
+            $data['result'] = array(
+                'key'=>200,
+                'val'=>$select
+            );
+            return response()->json($data,200);
+        }else{
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Notification Data Not Found!'
+            );
+            return response()->json($data,200);
+        }
     }
 }

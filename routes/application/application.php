@@ -84,6 +84,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::post('document-upload-from-web','document_upload_from_web');
     Route::get('offer-request-list','offer_request_list');
     Route::get('transfer-course-to-other','transfer_course_to_other');
+    Route::get('get-notification-data-for-activity-list/{id?}','get_notification_data_for_activity_list');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

@@ -1,5 +1,28 @@
 @extends('adminpanel')
 @section('admin')
+<div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header" id="inputFormModalLabel">
+            <h5 class="modal-title"><b>Change Field List</b></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <div class="mt-0">
+            <div id="note-formid" method="post">
+                <div class="modal-body">
+                    <div id="change-field-data">
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Close</a>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
 <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <div class="row secondary-nav">
@@ -471,6 +494,11 @@
                                             <p>{{ $row->creator_name }}</p>
                                             {!! $row->description !!}
                                             <p>{{ App\Models\Application\Application::timeLeft(strtotime($row->created_at)) }}</p>
+                                            @if (!empty($row->basic_info))
+                                            <p>
+                                                <a onclick="get_notification_data('{{ $row->id }}')" data-bs-toggle="modal" data-bs-target="#inputFormModal" class="btn badge badge-danger btn-sm _effect--ripple waves-effect waves-light" href="javascript://">View Details</a>
+                                            </p> 
+                                            @endif
                                         </td>
                                     </tr>
                                     @empty
@@ -487,6 +515,21 @@
         </div>
     </div>
 </div>
+<script src="{{ asset('web/js/jquery.js') }}"></script>
+<script>
+    function get_notification_data(id){
+        var getId = id;
+        $.get('{{ URL::to('get-notification-data-for-activity-list') }}/'+getId,function(data,status){
+            if(data['result']['key']===200){
+                console.log(data['result']['val']);
+                $('#change-field-data').html(data['result']['val']);
+            }
+            if(data['result']['key']===101){
+                console.log(data['result']['val']);
+            }
+        });
+    }
+</script>
 <style>
     .is-action-data{
         display: none;
