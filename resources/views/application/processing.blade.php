@@ -405,7 +405,8 @@
                                         <form id="eligible-form" method="post">
                                             <div class="col col-md-12 p-0">
                                                 <div class="form-group lead-drawer-form">
-                                                    <input type="hidden" value="{{ (!empty($check_eligible->application_id))?$check_eligible->application_id:'' }}" name="eligible_application_id" id="eligible_application_id" />
+                                                    <input type="hidden" value="{{ URL::to('check-eligible-data-post') }}" name="eligible_url" id="eligible_url" />
+                                                    <input type="hidden" value="{{ (!empty($application_info->id))?$application_info->id:'' }}" name="eligible_application_id" id="eligible_application_id" />
                                                     <input type="hidden" value="{{ (!empty($check_eligible->id))?$check_eligible->id:'' }}" name="eligible_id" id="eligible_id" />
                                                     <input placeholder="Officer Name" name="officer_name" id="officer_name" value="{{ (!empty($check_eligible->officer_name))?$check_eligible->officer_name:'' }}" class="form-control" rows="2" />
                                                 </div><br>
@@ -414,15 +415,15 @@
                                                 </div><br>
                                                 <div class="col col-md-12 p-0">
                                                     <select class="form-control" name="is_eligible" id="is_eligible">
-                                                        <option>--Select One--</option>
+                                                        <option value="">--Select One--</option>
                                                         <option {{ (!empty($check_eligible->is_eligible) && $check_eligible->is_eligible=="Eligible")?'selected':'' }} value="Eligible">Eligible</option>
                                                         <option {{ (!empty($check_eligible->is_eligible) && $check_eligible->is_eligible=="Not Eligible")?'selected':'' }} value="Not Eligible">Not Eligible</option>
                                                     </select>
                                                 </div><br>
                                                 <div class="col col-md-12 p-0">
                                                     <textarea placeholder="Notes" class="form-control" name="eligible_notes" id="eligible_notes">{{ (!empty($check_eligible->notes))?$check_eligible->notes:'' }}</textarea>
-                                                </div><br>
-                                                <button id="btn-eligible-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Update</button>
+                                                </div>
+                                                <button id="btn-eligible-submit" class="mt-2 btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Update</button>
                                             </div>
                                             <hr>
                                         </form>

@@ -335,4 +335,88 @@ function get_application_notes_by_agent(id){
             }
         });
     }
+
+    $(document).ready(function() {
+        $('#eligible-form').validate({
+            rules: {
+            officer_name: {
+                required: true
+            },
+            crn: {
+                required: true
+            },
+            is_eligible: {
+                required: true
+            },
+            eligible_notes: {
+                required: true
+            },
+            },
+            messages: {
+            officer_name: {
+                required: "Officer Name Field Is Required!"
+            },
+            crn: {
+                required: "CRN Field Is Required!"
+            },
+            is_eligible: {
+                required: "Please Select Eligible!"
+            },
+            eligible_notes: {
+                required: "Eligible Notes Field Is Required!"
+            },
+            },
+            submitHandler: function(form) {
+            $('#btn-eligible-submit').prop('disabled', true);
+            var formData = new FormData();
+            var url = $('#eligible_url').val();
+            var application_id = $('#eligible_application_id').val();
+            var eligible_id = $('#eligible_id').val();
+            var officer_name = $('#officer_name').val();
+            var crn = $('#crn').val();
+            var is_eligible = $('#is_eligible').val();
+            var eligible_notes = $('#eligible_notes').val();
+
+
+            formData.append('application_id', application_id);
+            formData.append('eligible_id', eligible_id);
+            formData.append('officer_name', officer_name);
+            formData.append('crn', crn);
+            formData.append('is_eligible', is_eligible);
+            formData.append('notes', eligible_notes);
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data, status) {
+                console.log(data);
+                console.log(status);
+                if (data['result']['key'] === 200) {
+                    iziToast.show({
+                    title: 'Success:',
+                    message: data['result']['val'],
+                    position: 'topRight',
+                    timeout: 8000,
+                    color: 'green',
+                    balloon: true,
+                    close: true,
+                    progressBarColor: 'yellow',
+                    });
+                    $('#btn-eligible-submit').prop('disabled', false);
+                    $('#eligible_application_id').val(data['result']['application_id']);
+                    $('#eligible_id').val(data['result']['eligible_id']);
+                }
+                },
+                error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+                console.log(status);
+                console.log(error);
+                }
+            });
+            }
+        });
+    });
 </script>

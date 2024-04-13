@@ -1056,7 +1056,7 @@ class ApplicationOtherController extends Controller
         //make notification
         $notification = new Notification();
         $notification->title = 'Check Eligibility';
-        $notification->description = 'Check Eligibility of Application By '.Auth::user()->name;
+        $notification->description = 'Application Makes as '.$eligible->is_eligible.' By '.Auth::user()->name;
         $notification->create_date = time();
         $notification->create_by = Auth::user()->id;
         $notification->creator_name = Auth::user()->name;
@@ -1066,14 +1066,13 @@ class ApplicationOtherController extends Controller
         $notification->application_id = $request->application_id;
         $notification->slug = 'application/'.$request->application_id.'/processing';
         $notification->save();
-        $select = '';
-
         //make instant notification for super admin
         event(new AdminMsgEvent($notification->description,url('application/'.$request->application_id.'/processing')));
         $data['result'] = array(
             'key'=>200,
-            'val'=>'Application Make as '.$eligible->is_eligible,
-            'application_id'=>$eligible->application_id
+            'val'=>'Application Make as '.$eligible->is_eligible.' By '.Auth::user()->name,
+            'application_id'=>$eligible->application_id,
+            'eligible_id'=>$eligible->id
         );
         return response()->json($data,200);
     }
