@@ -390,6 +390,16 @@
                             </div>
                             <div class="row">
                                 <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">Email:</label>
+                                    <input class="form-control" type="text" id="email" name="email" value="" />
+                                </div>
+                                <div class="col form-group mb-4">
+                                    <label for="verticalFormStepform-name">Phone:</label>
+                                    <input class="form-control" type="text" id="phone" name="phone" value="" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group mb-4">
                                     <label for="verticalFormStepform-name">Start Date:</label>
                                     <input class="form-control" type="datetime-local" id="start_date" name="start_date" value="" />
                                     @if ($errors->has('start_date'))
@@ -412,6 +422,8 @@
                             <tr>
                                 <td>Job Title</td>
                                 <td>Employer Name</td>
+                                <td>Email</td>
+                                <td>Phone</td>
                                 <td>Start Date</td>
                                 <td>End Date</td>
                             </tr>
@@ -419,6 +431,8 @@
                             <tr>
                                 <td>{{ $jlist->job_title }}</td>
                                 <td>{{ $jlist->employer_name }}</td>
+                                <td>{{ $jlist->email }}</td>
+                                <td>{{ $jlist->phone }}</td>
                                 <td>{{ $jlist->start_date }}</td>
                                 <td>{{ (!empty($jlist->end_date))?$jlist->end_date:$jlist->continue }}</td>
                             </tr>

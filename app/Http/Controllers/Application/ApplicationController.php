@@ -398,6 +398,8 @@ class ApplicationController extends Controller{
         $job->application_id = $request->get_application_id;
         $job->job_title = $request->job_title;
         $job->employer_name = $request->employer_name;
+        $job->email = $request->email;
+        $job->phone = $request->phone;
         $job->start_date = $request->start_date;
         $job->end_date = $request->end_date;
         $job->continue = $request->continue;
