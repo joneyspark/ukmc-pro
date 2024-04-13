@@ -327,8 +327,6 @@
                                 </div>
                             </div><br>
                             @endif
-
-
                             <div class="card no-outer-spacing no-border-custom">
                                 <div class="card-header">
                                     <section class="mb-0 mt-0">
@@ -394,7 +392,44 @@
                                     </div>
                                     @endif
                                 </div>
-                            </div>
+                            </div><br>
+                            <div class="card no-outer-spacing no-border-custom">
+                                <div class="card-header">
+                                    <section class="mb-0 mt-0">
+                                        <h5>Check Eligibility</h5>
+                                    </section>
+                                </div>
+                                <div id="" class="" aria-labelledby="headingTwo2" data-parent="#withoutSpacing">
+
+                                    <div class="card-body custom-card-body">
+                                        <form id="eligible-form" method="post">
+                                            <div class="col col-md-12 p-0">
+                                                <div class="form-group lead-drawer-form">
+                                                    <input type="hidden" value="{{ (!empty($check_eligible->application_id))?$check_eligible->application_id:'' }}" name="eligible_application_id" id="eligible_application_id" />
+                                                    <input type="hidden" value="{{ (!empty($check_eligible->id))?$check_eligible->id:'' }}" name="eligible_id" id="eligible_id" />
+                                                    <input placeholder="Officer Name" name="officer_name" id="officer_name" value="{{ (!empty($check_eligible->officer_name))?$check_eligible->officer_name:'' }}" class="form-control" rows="2" />
+                                                </div><br>
+                                                <div class="col col-md-12 p-0">
+                                                    <input placeholder="CRN" value="{{ (!empty($check_eligible->crn))?$check_eligible->crn:'' }}" name="crn" id="crn" type="text" class="form-control" />
+                                                </div><br>
+                                                <div class="col col-md-12 p-0">
+                                                    <select class="form-control" name="is_eligible" id="is_eligible">
+                                                        <option>--Select One--</option>
+                                                        <option {{ (!empty($check_eligible->is_eligible) && $check_eligible->is_eligible=="Eligible")?'selected':'' }} value="Eligible">Eligible</option>
+                                                        <option {{ (!empty($check_eligible->is_eligible) && $check_eligible->is_eligible=="Not Eligible")?'selected':'' }} value="Not Eligible">Not Eligible</option>
+                                                    </select>
+                                                </div><br>
+                                                <div class="col col-md-12 p-0">
+                                                    <textarea placeholder="Notes" class="form-control" name="eligible_notes" id="eligible_notes">{{ (!empty($check_eligible->notes))?$check_eligible->notes:'' }}</textarea>
+                                                </div><br>
+                                                <button id="btn-eligible-submit" class="btn badge badge-info btn-sm _effect--ripple waves-effect waves-light" >Update</button>
+                                            </div>
+                                            <hr>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div><br>
                         </div>
                         <div class="col col-md-12 mb-4">
                             <h5 class="pb-2">Application Document <a href="{{ URL::to('application-create/'.$application_info->id.'/step-2') }}" class="btn btn-info btn-rounded mb-2 mr-4 inline-flex"> Edit Document <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 icon custom-edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></h5>

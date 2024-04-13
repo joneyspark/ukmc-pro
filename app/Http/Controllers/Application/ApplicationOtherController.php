@@ -21,6 +21,7 @@ use App\Mail\requestDocumentMail;
 use App\Models\Application\Application;
 use App\Models\Application\ApplicationIntake;
 use App\Models\Application\ApplicationStatus;
+use App\Models\Application\Eligibility;
 use App\Models\Application\Followup;
 use App\Models\Application\InterviewStatus;
 use App\Models\Application\Meeting;
@@ -1035,6 +1036,44 @@ class ApplicationOtherController extends Controller
         $data['result'] = array(
             'key'=>200,
             'val'=>$select,
+        );
+        return response()->json($data,200);
+    }
+    //check eligible data post
+    public function check_eligible_data_post(Request $request){
+        //$getData = Eligibility::where
+        if($request->eligible_id){
+            $eligible = Eligibility::where('id',$request->eligible_id)->first();
+        }else{
+            $eligible = new Eligibility();
+        }
+        $eligible->application_id = $request->application_id;
+        $eligible->officer_name = $request->officer_name;
+        $eligible->crn = $request->crn;
+        $eligible->is_eligible = $request->is_eligible;
+        $eligible->notes = $request->notes;
+        $eligible->save();
+        //make notification
+        $notification = new Notification();
+        $notification->title = 'Check Eligibility';
+        $notification->description = 'Check Eligibility of Application By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = Auth::user()->photo;
+        $notification->user_id = 1;
+        $notification->is_admin = 1;
+        $notification->application_id = $request->application_id;
+        $notification->slug = 'application/'.$request->application_id.'/processing';
+        $notification->save();
+        $select = '';
+
+        //make instant notification for super admin
+        event(new AdminMsgEvent($notification->description,url('application/'.$request->application_id.'/processing')));
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>'Application Make as '.$eligible->is_eligible,
+            'application_id'=>$eligible->application_id
         );
         return response()->json($data,200);
     }

@@ -41,6 +41,7 @@ use App\Mail\requestDocumentMail;
 use App\Models\Application\ApplicationIntake;
 use App\Models\Application\ApplicationSop;
 use App\Models\Application\ApplicationStatus;
+use App\Models\Application\Eligibility;
 use App\Models\Application\Experience;
 use App\Models\Application\Followup;
 use App\Models\Application\InterviewStatus;
@@ -135,7 +136,7 @@ class ApplicationController extends Controller{
             }else{
                 $application->update_by = 0;
             }
-            //basic info update changing field list 
+            //basic info update changing field list
             $basic_array = array();
             //email change notification
             if($application->company_id != $request->company_id){
@@ -158,7 +159,7 @@ class ApplicationController extends Controller{
             if($application->date_of_birth != $request->date_of_birth){
                 $basic_array[] = 'Date Of Birth Change From '.$application->date_of_birth.' To '.$request->date_of_birth;
             }
-            
+
             if($application->email != $request->email){
                 $basic_array[] = 'Email Change From '.$application->email.' To '.$request->email;
             }
@@ -1035,6 +1036,7 @@ class ApplicationController extends Controller{
         $data['application_status_list'] = ApplicationStatus::where('status',0)->get();
         $data['interview_status_list'] = InterviewStatus::where('status',0)->get();
         $data['activities'] = Notification::where('application_id',$id)->orderBy('id','desc')->get();
+        $data['check_eligible'] = Eligibility::where('application_id',$id)->first();
         return view('application/processing',$data);
     }
     public function all(Request $request){
@@ -2716,7 +2718,7 @@ class ApplicationController extends Controller{
                 $array = json_decode($get_data->basic_info);
                 foreach($array as $key=>$row){
                     $select .= '<p style="color:green;">'.$key+1 . ':' . $row.'</p>';
-                } 
+                }
             }
             $data['result'] = array(
                 'key'=>200,
