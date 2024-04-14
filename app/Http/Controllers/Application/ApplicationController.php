@@ -1062,6 +1062,7 @@ class ApplicationController extends Controller{
         $get_nationality = $request->nationality;
         $get_other_nationality = $request->other_nationality;
         $get_disability = $request->disability;
+        $get_eligibility = $request->eligibility;
         //Session set data
         Session::put('get_campus',$get_campus);
         Session::put('get_agent',$get_agent);
@@ -1080,6 +1081,7 @@ class ApplicationController extends Controller{
         Session::put('get_nationality',$get_nationality);
         Session::put('get_other_nationality',$get_other_nationality);
         Session::put('get_disability',$get_disability);
+        Session::put('get_eligibility',$get_eligibility);
 
         $data['campuses'] = Campus::where('active',1)->get();
         $data['agents'] = Company::where('status',1)->get();
@@ -1151,6 +1153,11 @@ class ApplicationController extends Controller{
                 $query->where('disabilities', $get_disability);
             });
         })
+        ->when($get_eligibility, function ($query) use ($get_eligibility) {
+            $query->whereHas('eligible', function ($query) use ($get_eligibility) {
+                $query->where('is_eligible', $get_eligibility);
+            });
+        })
         ->where('application_status_id','!=',3)
         ->orderBy('created_at','desc')
         ->paginate(50)
@@ -1171,6 +1178,7 @@ class ApplicationController extends Controller{
             'nationality' => $get_nationality,
             'other_nationality' => $get_other_nationality,
             'disability' => $get_disability,
+            'eligibility' => $get_eligibility,
         ]);
 
         $data['my_teams'] = User::where('role','adminManager')->where('active',1)->get();
@@ -1193,6 +1201,7 @@ class ApplicationController extends Controller{
         $data['get_nationality'] = Session::get('get_nationality');
         $data['get_other_nationality'] = Session::get('get_other_nationality');
         $data['get_disability'] = Session::get('get_disability');
+        $data['get_eligibility'] = Session::get('get_eligibility');
         //$data['application_list'] = Application::where('application_status_id','!=',0)->orderBy('id','desc')->paginate(15);
         return view('application/all',$data);
     }

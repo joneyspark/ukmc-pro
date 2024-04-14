@@ -119,6 +119,9 @@ class Application extends Model
     public function sop(){
         return $this->hasOne(ApplicationSop::class);
     }
+    public function eligible(){
+        return $this->hasOne(Eligibility::class,'application_id');
+    }
     public static function timeLeft($passTime)
     {
         //echo $time;

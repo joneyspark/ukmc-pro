@@ -264,7 +264,7 @@
                             <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="#">Application</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Create</li>
+                                    <li class="breadcrumb-item active" aria-current="page">All</li>
                                 </ol>
                             </nav>
 
@@ -421,6 +421,13 @@
                                 <option value="">Disability</option>
                                 <option {{ (!empty($get_disability) && $get_disability=='yes')?'selected':'' }} value="yes">Yes</option>
                                 <option {{ (!empty($get_disability) && $get_disability=='no')?'selected':'' }} value="no">No</option>
+                            </select>
+                         </div>
+                         <div class="col">
+                            <select name="eligibility" id="eligibility" class="form-control" onchange="getApplicationData()">
+                                <option value="">Eligible</option>
+                                <option {{ (!empty($get_eligibility) && $get_eligibility=="Eligible")?'selected':'' }} value="Eligible">Eligible</option>
+                                <option {{ (!empty($get_eligibility) && $get_eligibility=="Not Eligible")?'selected':'' }} value="Not Eligible">Not Eligible</option>
                             </select>
                          </div>
                         <div class="col-3">

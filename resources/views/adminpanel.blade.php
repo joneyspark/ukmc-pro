@@ -297,8 +297,9 @@
                 var nationality = $('#nationality').val();
                 var other_nationality = $('#other_nationality').val();
                 var disability = $('#disability').val();
+                var eligibility = $('#eligibility').val();
 
-                window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&interviewer=" + interviewer + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date + "&level_of_education=" + level_of_education + "&course_id=" + course_id + "&gender=" + gender + "&ethnic_origin=" + ethnic_origin + "&nationality=" + nationality + "&other_nationality=" + other_nationality + "&disability=" + disability;
+                window.location = "{{ URL::to('all-application?campus=') }}" + campus + "&agent=" + agent + "&officer=" + officer + "&interviewer=" + interviewer + "&status=" + status + "&intake=" + intake + "&interview_status=" + interview_status + "&from_date=" + from_date + "&to_date=" + to_date + "&level_of_education=" + level_of_education + "&course_id=" + course_id + "&gender=" + gender + "&ethnic_origin=" + ethnic_origin + "&nationality=" + nationality + "&other_nationality=" + other_nationality + "&disability=" + disability + "&eligibility=" + eligibility;
             }
             function getAcademicData(){
                 var level_data = $('#level_of_education').val();
