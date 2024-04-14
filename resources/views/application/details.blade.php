@@ -52,6 +52,10 @@
                             </div>
                             @endif
                             <div class="row mb-4 px-5">
+                                <div class="col">Eligibility : </div>
+                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->eligible->is_eligible))?$app_data->eligible->is_eligible:'Not Specified' }}</span></div>
+                            </div>
+                            <div class="row mb-4 px-5">
                                 <div class="col">Name : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->name))?$app_data->name:'' }}</span></div>
                             </div>
@@ -141,6 +145,28 @@
                                 </div>
                             </div>
                         </div>
+                        @if(!empty($app_data->eligible))
+                        <h5 class="text-center py-3" id="MainContent_dv_HPerm">Eligibility Check Details</h5>
+                        <div class="container bg-dark py-5 px-5 rounded">
+                            <div id="MainContent_dv_PermAdd1" class="row mb-4 px-5">
+                                <div class="col">Officer Name :</div>
+                                <div class="col"><span id="MainContent_lbl_PermAdd1">{{ (!empty($app_data->eligible->officer_name))?$app_data->eligible->officer_name:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PermAdd2" class="row mb-4 px-5">
+                                <div class="col">CRN :</div>
+                                <div class="col"><span id="MainContent_lbl_PermAdd2">{{ (!empty($app_data->eligible->crn))?$app_data->eligible->crn:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PermCounty" class="row mb-4 px-5">
+                                <div class="col">Is Eligible :</div>
+                                <div class="col"><span id="MainContent_lbl_PermCounty">{{ (!empty($app_data->eligible->is_eligible))?$app_data->eligible->is_eligible:'' }}</span></div>
+                            </div>
+                            <div id="MainContent_dv_PermCity" class="row mb-4 px-5">
+                                <div class="col">Notes :</div>
+                                <div class="col"><span id="MainContent_lbl_PermCity">{{ (!empty($app_data->eligible->notes))?$app_data->eligible->notes:'' }}</span></div>
+                            </div>
+                        </div>
+                        @endif
+                        
                         <h5 class="text-center py-3" id="MainContent_dv_HPerm">Permanent Address</h5>
                         <div class="container bg-dark py-5 px-5 rounded">
                             <div id="MainContent_dv_PermAdd1" class="row mb-4 px-5">

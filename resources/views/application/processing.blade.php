@@ -227,6 +227,10 @@
                                 <table class="table-bordered mb-4 table">
                                     <tbody>
                                         <tr>
+                                            <td>Check Eligibility</td>
+                                            <td>{{ (!empty($check_eligible->is_eligible))?$check_eligible->is_eligible:'Not Specified' }}</td>
+                                        </tr>
+                                        <tr>
                                             <td>Application Type</td>
                                             <td>{{ ($application_info->is_academic==1)?'Academic':'Non-academic' }}</td>
                                         </tr>

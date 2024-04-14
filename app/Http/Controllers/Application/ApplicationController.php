@@ -1020,7 +1020,7 @@ class ApplicationController extends Controller{
         $data['page_title'] = 'Application | All';
         $data['application'] = true;
         $data['application_all'] = true;
-        $data['app_data'] = Application::with(['sub_agent'])->where('id',$id)->first();
+        $data['app_data'] = Application::with(['sub_agent','eligible'])->where('id',$id)->first();
         return view('application.details',$data);
     }
     public function pending_applications(){
