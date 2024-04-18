@@ -1456,7 +1456,7 @@ class ApplicationController extends Controller{
         $doc->request_to = ($application->create_by > 0)?$application->create_by:0;
         $doc->save();
         $agentData = User::where('company_id',$application->company_id)->where('is_admin',1)->first();
-        if($application->create_by > 0){
+        if(!empty($agentData) && $application->create_by > 0){
             $notification = new Notification();
             $notification->title = 'Document Request';
             $notification->description = 'New Document Requested By '.Auth::user()->name;
