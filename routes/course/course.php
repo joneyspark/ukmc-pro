@@ -36,7 +36,7 @@ Route::controller(CourseController::class)->group(function () {
     Route::post('class/schedule/absent-call','absent_call');
     Route::post('class/schedule/leave-call','leave_call');
     Route::get('class/schedule/get-notes/{id?}','get_notes');
-    Route::get('class/schedule/note_delete/{id?}','main_note_delete');
+    Route::get('class/schedule/note_delete/{id?}/{schedule_id?}','main_note_delete');
     Route::get('class/schedule/quick-attendence','quick_attendence');
     Route::get('reset-schedule-list','reset_schedule_list');
     Route::post('class/schedule/schedule-note-post','application_note_post');

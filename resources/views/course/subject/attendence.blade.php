@@ -18,6 +18,7 @@
                         <div class="col">
                             <div class="form-group mb-4"><label for="exampleFormControlInput1">Note:</label>
                                 <input type="hidden" value="" name="note_application_id" id="note_application_id" />
+                                <input type="hidden" value="" name="note_schedule_id" id="note_schedule_id" />
                                 <textarea name="application_note" id="application_note" class="form-control" rows="2"></textarea>
                             </div>
                         </div>
@@ -66,7 +67,7 @@
                 <input type="hidden" id="schedule_id{{ $row->application_data->id }}" name="schedule_id" value="{{ (!empty($schedule_id))?$schedule_id:'' }}" />
                 <div class="card style-2 mb-md-0 mb-4">
                     <div class="text-end">
-                        <a onclick="get_schedule_notes('{{ $row->application_data->id }}')" data-bs-toggle="modal" data-bs-target="#inputFormModal133" class="dropdown-item" href="javascript://"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a>
+                        <a onclick="get_schedule_notes('{{ $row->application_data->id }}', '{{ $schedule_id }}')" data-bs-toggle="modal" data-bs-target="#inputFormModal133" class="dropdown-item" href="javascript://"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a>
                     </div>
                     <div class="text-center">
                         <img src="https://bheuni.io/front/img/teams/tanvir.png" class="card-img-top rounded-circle" alt="..." style="width: 120px">
@@ -75,17 +76,17 @@
                     <p class="text-center">{{ (!empty($row->application_data->id))?$row->application_data->id:'' }}</p>
                     <div class="card-body px-0 pb-0 d-flex justify-content-between">
                         @if(!empty($row->application_data->applicant_attendence))
-                            @if($row->application_data->applicant_attendence->application_status==1)
+                            @if($schedule_id==$row->application_data->applicant_attendence->class_schedule_id && $row->application_data->applicant_attendence->application_status==1)
                                 <a onclick="presentCall({{ $row->application_data->id }})" id="present_id{{ $row->application_data->id }}" class="btn btn-success" href="javascript://"><h5>Pp</h5></a>
                             @else
                                 <a onclick="presentCall({{ $row->application_data->id }})" id="present_id{{ $row->application_data->id }}" class="btn btn-outline-success" href="javascript://"><h5>Pp</h5></a>
                             @endif
-                            @if($row->application_data->applicant_attendence->application_status==2)
+                            @if($schedule_id==$row->application_data->applicant_attendence->class_schedule_id && $row->application_data->applicant_attendence->application_status==2)
                                 <a onclick="absentCall({{ $row->application_data->id }})" id="absent_id{{ $row->application_data->id }}" class="btn btn-danger" href="javascript://"><h5>AB</h5></a>
                             @else
                                 <a onclick="absentCall({{ $row->application_data->id }})" id="absent_id{{ $row->application_data->id }}" class="btn btn-outline-danger" href="javascript://"><h5>AB</h5></a>
                             @endif
-                            @if($row->application_data->applicant_attendence->application_status==3)
+                            @if($schedule_id==$row->application_data->applicant_attendence->class_schedule_id && $row->application_data->applicant_attendence->application_status==3)
                                 <a onclick="leaveCall({{ $row->application_data->id }})" id="leave_id{{ $row->application_data->id }}" class="btn btn-warning" href="javascript://"><h5>AA</h5></a>
                             @else
                                 <a onclick="leaveCall({{ $row->application_data->id }})" id="leave_id{{ $row->application_data->id }}" class="btn btn-outline-warning" id="leave_id{{ $row->application_data->id }}" href="javascript://"><h5>AA</h5></a>
@@ -256,13 +257,14 @@
     }
 </script>
 <script>
-    function get_schedule_notes(id){
+    function get_schedule_notes(id,schedule_id){
         if(id===null){
             return false;
         }
         //alert(id);
         $('#note_application_id').val(id);
-        $.get('{{ URL::to('class/schedule/get-notes') }}/'+id,function(data,status){
+        $('#note_schedule_id').val(schedule_id);
+        $.get('{{ URL::to('class/schedule/get-notes') }}/'+id+'/'+schedule_id,function(data,status){
             if(data['result']['key']===200){
                 console.log(data['result']['val']);
                 $('#note-data').html(data['result']['val']);
@@ -298,10 +300,12 @@
             },
             submitHandler: function(form) {
             $('#btn-note-submit').prop('disabled', true);
+            var note_schedule_id = $('#note_schedule_id').val();
             var note_application_id = $('#note_application_id').val();
             var application_note = $('#application_note').val();
             $.post('{{ URL::to('class/schedule/schedule-note-post') }}',
                 {
+                    note_schedule_id: note_schedule_id,
                     note_application_id: note_application_id,
                     application_note: application_note,
                 },

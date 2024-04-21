@@ -568,6 +568,7 @@ class CourseController extends Controller{
         }else{
             $attendence = new AttendenceConfirmation();
             $attendence->class_schedule_id = $checkSchedule->id;
+            $attendence->course_group_id = $checkSchedule->group_id;
             $attendence->application_id = $get_app_data->id;
             $attendence->course_id = $checkSchedule->course_id;
             $attendence->intake_id = $checkSchedule->intake_id;
@@ -619,6 +620,7 @@ class CourseController extends Controller{
         }else{
             $attendence = new AttendenceConfirmation();
             $attendence->class_schedule_id = $checkSchedule->id;
+            $attendence->course_group_id = $checkSchedule->group_id;
             $attendence->application_id = $get_app_data->id;
             $attendence->course_id = $checkSchedule->course_id;
             $attendence->intake_id = $checkSchedule->intake_id;
@@ -670,6 +672,7 @@ class CourseController extends Controller{
         }else{
             $attendence = new AttendenceConfirmation();
             $attendence->class_schedule_id = $checkSchedule->id;
+            $attendence->course_group_id = $checkSchedule->group_id;
             $attendence->application_id = $get_app_data->id;
             $attendence->course_id = $checkSchedule->course_id;
             $attendence->intake_id = $checkSchedule->intake_id;
@@ -685,9 +688,9 @@ class CourseController extends Controller{
         );
         return response()->json($data,200);
     }
-    public function get_notes($id=NULL){
+    public function get_notes($id=NULL,$schedule_id=NULL){
         $select = '';
-        $notes = AttendNote::where('application_id',$id)->orderBy('id','asc')->get();
+        $notes = AttendNote::where('schedule_id',$schedule_id)->where('application_id',$id)->orderBy('id','asc')->get();
         if($notes){
             foreach($notes as $note){
                 $select .= '<p class="modal-text">';
@@ -718,6 +721,7 @@ class CourseController extends Controller{
     public function application_note_post(Request $request){
         $note = new AttendNote();
         $note->application_id = $request->note_application_id;
+        $note->schedule_id = $request->note_schedule_id;
         $note->note = $request->application_note;
         $note->user_id = Auth::user()->id;
         $note->status = 0;
@@ -725,7 +729,7 @@ class CourseController extends Controller{
         //make notification
 
         $select = '';
-        $notes = AttendNote::where('application_id',$request->note_application_id)->orderBy('id','asc')->get();
+        $notes = AttendNote::where('schedule_id',$request->note_schedule_id)->where('application_id',$request->note_application_id)->orderBy('id','asc')->get();
         if($notes){
             foreach($notes as $note){
                 $select .= '<p class="modal-text">';

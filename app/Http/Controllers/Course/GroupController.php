@@ -271,8 +271,9 @@ class GroupController extends Controller
             return redirect()->back();
         }
         $data['schedule_id'] = $id;
+        $data['group_id'] = $getSchedule->group_id;
 
-        $data['applicants'] = JoinGroup::with(['application_data'])->where('group_id',$getSchedule->group_id)->paginate(15);
+        $data['applicants'] = JoinGroup::with(['application_data'])->where('group_id',$getSchedule->group_id)->paginate(30);
         //$data['applicants'] = Application::with(['applicant_attendence'])->where('course_id',$getSchedule->course_id)->where('intake',$getSchedule->intake_date)->where('status',11)->paginate(50);
         //dd($data['applicants']);
         return view('course/subject/attendence',$data);
@@ -326,4 +327,5 @@ class GroupController extends Controller
         Session::flash('success','Successfully Moved To Another Group!');
         return redirect()->back();
     }
+    //all course
 }
