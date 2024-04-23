@@ -245,6 +245,12 @@ class GroupController extends Controller
             );
             return response()->json($data,200);
         }
+        //get group applicant
+        $getGroupApplicants = JoinGroup::where('group_id',$classSchedule->group_id)->get();
+        if(!empty($getGroupApplicants)){
+            $getAttendList = AttendenceConfirmation::where('class_schedule_id',$classSchedule->id)->get();
+            //if(!empty())
+        }
         $msg = '';
         if($classSchedule->is_done==1){
             $classSchedule->is_done = 0;
