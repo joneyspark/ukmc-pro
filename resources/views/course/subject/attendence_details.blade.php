@@ -95,6 +95,7 @@
                 @csrf
                 <div class="col">
                     <input type="hidden" name="class_schedule_id" value="{{ (!empty($details->id))?$details->id:'' }}" />
+                    <input type="hidden" name="course_group_id" value="{{ (!empty($details->group_id))?$details->group_id:'' }}" />
                     <label for="id">Student Id:</label>
                     <input type="text" name="application_id" value="" />
                     @if ($errors->has('application_id'))

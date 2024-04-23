@@ -1295,7 +1295,7 @@ class ApplicationController extends Controller{
     }
     public function enrolled(Request $request){
         $data['page_title'] = 'Application | Enrolled';
-        $data['application'] = true;
+        $data['attend'] = true;
         $data['application_enrolled'] = true;
         $get_course_id = $request->course_id;
         $get_intake_id = $request->intake_id;

@@ -9,10 +9,8 @@
                     <form id="login-form" method="POST" action="{{ URL::to('student-register-post') }}">
                         @csrf
                     <div class="col-md-12 mb-3">
-
                         <h2>Sign Up</h2>
                         <p>Enter your Name email and password to Register</p>
-
                     </div>
                     <div class="col-md-12">
                         <div class="mb-3">

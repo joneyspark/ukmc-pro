@@ -90,9 +90,6 @@
                 <li class="{{ (!empty($interview_list) && $interview_list==true)?'active':'' }}">
                     <a href="{{ URL::to('interview-list') }}"> Interview Schedule </a>
                 </li>
-                <li class="{{ (!empty($application_enrolled) && $application_enrolled==true)?'active':'' }}">
-                    <a href="{{ URL::to('enrolled-students') }}"> Enrolled Students </a>
-                </li>
                 @endif
                 @if(Auth::check() && Auth::user()->role=='manager' || Auth::user()->role=='interviewer' || Auth::user()->role=='adminManager' || Auth::user()->role=='admin')
                 <li class="{{ (!empty($offer_request_list) && $offer_request_list==true)?'active':'' }}">
@@ -208,6 +205,9 @@
                 </li>
                 <li class="{{ (!empty($course_all) && $course_all==true)?'active':'' }}">
                     <a href="{{ URL::to('all-course') }}"> All Course </a>
+                </li>
+                <li class="{{ (!empty($application_enrolled) && $application_enrolled==true)?'active':'' }}">
+                    <a href="{{ URL::to('enrolled-students') }}"> Enrolled Students </a>
                 </li>
                 @endif
             </ul>

@@ -509,6 +509,7 @@ class CourseController extends Controller{
         $attendence->class_schedule_id = $checkSchedule->id;
         $attendence->application_id = $get_app_data->id;
         $attendence->course_id = $checkSchedule->course_id;
+        $attendence->course_group_id = $request->course_group_id;
         $attendence->intake_id = $checkSchedule->intake_id;
         $attendence->subject_id = $checkSchedule->subject_id;
         $attendence->intake_date = $checkSchedule->intake_date;
