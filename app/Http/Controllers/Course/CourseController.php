@@ -409,7 +409,7 @@ class CourseController extends Controller{
         $data['main_subject_id'] = $id;
         $data['days_list'] = Service::days_list();
         $data['subject_schedule_list'] = SubjectSchedule::where('subject_id',$id)->orderBy('id','desc')->paginate(15);
-        return view('course/subject/SubjectSchedule',$data);
+        return view('course/subject/subjectSchedule',$data);
     }
     //subject schedule data store
     public function subject_schedule_data_post(Request $request){
