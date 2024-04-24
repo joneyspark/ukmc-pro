@@ -52,7 +52,7 @@ use App\Models\Application\Note;
 use App\Models\Application\Qualification;
 use App\Models\Application\Status;
 use App\Models\Course\CourseGroup;
-use App\Models\course\CourseIntake;
+use App\Models\Course\CourseIntake;
 use App\Models\Setting\CompanySetting;
 use App\Models\University\University;
 use Illuminate\Support\Facades\File;
