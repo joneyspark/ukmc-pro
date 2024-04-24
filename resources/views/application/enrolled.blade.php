@@ -69,7 +69,7 @@
                      <div class="row mb-2">
                         
                         <div class="col-3">
-                            <select id="course_id" name="course_id" class="form-control">
+                            <select id="course_id" name="course_id" class="form-control" onchange="getIntakeData()">
                                 <option value="">Select Course</option>
                                 @if(count($courses) > 0)
                                 @foreach ($courses as $course1)
@@ -79,7 +79,7 @@
                             </select>
                          </div>
                          <div class="col-2">
-                            <select id="intake_id" name="intake_id" class="form-control">
+                            <select id="get_intake_id" name="intake_id" class="form-control">
                                 <option value="">Select Intake</option>
                                 @if(count($course_intakes) > 0)
                                 @foreach ($course_intakes as $intake)
@@ -285,6 +285,17 @@
     }
 </style>
 <script src="{{ asset('web/js/jquery.js') }}"></script>
+<script>
+    function getIntakeData(){
+        var getId = $('#course_id').val();
+        $.get('{{ URL::to('get-intake-data') }}/'+getId,function(data,status){
+            if(data['result']['key']===200){
+                console.log(data['result']['val']);
+                $('#get_intake_id').html(data['result']['val']);
+            }
+        });
+    }
+</script>
 @if(Auth::user()->role=='admin' || Auth::user()->role=='manager')
     <script>
         var selectedValues = [];

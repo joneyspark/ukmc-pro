@@ -246,11 +246,7 @@ class GroupController extends Controller
             return response()->json($data,200);
         }
         //get group applicant
-        $getGroupApplicants = JoinGroup::where('group_id',$classSchedule->group_id)->get();
-        if(!empty($getGroupApplicants)){
-            $getAttendList = AttendenceConfirmation::where('class_schedule_id',$classSchedule->id)->get();
-            //if(!empty())
-        }
+        
         $msg = '';
         if($classSchedule->is_done==1){
             $classSchedule->is_done = 0;
@@ -260,6 +256,30 @@ class GroupController extends Controller
             $classSchedule->is_done = 1;
             $classSchedule->save();
             $msg = 'Class Schedule Task Complete';
+            $getGroupApplicants = JoinGroup::where('group_id',$classSchedule->group_id)->get();
+            if(!empty($getGroupApplicants)){
+                $ids = array();
+                $getAttendList = AttendenceConfirmation::where('class_schedule_id',$classSchedule->id)->get();
+                if(!empty($getAttendList)){
+                    foreach($getAttendList as $row){
+                        $ids[] = $row->application_id;
+                    }
+                }
+                foreach($getGroupApplicants as $applicant){
+                    if(!in_array($applicant->application_id,$ids)){
+                        $confirmation = new AttendenceConfirmation();
+                        $confirmation->class_schedule_id = $classSchedule->id;
+                        $confirmation->course_group_id = $classSchedule->group_id;
+                        $confirmation->application_id = $applicant->application_id;
+                        $confirmation->course_id = $classSchedule->course_id;
+                        $confirmation->intake_id = $classSchedule->intake_id;
+                        $confirmation->subject_id = $classSchedule->subject_id;
+                        $confirmation->intake_date = $classSchedule->intake_date;
+                        $confirmation->application_status = 2;
+                        $confirmation->save();
+                    }
+                }
+            }
         }
         $data['result'] = array(
             'key'=>200,
