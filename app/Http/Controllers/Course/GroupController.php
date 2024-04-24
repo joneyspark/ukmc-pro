@@ -13,6 +13,7 @@ use App\Models\Application\ApplicationStatus;
 use App\Models\Campus\Campus;
 use App\Models\Course\AttendenceConfirmation;
 use App\Models\Course\AttendNote;
+use App\Models\Course\AuthorisedAbsent;
 use App\Models\Course\ClassSchedule;
 use App\Models\Course\Course;
 use App\Models\Course\CourseAdditional;
@@ -276,6 +277,7 @@ class GroupController extends Controller
                         $confirmation->subject_id = $classSchedule->subject_id;
                         $confirmation->intake_date = $classSchedule->intake_date;
                         $confirmation->application_status = 2;
+                        $confirmation->status = 0;
                         $confirmation->save();
                     }
                 }
@@ -331,6 +333,9 @@ class GroupController extends Controller
 
         $data['group_id'] = $id;
         $data['get_title'] = Session::get('get_title');
+        $data['aa_application_id'] = Session::get('aa_application_id');
+        $data['current_date'] = date('Y-m-d H:i:s',time());
+        //dd($data['current_date']);
         //dd($data['application_list']);
         return view('course/group/application_list',$data);
     }
@@ -354,4 +359,31 @@ class GroupController extends Controller
         return redirect()->back();
     }
     //all course
+    public function create_authorised_absent(Request $request){
+        $request->validate([
+            'from_date'=>'required',
+            'to_date'=>'required',
+            'reason'=>'required',
+        ]);
+        $absent = new AuthorisedAbsent();
+        $absent->application_id = $request->aa_application_id;
+        $absent->from_date = Carbon::parse($request->from_date);
+        $absent->to_date = Carbon::parse($request->to_date);
+        $absent->reason = $request->reason;
+        //course module pdf
+        $file = $request->file;
+        if ($request->hasFile('file')) {
+            $ext = $file->getClientOriginalExtension();
+            $doc_file_name = $file->getClientOriginalName();
+            $doc_file_name = Service::slug_create($doc_file_name).rand(11, 99).'.'.$ext;
+            $upload_path1 = 'backend/images/course/module/attendence/';
+            Service::createDirectory($upload_path1);
+            $request->file('file')->move(public_path('backend/images/course/module/attendence/'), $doc_file_name);
+            $absent->file = $upload_path1.$doc_file_name;
+        }
+        $absent->save();
+        Session::flash('success','Authorised Absent Created');
+        Session::put('aa_application_id',$absent->application_id);
+        return redirect()->back();
+    }
 }

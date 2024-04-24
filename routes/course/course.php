@@ -69,4 +69,5 @@ Route::controller(GroupController::class)->group(function () {
     Route::get('group-attendence/{id?}','group_attendence');
     Route::get('get-application-by-group/{id?}','get_application_by_group');
     Route::post('move-to-another-group','move_to_another_group');
+    Route::post('create-authorised-absent','create_authorised_absent');
 });

@@ -5,6 +5,7 @@ namespace App\Models\Application;
 use App\Models\Agent\Company;
 use App\Models\Campus\Campus;
 use App\Models\Course\AttendenceConfirmation;
+use App\Models\Course\AuthorisedAbsent;
 use App\Models\Course\Course;
 use App\Models\University\University;
 use App\Models\User;
@@ -74,6 +75,9 @@ class Application extends Model
     // {
     //     return 'applications';
     // }
+    public function absent(){
+        return $this->hasMany(AuthorisedAbsent::class,'application_id')->orderBy('id','desc');
+    }
     public function applicant_attendence(){
         return $this->hasOne(AttendenceConfirmation::class,'application_id');
     }
