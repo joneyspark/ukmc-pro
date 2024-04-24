@@ -57,43 +57,61 @@
                 </header>
             </div>
         </div>
-        <h5 class="p-3">Student Attendance list</h5>
+        <h5 class="p-3">Student Attendance list</h5><a href="{{ URL::to('attendence-group-details/'.$group_id) }}" class="btn btn-primary">Back</a>
+
 
         <div class="row">
             <input type="hidden" id="get_note_schedule_id" name="get_note_schedule_id" value="{{ (!empty($schedule_id))?$schedule_id:'' }}" />
             @forelse ($applicants as $row)
+            @php
+                $getAttendenceConfirmation = App\Models\Course\AttendenceConfirmation::where('class_schedule_id',$schedule_id)->where('application_id',$row->application_data->id)->first();
+                $checkAbsent = App\Models\Course\AuthorisedAbsent::where('application_id', $row->application_data->id)->whereDate('to_date', '>', $current_date)->where('status',0)->orderBy('id', 'desc')->first();
+            @endphp
             <div class="col-3 mt-3">
                 <input type="hidden" id="application_id{{ $row->application_data->id }}" name="application_id" value="{{ (!empty($row->application_data->id))?$row->application_data->id:'' }}" />
                 <input type="hidden" id="schedule_id{{ $row->application_data->id }}" name="schedule_id" value="{{ (!empty($schedule_id))?$schedule_id:'' }}" />
                 <div class="card style-2 mb-md-0 mb-4">
-                    <div class="text-end">
-                        <a onclick="get_schedule_notes('{{ $row->application_data->id }}', '{{ $schedule_id }}')" data-bs-toggle="modal" data-bs-target="#inputFormModal133" class="dropdown-item" href="javascript://"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a>
+                    <div style="height: 80px;" class="row text-end">
+                        @if(!empty($checkAbsent))
+                        <p class="col-md-8">Authorised Leave From <span style="color:green;">{{ date('F d Y',strtotime($checkAbsent->from_date)) }}</span> to <span style="color: red;">{{ date('F d Y',strtotime($checkAbsent->to_date)) }}</span></p>
+                        @endif
+                        <div style="display: flex;" class="col-md-4">
+                            <a onclick="get_schedule_notes('{{ $row->application_data->id }}', '{{ $schedule_id }}')" data-bs-toggle="modal" data-bs-target="#inputFormModal133" class="dropdown-item" href="javascript://"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a>
+                            <a class="dropdown-item" href="javascript://"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-view-stacked" viewBox="0 0 16 16">
+                                <path d="M3 0h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm0 8h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1z"/>
+                              </svg></a>
+                        </div>
                     </div>
                     <div class="text-center">
-                        <img src="https://bheuni.io/front/img/teams/tanvir.png" class="card-img-top rounded-circle" alt="..." style="width: 120px">
+                        <img src="{{ asset('img/dummy-user.png') }}" class="card-img-top rounded-circle" alt="..." style="width: 120px">
                     </div>
                     <h6 class="text-center pt-3">{{ (!empty($row->application_data->name))?$row->application_data->name:'' }}</h6>
                     <p class="text-center">{{ (!empty($row->application_data->id))?$row->application_data->id:'' }}</p>
                     <div class="card-body px-0 pb-0 d-flex justify-content-between">
-                        @if(!empty($row->application_data->applicant_attendence))
-                            @if($schedule_id==$row->application_data->applicant_attendence->class_schedule_id && $row->application_data->applicant_attendence->application_status==1)
-                                <a onclick="presentCall({{ $row->application_data->id }})" id="present_id{{ $row->application_data->id }}" class="btn btn-success" href="javascript://"><h5>Pp</h5></a>
-                            @else
-                                <a onclick="presentCall({{ $row->application_data->id }})" id="present_id{{ $row->application_data->id }}" class="btn btn-outline-success" href="javascript://"><h5>Pp</h5></a>
+                        @if(!empty($getAttendenceConfirmation))
+                            @if(empty($checkAbsent))
+                                @if($getAttendenceConfirmation->application_status==1)
+                                    <a onclick="presentCall({{ $row->application_data->id }})" id="present_id{{ $row->application_data->id }}" class="btn btn-success" href="javascript://"><h5>Pp</h5></a>
+                                @else
+                                    <a onclick="presentCall({{ $row->application_data->id }})" id="present_id{{ $row->application_data->id }}" class="btn btn-outline-success" href="javascript://"><h5>Pp</h5></a>
+                                @endif
+                                @if($getAttendenceConfirmation->application_status==2)
+                                    <a onclick="absentCall({{ $row->application_data->id }})" id="absent_id{{ $row->application_data->id }}" class="btn btn-danger" href="javascript://"><h5>AB</h5></a>
+                                @else
+                                    <a onclick="absentCall({{ $row->application_data->id }})" id="absent_id{{ $row->application_data->id }}" class="btn btn-outline-danger" href="javascript://"><h5>AB</h5></a>
+                                @endif
                             @endif
-                            @if($schedule_id==$row->application_data->applicant_attendence->class_schedule_id && $row->application_data->applicant_attendence->application_status==2)
-                                <a onclick="absentCall({{ $row->application_data->id }})" id="absent_id{{ $row->application_data->id }}" class="btn btn-danger" href="javascript://"><h5>AB</h5></a>
-                            @else
-                                <a onclick="absentCall({{ $row->application_data->id }})" id="absent_id{{ $row->application_data->id }}" class="btn btn-outline-danger" href="javascript://"><h5>AB</h5></a>
-                            @endif
-                            @if($schedule_id==$row->application_data->applicant_attendence->class_schedule_id && $row->application_data->applicant_attendence->application_status==3)
+
+                            @if($getAttendenceConfirmation->application_status==3)
                                 <a onclick="leaveCall({{ $row->application_data->id }})" id="leave_id{{ $row->application_data->id }}" class="btn btn-warning" href="javascript://"><h5>AA</h5></a>
                             @else
                                 <a onclick="leaveCall({{ $row->application_data->id }})" id="leave_id{{ $row->application_data->id }}" class="btn btn-outline-warning" id="leave_id{{ $row->application_data->id }}" href="javascript://"><h5>AA</h5></a>
                             @endif
                         @else
-                            <a onclick="presentCall({{ $row->application_data->id }})" id="present_id{{ $row->application_data->id }}" class="btn btn-outline-success" href="javascript://"><h5>Pp</h5></a>
-                            <a onclick="absentCall({{ $row->application_data->id }})" id="absent_id{{ $row->application_data->id }}" class="btn btn-outline-danger" href="javascript://"><h5>AB</h5></a>
+                            @if(empty($checkAbsent))
+                                <a onclick="presentCall({{ $row->application_data->id }})" id="present_id{{ $row->application_data->id }}" class="btn btn-outline-success" href="javascript://"><h5>Pp</h5></a>
+                                <a onclick="absentCall({{ $row->application_data->id }})" id="absent_id{{ $row->application_data->id }}" class="btn btn-outline-danger" href="javascript://"><h5>AB</h5></a>
+                            @endif
                             <a onclick="leaveCall({{ $row->application_data->id }})" id="leave_id{{ $row->application_data->id }}" class="btn btn-outline-warning" href="javascript://"><h5>AA</h5></a>
                         @endif
 

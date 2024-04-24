@@ -52,7 +52,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -185,7 +185,7 @@
                             <tbody>
                                 @forelse ($application_list as $row)
                                 @php
-                                $checkAbsent = App\Models\Course\AuthorisedAbsent::where('application_id', $row->application_data->id)->whereDate('to_date', '>', $current_date)->orderBy('id', 'desc')->first();
+                                $checkAbsent = App\Models\Course\AuthorisedAbsent::where('application_id', $row->application_data->id)->whereDate('to_date', '>', $current_date)->where('status',0)->orderBy('id', 'desc')->first();
                                 @endphp
                                 <tr class="{{ (!empty($aa_application_id) && $aa_application_id==$row->application_data->id)?'tr-bg':'' }}">
                                     <td>

@@ -247,7 +247,7 @@ class GroupController extends Controller
             return response()->json($data,200);
         }
         //get group applicant
-        
+
         $msg = '';
         if($classSchedule->is_done==1){
             $classSchedule->is_done = 0;
@@ -268,6 +268,7 @@ class GroupController extends Controller
                 }
                 foreach($getGroupApplicants as $applicant){
                     if(!in_array($applicant->application_id,$ids)){
+                        $checkAbsent = AuthorisedAbsent::where('application_id', $applicant->application_id)->whereDate('to_date', '>', Carbon::now())->where('status',0)->orderBy('id', 'desc')->first();
                         $confirmation = new AttendenceConfirmation();
                         $confirmation->class_schedule_id = $classSchedule->id;
                         $confirmation->course_group_id = $classSchedule->group_id;
@@ -276,7 +277,7 @@ class GroupController extends Controller
                         $confirmation->intake_id = $classSchedule->intake_id;
                         $confirmation->subject_id = $classSchedule->subject_id;
                         $confirmation->intake_date = $classSchedule->intake_date;
-                        $confirmation->application_status = 2;
+                        $confirmation->application_status = (!empty($checkAbsent))?3:2;
                         $confirmation->status = 0;
                         $confirmation->save();
                     }
@@ -304,6 +305,7 @@ class GroupController extends Controller
         $data['applicants'] = JoinGroup::with(['application_data'])->where('group_id',$getSchedule->group_id)->paginate(30);
         //$data['applicants'] = Application::with(['applicant_attendence'])->where('course_id',$getSchedule->course_id)->where('intake',$getSchedule->intake_date)->where('status',11)->paginate(50);
         //dd($data['applicants']);
+        $data['current_date'] = Carbon::now();
         return view('course/subject/attendence',$data);
     }
     //get application by group
