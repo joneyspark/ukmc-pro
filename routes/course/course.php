@@ -70,4 +70,6 @@ Route::controller(GroupController::class)->group(function () {
     Route::get('get-application-by-group/{id?}','get_application_by_group');
     Route::post('move-to-another-group','move_to_another_group');
     Route::post('create-authorised-absent','create_authorised_absent');
+    Route::get('get-attend-list-of-student/{id?}','get_attend_list_of_student');
+    Route::post('authorised-absent-status-change','authorised_absent_status_change');
 });

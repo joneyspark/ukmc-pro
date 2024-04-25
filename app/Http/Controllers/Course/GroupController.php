@@ -149,6 +149,7 @@ class GroupController extends Controller
         $data['get_course_id'] = Session::get('get_course_id');
         $data['get_intake_id'] = Session::get('get_intake_id');
         //dd($data['list']);
+        
         return view('group/group_list',$data);
     }
     //get intake data
@@ -387,5 +388,48 @@ class GroupController extends Controller
         Session::flash('success','Authorised Absent Created');
         Session::put('aa_application_id',$absent->application_id);
         return redirect()->back();
+    }
+    //get attend list of student
+    public function get_attend_list_of_student(Request $request, $application_id=NULL){
+        $get_application_status = $request->application_status;
+        $data['attend_list'] = AttendenceConfirmation::query()
+        ->with(['application','group','class_schedule','course','subject'])
+        ->when($get_application_status, function ($query, $get_application_status) {
+            return $query->where('application_status',$get_application_status);
+        })
+        ->where('application_id',$application_id)
+        ->paginate(50);
+
+        $data['absent_list'] = AuthorisedAbsent::where('application_id',$application_id)->orderBy('id','desc')->get();
+        $data['attend'] = true;
+        $data['get_application_status'] = Session::get('get_application_status');
+        
+        return view('course/group/attend_list_of_student',$data);
+    }
+    //authorised absent force complete
+    public function authorised_absent_status_change(Request $request){
+        $groupData = AuthorisedAbsent::where('id',$request->absent_id)->first();
+        if(!$groupData){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Data Not Found! Server Error!'
+            );
+            return response()->json($data,200);
+        }
+        $msg = '';
+        if($groupData->status==1){
+            $groupData->status = 0;
+            $groupData->save();
+            $msg = 'Roll Back';
+        }else{
+            $groupData->status = 1;
+            $groupData->save();
+            $msg = 'Force To Complete';
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$msg
+        );
+        return response()->json($data,200);
     }
 }

@@ -52,7 +52,7 @@
                             <input type="submit" value="Filter" name="time" class="btn btn-warning">
                          </div>
                          <div class="col-1">
-                            <a href="#" class="btn btn-danger">Reset</a>
+                            <a href="{{ URL::to('attendence-groups') }}" class="btn btn-danger">Reset</a>
                          </div>
                      </div>
 
@@ -72,12 +72,18 @@
                                     <th>Group ID</th>
                                     <th>Title</th>
                                     <th>No Of Student</th>
+                                    <th>Present Percent</th>
+                                    <th>Absent Percent</th>
+                                    <th>Leave Percent</th>
                                     <th>Is Complete</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($list as $row)
+                                @php
+                                    $attendence_percent_count = App\Models\Course\CourseGroup::get_group_attend_percent($row->id);
+                                @endphp
                                 <tr>
                                     <td>{{ (!empty($row->id)?$row->id:'') }}</td>
 
@@ -86,6 +92,15 @@
                                     </td>
                                     <td>
                                         <span>{{ (!empty($row->total_application_count))?$row->total_application_count:'' }}</span>
+                                    </td>
+                                    <td>
+                                        {{ $attendence_percent_count['present_percentage'] }} %
+                                    </td>
+                                    <td>
+                                        {{ $attendence_percent_count['absent_percentage'] }} %
+                                    </td>
+                                    <td>
+                                        {{ $attendence_percent_count['leave_percentage'] }} %
                                     </td>
                                     <td>
                                         <div
