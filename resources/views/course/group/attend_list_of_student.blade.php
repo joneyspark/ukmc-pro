@@ -40,7 +40,7 @@
                         <div class="col">
                            <input type="submit" value="Filter" name="time" class="btn btn-warning">
                         </div>
-                        
+
                         <div class="col">
                            <a href="{{ URL::to('attendence-groups') }}" class="btn btn-primary">Back</a>
                         </div>
@@ -53,7 +53,7 @@
         <h5 class="pt-3">All Attendence List Here</h5>
 
         <div class="row layout-top-spacing">
-            
+
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-8">
                     <div class="table-responsive">
@@ -64,29 +64,35 @@
                                     <th>Name</th>
                                     {{-- <th>Email</th>
                                     <th>Phone</th> --}}
+                                    <th>Intake</th>
                                     <th>Group Name</th>
                                     <th>Course</th>
                                     <th>Subject</th>
-                                    <th>Intake</th>
+
                                     <th>Subject Module</th>
+                                    <th>Class Date</th>
                                     <th>Application Status</th>
-                                    
+
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($attend_list as $row)
-                                
+
                                 <tr>
-                                    
-                                    <td>{{ (!empty($row->application->id)?$row->application->id:'') }}</td>
-                                    <td>{{ (!empty($row->application->name)?$row->application->name:'') }}</td>
+
+                                    <td>{{ (!empty($row->application->id))?$row->application->id:'' }}</td>
+                                    <td>{{ (!empty($row->application->name))?$row->application->name:'' }}</td>
                                     {{-- <td>{{ (!empty($row->application->email)?$row->application->email:'') }}</td>
                                     <td>{{ (!empty($row->application->phone)?$row->application->phone:'') }}</td> --}}
-                                    <td>{{ (!empty($row->group->title)?$row->group->title:'') }}</td>
+                                    <td>{{ (!empty($row->intake_date))?date('F Y',strtotime($row->intake_date)):'' }}</td>
+                                    <td>{{ (!empty($row->group->title))?$row->group->title:'' }}</td>
                                     <td>{{ (!empty($row->course->course_name)?$row->course->course_name:'') }}</td>
-                                    <td>{{ (!empty($row->subject->title)?$row->subject->title:'') }}</td>
-                                    <td>{{ (!empty($row->intake_date)?date('F Y',strtotime($row->intake_date)):'') }}</td>
+                                    <td>{{ (!empty($row->subject->title))?$row->subject->title:'' }}</td>
                                     <td>{{ (!empty($row->class_schedule->title)?$row->class_schedule->title:'') }}</td>
+                                    <td>
+                                        {{ (!empty($row->class_schedule->subject_schedule->schedule_date))?$row->class_schedule->subject_schedule->schedule_date:'' }} <span>( {{ (!empty($row->class_schedule->subject_schedule->time_from))?$row->class_schedule->subject_schedule->time_from:'' }} - {{ (!empty($row->class_schedule->subject_schedule->time_to))?$row->class_schedule->subject_schedule->time_to:'' }} )</span><br>
+                                        <span>{{ (!empty($row->class_schedule->created_at))?date('F d Y',strtotime($row->class_schedule->created_at)):'' }}</span>
+                                    </td>
                                     <td>
                                         @if ($row->application_status==1)
                                             <span class="badge badge-success">Present</span>
@@ -145,9 +151,9 @@
                             </thead>
                             <tbody>
                                 @forelse ($absent_list as $val)
-                                
+
                                 <tr>
-                                    
+
                                     <td>{{ (!empty($val->application_id)?$val->application_id:'') }}</td>
                                     <td>{{ (!empty($val->from_date)?date('F d Y',strtotime($val->from_date)):'') }}</td>
                                     <td>{{ (!empty($val->to_date)?date('F d Y',strtotime($val->to_date)):'') }}</td>
@@ -167,8 +173,8 @@
                                             </div>
                                         </div>
                                     </td>
-                                    
-                                    
+
+
                                 </tr>
                                 @empty
                                     <tr>
@@ -178,7 +184,7 @@
 
                             </tbody>
                         </table>
-                        
+
                     </div>
                 </div>
             </div>

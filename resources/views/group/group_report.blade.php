@@ -14,8 +14,8 @@
                             </div>
                             <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Attendence</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">List Of Group</li>
+                                    <li class="breadcrumb-item"><a href="#">Group</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Report</li>
                                 </ol>
                             </nav>
 
@@ -31,28 +31,39 @@
                      <div class="row mb-2">
 
                          <div class="col-4">
-                            <select name="course_id" id="course_id" class="form-control" onchange="getIntakeData()">
-                                <option value="">Select Course</option>
-                                @forelse ($course_list as $clist)
-                                <option {{ (!empty($get_course_id) && $get_course_id==$clist->id)?'selected':'' }} value="{{ (!empty($clist->id))?$clist->id:'' }}">{{ (!empty($clist->course_name))?$clist->course_name:'' }}</option>
+                            <select name="subject_id" id="subject_id" class="form-control" onchange="getIntakeData()">
+                                <option value="">Select Subject</option>
+                                @forelse ($subject_list as $clist)
+                                <option {{ (!empty($get_subject_id) && $get_subject_id==$clist->id)?'selected':'' }} value="{{ (!empty($clist->id))?$clist->id:'' }}">{{ (!empty($clist->title))?$clist->title:'' }}</option>
                                 @empty
                                 @endforelse
                             </select>
                          </div>
                          <div class="col-4">
-                            <select name="intake_id" id="get_intake_data" class="form-control">
-                                <option value="">Select Intake</option>
-                                @forelse ($intake_list as $ilist)
-                                <option {{ (!empty($get_intake_id) && $get_intake_id==$ilist->id)?'selected':'' }} value="{{ (!empty($ilist->id))?$ilist->id:'' }}">{{ (!empty($ilist->title))?$ilist->title:'' }}</option>
-                                @empty
-                                @endforelse
+                            <select name="application_status" class="form-control">
+                                <option value="">--Select Status--</option>
+                                <option {{ (!empty($get_application_status) && $get_application_status==1)?'selected':'' }} value="1">Present</option>
+                                <option {{ (!empty($get_application_status) && $get_application_status==2)?'selected':'' }} value="2">Absent</option>
+                                <option {{ (!empty($get_application_status) && $get_application_status==3)?'selected':'' }} value="3">Authorised Absent</option>
                             </select>
                          </div>
-                         <div class="col-1">
+                         <div class="col-2">
+                            <input type="date" name="from_date" value="{{ (!empty($get_from_date))?$get_from_date:'' }}" class="form-control" />
+                         </div>
+                         <div class="col-2">
+                            <input type="date" name="to_date" value="{{ (!empty($get_to_date))?$get_to_date:'' }}" class="form-control" />
+                         </div>
+
+                     </div>
+                     <div class="row mb-2">
+                        <div class="col-7">
+                            <input type="text" placeholder="Enter ID, Email, Name, Phone..." name="title" value="{{ (!empty($get_title))?$get_title:'' }}" class="form-control" />
+                        </div>
+                        <div class="col-1">
                             <input type="submit" value="Filter" name="time" class="btn btn-warning">
                          </div>
                          <div class="col-1">
-                            <a href="{{ URL::to('attendence-groups') }}" class="btn btn-danger">Reset</a>
+                            <a href="{{ URL::to('group-report/'.$group_info->id) }}" class="btn btn-danger">Reset</a>
                          </div>
                      </div>
 
@@ -79,7 +90,7 @@
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            {{-- <tbody>
                                 @forelse ($list as $row)
                                 @php
                                     $attendence_percent_count = App\Models\Course\CourseGroup::get_group_attend_percent($row->id);
@@ -139,10 +150,10 @@
                                     </tr>
                                 @endforelse
 
-                            </tbody>
+                            </tbody> --}}
                         </table>
                         <div style="text-align: center;" class="pagination-custom_solid">
-                            {{ $list->links() }}
+                            {{ $attend_list_data->links() }}
                         </div>
                     </div>
                 </div>

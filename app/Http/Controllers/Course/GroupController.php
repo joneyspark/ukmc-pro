@@ -149,7 +149,7 @@ class GroupController extends Controller
         $data['get_course_id'] = Session::get('get_course_id');
         $data['get_intake_id'] = Session::get('get_intake_id');
         //dd($data['list']);
-        
+
         return view('group/group_list',$data);
     }
     //get intake data
@@ -398,12 +398,13 @@ class GroupController extends Controller
             return $query->where('application_status',$get_application_status);
         })
         ->where('application_id',$application_id)
+        ->orderBy('id','desc')
         ->paginate(50);
 
         $data['absent_list'] = AuthorisedAbsent::where('application_id',$application_id)->orderBy('id','desc')->get();
         $data['attend'] = true;
         $data['get_application_status'] = Session::get('get_application_status');
-        
+
         return view('course/group/attend_list_of_student',$data);
     }
     //authorised absent force complete
@@ -431,5 +432,62 @@ class GroupController extends Controller
             'val'=>$msg
         );
         return response()->json($data,200);
+    }
+    //get group report
+    public function group_report($group_id=NULL,Request $request){
+        $data['attend'] = true;
+        $data['page_title'] = 'Group Report';
+        $get_application_status = $request->application_status;
+        $get_from_date = $request->from_date;
+        $get_to_date = $request->to_date;
+        $get_subject_id = $request->subject_id;
+        $get_title = $request->title;
+        Session::put('get_from_date',$get_from_date);
+        Session::put('get_to_date',$get_to_date);
+        Session::put('get_subject_id',$get_subject_id);
+        Session::put('get_title',$get_title);
+        Session::put('get_application_status',$get_application_status);
+        $data['group_info'] = CourseGroup::with(['intake_data'])->where('id',$group_id)->first();
+        if(!$data['group_info']){
+            Session::flash('error','Group Data Not Found!');
+            return redirect()->back();
+        }
+        $course_id = $data['group_info']->intake_data->course_id;
+        $data['subject_list'] = CourseSubject::where('course_id',$course_id)->get();
+        $data['attend_list_data'] = AttendenceConfirmation::query()
+        ->when($get_title, function ($query, $get_title) {
+            return $query->whereHas('application', function ($subquery) use ($get_title) {
+                $subquery->where('name', 'like', '%' . $get_title . '%')
+                    ->orWhere('email', 'like', '%' . $get_title . '%')
+                    ->orWhere('id', 'like', '%' . $get_title . '%')
+                    ->orWhere('phone', 'like', '%' . $get_title . '%');
+            });
+        })
+        ->when($get_subject_id, function ($query, $get_subject_id) {
+            return $query->where('subject_id',$get_subject_id);
+        })
+        ->when($get_application_status, function ($query, $get_application_status) {
+            return $query->where('application_status',$get_application_status);
+        })
+        ->when($get_from_date && $get_to_date, function (Builder $query) use ($get_from_date, $get_to_date) {
+            return $query->whereBetween('created_at', [$get_from_date, $get_to_date]);
+        })
+        ->where('course_group_id',$data['group_info']->id)
+        ->orderBy('id','desc')
+        ->paginate(30)
+        ->appends([
+            'from_date' => $get_from_date,
+            'to_date' => $get_to_date,
+            'application_status' => $get_application_status,
+            'subject_id' => $get_subject_id,
+            'title' => $get_title,
+        ]);
+
+        $data['get_title'] = Session::get('get_title');
+        $data['get_from_date'] = Session::get('get_from_date');
+        $data['get_to_date'] = Session::get('get_to_date');
+        $data['get_application_status'] = Session::get('get_application_status');
+        $data['get_subject_id'] = Session::get('get_subject_id');
+        return view('group/group_report',$data);
     }
 }
