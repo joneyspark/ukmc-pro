@@ -85,6 +85,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('offer-request-list','offer_request_list');
     Route::get('transfer-course-to-other','transfer_course_to_other');
     Route::get('get-notification-data-for-activity-list/{id?}','get_notification_data_for_activity_list');
+    Route::get('delete-application-doc-file/{id?}','delete_application_doc_file');
 });
 
 Route::controller(ApplicationOtherController::class)->group(function () {

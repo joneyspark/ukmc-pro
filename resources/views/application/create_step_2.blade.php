@@ -201,7 +201,7 @@
 
                         <div class="col-12">
                             <label for="verticalFormInputAddress" class="form-label">Attached Files</label>
-                            <div class="table-responsive">
+                            <div class="table">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -239,6 +239,12 @@
                                                         <span class="badge badge-light-warning">Only Admin View</span>
                                                     </a>
                                                 @endif
+                                                @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->id==$doc->user_id)
+                                                <a href="javascript:void(0)" onclick="if(confirm('Are you sure to Delete this Document File?')) location.href='{{ URL::to('delete-application-doc-file/'.$doc->id) }}'; return false;">
+                                                    <span class="badge badge-light-danger">Delete</span>
+                                                </a>
+                                                @endif
+
                                             </td>
                                         </tr>
                                         @empty

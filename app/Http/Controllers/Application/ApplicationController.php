@@ -2744,4 +2744,17 @@ class ApplicationController extends Controller{
             return response()->json($data,200);
         }
     }
+    public function delete_application_doc_file($id=NULL){
+        $getData = ApplicationDocument::where('id',$id)->first();
+        if(!$getData){
+            Session::flash('error','Document Data Not Found!');
+            return redirect()->back();
+        }
+        $delete = ApplicationDocument::where('id',$getData->id)->delete();
+        if (File::exists(public_path($getData->doc))) {
+            File::delete(public_path($getData->doc));
+        }
+        Session::flash('success','Document Successfully Deleted!');
+        return redirect('application-create/'.$getData->application_id.'/step-2');
+    }
 }
