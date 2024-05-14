@@ -2754,6 +2754,19 @@ class ApplicationController extends Controller{
         if (File::exists(public_path($getData->doc))) {
             File::delete(public_path($getData->doc));
         }
+        $notification = new Notification();
+        $notification->title = 'Document Delete';
+        $notification->description = 'Delete '.$getData->document_type.' Associated With This Application By '.Auth::user()->name;
+        $notification->create_date = time();
+        $notification->create_by = Auth::user()->id;
+        $notification->creator_name = Auth::user()->name;
+        $notification->creator_image = url(Auth::user()->photo);
+        $notification->user_id = 0;
+        $notification->is_admin = 1;
+        $notification->manager_id = 1;
+        $notification->application_id = $getData->application_id;
+        $notification->slug = 'application/'.$getData->application_id.'/processing';
+        $notification->save();
         Session::flash('success','Document Successfully Deleted!');
         return redirect('application-create/'.$getData->application_id.'/step-2');
     }
