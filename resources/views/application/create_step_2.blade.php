@@ -1,6 +1,11 @@
 @extends('adminpanel')
 @section('admin')
 <!-- Modal -->
+<style>
+    #download_doc{
+        display: none;
+    }
+</style>
 <div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -38,7 +43,7 @@
       </div>
     </div>
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form method="post" action="{{ URL::to('step-4-post') }}" enctype="multipart/form-data">
@@ -106,6 +111,89 @@
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="is_view" value="2" id="flexRadioDefault2">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                View By UKMC
+                            </label>
+                        </div>
+                    </div>
+                    @endif
+                @endif
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div> --}}
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" action="{{ URL::to('step-4-post') }}" enctype="multipart/form-data">
+                @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Upload Documents</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><svg> ... </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="application_id" value="{{ (!empty($application_id))?$application_id:'' }}" />
+                <input type="hidden" name="document_id" id="document_id" value="" />
+                <div class="col form-group mb-4">
+                    <label for="verticalFormStepform-name">Browse Document:</label>
+                    <input name="doc" type="file" class="form-control-file" id="exampleFormControlFile1">
+                    <a id="download_doc" href="">Download Document</a>
+                </div>
+                <div class="col form-group mb-4">
+                    <label for="verticalFormStepform-name">Document Type:</label>
+                    @if($application_data->is_academic==1)
+                    <select name="document_type" id="get_document_type" class="form-select" onchange="getTitle()">
+                        <option value="">Choose...</option>
+                        <option value="Passport">Passport</option>
+                        <option value="Proof of Address">Proof of Address</option>
+                        <option value="Residency">Residency</option>
+                        <option value="SOP">SOP</option>
+                        <option value="Qualification transcript">Qualification transcript</option>
+                        <option value="Additional Documents">Additional Documents</option>
+                        <option value="Other">Other</option>
+                        </select>
+                    @endif
+                    @if($application_data->is_academic==2)
+                    <select name="document_type" id="get_document_type" class="form-select" onchange="getTitle()">
+                        <option value="">Choose...</option>
+                        <option value="Passport">Passport</option>
+                        <option value="SOP">SOP</option>
+                        <option value="Residency">Residency</option>
+                        <option value="Proof of Address">Proof of Address</option>
+                        <option value="CV">CV</option>
+                        <option value="Essay">Essay</option>
+                        <option value="Additional Documents">Additional Documents</option>
+                        <option value="Other">Other</option>
+                        </select>
+                    @endif
+                    @if ($errors->has('document_type'))
+                        <span class="text-danger">{{ $errors->first('document_type') }}</span>
+                    @endif
+                </div>
+                <div id="show_title" class="col form-group mb-4">
+                    <input name="title" placeholder="Title" type="text" class="form-control" id="get_title">
+                </div>
+                <div class="col form-group mb-4">
+                    <label for="verticalFormStepform-name">Upload Date:</label>
+                    <input name="create_date" type="datetime-local" class="form-control" id="create_date">
+                </div>
+                @if(Auth::check())
+                    @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager' || Auth::user()->role=='interviewer')
+                    <div class="col form-group mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_view" id="is_view" value="1" id="flexRadioDefault1" checked>
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                View By All
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="is_view" id="is_view" value="2" id="flexRadioDefault2">
                             <label class="form-check-label" for="flexRadioDefault2">
                                 View By UKMC
                             </label>
@@ -250,9 +338,13 @@
                                                     </a>
                                                 @endif
                                                 @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->id==$doc->user_id)
+                                                <a onclick="getDocumentData('{{ $doc->id }}')" data-bs-toggle="modal" data-bs-target="#exampleModal11" href="javascript://" >
+                                                    <span class="badge badge-light-warning">Edit</span>
+                                                </a>
                                                 <a href="javascript:void(0)" onclick="if(confirm('Are you sure to Delete this Document File?')) location.href='{{ URL::to('delete-application-doc-file/'.$doc->id) }}'; return false;">
                                                     <span class="badge badge-light-danger">Delete</span>
                                                 </a>
+                                                
                                                 @endif
 
                                             </td>
@@ -639,6 +731,26 @@
         }else{
             $('#show_title').hide();
         }
+    }
+</script>
+<script>
+    function getDocumentData(id){
+        if(id===null){
+            return false;
+        }
+        $.get('{{ URL::to('get-document-data') }}/'+id,function(data,status){
+            if(data['result']['key']===200){
+                $('#exampleModal').modal('show');
+                $('#document_id').val(data['result']['val']['id']);
+                $('#get_document_type option').each(function() {
+                    if ($(this).val() === data['result']['val']['document_type']) {
+                        $(this).prop('selected', true);
+                    }
+                });
+                
+            }
+            console.log(data['result']['val']);
+        });
     }
 </script>
 @stop

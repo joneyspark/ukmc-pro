@@ -601,6 +601,22 @@ class ApplicationController extends Controller{
         Session::flash('success','Document Saved Successfully!');
         return redirect('application-create/'.$application->id.'/step-2');
     }
+    //get document data
+    public function get_document_data($id=NULL){
+        $getData = ApplicationDocument::where('id',$id)->first();
+        if(!$getData){
+            $data['result'] = array(
+                'key'=>101,
+                'val'=>'Document Data Not Found!'
+            );
+            return response()->json($data,200);
+        }
+        $data['result'] = array(
+            'key'=>200,
+            'val'=>$getData
+        );
+        return response()->json($data,200);
+    }
     public function create_step_3($id=NULL){
         // if($id != Session::get('set_application_id')){
         //     Session::flash('error','Internal Server Error! Follow Step Carefully! Press Button Next');

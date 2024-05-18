@@ -48,6 +48,7 @@ Route::controller(ApplicationController::class)->group(function () {
     Route::get('reset-agent-application-search', 'reset_agent_application_search');
     Route::post('application-assign-to-manager', 'application_assign_to_manager');
     Route::get('get-admission-officer-by-manager/{id?}', 'get_admission_officer_by_manager');
+    Route::get('get-document-data/{id?}', 'get_document_data');
 
     Route::get('application-step1-new/{id?}', 'application_step1_new');
     Route::post('application-step1-post', 'application_step1_post');
