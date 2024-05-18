@@ -560,19 +560,22 @@ class ApplicationController extends Controller{
     }
     //step 4 post
     public function step_4_post(Request $request){
-        $validator = Validator::make($request->all(), [
+        
+        $request->validate([
             'document_type' => 'required',
-            'doc' => 'required',
+            'doc' => 'required_without:document_id',
         ]);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+
         $application = Application::where('id',$request->application_id)->first();
         if(!$application){
             Session::flash('error','Application Data Not Found!');
             return redirect('application-create');
         }
-        $document = new ApplicationDocument();
+        if(!empty($request->document_id)){
+            $document = ApplicationDocument::where('id',$request->document_id)->first();
+        }else{
+            $document = new ApplicationDocument();
+        }
         $document->application_id = $application->id;
         $document->document_type = $request->document_type;
         $document->title = $request->title;
@@ -589,6 +592,9 @@ class ApplicationController extends Controller{
             if(!$ext){
                 Session::flash('error','Invalid Document! Please Upload PDF, JPG, Docs etc!');
                 return redirect('application-create/'.$application->id.'/step-2');
+            }
+            if(File::exists(public_path($document->doc))){
+                File::delete(public_path($document->doc));
             }
             $doc_file_name = $doc->getClientOriginalName();
             $doc_file_name = 'UKMC-'.Service::get_random_str_number().'-'.Service::slug_create($doc_file_name).'.'.$ext;
@@ -611,9 +617,11 @@ class ApplicationController extends Controller{
             );
             return response()->json($data,200);
         }
+
         $data['result'] = array(
             'key'=>200,
-            'val'=>$getData
+            'val'=>$getData,
+            'file_src'=>asset($getData->doc)
         );
         return response()->json($data,200);
     }

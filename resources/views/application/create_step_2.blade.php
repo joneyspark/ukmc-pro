@@ -142,8 +142,11 @@
                 <input type="hidden" name="document_id" id="document_id" value="" />
                 <div class="col form-group mb-4">
                     <label for="verticalFormStepform-name">Browse Document:</label>
-                    <input name="doc" type="file" class="form-control-file" id="exampleFormControlFile1">
-                    <a id="download_doc" href="">Download Document</a>
+                    <input name="doc" type="file" id="doc" class="form-control-file" id="exampleFormControlFile1">
+                    @if ($errors->has('doc'))
+                        <span class="text-danger">{{ $errors->first('doc') }}</span>
+                    @endif
+                    <a target="_blank" id="download_doc" href="">Download Document</a>
                 </div>
                 <div class="col form-group mb-4">
                     <label for="verticalFormStepform-name">Document Type:</label>
@@ -187,13 +190,13 @@
                     @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager' || Auth::user()->role=='interviewer')
                     <div class="col form-group mb-4">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="is_view" id="is_view" value="1" id="flexRadioDefault1" checked>
+                            <input class="form-check-input" type="radio" name="is_view" id="is_view_all" value="1" id="flexRadioDefault1" checked>
                             <label class="form-check-label" for="flexRadioDefault1">
                                 View By All
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="is_view" id="is_view" value="2" id="flexRadioDefault2">
+                            <input class="form-check-input" type="radio" name="is_view" id="is_view_ukmc" value="2" id="flexRadioDefault2">
                             <label class="form-check-label" for="flexRadioDefault2">
                                 View By UKMC
                             </label>
@@ -286,7 +289,7 @@
                         </div>
                         <div class="col-12">
                             <label for="verticalFormInputAddress" class="form-label">Upload Files (Note: Please Upload jpg,jpeg,png and PDF file Format)</label><br>
-                            <button type="button" class="btn btn-primary mr-2 _effect--ripple waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <button onclick="upload_file()" type="button" class="btn btn-primary mr-2 _effect--ripple waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 Upload File
                               </button>
                         </div>
@@ -310,13 +313,13 @@
                                             <td>{{ (!empty($doc->title))?$doc->title:'' }}</td>
                                             <td>
                                                 @if(!empty($doc->create_date))
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                {{-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> --}}
                                                 <span class="table-inner-text">{{ date('F d Y',strtotime($doc->create_date)) }}</span>
                                                 @else
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                {{-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> --}}
                                                 <span class="table-inner-text">{{ date('F d Y',strtotime($doc->created_at)) }}</span>
                                                 @endif
-                                                
+
                                             </td>
                                             <td>
                                                 @php
@@ -344,7 +347,7 @@
                                                 <a href="javascript:void(0)" onclick="if(confirm('Are you sure to Delete this Document File?')) location.href='{{ URL::to('delete-application-doc-file/'.$doc->id) }}'; return false;">
                                                     <span class="badge badge-light-danger">Delete</span>
                                                 </a>
-                                                
+
                                                 @endif
 
                                             </td>
@@ -725,7 +728,7 @@
 @endif
 <script>
     function getTitle(){
-        var getData = $('#document_type').val();
+        var getData = $('#get_document_type').val();
         if(getData=="Other"){
             $('#show_title').show();
         }else{
@@ -747,10 +750,29 @@
                         $(this).prop('selected', true);
                     }
                 });
-                
+                $('#download_doc').show();
+                $('#download_doc').attr('href', data.result.file_src);
+                $('#create_date').val(data['result']['val']['create_date']);
+                if(data['result']['val']['is_view'] === 1) {
+                    $('#is_view_all').prop('checked', true);
+                }else if (data['result']['val']['is_view'] === 2) {
+                    $('#is_view_ukmc').prop('checked', true);
+                }
+                if(data['result']['val']['title'] !== null) {
+                    $('#show_title').show();
+                    $('#get_title').val(data['result']['val']['title']);
+                }else{
+                    $('#show_title').hide();
+                }
             }
             console.log(data['result']['val']);
         });
+    }
+    function upload_file(){
+        $('#document_id').val("");
+        $('#doc').val("");
+        $('#show_title').hide();
+        $('#download_doc').hide();
     }
 </script>
 @stop
