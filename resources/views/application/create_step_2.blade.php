@@ -91,6 +91,10 @@
                 <div id="show_title" class="col form-group mb-4">
                     <input name="title" placeholder="Title" type="text" class="form-control" id="exampleFormControlFile1">
                 </div>
+                <div class="col form-group mb-4">
+                    <label for="verticalFormStepform-name">Upload Date:</label>
+                    <input name="create_date" type="datetime-local" class="form-control" id="exampleFormControlFile1">
+                </div>
                 @if(Auth::check())
                     @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager' || Auth::user()->role=='interviewer')
                     <div class="col form-group mb-4">
@@ -217,8 +221,14 @@
                                             <td>{{ $doc->document_type }}</td>
                                             <td>{{ (!empty($doc->title))?$doc->title:'' }}</td>
                                             <td>
+                                                @if(!empty($doc->create_date))
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                <span class="table-inner-text">{{ date('F d Y',strtotime($doc->create_date)) }}</span>
+                                                @else
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                                                 <span class="table-inner-text">{{ date('F d Y',strtotime($doc->created_at)) }}</span>
+                                                @endif
+                                                
                                             </td>
                                             <td>
                                                 @php

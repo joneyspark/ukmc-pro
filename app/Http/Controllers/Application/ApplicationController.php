@@ -576,6 +576,7 @@ class ApplicationController extends Controller{
         $document->application_id = $application->id;
         $document->document_type = $request->document_type;
         $document->title = $request->title;
+        $document->create_date = $request->create_date;
         $is_view = $request->is_view;
         if($is_view){
             $document->is_view = $is_view;
