@@ -182,10 +182,12 @@
                 <div id="show_title" class="col form-group mb-4">
                     <input name="title" placeholder="Title" type="text" class="form-control" id="get_title">
                 </div>
+                @if(Auth::check() && Auth::user()->role=='admin')
                 <div class="col form-group mb-4">
                     <label for="verticalFormStepform-name">Upload Date:</label>
                     <input name="create_date" type="datetime-local" class="form-control" id="create_date">
                 </div>
+                @endif
                 @if(Auth::check())
                     @if(Auth::user()->role=='admin' || Auth::user()->role=='manager' || Auth::user()->role=='adminManager' || Auth::user()->role=='interviewer')
                     <div class="col form-group mb-4">
