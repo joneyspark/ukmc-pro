@@ -88,7 +88,7 @@ class Application extends Model
         return $this->hasOne(Application_Step_3::class);
     }
     public function applicationDocuments(){
-        return $this->hasMany(ApplicationDocument::class);
+        return $this->hasMany(ApplicationDocument::class)->orderBy('created_at','desc');
     }
     public function campus(){
         return $this->belongsTo(Campus::class);

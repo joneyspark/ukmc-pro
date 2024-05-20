@@ -520,7 +520,7 @@ class ApplicationController extends Controller{
         $document = ApplicationDocument::where('application_id',$application->id)->count();
 
         $data['document_count'] = $document;
-        $data['application_documents'] = ApplicationDocument::where('application_id',$application->id)->get();
+        $data['application_documents'] = ApplicationDocument::where('application_id',$application->id)->orderBy('created_at','desc')->get();
         $data['application_id'] = $application->id;
         $data['application_data'] = $application;
         $data['application_step2_data'] = Application_Step_2::where('application_id',$application->id)->first();
@@ -579,6 +579,9 @@ class ApplicationController extends Controller{
         $document->application_id = $application->id;
         $document->document_type = $request->document_type;
         $document->title = $request->title;
+        if(!empty($request->create_date)){
+            $document->created_at = Carbon::parse($request->create_date);
+        }
         $document->create_date = $request->create_date;
         $is_view = $request->is_view;
         if($is_view){
