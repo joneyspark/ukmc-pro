@@ -560,7 +560,7 @@ class ApplicationController extends Controller{
     }
     //step 4 post
     public function step_4_post(Request $request){
-        
+
         $request->validate([
             'document_type' => 'required',
             'doc' => 'required_without:document_id',
@@ -593,8 +593,10 @@ class ApplicationController extends Controller{
                 Session::flash('error','Invalid Document! Please Upload PDF, JPG, Docs etc!');
                 return redirect('application-create/'.$application->id.'/step-2');
             }
-            if(File::exists(public_path($document->doc))){
-                File::delete(public_path($document->doc));
+            if(!empty($request->document_id)){
+                if(File::exists(public_path($document->doc))){
+                    File::delete(public_path($document->doc));
+                }
             }
             $doc_file_name = $doc->getClientOriginalName();
             $doc_file_name = 'UKMC-'.Service::get_random_str_number().'-'.Service::slug_create($doc_file_name).'.'.$ext;
