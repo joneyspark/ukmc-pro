@@ -142,7 +142,9 @@ class ApplicationController extends Controller{
             if($application->company_id != $request->company_id){
                 $previous = Company::where('id',$application->company_id)->first();
                 $current = Company::where('id',$request->company_id)->first();
-                $basic_array[] = 'Agent/Company/Referral Change From '.$previous->company_name.' To '.$current->company_name;
+                if(!empty($previous) && !empty($current)){
+                    $basic_array[] = 'Agent/Company/Referral Change From '.$previous->company_name.' To '.$current->company_name;
+                }
             }
             if($application->title != $request->title){
                 $basic_array[] = 'Title Change From '.$application->title.' To '.$request->title;
