@@ -166,7 +166,7 @@
                             </div>
                         </div>
                         @endif
-                        
+
                         <h5 class="text-center py-3" id="MainContent_dv_HPerm">Permanent Address</h5>
                         <div class="container bg-dark py-5 px-5 rounded">
                             <div id="MainContent_dv_PermAdd1" class="row mb-4 px-5">
@@ -245,8 +245,8 @@
 
                                                 @forelse ($app_data->applicationDocuments as $row)
                                                 <tr>
-                                                    <td class="LCAHidden">UKMC-{{ (!empty($row->application_id))?$row->application_id:'' }}</td>
-                                                    <td>{{ (!empty($row->document_type))?$row->document_type:'' }}</td>
+                                                    <td class="LCAHidden">{{ (!empty($row->application_id))?$row->application_id:'' }}</td>
+                                                    <td>{{ (!empty($row->title))?$row->title:$row->document_type }}</td>
                                                     <td>{{ date('F d Y',strtotime($row->created_at)) }}</td>
                                                     <td><a download href="{{ asset($row->doc) }}">Download</a></td>
                                                 </tr>
