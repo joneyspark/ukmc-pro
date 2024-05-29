@@ -139,7 +139,7 @@ class BlogController extends Controller{
             $filename = $image1->getClientOriginalName();
             $filename = Service::slug_create($filename).rand(11, 99).'.'.$ext;
             $image_resize = Image::make($image1->getRealPath());
-            $image_resize->resize(1200, 400);
+            $image_resize->resize(1200, 644);
             $upload_path = 'backend/images/blog/';
             Service::createDirectory($upload_path);
             $image_resize->save(public_path('backend/images/blog/'.$filename));
