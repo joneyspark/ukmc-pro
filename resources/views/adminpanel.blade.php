@@ -16,7 +16,7 @@
     @if(!empty($setting->favicon))
     <link rel="icon" type="image/x-icon" href="{{ asset($setting->favicon) }}" />
     @else
-    <link rel="icon" type="image/x-icon" href="{{ asset('backend/src/assets/img/favicon.ico') }}" />
+    <link rel="icon" type="image/x-icon" href="https://ukmc.ac.uk/img/favicon.png" />
     @endif
 
     <link href="{{ asset('backend/layouts/vertical-dark-menu/css/light/loader.css') }}" rel="stylesheet" type="text/css" />
@@ -73,7 +73,7 @@
                     </a>
                     @else
                     <a href="#">
-                        <img src="{{ asset('backend/src/assets/img/logo.svg') }}" class="" alt="logo">
+                        <img src="https://ukmc.ac.uk/img/home/logo_ukmc.png" class="" alt="logo">
                     </a>
                     @endif
 
