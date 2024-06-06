@@ -539,7 +539,7 @@
                                             <img src="{{ asset($row->creator_image) }}" class="img-fluid me-2" alt="avatar" style="height: 40px; width: 40px; border-radius: 50%;" />
                                             <p>{{ $row->creator_name }}</p>
                                             {!! $row->description !!}
-                                            <p>{{ App\Models\Application\Application::timeLeft(strtotime($row->created_at)) }}</p>
+                                            <p>{{ date('F d Y H:i:s',strtotime($row->created_at)) }}</p>
                                             @if (!empty($row->basic_info))
                                             <p>
                                                 <a onclick="get_notification_data('{{ $row->id }}')" data-bs-toggle="modal" data-bs-target="#inputFormModal" class="btn badge badge-danger btn-sm _effect--ripple waves-effect waves-light" href="javascript://">View Details</a>

@@ -348,8 +348,8 @@
                                 <label for="verticalFormStepform-name">Nationality*:</label>
                                 <select name="nationality" id="nationality" class="form-select" onchange="change_nationality()">
                                     <option value="">Choose...</option>
-                                    <option {{ (!empty($app_data->nationality) && $app_data->nationality=='UK National')?'selected':'' }} value="UK National">UK National</option>
-                                    <option {{ (!empty($app_data->nationality) && $app_data->nationality=='Other')?'selected':'' }} value="Other">Other Nationality</option>
+                                    <option {{ (old('nationality')=='UK National')?'selected':'' }} {{ (!empty($app_data->nationality) && $app_data->nationality=='UK National')?'selected':'' }} value="UK National">UK National</option>
+                                    <option {{ (old('nationality')=='Other')?'selected':'' }} {{ (!empty($app_data->nationality) && $app_data->nationality=='Other')?'selected':'' }} value="Other">Other Nationality</option>
                                 </select>
                                 @if ($errors->has('nationality'))
                                     <span class="text-danger">{{ $errors->first('nationality') }}</span>
@@ -428,7 +428,7 @@
                                         <select name="other_nationality" id="inputState" class="form-select">
                                             <option value="">Choose...</option>
                                             @foreach ($nationalities as $nrow)
-                                                <option {{ (!empty($app_data->other_nationality) && $app_data->other_nationality==$nrow)?'selected':'' }} value="{{ $nrow }}">{{ $nrow }}</option>
+                                                <option {{ (old('other_nationality')==$nrow)?'selected':'' }} {{ (!empty($app_data->other_nationality) && $app_data->other_nationality==$nrow)?'selected':'' }} value="{{ $nrow }}">{{ $nrow }}</option>
                                             @endforeach
                                         </select>
                                         @if ($errors->has('other_nationality'))
