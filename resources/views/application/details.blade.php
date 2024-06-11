@@ -31,11 +31,10 @@
                     <div id="verticalFormStep-five" class="container content fade dstepper-block active" role="tabpanel">
                         <h5 class="text-center mb-3">Application Details ({{ ($app_data->is_academic==1)?'Academic':'Non-academic' }})</h5>
                         <div class="container bg-dark py-5 px-5 rounded">
-                            @if($app_data->company_id > 0)
+                            {{-- @if($app_data->company_id > 0)
                                 @if(!empty($app_data->sub_agent) && $app_data->sub_agent->is_admin==0)
                                 <div id="MainContent_DV_FundedBy" class="row mb-4 px-5">
                                     <div class="col">Sub Agent Application ( Company- {{ (!empty($app_data->company->company_name))?$app_data->company->company_name:'' }} )</div>
-                                    {{-- <div class="col"><span id="MainContent_lbl_FundedBy">{{ (!empty($app_data->sub_agent->first_name))?$app_data->sub_agent->first_name:'' }} {{ (!empty($app_data->sub_agent->last_name))?$app_data->sub_agent->last_name:'' }}</span></div> --}}
                                 </div>
                                 @else
                                 <div id="MainContent_DV_FundedBy" class="row mb-4 px-5">
@@ -43,13 +42,13 @@
                                     <div class="col"><span id="MainContent_lbl_FundedBy">{{ (!empty($app_data->company->company_name))?$app_data->company->company_name:'' }}</span></div>
                                 </div>
                                 @endif
-                            @endif
-                            @if($app_data->sub_agent->role=="subAgent")
+                            @endif --}}
+                            {{-- @if($app_data->sub_agent->role=="subAgent")
                             <div class="row mb-4 px-5">
                                 <div class="col">Sub Agent Name : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->sub_agent->name))?$app_data->sub_agent->name:'' }}</span></div>
                             </div>
-                            @endif
+                            @endif --}}
                             @if(!empty($app_data->reference))
                             <div id="MainContent_DV_ResidentCat" class="row mb-4 px-5">
                                 <div class="col">Reference : </div>
