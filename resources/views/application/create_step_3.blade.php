@@ -95,11 +95,11 @@
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->ni_number))?$app_data->ni_number:'' }}</span></div>
                             </div>
                             <div class="row mb-4 px-5">
-                                <div class="col">Emergency Contact Name : </div>
+                                <div class="col">Next of Keen Details : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->emergency_contact_name))?$app_data->emergency_contact_name:'' }}</span></div>
                             </div>
                             <div class="row mb-4 px-5">
-                                <div class="col">Emergency Contact Number : </div>
+                                <div class="col">ENext of Keen Contact Number : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->emergency_contact_number))?$app_data->emergency_contact_number:'' }}</span></div>
                             </div>
                             @if(!empty($app_data->nationality) && $app_data->nationality!="Other")
@@ -107,18 +107,22 @@
                                 <div class="col">Nationality : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->nationality))?$app_data->nationality:'' }}</span></div>
                             </div>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Date Entry Of UK : </div>
+                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:'' }}</span></div>
+                            </div>
                             @else
                             <div class="row mb-4 px-5">
                                 <div class="col">Other Nationality : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->other_nationality))?$app_data->other_nationality:'' }}</span></div>
                             </div>
                             <div class="row mb-4 px-5">
-                                <div class="col">Visa Category : </div>
-                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->visa_category))?$app_data->visa_category:'' }}</span></div>
-                            </div>
-                            <div class="row mb-4 px-5">
                                 <div class="col">Date Entry Of UK : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:'' }}</span></div>
+                            </div>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Visa Category : </div>
+                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->visa_category))?$app_data->visa_category:'' }}</span></div>
                             </div>
                             <div class="row mb-4 px-5">
                                 <div class="col">Ethnic Origin : </div>
@@ -141,10 +145,10 @@
                                 <div class="col">Course Fee Local : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->course_fee))?$app_data->course->course_fee:'' }}</span></div>
                             </div>
-                            <div class="row mb-4 px-5">
+                            {{-- <div class="row mb-4 px-5">
                                 <div class="col">Course Fee International : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->international_course_fee))?$app_data->course->international_course_fee:'' }}</span></div>
-                            </div>
+                            </div> --}}
 
                             <div class="row mb-4 px-5">
                                 <div class="col">Course Intake :</div>
@@ -261,7 +265,7 @@
                                         I hereby, confirm that the information provided on this application form is accurate. I accept that the UKMC/Partner University reserves the right to cancel my application if any of the information that I have submitted is subsequently found to be false or inaccurate and that by signing this declaration, I am bound by the terms and conditions as outlined by the UKMC/Partner University. I give consent to the UKMC/Partner University to process the information on, and submitted with, this form for administrative purposes and for consideration of my application, but only insofar as it is permitted to do so within the constraints imposed by the Data Protection Act 1998.
                                     </p>
                                     <p id="MainContent_Declaration_Text" class="text-white">
-                                        In particular, I understand that the UKMC/Partner University may continue to process this information even if I am refused admission or if it should decline an offer of admission. I also give consent to the University/UKMC to contact the Home Office to seek information regarding my immigration status if required, whether to make an assessment of my application or at any time in the future. 
+                                        In particular, I understand that the UKMC/Partner University may continue to process this information even if I am refused admission or if it should decline an offer of admission. I also give consent to the University/UKMC to contact the Home Office to seek information regarding my immigration status if required, whether to make an assessment of my application or at any time in the future.
                                     </p>
                                 </div>
                             </div>

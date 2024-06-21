@@ -201,11 +201,11 @@
                         </div>
                         <div class="row">
                             <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Emergency Contact Name:</label>
+                                <label for="verticalFormStepform-name">Next of Keen Details:</label>
                                 <input value="{{ (!empty($app_data->emergency_contact_name))?$app_data->emergency_contact_name:old('emergency_contact_name') }}" type="text" name="emergency_contact_name" class="form-control" id="verticalFormStepform-name">
                             </div>
                             <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Emergency Contact Number:</label>
+                                <label for="verticalFormStepform-name">Next of Keen Contact Number:</label>
                                 <input value="{{ (!empty($app_data->emergency_contact_number))?$app_data->emergency_contact_number:old('emergency_contact_number') }}" type="text" name="emergency_contact_number" class="form-control" id="verticalFormStepform-name">
                             </div>
                         </div>
@@ -355,6 +355,13 @@
                                     <span class="text-danger">{{ $errors->first('nationality') }}</span>
                                 @endif
                             </div>
+                            <div class="col form-group mb-4">
+                                <label for="verticalFormStepform-name">Date Entry Of UK*:</label>
+                                <input name="date_entry_of_uk" value="{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:old('date_entry_of_uk') }}" type="date" class="form-control" id="verticalFormStepform-name">
+                                @if ($errors->has('date_entry_of_uk'))
+                                    <span class="text-danger">{{ $errors->first('date_entry_of_uk') }}</span>
+                                @endif
+                            </div>
                         </div>
                         @if(!empty($app_data->nationality) && $app_data->nationality=="Other")
                         <div id="national-other-id" class="">
@@ -393,14 +400,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col form-group mb-4">
-                                    <label for="verticalFormStepform-name">Date Entry Of UK*:</label>
-                                    <input name="date_entry_of_uk" value="{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:old('date_entry_of_uk') }}" type="date" class="form-control" id="verticalFormStepform-name">
-                                    @if ($errors->has('date_entry_of_uk'))
-                                        <span class="text-danger">{{ $errors->first('date_entry_of_uk') }}</span>
-                                    @endif
-                                </div>
-                                <div class="col form-group mb-4">
+                                <div class="col-8 form-group mb-4">
                                     <label for="verticalFormStepEmailAddress">Ethnic
                                         Origin*:</label>
                                     <select name="ethnic_origin" id="inputState" class="form-select">
@@ -452,14 +452,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col form-group mb-4">
-                                    <label for="verticalFormStepform-name">Date Entry Of UK*:</label>
-                                    <input name="date_entry_of_uk" value="{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:old('date_entry_of_uk') }}" type="date" class="form-control" id="verticalFormStepform-name">
-                                    @if ($errors->has('date_entry_of_uk'))
-                                        <span class="text-danger">{{ $errors->first('date_entry_of_uk') }}</span>
-                                    @endif
-                                </div>
-                                <div class="col form-group mb-4">
+                                <div class="col-8 form-group mb-4">
                                     <label for="verticalFormStepEmailAddress">Ethnic
                                         Origin*:</label>
                                     <select name="ethnic_origin" id="inputState" class="form-select">
@@ -540,18 +533,14 @@
                             @endif
                         </div>
                         <div class="row">
-                            <div class="col form-group mb-4">
+                            <div class="col-6 form-group mb-4">
                                 <label for="verticalFormStepform-name">Course fee
                                     (GBP) Per Year (Local):</label>
                                 <input type="text" value="{{ (!empty($app_data->local_course_fee))?$app_data->local_course_fee:old('local_course_fee') }}" class="course-fee-local-data form-control" id="local_course_fee" name="local_course_fee" placeholder="">
+                                <input value="{{ (!empty($app_data->international_course_fee))?$app_data->international_course_fee:old('international_course_fee') }}" type="hidden" class="form-control" id="international_course_fee" name="international_course_fee" placeholder="">
                                 @if ($errors->has('local_course_fee'))
                                     <span class="text-danger">{{ $errors->first('local_course_fee') }}</span>
                                 @endif
-                            </div>
-                            <div class="col form-group mb-4">
-                                <label for="verticalFormStepform-name">Course fee
-                                    (GBP) Per Year (International):</label>
-                                <input value="{{ (!empty($app_data->international_course_fee))?$app_data->international_course_fee:old('international_course_fee') }}" type="text" class="form-control" id="international_course_fee" name="international_course_fee" placeholder="">
                             </div>
                         </div>
                         <div class="row">

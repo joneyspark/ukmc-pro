@@ -119,7 +119,7 @@ class ApplicationController extends Controller{
             'nationality' => 'required',
             'other_nationality' => 'required_if:nationality,Other',
             'visa_category' => 'required_if:nationality,Other',
-            'date_entry_of_uk' => 'required_if:nationality,Other',
+            'date_entry_of_uk' => 'required',
             'ethnic_origin' => 'required_if:nationality,Other',
             'university_id' => 'required',
             'campus_id' => 'required',

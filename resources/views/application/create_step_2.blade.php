@@ -157,8 +157,9 @@
                         <option value="Proof of Address">Proof of Address</option>
                         <option value="Residency">Residency</option>
                         <option value="SOP">SOP</option>
+                        <option value="CV">CV</option>
                         <option value="Qualification transcript">Qualification transcript</option>
-                        <option value="Additional Documents">Additional Documents</option>
+                        {{-- <option value="Additional Documents">Additional Documents</option> --}}
                         <option value="Other">Other</option>
                         </select>
                     @endif
@@ -170,8 +171,9 @@
                         <option value="Residency">Residency</option>
                         <option value="Proof of Address">Proof of Address</option>
                         <option value="CV">CV</option>
+                        <option value="Qualification transcript">Qualification transcript</option>
                         <option value="Essay">Essay</option>
-                        <option value="Additional Documents">Additional Documents</option>
+                        {{-- <option value="Additional Documents">Additional Documents</option> --}}
                         <option value="Other">Other</option>
                         </select>
                     @endif

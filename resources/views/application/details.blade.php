@@ -86,17 +86,21 @@
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->ni_number))?$app_data->ni_number:'' }}</span></div>
                             </div>
                             <div class="row mb-4 px-5">
-                                <div class="col">Emergency Contact Name : </div>
+                                <div class="col">Next of Keen Details : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->emergency_contact_name))?$app_data->emergency_contact_name:'' }}</span></div>
                             </div>
                             <div class="row mb-4 px-5">
-                                <div class="col">Emergency Contact Number : </div>
+                                <div class="col">Next of Keen Contact Number : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->emergency_contact_number))?$app_data->emergency_contact_number:'' }}</span></div>
                             </div>
                             @if(!empty($app_data->nationality) && $app_data->nationality!="Other")
                             <div class="row mb-4 px-5">
                                 <div class="col">Nationality : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->nationality))?$app_data->nationality:'' }}</span></div>
+                            </div>
+                            <div class="row mb-4 px-5">
+                                <div class="col">Date Entry Of UK : </div>
+                                <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->date_entry_of_uk))?$app_data->date_entry_of_uk:'' }}</span></div>
                             </div>
                             @else
                             <div class="row mb-4 px-5">
@@ -132,10 +136,10 @@
                                 <div class="col">Course Fee Local : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->course_fee))?$app_data->course->course_fee:'' }}</span></div>
                             </div>
-                            <div class="row mb-4 px-5">
+                            {{-- <div class="row mb-4 px-5">
                                 <div class="col">Course Fee International : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->course->international_course_fee))?$app_data->course->international_course_fee:'' }}</span></div>
-                            </div>
+                            </div> --}}
 
                             <div class="row mb-4 px-5">
                                 <div class="col">Course Intake :</div>
