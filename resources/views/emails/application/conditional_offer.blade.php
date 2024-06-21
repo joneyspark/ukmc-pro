@@ -61,7 +61,7 @@
     <h2>Application Status Updated</h2><br>
     <p>Dear {{ (!empty($details['application_data']->name))?$details['application_data']->name:'' }},</p><br><br>
     <p>We are delighted to inform that you have been issued a <span class="spn-from">Conditional offer</span> letter to study at UK Management College in partnership with CCCU.</p>
-    
+
     <p>
       <strong>Application Id:</strong> {{ (!empty($details['application_data']->id))?$details['application_data']->id:'' }}<br>
 	    <strong>Course Title:</strong> {{ (!empty($details['application_data']->course->course_name))?$details['application_data']->course->course_name:'' }}<br>
@@ -72,12 +72,13 @@
     <span>
         <strong>{{ (!empty($details['offer_letter_text']))?$details['offer_letter_text']:'' }}</strong>
     </span><br><br>
+    <p>Please note that you must provide all pending documents within 7 working days to secure your place for the intake. Failure to meet the deadline can result in your application being rejected or deferred for the next intake.</p>
     <p>Once we have received all the required documents and they have been verified, we will send you unconditional offer .</p>
     <p>Once you have accepted unconditional offer, you will receive further instructions on how to complete your registration and enrolment.</p><br><br><br>
 
     <p>If you have any queries and would like to discuss with us, please email us </p>
     <p>at <a href="mailto:admissions@ukmc.ac.uk">admissions@ukmc.ac.uk</a> or call us on 01614780015</p>
-    
+
 
     <p>Thank you.</p>
 
