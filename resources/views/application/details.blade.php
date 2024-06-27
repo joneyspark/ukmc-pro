@@ -86,11 +86,11 @@
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->ni_number))?$app_data->ni_number:'' }}</span></div>
                             </div>
                             <div class="row mb-4 px-5">
-                                <div class="col">Next of Keen Details : </div>
+                                <div class="col">Next of Kin Details : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->emergency_contact_name))?$app_data->emergency_contact_name:'' }}</span></div>
                             </div>
                             <div class="row mb-4 px-5">
-                                <div class="col">Next of Keen Contact Number : </div>
+                                <div class="col">Next of Kin Contact Number : </div>
                                 <div class="col"><span id="MainContent_lbl_EUSettlementCode">{{ (!empty($app_data->emergency_contact_number))?$app_data->emergency_contact_number:'' }}</span></div>
                             </div>
                             @if(!empty($app_data->nationality) && $app_data->nationality!="Other")
