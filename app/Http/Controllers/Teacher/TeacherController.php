@@ -29,4 +29,5 @@ class TeacherController extends Controller{
         $data['teacher_list'] = true;
         return view('teacher.teacher_class_schedule_list',$data);
     }
+    
 }

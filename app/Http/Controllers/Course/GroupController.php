@@ -490,4 +490,10 @@ class GroupController extends Controller
         $data['get_subject_id'] = Session::get('get_subject_id');
         return view('group/group_report',$data);
     }
+    public function attendence_overview(){
+        $data['page_title'] = 'Teacher | Calss Schedule List';
+        $data['attend'] = true;
+        $data['attendence_overview'] = true;
+        return view('attendence.attendence_overview',$data);
+    }
 }
