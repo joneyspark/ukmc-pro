@@ -200,6 +200,9 @@
             </a>
             <ul class="{{ (!empty($attend) && $attend==true)?'collapse show':'collapse' }} submenu list-unstyled" id="datatables10" data-bs-parent="#accordionExample">
                 @if(Auth::check() && Auth::user()->role=='admin' || Auth::user()->role=='adminManager' || Auth::user()->role=='manager' || Auth::user()->role=='interviewer')
+                <li class="{{ (!empty($teacher_list) && $teacher_list==true)?'active':'' }}">
+                    <a href="{{ URL::to('teachers') }}"> Teachers </a>
+                </li>
                 <li class="{{ (!empty($attendence_groups) && $attendence_groups==true)?'active':'' }}">
                     <a href="{{ URL::to('attendence-groups') }}"> Attendence Groups</a>
                 </li>

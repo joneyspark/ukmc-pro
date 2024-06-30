@@ -11,7 +11,7 @@ use App\Http\Controllers\Login\LoginController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Agent\AgentTaskController;
 use App\Http\Controllers\Blog\BlogController;
-
+use App\Http\Controllers\Teacher\TeacherController;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index');
@@ -133,4 +133,9 @@ Route::controller(BlogController::class)->group(function () {
     Route::get('blog-categories/{id?}', 'all_blog_categories');
     Route::post('store-blog-category-data','create_blog_category');
     Route::post('blog-category_status_change','category_status_change');
+});
+Route::controller(TeacherController::class)->group(function () {
+    Route::get('teachers', 'teachers');
+    Route::get('create-teacher', 'create_teacher');
+    Route::get('get-class-schedule-by-teacher/{id?}','get_class_schedule_by_teacher');
 });
