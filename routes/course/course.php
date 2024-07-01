@@ -74,4 +74,5 @@ Route::controller(GroupController::class)->group(function () {
     Route::post('authorised-absent-status-change','authorised_absent_status_change');
     Route::get('group-report/{id?}','group_report');
     Route::get('attendence-overview','attendence_overview');
+    Route::get('attendence-reports','attendence_reports');
 });

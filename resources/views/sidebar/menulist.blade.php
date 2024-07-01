@@ -215,6 +215,9 @@
                 <li class="{{ (!empty($application_enrolled) && $application_enrolled==true)?'active':'' }}">
                     <a href="{{ URL::to('enrolled-students') }}"> Enrolled Students </a>
                 </li>
+                <li class="{{ (!empty($attendence_reports) && $attendence_reports==true)?'active':'' }}">
+                    <a href="{{ URL::to('attendence-reports') }}"> Reports </a>
+                </li>
                 @endif
             </ul>
         </li>

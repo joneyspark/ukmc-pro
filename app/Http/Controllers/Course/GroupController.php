@@ -500,6 +500,14 @@ class GroupController extends Controller
         $data['page_title'] = 'Attendence | Reports';
         $data['attend'] = true;
         $data['attendence_reports'] = true;
-        return view('attendence.reports',$data);
+        return view('attendence.report',$data);
+    }
+    public function attendence_report_filter(Request $request){
+        $data['page_title'] = 'Attendence | Reports';
+        $data['attend'] = true;
+        $data['attendence_reports'] = true;
+        $data['get_from_date'] = $request->from_date;
+        $data['get_to_date'] = $request->to_date;
+        return view('attendence.report',$data);
     }
 }
