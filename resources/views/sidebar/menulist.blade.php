@@ -206,6 +206,9 @@
                 <li class="{{ (!empty($attendence_groups) && $attendence_groups==true)?'active':'' }}">
                     <a href="{{ URL::to('attendence-groups') }}"> Attendence Groups</a>
                 </li>
+                <li class="{{ (!empty($attendence_overview) && $attendence_overview==true)?'active':'' }}">
+                    <a href="{{ URL::to('attendence-overview') }}"> Attendence Overview</a>
+                </li>
                 <li class="{{ (!empty($course_all) && $course_all==true)?'active':'' }}">
                     <a href="{{ URL::to('all-course') }}"> All Course </a>
                 </li>

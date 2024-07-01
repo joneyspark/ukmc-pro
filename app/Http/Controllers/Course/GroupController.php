@@ -496,4 +496,10 @@ class GroupController extends Controller
         $data['attendence_overview'] = true;
         return view('attendence.attendence_overview',$data);
     }
+    public function attendence_reports(){
+        $data['page_title'] = 'Attendence | Reports';
+        $data['attend'] = true;
+        $data['attendence_reports'] = true;
+        return view('attendence.reports',$data);
+    }
 }

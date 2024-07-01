@@ -1,4 +1,3 @@
-
 @extends('adminpanel')
 @section('admin')
 <style>
@@ -12,6 +11,10 @@
         font-size: 13px !important;
     }
 </style>
+<link href="{{ asset('backend/src/plugins/src/fullcalendar/fullcalendar.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('backend/src/plugins/css/light/fullcalendar/custom-fullcalendar.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('backend/src/plugins/css/dark/fullcalendar/custom-fullcalendar.css') }}" rel="stylesheet" type="text/css">
+
 <div class="modal fade inputForm-modal" id="inputFormModal1" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -48,6 +51,153 @@
       </div>
     </div>
 </div>
+<div class="modal fade inputForm-modal" id="groupModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header" id="inputFormModalLabel">
+            <h5 class="modal-title"><b>Create Group</b></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <form method="post" action="#" class="mt-0">
+            @csrf
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col">
+                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Course</label>
+                            <input type="hidden" name="interviewer_user_id" value="" id="interviewer_user_id" />
+                            <select id="course_id" name="course_id" class="form-control">
+                                <option value="">Select Course</option>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Intake</label>
+                            <select id="intake" name="intake" class="form-control">
+                                <option value="">Select Intake</option>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-4"><label for="exampleFormControlInput1">Group Name</label>
+                            <input type="text" name="group_name" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
+                <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Confirm</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
+<div class="modal fade inputForm-modal" id="timeTableModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header" id="inputFormModalLabel">
+            <h5 class="modal-title"><b>Create Timetable</b></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <form method="post" action="#" class="mt-0">
+            @csrf
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Course</label>
+                                <select id="intake" name="intake" class="form-control">
+                                    <option value="">Select Course</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Intake</label>
+                                <input type="hidden" name="interviewer_user_id" value="" id="interviewer_user_id" />
+                                <select id="course_id" name="course_id" class="form-control">
+                                    <option value="">Select Intake</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Group</label>
+                                <select id="intake" name="intake" class="form-control">
+                                    <option value="">Select Group</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Subject</label>
+                                <input type="hidden" name="interviewer_user_id" value="" id="interviewer_user_id" />
+                                <select id="course_id" name="course_id" class="form-control">
+                                    <option value="">Select Subject</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Module No</label>
+                                <select id="intake" name="intake" class="form-control">
+                                    <option value="">Select Module</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Location</label>
+                                <input type="hidden" name="interviewer_user_id" value="" id="interviewer_user_id" />
+                                <select id="course_id" name="course_id" class="form-control">
+                                    <option value="">Select Location</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Stuff</label>
+                                <select id="intake" name="intake" class="form-control">
+                                    <option value="">Select Stuff</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Date</label>
+                                <input class="form-control" type="datetime-local" name="interviewer_user_id" value="" id="interviewer_user_id" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">Start Time</label>
+                                <input class="form-control" type="time" name="interviewer_user_id" value="" id="interviewer_user_id" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group mb-4"><label for="exampleFormControlInput1">End Time</label>
+                                <input class="form-control" type="time" name="interviewer_user_id" value="" id="interviewer_user_id" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-light-danger mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Cancel</a>
+                <button type="submit" class="btn btn-primary mt-2 mb-2 btn-no-effect" data-bs-dismiss="modal">Confirm</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
 <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <div class="secondary-nav">
@@ -72,7 +222,7 @@
                 </header>
             </div>
         </div>
-        <h5 class="p-3">Teacher List</h5>
+        <h5 class="p-3">Attendence Overview</h5>
         <div class="widget-content widget-content-area">
             <form method="get" action="">
                  <div class="row mb-2">
@@ -101,13 +251,26 @@
                         </select>
                      </div>
                      <div class="col-2">
+                        <select id="assign_to_interviewer_user_id" name="assign_to_interviewer_user_id" class="form-control">
+                            <option value="">Select Campus</option>
+                            <option value="">Campus 1</option>
+                        </select>
+                     </div>
+                     <div class="col-2">
+                        <select id="assign_to_interviewer_user_id" name="assign_to_interviewer_user_id" class="form-control">
+                            <option value="">Select Teacher</option>
+                            <option value="">Teacher 1</option>
+                        </select>
+                     </div>
+
+                 </div>
+                 <div class="row">
+                    <div class="col-2">
                         <input value="{{ (!empty($get_name))?$get_name:'' }}" name="from_date" type="datetime-local" class="form-control">
                     </div>
                      <div class="col-2">
                         <input value="{{ (!empty($get_name))?$get_name:'' }}" name="to_date" type="datetime-local" class="form-control">
                     </div>
-                 </div>
-                 <div class="row">
                     <div class="col-4">
                         <input value="{{ (!empty($get_name))?$get_name:'' }}" name="name" type="text" class="form-control" placeholder="Enter Schedue Title">
                     </div>
@@ -125,7 +288,8 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <li><a class="dropdown-item" href="{{ URL::to('create-techer') }}">Teacher</a></li>
+                                    <li><a data-bs-toggle="modal" data-bs-target="#timeTableModal" class="dropdown-item" href="#">Create Timetable</a></li>
+                                    <li><a data-bs-toggle="modal" data-bs-target="#groupModal" class="dropdown-item" href="#">Create Group</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -134,251 +298,86 @@
             </form>
         </div>
         <div class="row layout-top-spacing">
-            <a data-bs-toggle="modal" data-bs-target="#assignToModal" class="assignToDisplay assignToBtn dropdown-item" href="#">Transfer To Another Teacher</a>
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-8">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th class="checkbox-area" scope="col"></th>
-                                    <th scope="col">Course</th>
-                                    <th scope="col">Intake</th>
-                                    <th scope="col">Group</th>
-                                    <th scope="col">Subject</th>
-                                    <th scope="col">Location</th>
-                                    <th scope="col">Assign Teacher</th>
-                                    <th scope="col">Module Title</th>
-                                    <th scope="col">Module Date</th>
-                                    <th scope="col">Class Time</th>
-                                    <th class="text-center" scope="col">Status</th>
-                                    <th class="text-center" scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    <div class="row layout-top-spacing layout-spacing" id="cancel-row">
+                        <div class="col-xl-12 col-lg-12 col-md-12">
+                            <div class="calendar-container">
+                                <div class="calendar"></div>
+                            </div>
+                        </div>
+                    </div>
 
-                                <tr class="">
-                                    <td>
-                                        <div class="form-check form-check-primary">
-                                            <input value="" class="assignto form-check-input assign-to-adminmanager striped_child" type="checkbox">
-                                        </div>
-                                    </td>
-                                    <td>BSC IN CIS</td>
-                                    <td>SEP 2024</td>
-                                    <td>First Group</td>
-                                    <td>MATH 1</td>
-                                    <td>BC 02</td>
-                                    <td>Jhon DEV</td>
-                                    <td><span class="badge badge-primary">JAN24ENTAB1</span></td>
-                                    <td>24 jan 2024</td>
-                                    <td>9.00 AM to 11.00 AM</td>
-                                    <td class="text-center">
-                                        <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
-                                            <div class="input-checkbox">
-                                                <span class="switch-chk-label label-left">On</span>
-                                                <input checked data-action="#" data-id="2" class="switch-input" type="checkbox"
-                                                    role="switch" id="form-custom-switch-inner-text">
-                                                <span class="switch-chk-label label-right">Off</span>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="">
+                                                <label class="form-label">Enter Title</label>
+                                                <input id="event-title" type="text" class="form-control">
                                             </div>
                                         </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="#" class="badge badge-pill bg-warning">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                        </a>
-                                        <a href="#" title="view all class schedule" class="badge badge-pill bg-danger">
-                                            <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
-                                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr class="">
-                                    <td>
-                                        <div class="form-check form-check-primary">
-                                            <input value="" class="assignto form-check-input assign-to-adminmanager striped_child" type="checkbox">
-                                        </div>
-                                    </td>
-                                    <td>BSC IN CIS</td>
-                                    <td>SEP 2024</td>
-                                    <td>First Group</td>
-                                    <td>MATH 1</td>
-                                    <td>BC 02</td>
-                                    <td>Jhon DEV</td>
-                                    <td><span class="badge badge-primary">JAN24ENTAB1</span></td>
-                                    <td>24 jan 2024</td>
-                                    <td>9.00 AM to 11.00 AM</td>
-                                    <td class="text-center">
-                                        <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
-                                            <div class="input-checkbox">
-                                                <span class="switch-chk-label label-left">On</span>
-                                                <input checked data-action="#" data-id="2" class="switch-input" type="checkbox"
-                                                    role="switch" id="form-custom-switch-inner-text">
-                                                <span class="switch-chk-label label-right">Off</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="#" class="badge badge-pill bg-warning">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                        </a>
-                                        <a href="#" title="view all class schedule" class="badge badge-pill bg-danger">
-                                            <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
-                                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr class="">
-                                    <td>
-                                        <div class="form-check form-check-primary">
-                                            <input value="" class="assignto form-check-input assign-to-adminmanager striped_child" type="checkbox">
-                                        </div>
-                                    </td>
-                                    <td>BSC IN CIS</td>
-                                    <td>SEP 2024</td>
-                                    <td>First Group</td>
-                                    <td>MATH 1</td>
-                                    <td>BC 02</td>
-                                    <td>Jhon DEV</td>
-                                    <td><span class="badge badge-primary">JAN24ENTAB1</span></td>
-                                    <td>24 jan 2024</td>
-                                    <td>9.00 AM to 11.00 AM</td>
-                                    <td class="text-center">
-                                        <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
-                                            <div class="input-checkbox">
-                                                <span class="switch-chk-label label-left">On</span>
-                                                <input checked data-action="#" data-id="2" class="switch-input" type="checkbox"
-                                                    role="switch" id="form-custom-switch-inner-text">
-                                                <span class="switch-chk-label label-right">Off</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="#" class="badge badge-pill bg-warning">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                        </a>
-                                        <a href="#" title="view all class schedule" class="badge badge-pill bg-danger">
-                                            <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
-                                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr class="">
-                                    <td>
-                                        <div class="form-check form-check-primary">
-                                            <input value="" class="assignto form-check-input assign-to-adminmanager striped_child" type="checkbox">
-                                        </div>
-                                    </td>
-                                    <td>BSC IN CIS</td>
-                                    <td>SEP 2024</td>
-                                    <td>First Group</td>
-                                    <td>MATH 1</td>
-                                    <td>BC 02</td>
-                                    <td>Jhon DEV</td>
-                                    <td><span class="badge badge-primary">JAN24ENTAB1</span></td>
-                                    <td>24 jan 2024</td>
-                                    <td>9.00 AM to 11.00 AM</td>
-                                    <td class="text-center">
-                                        <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
-                                            <div class="input-checkbox">
-                                                <span class="switch-chk-label label-left">On</span>
-                                                <input checked data-action="#" data-id="2" class="switch-input" type="checkbox"
-                                                    role="switch" id="form-custom-switch-inner-text">
-                                                <span class="switch-chk-label label-right">Off</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="#" class="badge badge-pill bg-warning">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                        </a>
-                                        <a href="#" title="view all class schedule" class="badge badge-pill bg-danger">
-                                            <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
-                                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr class="">
-                                    <td>
-                                        <div class="form-check form-check-primary">
-                                            <input value="" class="assignto form-check-input assign-to-adminmanager striped_child" type="checkbox">
-                                        </div>
-                                    </td>
-                                    <td>BSC IN CIS</td>
-                                    <td>SEP 2024</td>
-                                    <td>First Group</td>
-                                    <td>MATH 1</td>
-                                    <td>BC 02</td>
-                                    <td>Jhon DEV</td>
-                                    <td><span class="badge badge-primary">JAN24ENTAB1</span></td>
-                                    <td>24 jan 2024</td>
-                                    <td>9.00 AM to 11.00 AM</td>
-                                    <td class="text-center">
-                                        <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
-                                            <div class="input-checkbox">
-                                                <span class="switch-chk-label label-left">On</span>
-                                                <input checked data-action="#" data-id="2" class="switch-input" type="checkbox"
-                                                    role="switch" id="form-custom-switch-inner-text">
-                                                <span class="switch-chk-label label-right">Off</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="#" class="badge badge-pill bg-warning">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                        </a>
-                                        <a href="#" title="view all class schedule" class="badge badge-pill bg-danger">
-                                            <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
-                                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr class="">
-                                    <td>
-                                        <div class="form-check form-check-primary">
-                                            <input value="" class="assignto form-check-input assign-to-adminmanager striped_child" type="checkbox">
-                                        </div>
-                                    </td>
-                                    <td>BSC IN CIS</td>
-                                    <td>SEP 2024</td>
-                                    <td>First Group</td>
-                                    <td>MATH 1</td>
-                                    <td>BC 02</td>
-                                    <td>Jhon DEV</td>
-                                    <td><span class="badge badge-primary">JAN24ENTAB1</span></td>
-                                    <td>24 jan 2024</td>
-                                    <td>9.00 AM to 11.00 AM</td>
-                                    <td class="text-center">
-                                        <div class="switch form-switch-custom switch-inline form-switch-primary form-switch-custom inner-text-toggle">
-                                            <div class="input-checkbox">
-                                                <span class="switch-chk-label label-left">On</span>
-                                                <input checked data-action="#" data-id="2" class="switch-input" type="checkbox"
-                                                    role="switch" id="form-custom-switch-inner-text">
-                                                <span class="switch-chk-label label-right">Off</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="#" class="badge badge-pill bg-warning">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 text-white"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                        </a>
-                                        <a href="#" title="view all class schedule" class="badge badge-pill bg-danger">
-                                            <svg style="color: white;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
-                                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
 
-                            </tbody>
+                                        <div class="col-md-12 d-none">
+                                            <div class="">
+                                                <label class="form-label">Enter Start Date</label>
+                                                <input id="event-start-date" type="text" class="form-control">
+                                            </div>
+                                        </div>
 
-                        </table>
-                        <div style="text-align: center;" class="pagination-custom_solid">
+                                        <div class="col-md-12 d-none">
+                                            <div class="">
+                                                <label class="form-label">Enter End Date</label>
+                                                <input id="event-end-date" type="text" class="form-control">
+                                            </div>
+                                        </div>
 
+                                        <div class="col-md-12">
+
+                                            <div class="d-flex mt-4">
+                                                <div class="n-chk">
+                                                    <div class="form-check form-check-primary form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="event-level" value="Work" id="rwork">
+                                                        <label class="form-check-label" for="rwork">Work</label>
+                                                    </div>
+                                                </div>
+                                                <div class="n-chk">
+                                                    <div class="form-check form-check-warning form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="event-level" value="Travel" id="rtravel">
+                                                        <label class="form-check-label" for="rtravel">Travel</label>
+                                                    </div>
+                                                </div>
+                                                <div class="n-chk">
+                                                    <div class="form-check form-check-success form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="event-level" value="Personal" id="rPersonal">
+                                                        <label class="form-check-label" for="rPersonal">Personal</label>
+                                                    </div>
+                                                </div>
+                                                <div class="n-chk">
+                                                    <div class="form-check form-check-danger form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="event-level" value="Important" id="rImportant">
+                                                        <label class="form-check-label" for="rImportant">Important</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success btn-update-event" data-fc-event-public-id="">Update changes</button>
+                                    <button type="button" class="btn btn-primary btn-add-event">Add Event</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -434,3 +433,6 @@
     </script>
 @endif
 @stop
+<script src="{{ asset('backend/src/plugins/src/fullcalendar/fullcalendar.min.js') }}"></script>
+<script src="{{ asset('backend/src/plugins/src/fullcalendar/custom-fullcalendar.js') }}"></script>
+<script src="{{ asset('backend/src/plugins/src/uuid/uuid4.min.js') }}"></script>
